@@ -1,73 +1,22 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.ruishanio</groupId>
+    <parent>
+        <groupId>com.ruishanio</groupId>
+        <artifactId>task-pilot</artifactId>
+        <version>1.0.0</version>
+    </parent>
     <artifactId>task-pilot-tool</artifactId>
-    <version>1.0.0</version>
     <packaging>jar</packaging>
 
-    <name>task-pilot-tool</name>
+    <name>${project.artifactId}</name>
     <description>Task-Pilot-Tool is a Java tool library that makes Java development more efficient. The tools include "collection, cache, concurrency, string, IO, Excel, emoji ..." and so on.</description>
     <url>https://github.com/ruishanio/Task-Pilot</url>
-    <licenses>
-        <license>
-            <name>GNU General Public License v3.0</name>
-            <url>https://www.gnu.org/licenses/gpl-3.0.txt</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
     <scm>
-        <tag>HEAD</tag>
         <url>https://github.com/ruishanio/Task-Pilot.git</url>
         <connection>scm:git:https://github.com/ruishanio/Task-Pilot.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/ruishanio/Task-Pilot.git</developerConnection>
     </scm>
-    <developers>
-        <developer>
-            <id>ruishanio</id>
-            <name>ruishanio</name>
-            <email>harryrong@ruishanio.com</email>
-            <organization>Ruishan IO</organization>
-            <organizationUrl>https://github.com/ruishanio</organizationUrl>
-            <url>https://github.com/ruishanio</url>
-        </developer>
-    </developers>
-
-    <properties>
-        <!-- env -->
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
-        <java.version>21</java.version>
-        <maven.compiler.source>${java.version}</maven.compiler.source>
-        <maven.compiler.target>${java.version}</maven.compiler.target>
-        <maven.compiler.release>${java.version}</maven.compiler.release>
-        <maven.test.skip>true</maven.test.skip>
-        <!-- plugin -->
-        <maven-compiler-plugin.version>3.14.1</maven-compiler-plugin.version>
-        <maven-source-plugin.version>3.4.0</maven-source-plugin.version>
-        <maven-javadoc-plugin.version>3.12.0</maven-javadoc-plugin.version>
-        <maven-gpg-plugin.version>3.2.8</maven-gpg-plugin.version>
-        <central-publishing-maven-plugin.version>0.9.0</central-publishing-maven-plugin.version>
-        <dokka-maven-plugin.version>2.2.0</dokka-maven-plugin.version>
-        <kotlin.version>2.3.20</kotlin.version>
-        <!-- base -->
-        <slf4j-api.version>2.0.17</slf4j-api.version>
-        <junit-jupiter.version>6.0.1</junit-jupiter.version>
-
-        <!-- servlet (provided：cookie) -->
-        <jakarta.servlet-api.version>6.1.0</jakarta.servlet-api.version>
-        <!-- gson (provided：json -->
-        <gson.version>2.13.2</gson.version>
-        <!-- poi (provided：excel ) -->
-        <poi.version>5.5.1</poi.version>
-        <!-- spring (provided：pipeline) -->
-        <spring.version>7.0.2</spring.version>
-        <!-- freemarker (provided：ftl) -->
-        <freemarker.version>2.3.34</freemarker.version>
-        <!-- nimbus-jose-jwt (provided：jwt) -->
-        <nimbus-jose-jwt.version>10.6</nimbus-jose-jwt.version>
-    </properties>
 
     <dependencies>
 
@@ -75,7 +24,6 @@
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib</artifactId>
-            <version>${kotlin.version}</version>
         </dependency>
 
         <!-- ********************** slf4j+junit(base) ********************** -->
@@ -83,19 +31,16 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>${slf4j-api.version}</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-reload4j</artifactId>
-            <version>${slf4j-api.version}</version>
             <scope>test</scope>
         </dependency>
         <!-- junit -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-            <version>${junit-jupiter.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -103,7 +48,6 @@
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
-            <version>${gson.version}</version>
             <scope>provided</scope>
         </dependency>
 
@@ -111,7 +55,6 @@
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
-            <version>${poi.version}</version>
             <scope>provided</scope>
         </dependency>
 
@@ -119,7 +62,6 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
-            <version>${spring.version}</version>
             <scope>provided</scope>
         </dependency>
 
@@ -127,7 +69,6 @@
         <dependency>
             <groupId>jakarta.servlet</groupId>
             <artifactId>jakarta.servlet-api</artifactId>
-            <version>${jakarta.servlet-api.version}</version>
             <scope>provided</scope>
         </dependency>
 
@@ -135,7 +76,6 @@
         <dependency>
             <groupId>org.freemarker</groupId>
             <artifactId>freemarker</artifactId>
-            <version>${freemarker.version}</version>
             <scope>provided</scope>
         </dependency>
 
@@ -143,7 +83,6 @@
         <dependency>
             <groupId>com.nimbusds</groupId>
             <artifactId>nimbus-jose-jwt</artifactId>
-            <version>${nimbus-jose-jwt.version}</version>
             <scope>provided</scope>
         </dependency>
 
@@ -155,7 +94,7 @@
         <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
         <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
         <plugins>
-            <!-- tool 模块独立发布，这里只补 Kotlin/Java 混编能力，不改现有发布流水线。 -->
+            <!-- tool 模块改为走根 parent 统一发布，这里只保留编译所需的 Kotlin/Java 混编能力。 -->
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-maven-plugin</artifactId>
@@ -232,16 +171,26 @@
             <id>release</id>
             <build>
                 <plugins>
-                    <!-- Source -->
+                    <!-- 发布子模块时生成扁平化 POM，避免消费端再去解析未发布的聚合 parent。 -->
                     <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-source-plugin</artifactId>
-                        <version>${maven-source-plugin.version}</version>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>flatten-maven-plugin</artifactId>
+                        <version>${flatten-maven-plugin.version}</version>
+                        <configuration>
+                            <flattenMode>ossrh</flattenMode>
+                        </configuration>
                         <executions>
                             <execution>
-                                <phase>package</phase>
+                                <id>flatten</id>
+                                <phase>process-resources</phase>
                                 <goals>
-                                    <goal>jar-no-fork</goal>
+                                    <goal>flatten</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>flatten.clean</id>
+                                <goals>
+                                    <goal>clean</goal>
                                 </goals>
                             </execution>
                         </executions>
@@ -263,35 +212,6 @@
                                 </configuration>
                             </execution>
                         </executions>
-                    </plugin>
-                    <!-- GPG -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <version>${maven-gpg-plugin.version}</version>
-                        <configuration>
-                            <useAgent>false</useAgent>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <!-- maven central -->
-                    <plugin>
-                        <groupId>org.sonatype.central</groupId>
-                        <artifactId>central-publishing-maven-plugin</artifactId>
-                        <version>${central-publishing-maven-plugin.version}</version>
-                        <extensions>true</extensions>
-                        <configuration>
-                            <publishingServerId>central</publishingServerId>
-                            <autoPublish>true</autoPublish>
-                            <waitUntil>published</waitUntil>
-                        </configuration>
                     </plugin>
                 </plugins>
             </build>

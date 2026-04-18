@@ -41,6 +41,7 @@
 		<maven-javadoc-plugin.version>3.12.0</maven-javadoc-plugin.version>
 		<maven-gpg-plugin.version>3.2.8</maven-gpg-plugin.version>
 		<central-publishing-maven-plugin.version>0.9.0</central-publishing-maven-plugin.version>
+		<flatten-maven-plugin.version>1.7.3</flatten-maven-plugin.version>
 		<dokka-maven-plugin.version>2.2.0</dokka-maven-plugin.version>
 		<!-- base -->
 		<slf4j-api.version>2.0.17</slf4j-api.version>
@@ -48,6 +49,7 @@
 
 		<!-- jakarta.annotation-api -->
 		<jakarta.annotation-api.version>3.0.0</jakarta.annotation-api.version>
+		<jakarta.servlet-api.version>6.1.0</jakarta.servlet-api.version>
 
 		<!-- spring -->
 		<spring-boot.version>4.0.1</spring-boot.version>
@@ -64,7 +66,9 @@
 		<groovy.version>5.0.3</groovy.version>
 
 		<!-- task-pilot-tool -->
-		<task-pilot-tool.version>${project.version}</task-pilot-tool.version>
+		<poi.version>5.5.1</poi.version>
+		<freemarker.version>2.3.34</freemarker.version>
+		<nimbus-jose-jwt.version>10.6</nimbus-jose-jwt.version>
 		<!-- gson -->
 		<gson.version>2.13.2</gson.version>
 
@@ -143,7 +147,31 @@
 			<dependency>
 				<groupId>com.ruishanio</groupId>
 				<artifactId>task-pilot-tool</artifactId>
-				<version>${task-pilot-tool.version}</version>
+				<version>${project.version}</version>
+			</dependency>
+			<!-- jakarta.servlet-api -->
+			<dependency>
+				<groupId>jakarta.servlet</groupId>
+				<artifactId>jakarta.servlet-api</artifactId>
+				<version>${jakarta.servlet-api.version}</version>
+			</dependency>
+			<!-- poi -->
+			<dependency>
+				<groupId>org.apache.poi</groupId>
+				<artifactId>poi-ooxml</artifactId>
+				<version>${poi.version}</version>
+			</dependency>
+			<!-- freemarker -->
+			<dependency>
+				<groupId>org.freemarker</groupId>
+				<artifactId>freemarker</artifactId>
+				<version>${freemarker.version}</version>
+			</dependency>
+			<!-- nimbus-jose-jwt -->
+			<dependency>
+				<groupId>com.nimbusds</groupId>
+				<artifactId>nimbus-jose-jwt</artifactId>
+				<version>${nimbus-jose-jwt.version}</version>
 			</dependency>
 
 			<!-- groovy -->
@@ -334,6 +362,8 @@
 							<autoPublish>true</autoPublish>
 							<waitUntil>published</waitUntil>
 							<excludeArtifacts>
+								<!-- 聚合/parent POM 仅用于仓库内统一管理，不单独发布到 Central。 -->
+								<artifact>task-pilot</artifact>
 								<artifact>task-pilot-admin</artifact>
 								<artifact>task-pilot-executor-samples</artifact>
 								<artifact>task-pilot-executor-sample-frameless</artifact>

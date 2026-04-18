@@ -13,6 +13,11 @@
     <name>${project.artifactId}</name>
     <description>Spring Boot starter for TaskPilot executor.</description>
     <url>https://github.com/ruishanio/Task-Pilot</url>
+    <scm>
+        <url>https://github.com/ruishanio/Task-Pilot.git</url>
+        <connection>scm:git:https://github.com/ruishanio/Task-Pilot.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/ruishanio/Task-Pilot.git</developerConnection>
+    </scm>
 
     <dependencies>
         <dependency>
@@ -71,6 +76,30 @@
             <id>release</id>
             <build>
                 <plugins>
+                    <!-- 发布子模块时生成扁平化 POM，避免消费端再去解析未发布的聚合 parent。 -->
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>flatten-maven-plugin</artifactId>
+                        <version>${flatten-maven-plugin.version}</version>
+                        <configuration>
+                            <flattenMode>ossrh</flattenMode>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>flatten</id>
+                                <phase>process-resources</phase>
+                                <goals>
+                                    <goal>flatten</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>flatten.clean</id>
+                                <goals>
+                                    <goal>clean</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
                     <!-- Starter 也是纯 Kotlin 源码，发布到 Central 时需要额外挂出 javadoc.jar。 -->
                     <plugin>
                         <groupId>org.jetbrains.dokka</groupId>

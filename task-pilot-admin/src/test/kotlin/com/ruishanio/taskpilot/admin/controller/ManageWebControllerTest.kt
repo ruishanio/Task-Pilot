@@ -12,8 +12,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirec
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 /**
- * 验证 `/web/*` 页面入口已切换为 history 路由，并统一 forward 到前端 SPA 入口。
-*/
+ * 验证 `/web/` 前缀页面入口已切换为 history 路由，并统一 forward 到前端 SPA 入口。
+ */
 class ManageWebControllerTest : AbstractSpringMvcTest() {
     private lateinit var cookie: Cookie
 

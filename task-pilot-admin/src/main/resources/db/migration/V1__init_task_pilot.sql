@@ -1,6 +1,4 @@
--- TASK-PILOT PostgreSQL 初始化脚本
-
-BEGIN;
+-- TASK-PILOT Flyway V1：初始化 PostgreSQL 表结构与默认种子数据。
 
 -- ------------------------------ job group and registry ------------------------------
 
@@ -258,5 +256,3 @@ ON CONFLICT (lock_name) DO NOTHING;
 SELECT setval(pg_get_serial_sequence('task_pilot_group', 'id'), (SELECT MAX(id) FROM task_pilot_group), true);
 SELECT setval(pg_get_serial_sequence('task_pilot_info', 'id'), (SELECT MAX(id) FROM task_pilot_info), true);
 SELECT setval(pg_get_serial_sequence('task_pilot_user', 'id'), (SELECT MAX(id) FROM task_pilot_user), true);
-
-COMMIT;

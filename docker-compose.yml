@@ -14,8 +14,6 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      # 说明：仅数据库首次初始化时执行；
-      - ./doc/db/tables_task_pilot.sql:/docker-entrypoint-initdb.d/tables_task_pilot.sql:ro
       # 3、数据库持久化目录位置，建议自定义：
       - ${POSTGRES_PATH:-/Users/admin/program/docker/instance/postgres}/data:/var/lib/postgresql/data
     healthcheck:
@@ -33,7 +31,6 @@ services:
       dockerfile: Dockerfile
     container_name: task-pilot-admin
     environment:
-      # 5、数据库连接配置，需要与上文 PostgreSQL 中保持一致：
       PARAMS: >-
         --spring.datasource.url=jdbc:postgresql://postgres:5432/task_pilot
         --spring.datasource.username=postgres

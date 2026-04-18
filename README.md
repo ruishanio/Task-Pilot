@@ -31,10 +31,9 @@ docker-compose up --build
 
 ### 方式二：本地开发
 
-1. 初始化数据库：
+1. 创建数据库：
    ```bash
    psql -U postgres -c "CREATE DATABASE task_pilot;"
-   psql -U postgres -d task_pilot -f doc/db/tables_task_pilot.sql
    ```
 2. 启动 `task-pilot-admin` 的 `TaskPilotAdminApplication`
 3. 启动 `task-pilot-executor-sample-springboot` 的 `TaskPilotExecutorApplication`

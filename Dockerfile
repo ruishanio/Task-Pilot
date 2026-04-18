@@ -22,29 +22,29 @@ RUN rm -rf task-pilot-admin/src/main/resources/static \
 
 # 运行时阶段仅保留最终 Jar 和启动参数，尽量收窄镜像体积。
 FROM eclipse-temurin:21-jre-jammy AS runtime
-WORKDIR /app
+
+WORKDIR /opt/app
 
 ARG VERSION=dev
 ARG VCS_REF=unknown
 ARG BUILD_DATE=unknown
 
-LABEL org.opencontainers.image.title="task-pilot-admin" \
-      org.opencontainers.image.description="Task-Pilot admin server image" \
-      org.opencontainers.image.url="https://hub.docker.com/r/ruishan/task-pilot" \
-      org.opencontainers.image.source="https://github.com/ruishanio/Task-Pilot" \
-      org.opencontainers.image.version="${VERSION}" \
-      org.opencontainers.image.revision="${VCS_REF}" \
-      org.opencontainers.image.created="${BUILD_DATE}"
+LABEL maintainer="RuiShan <harryrong@ruishanio.com>"
 
-ENV PARAMS=""
-ENV JAVA_OPTS=""
-ENV TZ=Asia/Shanghai
+# 设置时区为 Asia/Shanghai
+RUN echo "Asia/Shanghai" > /etc/timezone && \
+    ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
+    dpkg-reconfigure -f noninteractive tzdata
 
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-
-COPY --from=backend-builder /workspace/task-pilot-admin/target/task-pilot-admin-*.jar /app/app.jar
+COPY --from=backend-builder /workspace/task-pilot-admin/target/task-pilot-admin-*.jar /opt/app/app.jar
+# 拷贝启动脚本
+COPY ./docker-entrypoint.sh /usr/local/bin/
+# 添加执行权限
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 EXPOSE 8080
 
-# LOG_HOME、JAVA_OPTS、PARAMS 都通过环境变量注入，便于沿用现有部署方式。
-ENTRYPOINT ["sh","-c","java ${LOG_HOME:+-DLOG_HOME=$LOG_HOME} $JAVA_OPTS -jar /app/app.jar $PARAMS"]
+# 设置数据卷
+VOLUME /opt/config/
+
+ENTRYPOINT ["docker-entrypoint.sh"]

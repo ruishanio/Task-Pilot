@@ -3,62 +3,25 @@ version: '3.8'
 
 services:
   postgres:
-    image: postgres:16
+    image: postgres:17.9-alpine3.23
     container_name: task-pilot-postgres
     environment:
-      # 1、数据库账号密码设置，需要与 Admin 中配置一致：
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres_pwd
-      # 2、数据库实例名称，需要与 Admin 中配置一致：
       POSTGRES_DB: task_pilot
     ports:
       - "5432:5432"
     volumes:
-      # 3、数据库持久化目录位置，建议自定义：
-      - ${POSTGRES_PATH:-/Users/admin/program/docker/instance/postgres}/data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d task_pilot"]
-      timeout: 20s
-      retries: 10
-    networks:
-      - task-pilot-network
+      - ./data:/var/lib/postgresql/data
 
   task-pilot-admin:
-    # 4、默认沿用官方 Docker Hub 仓库名；本地联调时继续打 local 标签，避免误覆盖远端版本。
-    image: ${TASK_PILOT_ADMIN_IMAGE:-ruishan/task-pilot:local}
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ruishan/task-pilot:latest
     container_name: task-pilot-admin
     environment:
-      PARAMS: >-
-        --spring.datasource.url=jdbc:postgresql://postgres:5432/task_pilot
-        --spring.datasource.username=postgres
-        --spring.datasource.password=postgres_pwd
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/task_pilot
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres_pwd
     ports:
       - "8080:8080"
     depends_on:
-      postgres:
-        condition: service_healthy
-    networks:
-      - task-pilot-network
-
-  task-pilot-executor-sample-springboot:
-    image: ruishanio/task-pilot-executor-sample-springboot:local
-    build:
-      context: ./task-pilot-executor-samples/task-pilot-executor-sample-springboot
-      dockerfile: Dockerfile
-    container_name: task-pilot-executor-sample-springboot
-    environment:
-      PARAMS: "--task-pilot.admin.addresses=http://task-pilot-admin:8080"
-    ports:
-      - "9999:9999"
-    depends_on:
-      task-pilot-admin:
-        condition: service_started
-    networks:
-      - task-pilot-network
-
-networks:
-  task-pilot-network:
-    driver: bridge
+      - postgres

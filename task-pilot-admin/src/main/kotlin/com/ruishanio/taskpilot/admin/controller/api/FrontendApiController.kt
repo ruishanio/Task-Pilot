@@ -70,7 +70,7 @@ class FrontendApiController {
     private fun resolveAppVersion(): String {
         return buildProperties?.version
             ?: javaClass.`package`?.implementationVersion
-            ?: "1.0.0"
+            ?: "0.0.0"
     }
 
     /**

@@ -15,7 +15,7 @@ services:
       - ./data:/var/lib/postgresql/data
 
   task-pilot-admin:
-    image: ruishan/task-pilot:latest
+    image: ruishanio/task-pilot:latest
     container_name: task-pilot-admin
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/task_pilot

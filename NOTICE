@@ -1,14 +1,15 @@
 Task-Pilot
 Copyright (c) 2025-present, ruishanio.
 
-This product is a derivative work based on XXL-JOB
-(https://github.com/xuxueli/xxl-job), Copyright (c) 2015-present, xuxueli,
-which is licensed under the GNU General Public License version 3.
-The source code of this product is licensed under the same GPL-3.0 terms;
-see the LICENSE file in the project root for details.
-
 Dependencies:
 ================================================================
+
+XXL-JOB:
+
+  * LICENSE:
+    * https://www.gnu.org/licenses/gpl-3.0 (GNU General Public License v3.0)
+  * HOMEPAGE:
+    * http://www.xuxueli.com/xxl-job
 
 Spring:
 

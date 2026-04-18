@@ -1,0 +1,11 @@
+.git
+.github
+.idea
+.claude
+.DS_Store
+
+# 本地产物由 Docker 多阶段重新生成，避免旧构建污染上下文。
+**/target/
+task-pilot-frontend/node_modules/
+task-pilot-frontend/dist/
+task-pilot-admin/src/main/resources/static/

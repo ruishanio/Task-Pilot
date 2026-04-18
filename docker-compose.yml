@@ -30,7 +30,7 @@ services:
     #image: ruishanio/task-pilot-admin:{version}
     image: ruishanio/task-pilot-admin:local
     build:
-      context: ./task-pilot-admin
+      context: .
       dockerfile: Dockerfile
     container_name: task-pilot-admin
     environment:

@@ -33,7 +33,7 @@ task-pilot/
 
 | 领域       | 选型                                           |
 | ---------- | ---------------------------------------------- |
-| 运行时     | JDK 17+ · Kotlin 2.3.20                        |
+| 运行时     | JDK 21+ · Kotlin 2.3.20                        |
 | 框架       | Spring Boot 4.0.1 · Spring 7.0                 |
 | 通信       | Netty 4.2                                      |
 | 存储       | PostgreSQL 16 · MyBatis · HikariCP             |

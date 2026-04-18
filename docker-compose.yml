@@ -7,7 +7,7 @@ services:
     container_name: task-pilot-postgres
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres_pwd
+      POSTGRES_PASSWORD: my-secret-pw
       POSTGRES_DB: task_pilot
     ports:
       - "5432:5432"
@@ -20,7 +20,7 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/task_pilot
       SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: postgres_pwd
+      SPRING_DATASOURCE_PASSWORD: my-secret-pw
     ports:
       - "8080:8080"
     depends_on:

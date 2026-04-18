@@ -38,6 +38,13 @@ spring:
     username: postgres
     password: my-secret-pw
     driver-class-name: org.postgresql.Driver
+  flyway:
+    enabled: true
+    # 允许 Flyway 接管已存在但尚未纳入迁移历史的 schema，避免老库首次切换时直接失败。
+    baseline-on-migrate: true
+    # 统一约定管理端 migration 目录，避免后续资源路径调整时依赖默认扫描结果。
+    locations: classpath:db/migration
+    validate-on-migrate: true
   mail:
     host: smtp.qq.com
     port: 25

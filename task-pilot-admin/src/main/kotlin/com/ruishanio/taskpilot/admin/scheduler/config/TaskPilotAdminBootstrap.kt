@@ -19,11 +19,13 @@ import com.ruishanio.taskpilot.core.constant.Const
 import com.ruishanio.taskpilot.core.openapi.ExecutorBiz
 import com.ruishanio.taskpilot.tool.core.StringTool
 import com.ruishanio.taskpilot.tool.http.HttpTool
+import jakarta.annotation.PostConstruct
 import jakarta.annotation.Resource
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.DisposableBean
-import org.springframework.beans.factory.InitializingBean
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.context.event.ApplicationReadyEvent
+import org.springframework.context.event.EventListener
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.stereotype.Component
 import org.springframework.transaction.PlatformTransactionManager
@@ -36,13 +38,16 @@ import java.util.concurrent.ConcurrentMap
  * 统一承接管理端运行期所需的线程组件、Mapper 和远程调用配置。
  */
 @Component
-class TaskPilotAdminBootstrap : InitializingBean, DisposableBean {
+class TaskPilotAdminBootstrap : DisposableBean {
     lateinit var jobTriggerPoolHelper: JobTriggerPoolHelper
     lateinit var jobRegistryHelper: JobRegistryHelper
     lateinit var jobFailAlarmMonitorHelper: JobFailAlarmMonitorHelper
     lateinit var jobCompleteHelper: JobCompleteHelper
     lateinit var jobLogReportHelper: JobLogReportHelper
     lateinit var jobScheduleHelper: JobScheduleHelper
+
+    @Volatile
+    private var started: Boolean = false
 
     @Value("\${task-pilot.accessToken}")
     var accessToken: String = ""
@@ -113,10 +118,25 @@ class TaskPilotAdminBootstrap : InitializingBean, DisposableBean {
     val logretentiondays: Int
         get() = if (logretentiondaysInternal < 3) -1 else logretentiondaysInternal
 
-    @Throws(Exception::class)
-    override fun afterPropertiesSet() {
+    /**
+     * 先尽早暴露 bootstrap 单例，保证应用就绪后各线程和运行期服务能通过 companion 访问配置。
+     */
+    @PostConstruct
+    fun init() {
         adminConfig = this
+    }
+
+    /**
+     * 延迟到 Spring Boot 完全就绪后再启动后台线程，避免与 Flyway 建表迁移竞争。
+     */
+    @EventListener(ApplicationReadyEvent::class)
+    @Throws(Exception::class)
+    fun onApplicationReady() {
+        if (started) {
+            return
+        }
         doStart()
+        started = true
     }
 
     @Throws(Exception::class)
@@ -142,6 +162,7 @@ class TaskPilotAdminBootstrap : InitializingBean, DisposableBean {
      * 停止阶段按启动逆序回收组件，避免仍在调度中的线程依赖已关闭资源。
      */
     private fun doStop() {
+        started = false
         if (::jobScheduleHelper.isInitialized) {
             jobScheduleHelper.stop()
         }

@@ -58,11 +58,12 @@
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 		</dependency>
-		<!-- Flyway：统一由应用启动时执行数据库迁移，避免依赖容器初始化脚本灌库。 -->
+		<!-- Boot 4 已将 Flyway 自动配置拆到独立模块，这里显式接入，确保启动时真正执行迁移。 -->
 		<dependency>
-			<groupId>org.flywaydb</groupId>
-			<artifactId>flyway-core</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-flyway</artifactId>
 		</dependency>
+		<!-- Flyway 数据库方言驱动仍单独声明，确保 PostgreSQL 方言在运行期可用。 -->
 		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-database-postgresql</artifactId>

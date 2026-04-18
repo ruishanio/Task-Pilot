@@ -4,9 +4,8 @@ import com.ruishanio.taskpilot.admin.auth.model.LoginInfo
 import com.ruishanio.taskpilot.admin.mapper.TaskPilotInfoMapper
 import com.ruishanio.taskpilot.admin.mapper.TaskPilotLogGlueMapper
 import com.ruishanio.taskpilot.admin.model.TaskPilotLogGlue
-import com.ruishanio.taskpilot.admin.util.I18nUtil
+import com.ruishanio.taskpilot.admin.util.FrontendEntry
 import com.ruishanio.taskpilot.admin.util.JobGroupPermissionUtil
-import com.ruishanio.taskpilot.core.glue.GlueTypeEnum
 import com.ruishanio.taskpilot.tool.core.StringTool
 import com.ruishanio.taskpilot.tool.json.GsonTool
 import com.ruishanio.taskpilot.tool.response.Response
@@ -14,7 +13,6 @@ import jakarta.annotation.Resource
 import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
-import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseBody
@@ -33,20 +31,7 @@ class JobCodeController {
     private lateinit var taskPilotLogGlueMapper: TaskPilotLogGlueMapper
 
     @RequestMapping
-    fun index(request: HttpServletRequest, model: Model, @RequestParam("jobId") jobId: Int): String {
-        val jobInfo = taskPilotInfoMapper.loadById(jobId)
-            ?: throw RuntimeException(I18nUtil.getString("jobinfo_glue_jobid_unvalid"))
-        val jobLogGlues = taskPilotLogGlueMapper.findByJobId(jobId)
-        if (GlueTypeEnum.BEAN == GlueTypeEnum.match(jobInfo.glueType)) {
-            throw RuntimeException(I18nUtil.getString("jobinfo_glue_gluetype_unvalid"))
-        }
-
-        JobGroupPermissionUtil.validJobGroupPermission(request, jobInfo.jobGroup)
-        model.addAttribute("GlueTypeEnum", GlueTypeEnum.values())
-        model.addAttribute("jobInfo", jobInfo)
-        model.addAttribute("jobLogGlues", jobLogGlues)
-        return "biz/job.code"
-    }
+    fun index(@RequestParam("jobId") jobId: Int): String = FrontendEntry.route("/jobinfo?jobId=$jobId")
 
     /**
      * 保存 GLUE 源码时同步记录历史快照，便于后续回溯。
@@ -60,17 +45,17 @@ class JobCodeController {
         @RequestParam("glueRemark") glueRemark: String?
     ): Response<String> {
         if (StringTool.isBlank(glueSource)) {
-            return Response.ofFail(I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_glue_source"))
+            return Response.ofFail("请输入GLUE源码")
         }
         if (glueRemark == null) {
-            return Response.ofFail(I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_glue_remark"))
+            return Response.ofFail("请输入源码备注")
         }
         if (glueRemark.length !in 4..100) {
-            return Response.ofFail(I18nUtil.getString("jobinfo_glue_remark_limit"))
+            return Response.ofFail("源码备注长度限制为4~100")
         }
 
         val existsJobInfo = taskPilotInfoMapper.loadById(id)
-            ?: return Response.ofFail(I18nUtil.getString("jobinfo_glue_jobid_unvalid"))
+            ?: return Response.ofFail("任务ID非法")
         val loginInfo: LoginInfo = JobGroupPermissionUtil.validJobGroupPermission(request, existsJobInfo.jobGroup)
 
         existsJobInfo.glueSource = glueSource

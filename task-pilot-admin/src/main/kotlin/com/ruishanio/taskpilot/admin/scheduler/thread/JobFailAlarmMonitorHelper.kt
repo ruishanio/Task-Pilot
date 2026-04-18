@@ -2,7 +2,6 @@ package com.ruishanio.taskpilot.admin.scheduler.thread
 
 import com.ruishanio.taskpilot.admin.scheduler.config.TaskPilotAdminBootstrap
 import com.ruishanio.taskpilot.admin.scheduler.trigger.TriggerTypeEnum
-import com.ruishanio.taskpilot.admin.util.I18nUtil
 import org.slf4j.LoggerFactory
 import java.util.concurrent.TimeUnit
 
@@ -42,7 +41,7 @@ class JobFailAlarmMonitorHelper {
                                     null
                                 )
                                 val retryMsg =
-                                    "<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>${I18nUtil.getString("jobconf_trigger_type_retry")}<<<<<<<<<<< </span><br>"
+                                    "<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>失败重试触发<<<<<<<<<<< </span><br>"
                                 log.triggerMsg = log.triggerMsg + retryMsg
                                 TaskPilotAdminBootstrap.instance.taskPilotLogMapper.updateTriggerInfo(log)
                             }

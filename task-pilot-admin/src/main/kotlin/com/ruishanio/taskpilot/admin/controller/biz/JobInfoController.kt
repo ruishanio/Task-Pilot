@@ -1,16 +1,12 @@
 package com.ruishanio.taskpilot.admin.controller.biz
 
 import com.ruishanio.taskpilot.admin.auth.helper.TaskPilotAuthHelper
-import com.ruishanio.taskpilot.admin.auth.model.LoginInfo
-import com.ruishanio.taskpilot.admin.mapper.TaskPilotGroupMapper
-import com.ruishanio.taskpilot.admin.model.TaskPilotGroup
 import com.ruishanio.taskpilot.admin.model.TaskPilotInfo
-import com.ruishanio.taskpilot.admin.scheduler.exception.TaskPilotException
 import com.ruishanio.taskpilot.admin.scheduler.misfire.MisfireStrategyEnum
 import com.ruishanio.taskpilot.admin.scheduler.route.ExecutorRouteStrategyEnum
 import com.ruishanio.taskpilot.admin.scheduler.type.ScheduleTypeEnum
 import com.ruishanio.taskpilot.admin.service.TaskPilotService
-import com.ruishanio.taskpilot.admin.util.I18nUtil
+import com.ruishanio.taskpilot.admin.util.FrontendEntry
 import com.ruishanio.taskpilot.admin.util.JobGroupPermissionUtil
 import com.ruishanio.taskpilot.core.constant.ExecutorBlockStrategyEnum
 import com.ruishanio.taskpilot.core.glue.GlueTypeEnum
@@ -23,7 +19,6 @@ import jakarta.annotation.Resource
 import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
-import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseBody
@@ -37,34 +32,12 @@ import java.util.Date
 @RequestMapping("/jobinfo")
 class JobInfoController {
     @Resource
-    private lateinit var taskPilotGroupMapper: TaskPilotGroupMapper
-
-    @Resource
     private lateinit var taskPilotService: TaskPilotService
 
     @RequestMapping
     fun index(
-        request: HttpServletRequest,
-        model: Model,
         @RequestParam(value = "jobGroup", required = false, defaultValue = "-1") jobGroup: Int
-    ): String {
-        model.addAttribute("ExecutorRouteStrategyEnum", ExecutorRouteStrategyEnum.values())
-        model.addAttribute("GlueTypeEnum", GlueTypeEnum.values())
-        model.addAttribute("ExecutorBlockStrategyEnum", ExecutorBlockStrategyEnum.values())
-        model.addAttribute("ScheduleTypeEnum", ScheduleTypeEnum.values())
-        model.addAttribute("MisfireStrategyEnum", MisfireStrategyEnum.values())
-
-        val jobGroupListTotal = taskPilotGroupMapper.findAll()
-        val jobGroupList = JobGroupPermissionUtil.filterJobGroupByPermission(request, jobGroupListTotal)
-        if (CollectionTool.isEmpty(jobGroupList)) {
-            throw TaskPilotException(I18nUtil.getString("jobgroup_empty"))
-        }
-
-        val normalizedJobGroup = if (jobGroupList.map(TaskPilotGroup::id).contains(jobGroup)) jobGroup else -1
-        model.addAttribute("JobGroupList", jobGroupList)
-        model.addAttribute("jobGroup", normalizedJobGroup)
-        return "biz/job.list"
-    }
+    ): String = FrontendEntry.route("/jobinfo?jobGroup=$jobGroup")
 
     @RequestMapping("/pageList")
     @ResponseBody
@@ -100,7 +73,7 @@ class JobInfoController {
     @ResponseBody
     fun delete(request: HttpServletRequest, @RequestParam("ids[]") ids: List<Int>): Response<String> {
         if (CollectionTool.isEmpty(ids) || ids.size != 1) {
-            return Response.ofFail(I18nUtil.getString("system_please_choose") + I18nUtil.getString("system_one") + I18nUtil.getString("system_data"))
+            return Response.ofFail("请选择一条数据")
         }
         val loginInfoResponse = TaskPilotAuthHelper.loginCheckWithAttr(request)
         val loginInfo = loginInfoResponse.data ?: return Response.ofFail("not login.")
@@ -111,7 +84,7 @@ class JobInfoController {
     @ResponseBody
     fun pause(request: HttpServletRequest, @RequestParam("ids[]") ids: List<Int>): Response<String> {
         if (CollectionTool.isEmpty(ids) || ids.size != 1) {
-            return Response.ofFail(I18nUtil.getString("system_please_choose") + I18nUtil.getString("system_one") + I18nUtil.getString("system_data"))
+            return Response.ofFail("请选择一条数据")
         }
         val loginInfoResponse = TaskPilotAuthHelper.loginCheckWithAttr(request)
         val loginInfo = loginInfoResponse.data ?: return Response.ofFail("not login.")
@@ -122,7 +95,7 @@ class JobInfoController {
     @ResponseBody
     fun start(request: HttpServletRequest, @RequestParam("ids[]") ids: List<Int>): Response<String> {
         if (CollectionTool.isEmpty(ids) || ids.size != 1) {
-            return Response.ofFail(I18nUtil.getString("system_please_choose") + I18nUtil.getString("system_one") + I18nUtil.getString("system_data"))
+            return Response.ofFail("请选择一条数据")
         }
         val loginInfoResponse = TaskPilotAuthHelper.loginCheckWithAttr(request)
         val loginInfo = loginInfoResponse.data ?: return Response.ofFail("not login.")
@@ -171,9 +144,7 @@ class JobInfoController {
             }
         } catch (e: Exception) {
             logger.error(">>>>>>>>>>> 计算下次触发时间时发生异常。scheduleType={}, scheduleConf={}", scheduleType, scheduleConf, e)
-            return Response.ofFail(
-                I18nUtil.getString("schedule_type") + I18nUtil.getString("system_unvalid") + e.message
-            )
+            return Response.ofFail("调度类型非法${e.message}")
         }
         return Response.ofSuccess(result)
     }

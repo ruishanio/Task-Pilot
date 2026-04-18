@@ -8,7 +8,6 @@ import com.ruishanio.taskpilot.admin.model.TaskPilotInfo
 import com.ruishanio.taskpilot.admin.model.TaskPilotLog
 import com.ruishanio.taskpilot.admin.scheduler.config.TaskPilotAdminBootstrap
 import com.ruishanio.taskpilot.admin.scheduler.route.ExecutorRouteStrategyEnum
-import com.ruishanio.taskpilot.admin.util.I18nUtil
 import com.ruishanio.taskpilot.core.constant.ExecutorBlockStrategyEnum
 import com.ruishanio.taskpilot.core.context.TaskPilotContext
 import com.ruishanio.taskpilot.core.openapi.ExecutorBiz
@@ -148,7 +147,7 @@ class JobTrigger {
                 }
             }
         } else {
-            routeAddressResult = Response.of(TaskPilotContext.HANDLE_CODE_FAIL, I18nUtil.getString("jobconf_trigger_address_empty"))
+            routeAddressResult = Response.of(TaskPilotContext.HANDLE_CODE_FAIL, "调度失败：执行器地址为空")
         }
 
         val triggerResult = if (address != null) {
@@ -158,30 +157,30 @@ class JobTrigger {
         }
 
         val triggerMsgSb = StringBuilder()
-        triggerMsgSb.append(I18nUtil.getString("jobconf_trigger_type")).append("：").append(triggerType.title)
-        triggerMsgSb.append("<br>").append(I18nUtil.getString("jobconf_trigger_admin_adress")).append("：").append(IPTool.getIp())
-        triggerMsgSb.append("<br>").append(I18nUtil.getString("jobconf_trigger_exe_regtype")).append("：")
+        triggerMsgSb.append("任务触发类型").append("：").append(triggerType.title)
+        triggerMsgSb.append("<br>").append("调度机器").append("：").append(IPTool.getIp())
+        triggerMsgSb.append("<br>").append("执行器-注册方式").append("：")
             .append(
                 if (group.addressType == 0) {
-                    I18nUtil.getString("jobgroup_field_addressType_0")
+                    "自动注册"
                 } else {
-                    I18nUtil.getString("jobgroup_field_addressType_1")
+                    "手动录入"
                 }
             )
-        triggerMsgSb.append("<br>").append(I18nUtil.getString("jobconf_trigger_exe_regaddress")).append("：").append(group.registryList)
-        triggerMsgSb.append("<br>").append(I18nUtil.getString("jobinfo_field_executorRouteStrategy")).append("：")
+        triggerMsgSb.append("<br>").append("执行器-地址列表").append("：").append(group.registryList)
+        triggerMsgSb.append("<br>").append("路由策略").append("：")
             .append(executorRouteStrategyEnum.title)
         if (shardingParam != null) {
             triggerMsgSb.append("(").append(shardingParam).append(")")
         }
-        triggerMsgSb.append("<br>").append(I18nUtil.getString("jobinfo_field_executorBlockStrategy")).append("：").append(blockStrategy.title)
-        triggerMsgSb.append("<br>").append(I18nUtil.getString("jobinfo_field_timeout")).append("：").append(jobInfo.executorTimeout)
-        triggerMsgSb.append("<br>").append(I18nUtil.getString("jobinfo_field_executorFailRetryCount")).append("：").append(finalFailRetryCount)
+        triggerMsgSb.append("<br>").append("阻塞处理策略").append("：").append(blockStrategy.title)
+        triggerMsgSb.append("<br>").append("任务超时时间").append("：").append(jobInfo.executorTimeout)
+        triggerMsgSb.append("<br>").append("失败重试次数").append("：").append(finalFailRetryCount)
 
         triggerMsgSb.append("<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>")
-            .append(I18nUtil.getString("jobconf_trigger_run"))
+            .append("触发调度")
             .append("<<<<<<<<<<< </span><br>")
-        triggerMsgSb.append("<br>").append(I18nUtil.getString("joblog_field_executorAddress")).append("：")
+        triggerMsgSb.append("<br>").append("执行器地址").append("：")
         when {
             StringTool.isNotBlank(address) -> triggerMsgSb.append(address)
             routeAddressResult != null && !routeAddressResult.isSuccess && routeAddressResult.msg != null ->
@@ -191,8 +190,8 @@ class JobTrigger {
         if (StringTool.isNotBlank(jobInfo.executorHandler)) {
             triggerMsgSb.append("<br>").append("任务处理器").append("：").append(jobInfo.executorHandler)
         }
-        triggerMsgSb.append("<br>").append(I18nUtil.getString("jobinfo_field_executorparam")).append("：").append(jobInfo.executorParam)
-        triggerMsgSb.append("<br>").append(I18nUtil.getString("joblog_field_triggerMsg")).append("：")
+        triggerMsgSb.append("<br>").append("任务参数").append("：").append(jobInfo.executorParam)
+        triggerMsgSb.append("<br>").append("调度备注").append("：")
         when {
             triggerResult.isSuccess -> triggerMsgSb.append("成功")
             triggerResult.msg != null -> triggerMsgSb.append("异常，").append(triggerResult.msg)
@@ -219,7 +218,7 @@ class JobTrigger {
             val executorBiz: ExecutorBiz = TaskPilotAdminBootstrap.getExecutorBiz(address)!!
             val runResult = executorBiz.run(triggerParam)
 
-            val runResultSb = StringBuffer(I18nUtil.getString("jobconf_trigger_run") + "：")
+            val runResultSb = StringBuffer("触发调度：")
             runResultSb.append("<br>地址：").append(address)
             runResultSb.append("<br>状态码：").append(runResult.code)
             runResultSb.append("<br>消息：").append(runResult.msg)

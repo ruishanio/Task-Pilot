@@ -2,7 +2,6 @@ package com.ruishanio.taskpilot.admin.scheduler.misfire
 
 import com.ruishanio.taskpilot.admin.scheduler.misfire.strategy.MisfireDoNothing
 import com.ruishanio.taskpilot.admin.scheduler.misfire.strategy.MisfireFireOnceNow
-import com.ruishanio.taskpilot.admin.util.I18nUtil
 
 /**
  * 调度失火策略枚举。
@@ -13,8 +12,8 @@ enum class MisfireStrategyEnum(
     val title: String,
     val misfireHandler: MisfireHandler
 ) {
-    DO_NOTHING(I18nUtil.getString("misfire_strategy_do_nothing"), MisfireDoNothing()),
-    FIRE_ONCE_NOW(I18nUtil.getString("misfire_strategy_fire_once_now"), MisfireFireOnceNow());
+    DO_NOTHING("忽略", MisfireDoNothing()),
+    FIRE_ONCE_NOW("立即执行一次", MisfireFireOnceNow());
 
     companion object {
         /**

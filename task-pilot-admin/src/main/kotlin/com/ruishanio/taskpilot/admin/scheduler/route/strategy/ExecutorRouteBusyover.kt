@@ -2,7 +2,6 @@ package com.ruishanio.taskpilot.admin.scheduler.route.strategy
 
 import com.ruishanio.taskpilot.admin.scheduler.config.TaskPilotAdminBootstrap
 import com.ruishanio.taskpilot.admin.scheduler.route.ExecutorRouter
-import com.ruishanio.taskpilot.admin.util.I18nUtil
 import com.ruishanio.taskpilot.core.openapi.model.IdleBeatRequest
 import com.ruishanio.taskpilot.core.openapi.model.TriggerRequest
 import com.ruishanio.taskpilot.tool.response.Response
@@ -27,7 +26,7 @@ class ExecutorRouteBusyover : ExecutorRouter() {
             if (idleBeatResultBuilder.isNotEmpty()) {
                 idleBeatResultBuilder.append("<br><br>")
             }
-            idleBeatResultBuilder.append(I18nUtil.getString("jobconf_idleBeat"))
+            idleBeatResultBuilder.append("空闲检测")
                 .append("：")
                 .append("<br>地址：").append(address)
                 .append("<br>状态码：").append(idleBeatResult.code)

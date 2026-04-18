@@ -2,7 +2,6 @@ package com.ruishanio.taskpilot.admin.scheduler.route.strategy
 
 import com.ruishanio.taskpilot.admin.scheduler.config.TaskPilotAdminBootstrap
 import com.ruishanio.taskpilot.admin.scheduler.route.ExecutorRouter
-import com.ruishanio.taskpilot.admin.util.I18nUtil
 import com.ruishanio.taskpilot.core.openapi.model.TriggerRequest
 import com.ruishanio.taskpilot.tool.response.Response
 
@@ -26,7 +25,7 @@ class ExecutorRouteFailover : ExecutorRouter() {
             if (beatResultBuilder.isNotEmpty()) {
                 beatResultBuilder.append("<br><br>")
             }
-            beatResultBuilder.append(I18nUtil.getString("jobconf_beat"))
+            beatResultBuilder.append("心跳检测")
                 .append("：")
                 .append("<br>地址：").append(address)
                 .append("<br>状态码：").append(beatResult.code)

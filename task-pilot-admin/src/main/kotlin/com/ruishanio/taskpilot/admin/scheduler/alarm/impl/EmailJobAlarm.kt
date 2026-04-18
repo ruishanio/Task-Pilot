@@ -4,7 +4,6 @@ import com.ruishanio.taskpilot.admin.model.TaskPilotInfo
 import com.ruishanio.taskpilot.admin.model.TaskPilotLog
 import com.ruishanio.taskpilot.admin.scheduler.alarm.JobAlarm
 import com.ruishanio.taskpilot.admin.scheduler.config.TaskPilotAdminBootstrap
-import com.ruishanio.taskpilot.admin.util.I18nUtil
 import com.ruishanio.taskpilot.core.context.TaskPilotContext
 import jakarta.mail.internet.MimeMessage
 import org.slf4j.LoggerFactory
@@ -31,8 +30,8 @@ class EmailJobAlarm : JobAlarm {
             }
 
             val group = TaskPilotAdminBootstrap.instance.taskPilotGroupMapper.load(info.jobGroup)
-            val personal = I18nUtil.getString("admin_name_full")
-            val title = I18nUtil.getString("jobconf_monitor")
+            val personal = "Task Pilot｜分布式任务调度平台"
+            val title = "Task Pilot 监控报警"
             val content = MessageFormat.format(
                 loadEmailJobAlarmTemplate(),
                 group?.title ?: "null",
@@ -69,15 +68,15 @@ class EmailJobAlarm : JobAlarm {
      * 模板保持内联字符串形式，避免引入新的模板文件影响已有部署包结构。
      */
     private fun loadEmailJobAlarmTemplate(): String =
-        "<h5>${I18nUtil.getString("jobconf_monitor_detail")}：</span>" +
+        "<h5>监控告警明细：</span>" +
             "<table border=\"1\" cellpadding=\"3\" style=\"border-collapse:collapse; width:80%;\" >\n" +
             "   <thead style=\"font-weight: bold;color: #ffffff;background-color: #ff8c00;\" >" +
             "      <tr>\n" +
-            "         <td width=\"20%\" >${I18nUtil.getString("jobinfo_field_jobgroup")}</td>\n" +
-            "         <td width=\"10%\" >${I18nUtil.getString("jobinfo_field_id")}</td>\n" +
-            "         <td width=\"20%\" >${I18nUtil.getString("jobinfo_field_jobdesc")}</td>\n" +
-            "         <td width=\"10%\" >${I18nUtil.getString("jobconf_monitor_alarm_title")}</td>\n" +
-            "         <td width=\"40%\" >${I18nUtil.getString("jobconf_monitor_alarm_content")}</td>\n" +
+            "         <td width=\"20%\" >执行器</td>\n" +
+            "         <td width=\"10%\" >任务ID</td>\n" +
+            "         <td width=\"20%\" >任务描述</td>\n" +
+            "         <td width=\"10%\" >告警类型</td>\n" +
+            "         <td width=\"40%\" >告警内容</td>\n" +
             "      </tr>\n" +
             "   </thead>\n" +
             "   <tbody>\n" +
@@ -85,7 +84,7 @@ class EmailJobAlarm : JobAlarm {
             "         <td>{0}</td>\n" +
             "         <td>{1}</td>\n" +
             "         <td>{2}</td>\n" +
-            "         <td>${I18nUtil.getString("jobconf_monitor_alarm_type")}</td>\n" +
+            "         <td>调度失败</td>\n" +
             "         <td>{3}</td>\n" +
             "      </tr>\n" +
             "   </tbody>\n" +

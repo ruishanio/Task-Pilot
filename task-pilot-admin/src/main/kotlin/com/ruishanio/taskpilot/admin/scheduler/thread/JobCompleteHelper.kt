@@ -2,7 +2,6 @@ package com.ruishanio.taskpilot.admin.scheduler.thread
 
 import com.ruishanio.taskpilot.admin.model.TaskPilotLog
 import com.ruishanio.taskpilot.admin.scheduler.config.TaskPilotAdminBootstrap
-import com.ruishanio.taskpilot.admin.util.I18nUtil
 import com.ruishanio.taskpilot.core.context.TaskPilotContext
 import com.ruishanio.taskpilot.core.openapi.model.CallbackRequest
 import com.ruishanio.taskpilot.tool.core.DateTool
@@ -62,7 +61,7 @@ class JobCompleteHelper {
                                 id = logId
                                 handleTime = Date()
                                 handleCode = TaskPilotContext.HANDLE_CODE_FAIL
-                                handleMsg = I18nUtil.getString("joblog_lost_fail")
+                                handleMsg = "任务结果丢失，标记失败"
                             }
                             TaskPilotAdminBootstrap.instance.jobCompleter.complete(jobLog)
                         }

@@ -7,7 +7,7 @@ import com.ruishanio.taskpilot.admin.mapper.TaskPilotInfoMapper
 import com.ruishanio.taskpilot.admin.mapper.TaskPilotRegistryMapper
 import com.ruishanio.taskpilot.admin.model.TaskPilotGroup
 import com.ruishanio.taskpilot.admin.model.TaskPilotRegistry
-import com.ruishanio.taskpilot.admin.util.I18nUtil
+import com.ruishanio.taskpilot.admin.util.FrontendEntry
 import com.ruishanio.taskpilot.core.constant.Const
 import com.ruishanio.taskpilot.core.constant.RegistType
 import com.ruishanio.taskpilot.tool.core.CollectionTool
@@ -17,12 +17,10 @@ import com.ruishanio.taskpilot.tool.response.PageModel
 import com.ruishanio.taskpilot.tool.response.Response
 import jakarta.annotation.Resource
 import org.springframework.stereotype.Controller
-import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseBody
 import java.util.ArrayList
-import java.util.Collections
 import java.util.Date
 import java.util.HashMap
 
@@ -43,7 +41,7 @@ class JobGroupController {
 
     @RequestMapping
     @TaskPilotAuth(role = Consts.ADMIN_ROLE)
-    fun index(model: Model): String = "biz/group.list"
+    fun index(): String = FrontendEntry.route("/jobgroup")
 
     @RequestMapping("/pageList")
     @ResponseBody
@@ -98,19 +96,19 @@ class JobGroupController {
     @TaskPilotAuth(role = Consts.ADMIN_ROLE)
     fun delete(@RequestParam("ids[]") ids: List<Int>): Response<String> {
         if (CollectionTool.isEmpty(ids) || ids.size != 1) {
-            return Response.ofFail(I18nUtil.getString("system_please_choose") + I18nUtil.getString("system_one") + I18nUtil.getString("system_data"))
+            return Response.ofFail("请选择一条数据")
         }
         val id = ids[0]
 
         val taskPilotGroup = taskPilotGroupMapper.load(id) ?: return Response.ofSuccess()
         val count = taskPilotInfoMapper.pageListCount(0, 10, id, -1, null, null, null)
         if (count > 0) {
-            return Response.ofFail(I18nUtil.getString("jobgroup_del_limit_0"))
+            return Response.ofFail("拒绝删除，该执行器使用中")
         }
 
         val allList = taskPilotGroupMapper.findAll()
         if (allList.size == 1) {
-            return Response.ofFail(I18nUtil.getString("jobgroup_del_limit_1"))
+            return Response.ofFail("拒绝删除, 系统至少保留一个执行器")
         }
 
         val ret = taskPilotGroupMapper.remove(id)
@@ -130,19 +128,19 @@ class JobGroupController {
      */
     private fun validGroup(taskPilotGroup: TaskPilotGroup, isUpdate: Boolean): Response<String> {
         if (StringTool.isBlank(taskPilotGroup.appname)) {
-            return Response.ofFail(I18nUtil.getString("system_please_input") + "AppName")
+            return Response.ofFail("请输入AppName")
         }
         if (taskPilotGroup.appname!!.length !in 4..64) {
-            return Response.ofFail(I18nUtil.getString("jobgroup_field_appname_length"))
+            return Response.ofFail("AppName长度限制为4~64")
         }
         if (taskPilotGroup.appname!!.contains(">") || taskPilotGroup.appname!!.contains("<")) {
-            return Response.ofFail("AppName" + I18nUtil.getString("system_unvalid"))
+            return Response.ofFail("AppName非法")
         }
         if (StringTool.isBlank(taskPilotGroup.title)) {
-            return Response.ofFail(I18nUtil.getString("system_please_input") + I18nUtil.getString("jobgroup_field_title"))
+            return Response.ofFail("请输入名称")
         }
         if (taskPilotGroup.title!!.contains(">") || taskPilotGroup.title!!.contains("<")) {
-            return Response.ofFail(I18nUtil.getString("jobgroup_field_title") + I18nUtil.getString("system_unvalid"))
+            return Response.ofFail("名称非法")
         }
 
         if (isUpdate && taskPilotGroup.addressType == 0) {
@@ -155,14 +153,14 @@ class JobGroupController {
             }
         } else if (taskPilotGroup.addressType != 0) {
             if (StringTool.isBlank(taskPilotGroup.addressList)) {
-                return Response.ofFail(I18nUtil.getString("jobgroup_field_addressType_limit"))
+                return Response.ofFail("手动录入注册方式，机器地址不可为空")
             }
             for (item in taskPilotGroup.addressList!!.split(",")) {
                 if (StringTool.isBlank(item)) {
-                    return Response.ofFail(I18nUtil.getString("jobgroup_field_registryList_unvalid"))
+                    return Response.ofFail("机器地址格式非法")
                 }
                 if (!(HttpTool.isHttp(item) || HttpTool.isHttps(item))) {
-                    return Response.ofFail(I18nUtil.getString("jobgroup_field_registryList_unvalid") + "[2]")
+                    return Response.ofFail("机器地址格式非法[2]")
                 }
             }
         }

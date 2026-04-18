@@ -53,8 +53,18 @@ class WebHandlerExceptionResolver : HandlerExceptionResolver {
             return mv
         }
 
-        mv.addObject("exceptionMsg", ex.toString())
-        mv.viewName = "common/common.errorpage"
+        try {
+            val httpStatus = when ((ex as? TaskPilotAuthException)?.errorCode) {
+                HttpServletResponse.SC_UNAUTHORIZED -> HttpServletResponse.SC_UNAUTHORIZED
+                HttpServletResponse.SC_FORBIDDEN -> HttpServletResponse.SC_FORBIDDEN
+                else -> HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+            }
+            response.status = httpStatus
+            response.contentType = "text/plain;charset=UTF-8"
+            response.writer.println(ex.message ?: ex.toString())
+        } catch (ioe: IOException) {
+            logger.error("输出页面异常响应时发生异常。", ioe)
+        }
         return mv
     }
 

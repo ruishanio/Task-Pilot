@@ -5,7 +5,7 @@ import com.ruishanio.taskpilot.admin.auth.helper.TaskPilotAuthHelper
 import com.ruishanio.taskpilot.admin.auth.model.LoginInfo
 import com.ruishanio.taskpilot.admin.mapper.TaskPilotUserMapper
 import com.ruishanio.taskpilot.admin.model.TaskPilotUser
-import com.ruishanio.taskpilot.admin.util.I18nUtil
+import com.ruishanio.taskpilot.admin.util.FrontendEntry
 import com.ruishanio.taskpilot.tool.core.StringTool
 import com.ruishanio.taskpilot.tool.crypto.Sha256Tool
 import com.ruishanio.taskpilot.tool.id.UUIDTool
@@ -17,8 +17,6 @@ import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.ResponseBody
-import org.springframework.web.servlet.ModelAndView
-import org.springframework.web.servlet.view.RedirectView
 
 /**
  * 登录与密码维护控制器。
@@ -33,17 +31,9 @@ class LoginController {
 
     @RequestMapping("/login")
     @TaskPilotAuth(login = false)
-    fun login(
-        request: HttpServletRequest,
-        response: HttpServletResponse,
-        modelAndView: ModelAndView
-    ): ModelAndView {
+    fun login(request: HttpServletRequest, response: HttpServletResponse): String {
         val loginInfoResponse = TaskPilotAuthHelper.loginCheckWithCookie(request, response)
-        if (loginInfoResponse.isSuccess) {
-            modelAndView.view = RedirectView("/", true, false)
-            return modelAndView
-        }
-        return ModelAndView("base/login")
+        return if (loginInfoResponse.isSuccess) FrontendEntry.route("/dashboard") else FrontendEntry.route("/login")
     }
 
     /**
@@ -61,15 +51,15 @@ class LoginController {
     ): Response<String> {
         val ifRem = StringTool.isNotBlank(ifRemember) && "on" == ifRemember
         if (StringTool.isBlank(userName) || StringTool.isBlank(password)) {
-            return Response.ofFail(I18nUtil.getString("login_param_empty"))
+            return Response.ofFail("账号或密码为空")
         }
         val normalizedPassword = password!!.trim()
 
         val taskPilotUser = taskPilotUserMapper.loadByUserName(userName)
-            ?: return Response.ofFail(I18nUtil.getString("login_param_unvalid"))
+            ?: return Response.ofFail("账号或密码错误")
         val passwordHash = Sha256Tool.sha256(normalizedPassword)
         if (passwordHash != taskPilotUser.password) {
-            return Response.ofFail(I18nUtil.getString("login_param_unvalid"))
+            return Response.ofFail("账号或密码错误")
         }
 
         val loginInfo = LoginInfo(
@@ -101,14 +91,14 @@ class LoginController {
         password: String?
     ): Response<String> {
         if (oldPassword == null || oldPassword.trim().isEmpty()) {
-            return Response.ofFail(I18nUtil.getString("system_please_input") + I18nUtil.getString("change_pwd_field_oldpwd"))
+            return Response.ofFail("请输入旧密码")
         }
         if (password == null || password.trim().isEmpty()) {
-            return Response.ofFail(I18nUtil.getString("system_please_input") + I18nUtil.getString("change_pwd_field_oldpwd"))
+            return Response.ofFail("请输入旧密码")
         }
         val normalizedPassword = password.trim()
         if (normalizedPassword.length !in 4..20) {
-            return Response.ofFail(I18nUtil.getString("system_lengh_limit") + "[4-20]")
+            return Response.ofFail("长度限制[4-20]")
         }
 
         val oldPasswordHash = Sha256Tool.sha256(oldPassword)
@@ -118,7 +108,7 @@ class LoginController {
         val loginInfo = loginInfoResponse.data ?: return Response.ofFail("not login.")
         val existUser = taskPilotUserMapper.loadByUserName(loginInfo.userName) as TaskPilotUser
         if (oldPasswordHash != existUser.password) {
-            return Response.ofFail(I18nUtil.getString("change_pwd_field_oldpwd") + I18nUtil.getString("system_unvalid"))
+            return Response.ofFail("旧密码非法")
         }
 
         existUser.password = passwordHash

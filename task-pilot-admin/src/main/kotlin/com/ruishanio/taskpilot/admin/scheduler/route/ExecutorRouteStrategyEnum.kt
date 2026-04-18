@@ -9,7 +9,6 @@ import com.ruishanio.taskpilot.admin.scheduler.route.strategy.ExecutorRouteLRU
 import com.ruishanio.taskpilot.admin.scheduler.route.strategy.ExecutorRouteLast
 import com.ruishanio.taskpilot.admin.scheduler.route.strategy.ExecutorRouteRandom
 import com.ruishanio.taskpilot.admin.scheduler.route.strategy.ExecutorRouteRound
-import com.ruishanio.taskpilot.admin.util.I18nUtil
 
 /**
  * 执行器路由策略枚举。
@@ -20,16 +19,16 @@ enum class ExecutorRouteStrategyEnum(
     val title: String,
     val router: ExecutorRouter?
 ) {
-    FIRST(I18nUtil.getString("jobconf_route_first"), ExecutorRouteFirst()),
-    LAST(I18nUtil.getString("jobconf_route_last"), ExecutorRouteLast()),
-    ROUND(I18nUtil.getString("jobconf_route_round"), ExecutorRouteRound()),
-    RANDOM(I18nUtil.getString("jobconf_route_random"), ExecutorRouteRandom()),
-    CONSISTENT_HASH(I18nUtil.getString("jobconf_route_consistenthash"), ExecutorRouteConsistentHash()),
-    LEAST_FREQUENTLY_USED(I18nUtil.getString("jobconf_route_lfu"), ExecutorRouteLFU()),
-    LEAST_RECENTLY_USED(I18nUtil.getString("jobconf_route_lru"), ExecutorRouteLRU()),
-    FAILOVER(I18nUtil.getString("jobconf_route_failover"), ExecutorRouteFailover()),
-    BUSYOVER(I18nUtil.getString("jobconf_route_busyover"), ExecutorRouteBusyover()),
-    SHARDING_BROADCAST(I18nUtil.getString("jobconf_route_shard"), null);
+    FIRST("第一个", ExecutorRouteFirst()),
+    LAST("最后一个", ExecutorRouteLast()),
+    ROUND("轮询", ExecutorRouteRound()),
+    RANDOM("随机", ExecutorRouteRandom()),
+    CONSISTENT_HASH("一致性HASH", ExecutorRouteConsistentHash()),
+    LEAST_FREQUENTLY_USED("最不经常使用", ExecutorRouteLFU()),
+    LEAST_RECENTLY_USED("最近最久未使用", ExecutorRouteLRU()),
+    FAILOVER("故障转移", ExecutorRouteFailover()),
+    BUSYOVER("忙碌转移", ExecutorRouteBusyover()),
+    SHARDING_BROADCAST("分片广播", null);
 
     companion object {
         /**

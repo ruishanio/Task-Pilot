@@ -35,7 +35,7 @@ object JobGroupPermissionUtil {
         val loginInfoResponse = TaskPilotAuthHelper.loginCheckWithAttr(request)
         val loginInfo = loginInfoResponse.data
         if (!(loginInfoResponse.isSuccess && loginInfo != null && hasJobGroupPermission(loginInfo, jobGroup))) {
-            throw RuntimeException(I18nUtil.getString("system_permission_limit") + "[username=${loginInfo?.userName}]")
+            throw RuntimeException("权限拦截[username=${loginInfo?.userName}]")
         }
         return loginInfo
     }

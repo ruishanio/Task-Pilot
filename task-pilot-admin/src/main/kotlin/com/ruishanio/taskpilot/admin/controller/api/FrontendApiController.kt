@@ -15,7 +15,6 @@ import com.ruishanio.taskpilot.admin.scheduler.misfire.MisfireStrategyEnum
 import com.ruishanio.taskpilot.admin.scheduler.route.ExecutorRouteStrategyEnum
 import com.ruishanio.taskpilot.admin.scheduler.type.ScheduleTypeEnum
 import com.ruishanio.taskpilot.admin.service.TaskPilotService
-import com.ruishanio.taskpilot.admin.util.I18nUtil
 import com.ruishanio.taskpilot.admin.util.JobGroupPermissionUtil
 import com.ruishanio.taskpilot.core.constant.ExecutorBlockStrategyEnum
 import com.ruishanio.taskpilot.core.glue.GlueTypeEnum
@@ -51,9 +50,9 @@ class FrontendApiController {
     fun bootstrap(request: HttpServletRequest): Response<Map<String, Any>> {
         val loginInfo = requireLoginInfo(request)
         val data = HashMap<String, Any>()
-        data["appName"] = I18nUtil.getString("admin_name")
-        data["appNameFull"] = I18nUtil.getString("admin_name_full")
-        data["version"] = I18nUtil.getString("admin_version")
+        data["appName"] = "Task Pilot"
+        data["appNameFull"] = "Task Pilot｜分布式任务调度平台"
+        data["version"] = "3.3.2"
         data["menus"] = buildMenuList(loginInfo)
         data["user"] = buildUserInfo(loginInfo)
         return Response.ofSuccess(data)
@@ -74,7 +73,7 @@ class FrontendApiController {
     ): Response<Map<String, Any>> {
         val jobGroupList = JobGroupPermissionUtil.filterJobGroupByPermission(request, taskPilotGroupMapper.findAll())
         if (CollectionTool.isEmpty(jobGroupList)) {
-            throw TaskPilotException(I18nUtil.getString("jobgroup_empty"))
+            throw TaskPilotException("不存在有效执行器,请联系管理员")
         }
 
         val accessibleGroupIds = jobGroupList.map(TaskPilotGroup::id)
@@ -84,21 +83,21 @@ class FrontendApiController {
         data["groups"] = jobGroupList
         data["selectedJobGroup"] = selectedJobGroup
         data["triggerStatusOptions"] = listOf(
-            option("-1", I18nUtil.getString("system_all")),
-            option(TriggerStatus.STOPPED.value.toString(), I18nUtil.getString("jobinfo_opt_stop")),
-            option(TriggerStatus.RUNNING.value.toString(), I18nUtil.getString("jobinfo_opt_start"))
+            option("-1", "全部"),
+            option(TriggerStatus.STOPPED.value.toString(), "停止"),
+            option(TriggerStatus.RUNNING.value.toString(), "启动")
         )
-        data["scheduleTypeOptions"] = ScheduleTypeEnum.values().map { option(it.name, it.title) }
-        data["glueTypeOptions"] = GlueTypeEnum.values().map {
+        data["scheduleTypeOptions"] = ScheduleTypeEnum.entries.map { option(it.name, it.title) }
+        data["glueTypeOptions"] = GlueTypeEnum.entries.map {
             option(it.name, it.desc).also { payload ->
                 payload["isScript"] = it.isScript
                 payload["cmd"] = it.cmd
                 payload["suffix"] = it.suffix
             }
         }
-        data["executorRouteStrategyOptions"] = ExecutorRouteStrategyEnum.values().map { option(it.name, it.title) }
-        data["executorBlockStrategyOptions"] = ExecutorBlockStrategyEnum.values().map { option(it.name, it.title) }
-        data["misfireStrategyOptions"] = MisfireStrategyEnum.values().map { option(it.name, it.title) }
+        data["executorRouteStrategyOptions"] = ExecutorRouteStrategyEnum.entries.map { option(it.name, it.title) }
+        data["executorBlockStrategyOptions"] = ExecutorBlockStrategyEnum.entries.map { option(it.name, it.title) }
+        data["misfireStrategyOptions"] = MisfireStrategyEnum.entries.map { option(it.name, it.title) }
         return Response.ofSuccess(data)
     }
 
@@ -111,13 +110,13 @@ class FrontendApiController {
     ): Response<Map<String, Any>> {
         val jobGroupList = JobGroupPermissionUtil.filterJobGroupByPermission(request, taskPilotGroupMapper.findAll())
         if (CollectionTool.isEmpty(jobGroupList)) {
-            throw TaskPilotException(I18nUtil.getString("jobgroup_empty"))
+            throw TaskPilotException("不存在有效执行器,请联系管理员")
         }
 
         var selectedGroupParam = jobGroup ?: 0
         if (jobId != null && jobId > 0) {
             val jobInfo = taskPilotInfoMapper.loadById(jobId)
-                ?: throw RuntimeException(I18nUtil.getString("jobinfo_field_id") + I18nUtil.getString("system_unvalid"))
+                ?: throw RuntimeException("任务ID非法")
             selectedGroupParam = jobInfo.jobGroup
         }
 
@@ -137,21 +136,21 @@ class FrontendApiController {
         data["selectedJobGroup"] = selectedJobGroup
         data["selectedJobId"] = selectedJobId
         data["logStatusOptions"] = listOf(
-            option("-1", I18nUtil.getString("joblog_status_all")),
-            option("1", I18nUtil.getString("joblog_status_suc")),
-            option("2", I18nUtil.getString("joblog_status_fail")),
-            option("3", I18nUtil.getString("joblog_status_running"))
+            option("-1", "全部"),
+            option("1", "成功"),
+            option("2", "失败"),
+            option("3", "进行中")
         )
         data["clearLogOptions"] = listOf(
-            option("1", I18nUtil.getString("joblog_clean_type_1")),
-            option("2", I18nUtil.getString("joblog_clean_type_2")),
-            option("3", I18nUtil.getString("joblog_clean_type_3")),
-            option("4", I18nUtil.getString("joblog_clean_type_4")),
-            option("5", I18nUtil.getString("joblog_clean_type_5")),
-            option("6", I18nUtil.getString("joblog_clean_type_6")),
-            option("7", I18nUtil.getString("joblog_clean_type_7")),
-            option("8", I18nUtil.getString("joblog_clean_type_8")),
-            option("9", I18nUtil.getString("joblog_clean_type_9"))
+            option("1", "清理一个月之前日志数据"),
+            option("2", "清理三个月之前日志数据"),
+            option("3", "清理六个月之前日志数据"),
+            option("4", "清理一年之前日志数据"),
+            option("5", "清理一千条以前日志数据"),
+            option("6", "清理一万条以前日志数据"),
+            option("7", "清理三万条以前日志数据"),
+            option("8", "清理十万条以前日志数据"),
+            option("9", "清理所有日志数据")
         )
         return Response.ofSuccess(data)
     }
@@ -162,8 +161,8 @@ class FrontendApiController {
         val data = HashMap<String, Any>()
         data["groups"] = taskPilotGroupMapper.findAll()
         data["roleOptions"] = listOf(
-            option("1", I18nUtil.getString("user_role_admin")),
-            option("0", I18nUtil.getString("user_role_normal"))
+            option("1", "管理员"),
+            option("0", "普通用户")
         )
         return Response.ofSuccess(data)
     }
@@ -173,11 +172,11 @@ class FrontendApiController {
      */
     private fun buildMenuList(loginInfo: LoginInfo): List<TaskPilotBootResourceDTO> {
         var resourceList = listOf(
-            TaskPilotBootResourceDTO(1, 0, I18nUtil.getString("job_dashboard_name"), 1, "", "/dashboard", "fa-home", 1, 0, null),
-            TaskPilotBootResourceDTO(2, 0, I18nUtil.getString("jobinfo_name"), 1, "", "/jobinfo", "fa-clock-o", 2, 0, null),
-            TaskPilotBootResourceDTO(3, 0, I18nUtil.getString("joblog_name"), 1, "", "/joblog", "fa-database", 3, 0, null),
-            TaskPilotBootResourceDTO(4, 0, I18nUtil.getString("jobgroup_name"), 1, Consts.ADMIN_ROLE, "/jobgroup", "fa-cloud", 4, 0, null),
-            TaskPilotBootResourceDTO(5, 0, I18nUtil.getString("user_manage"), 1, Consts.ADMIN_ROLE, "/user", "fa-users", 5, 0, null)
+            TaskPilotBootResourceDTO(1, 0, "工作台", 1, "", "/dashboard", "fa-home", 1, 0, null),
+            TaskPilotBootResourceDTO(2, 0, "任务管理", 1, "", "/jobinfo", "fa-clock-o", 2, 0, null),
+            TaskPilotBootResourceDTO(3, 0, "调度日志", 1, "", "/joblog", "fa-database", 3, 0, null),
+            TaskPilotBootResourceDTO(4, 0, "执行器管理", 1, Consts.ADMIN_ROLE, "/jobgroup", "fa-cloud", 4, 0, null),
+            TaskPilotBootResourceDTO(5, 0, "用户管理", 1, Consts.ADMIN_ROLE, "/user", "fa-users", 5, 0, null)
         )
         if (!TaskPilotAuthHelper.hasRole(loginInfo, Consts.ADMIN_ROLE).isSuccess) {
             resourceList = resourceList.filter { StringTool.isBlank(it.permission) }

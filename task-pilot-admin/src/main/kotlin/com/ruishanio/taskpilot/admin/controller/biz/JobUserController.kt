@@ -4,11 +4,9 @@ import com.ruishanio.taskpilot.admin.auth.annotation.TaskPilotAuth
 import com.ruishanio.taskpilot.admin.auth.helper.TaskPilotAuthHelper
 import com.ruishanio.taskpilot.admin.auth.model.LoginInfo
 import com.ruishanio.taskpilot.admin.constant.Consts
-import com.ruishanio.taskpilot.admin.mapper.TaskPilotGroupMapper
 import com.ruishanio.taskpilot.admin.mapper.TaskPilotUserMapper
-import com.ruishanio.taskpilot.admin.model.TaskPilotGroup
 import com.ruishanio.taskpilot.admin.model.TaskPilotUser
-import com.ruishanio.taskpilot.admin.util.I18nUtil
+import com.ruishanio.taskpilot.admin.util.FrontendEntry
 import com.ruishanio.taskpilot.tool.core.CollectionTool
 import com.ruishanio.taskpilot.tool.core.StringTool
 import com.ruishanio.taskpilot.tool.crypto.Sha256Tool
@@ -17,7 +15,6 @@ import com.ruishanio.taskpilot.tool.response.Response
 import jakarta.annotation.Resource
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.stereotype.Controller
-import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseBody
@@ -31,16 +28,9 @@ class JobUserController {
     @Resource
     private lateinit var taskPilotUserMapper: TaskPilotUserMapper
 
-    @Resource
-    private lateinit var taskPilotGroupMapper: TaskPilotGroupMapper
-
     @RequestMapping
     @TaskPilotAuth(role = Consts.ADMIN_ROLE)
-    fun index(model: Model): String {
-        val groupList: List<TaskPilotGroup> = taskPilotGroupMapper.findAll()
-        model.addAttribute("groupList", groupList)
-        return "biz/user.list"
-    }
+    fun index(): String = FrontendEntry.route("/user")
 
     @RequestMapping("/pageList")
     @ResponseBody
@@ -70,25 +60,25 @@ class JobUserController {
     @TaskPilotAuth(role = Consts.ADMIN_ROLE)
     fun insert(taskPilotUser: TaskPilotUser): Response<String> {
         if (StringTool.isBlank(taskPilotUser.username)) {
-            return Response.ofFail(I18nUtil.getString("system_please_input") + I18nUtil.getString("user_username"))
+            return Response.ofFail("请输入账号")
         }
         taskPilotUser.username = taskPilotUser.username!!.trim()
         if (taskPilotUser.username!!.length !in 4..20) {
-            return Response.ofFail(I18nUtil.getString("system_lengh_limit") + "[4-20]")
+            return Response.ofFail("长度限制[4-20]")
         }
         if (StringTool.isBlank(taskPilotUser.password)) {
-            return Response.ofFail(I18nUtil.getString("system_please_input") + I18nUtil.getString("user_password"))
+            return Response.ofFail("请输入密码")
         }
         taskPilotUser.password = taskPilotUser.password!!.trim()
         val normalizedPassword = taskPilotUser.password!!
         if (normalizedPassword.length !in 4..20) {
-            return Response.ofFail(I18nUtil.getString("system_lengh_limit") + "[4-20]")
+            return Response.ofFail("长度限制[4-20]")
         }
         taskPilotUser.password = Sha256Tool.sha256(normalizedPassword)
 
         val existUser = taskPilotUserMapper.loadByUserName(taskPilotUser.username)
         if (existUser != null) {
-            return Response.ofFail(I18nUtil.getString("user_username_repeat"))
+            return Response.ofFail("账号重复")
         }
 
         taskPilotUserMapper.save(taskPilotUser)
@@ -105,14 +95,14 @@ class JobUserController {
         val loginInfoResponse = TaskPilotAuthHelper.loginCheckWithAttr(request)
         val loginInfo = loginInfoResponse.data ?: return Response.ofFail("not login.")
         if (loginInfo.userName == taskPilotUser.username) {
-            return Response.ofFail(I18nUtil.getString("user_update_loginuser_limit"))
+            return Response.ofFail("禁止操作当前登录账号")
         }
 
         if (StringTool.isNotBlank(taskPilotUser.password)) {
             taskPilotUser.password = taskPilotUser.password!!.trim()
             val normalizedPassword = taskPilotUser.password!!
             if (normalizedPassword.length !in 4..20) {
-                return Response.ofFail(I18nUtil.getString("system_lengh_limit") + "[4-20]")
+                return Response.ofFail("长度限制[4-20]")
             }
             taskPilotUser.password = Sha256Tool.sha256(normalizedPassword)
         } else {
@@ -128,13 +118,13 @@ class JobUserController {
     @TaskPilotAuth(role = Consts.ADMIN_ROLE)
     fun delete(request: HttpServletRequest, @RequestParam("ids[]") ids: List<Int>): Response<String> {
         if (CollectionTool.isEmpty(ids) || ids.size != 1) {
-            return Response.ofFail(I18nUtil.getString("system_please_choose") + I18nUtil.getString("system_one") + I18nUtil.getString("system_data"))
+            return Response.ofFail("请选择一条数据")
         }
 
         val loginInfoResponse: Response<LoginInfo> = TaskPilotAuthHelper.loginCheckWithAttr(request)
         val loginInfo = loginInfoResponse.data ?: return Response.ofFail("not login.")
         if (ids.contains(loginInfo.userId!!.toInt())) {
-            return Response.ofFail(I18nUtil.getString("user_update_loginuser_limit"))
+            return Response.ofFail("禁止操作当前登录账号")
         }
 
         taskPilotUserMapper.delete(ids[0])

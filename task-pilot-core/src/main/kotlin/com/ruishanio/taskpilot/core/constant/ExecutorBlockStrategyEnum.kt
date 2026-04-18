@@ -2,18 +2,16 @@ package com.ruishanio.taskpilot.core.constant
 
 /**
  * 执行器阻塞策略枚举。
- *
- * `title` 保持可变，便于启动阶段按国际化资源覆盖默认展示文案。
  */
 enum class ExecutorBlockStrategyEnum(
     /**
      * 展示文案。
      */
-    var title: String
+    val title: String
 ) {
-    SERIAL_EXECUTION("Serial execution"),
-    DISCARD_LATER("Discard Later"),
-    COVER_EARLY("Cover Early");
+    SERIAL_EXECUTION("单机串行"),
+    DISCARD_LATER("丢弃后续调度"),
+    COVER_EARLY("覆盖之前调度");
 
     companion object {
         /**

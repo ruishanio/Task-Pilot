@@ -3,7 +3,6 @@ package com.ruishanio.taskpilot.admin.scheduler.type
 import com.ruishanio.taskpilot.admin.scheduler.type.strategy.CronScheduleType
 import com.ruishanio.taskpilot.admin.scheduler.type.strategy.FixRateScheduleType
 import com.ruishanio.taskpilot.admin.scheduler.type.strategy.NoneScheduleType
-import com.ruishanio.taskpilot.admin.util.I18nUtil
 
 /**
  * 调度类型枚举。
@@ -14,9 +13,9 @@ enum class ScheduleTypeEnum(
     val title: String,
     val scheduleType: ScheduleType
 ) {
-    NONE(I18nUtil.getString("schedule_type_none"), NoneScheduleType()),
-    CRON(I18nUtil.getString("schedule_type_cron"), CronScheduleType()),
-    FIX_RATE(I18nUtil.getString("schedule_type_fix_rate"), FixRateScheduleType());
+    NONE("无", NoneScheduleType()),
+    CRON("CRON", CronScheduleType()),
+    FIX_RATE("固定速度", FixRateScheduleType());
 
     companion object {
         /**

@@ -22,14 +22,6 @@ spring:
   web:
     resources:
       static-locations: classpath:/static/
-  freemarker:
-    templateLoaderPath: classpath:/templates/
-    suffix: .ftl
-    charset: UTF-8
-    request-context-attribute: request
-    settings:
-      number_format: 0.##########
-      new_builtin_class_resolver: safer
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     hikari:

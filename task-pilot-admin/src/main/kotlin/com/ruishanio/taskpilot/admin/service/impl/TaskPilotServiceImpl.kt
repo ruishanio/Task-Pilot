@@ -18,7 +18,6 @@ import com.ruishanio.taskpilot.admin.scheduler.thread.JobScheduleHelper
 import com.ruishanio.taskpilot.admin.scheduler.trigger.TriggerTypeEnum
 import com.ruishanio.taskpilot.admin.scheduler.type.ScheduleTypeEnum
 import com.ruishanio.taskpilot.admin.service.TaskPilotService
-import com.ruishanio.taskpilot.admin.util.I18nUtil
 import com.ruishanio.taskpilot.admin.util.JobGroupPermissionUtil
 import com.ruishanio.taskpilot.core.constant.ExecutorBlockStrategyEnum
 import com.ruishanio.taskpilot.core.glue.GlueTypeEnum
@@ -104,7 +103,7 @@ class TaskPilotServiceImpl : TaskPilotService {
         }
         taskPilotInfoMapper.save(jobInfo)
         if (jobInfo.id < 1) {
-            return Response.ofFail(I18nUtil.getString("jobinfo_field_add") + I18nUtil.getString("system_fail"))
+            return Response.ofFail("新增失败")
         }
 
         logger.info(
@@ -118,14 +117,14 @@ class TaskPilotServiceImpl : TaskPilotService {
 
     override fun update(jobInfo: TaskPilotInfo, loginInfo: LoginInfo): Response<String> {
         if (StringTool.isBlank(jobInfo.jobDesc)) {
-            return Response.ofFail(I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_jobdesc"))
+            return Response.ofFail("请输入任务描述")
         }
         if (StringTool.isBlank(jobInfo.author)) {
-            return Response.ofFail(I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_author"))
+            return Response.ofFail("请输入负责人")
         }
 
         val scheduleTypeEnum = ScheduleTypeEnum.match(jobInfo.scheduleType, null)
-            ?: return Response.ofFail(I18nUtil.getString("schedule_type") + I18nUtil.getString("system_unvalid"))
+            ?: return Response.ofFail("调度类型非法")
         val triggerValidResult = validSchedule(jobInfo, scheduleTypeEnum)
         if (!triggerValidResult.isSuccess) {
             return triggerValidResult
@@ -142,10 +141,10 @@ class TaskPilotServiceImpl : TaskPilotService {
         }
 
         val jobGroup = taskPilotGroupMapper.load(jobInfo.jobGroup)
-            ?: return Response.ofFail(I18nUtil.getString("jobinfo_field_jobgroup") + I18nUtil.getString("system_unvalid"))
+            ?: return Response.ofFail("执行器非法")
 
         val existsJobInfo = taskPilotInfoMapper.loadById(jobInfo.id)
-            ?: return Response.ofFail(I18nUtil.getString("jobinfo_field_id") + I18nUtil.getString("system_not_found"))
+            ?: return Response.ofFail("任务ID不存在")
 
         var nextTriggerTime = existsJobInfo.triggerNextTime
         val scheduleDataNotChanged = jobInfo.scheduleType == existsJobInfo.scheduleType &&
@@ -155,11 +154,11 @@ class TaskPilotServiceImpl : TaskPilotService {
                 val nextValidTime = scheduleTypeEnum.scheduleType.generateNextTriggerTime(
                     jobInfo,
                     Date(System.currentTimeMillis() + JobScheduleHelper.PRE_READ_MS)
-                ) ?: return Response.ofFail(I18nUtil.getString("schedule_type") + I18nUtil.getString("system_unvalid"))
+                ) ?: return Response.ofFail("调度类型非法")
                 nextTriggerTime = nextValidTime.time
             } catch (e: Exception) {
                 logger.error("重新计算任务下次触发时间时发生异常。jobId={}", jobInfo.id, e)
-                return Response.ofFail(I18nUtil.getString("schedule_type") + I18nUtil.getString("system_unvalid"))
+                return Response.ofFail("调度类型非法")
             }
         }
 
@@ -193,7 +192,7 @@ class TaskPilotServiceImpl : TaskPilotService {
     override fun remove(id: Int, loginInfo: LoginInfo): Response<String> {
         val taskPilotInfo = taskPilotInfoMapper.loadById(id) ?: return Response.ofSuccess()
         if (!JobGroupPermissionUtil.hasJobGroupPermission(loginInfo, taskPilotInfo.jobGroup)) {
-            return Response.ofFail(I18nUtil.getString("system_permission_limit"))
+            return Response.ofFail("权限拦截")
         }
 
         taskPilotInfoMapper.delete(id.toLong())
@@ -211,26 +210,26 @@ class TaskPilotServiceImpl : TaskPilotService {
 
     override fun start(id: Int, loginInfo: LoginInfo): Response<String> {
         val taskPilotInfo = taskPilotInfoMapper.loadById(id)
-            ?: return Response.ofFail(I18nUtil.getString("jobinfo_glue_jobid_unvalid"))
+            ?: return Response.ofFail("任务ID非法")
         if (!JobGroupPermissionUtil.hasJobGroupPermission(loginInfo, taskPilotInfo.jobGroup)) {
-            return Response.ofFail(I18nUtil.getString("system_permission_limit"))
+            return Response.ofFail("权限拦截")
         }
 
         val scheduleTypeEnum = ScheduleTypeEnum.match(taskPilotInfo.scheduleType, ScheduleTypeEnum.NONE)
             ?: ScheduleTypeEnum.NONE
         if (scheduleTypeEnum == ScheduleTypeEnum.NONE) {
-            return Response.ofFail(I18nUtil.getString("schedule_type_none_limit_start"))
+            return Response.ofFail("当前调度类型禁止启动")
         }
 
         val nextTriggerTime = try {
             val nextValidTime = scheduleTypeEnum.scheduleType.generateNextTriggerTime(
                 taskPilotInfo,
                 Date(System.currentTimeMillis() + JobScheduleHelper.PRE_READ_MS)
-            ) ?: return Response.ofFail(I18nUtil.getString("schedule_type") + I18nUtil.getString("system_unvalid"))
+            ) ?: return Response.ofFail("调度类型非法")
             nextValidTime.time
         } catch (e: Exception) {
             logger.error("启动任务并计算下次触发时间时发生异常。jobId={}", id, e)
-            return Response.ofFail(I18nUtil.getString("schedule_type") + I18nUtil.getString("system_unvalid"))
+            return Response.ofFail("调度类型非法")
         }
 
         taskPilotInfo.triggerStatus = TriggerStatus.RUNNING.value
@@ -250,9 +249,9 @@ class TaskPilotServiceImpl : TaskPilotService {
 
     override fun stop(id: Int, loginInfo: LoginInfo): Response<String> {
         val taskPilotInfo = taskPilotInfoMapper.loadById(id)
-            ?: return Response.ofFail(I18nUtil.getString("jobinfo_glue_jobid_unvalid"))
+            ?: return Response.ofFail("任务ID非法")
         if (!JobGroupPermissionUtil.hasJobGroupPermission(loginInfo, taskPilotInfo.jobGroup)) {
-            return Response.ofFail(I18nUtil.getString("system_permission_limit"))
+            return Response.ofFail("权限拦截")
         }
 
         taskPilotInfo.triggerStatus = TriggerStatus.STOPPED.value
@@ -277,9 +276,9 @@ class TaskPilotServiceImpl : TaskPilotService {
         addressList: String?
     ): Response<String> {
         val taskPilotInfo = taskPilotInfoMapper.loadById(jobId)
-            ?: return Response.ofFail(I18nUtil.getString("jobinfo_glue_jobid_unvalid"))
+            ?: return Response.ofFail("任务ID非法")
         if (!JobGroupPermissionUtil.hasJobGroupPermission(loginInfo, taskPilotInfo.jobGroup)) {
-            return Response.ofFail(I18nUtil.getString("system_permission_limit"))
+            return Response.ofFail("权限拦截")
         }
 
         TaskPilotAdminBootstrap.instance.jobTriggerPoolHelper.trigger(
@@ -376,16 +375,16 @@ class TaskPilotServiceImpl : TaskPilotService {
      */
     private fun validBaseAndTrigger(jobInfo: TaskPilotInfo): Response<String> {
         val group = taskPilotGroupMapper.load(jobInfo.jobGroup)
-            ?: return Response.ofFail(I18nUtil.getString("system_please_choose") + I18nUtil.getString("jobinfo_field_jobgroup"))
+            ?: return Response.ofFail("请选择执行器")
         if (StringTool.isBlank(jobInfo.jobDesc)) {
-            return Response.ofFail(I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_jobdesc"))
+            return Response.ofFail("请输入任务描述")
         }
         if (StringTool.isBlank(jobInfo.author)) {
-            return Response.ofFail(I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_author"))
+            return Response.ofFail("请输入负责人")
         }
 
         val scheduleTypeEnum = ScheduleTypeEnum.match(jobInfo.scheduleType, null)
-            ?: return Response.ofFail(I18nUtil.getString("schedule_type") + I18nUtil.getString("system_unvalid"))
+            ?: return Response.ofFail("调度类型非法")
         return validSchedule(jobInfo, scheduleTypeEnum)
     }
 
@@ -396,24 +395,24 @@ class TaskPilotServiceImpl : TaskPilotService {
         return when (scheduleTypeEnum) {
             ScheduleTypeEnum.CRON -> {
                 if (jobInfo.scheduleConf == null || !CronExpression.isValidExpression(jobInfo.scheduleConf)) {
-                    Response.ofFail("Cron" + I18nUtil.getString("system_unvalid"))
+                    Response.ofFail("Cron非法")
                 } else {
                     Response.ofSuccess()
                 }
             }
             ScheduleTypeEnum.FIX_RATE -> {
                 if (jobInfo.scheduleConf == null) {
-                    Response.ofFail(I18nUtil.getString("schedule_type"))
+                    Response.ofFail("调度类型")
                 } else {
                     try {
                         val fixSecond = jobInfo.scheduleConf!!.toInt()
                         if (fixSecond < 1) {
-                            Response.ofFail(I18nUtil.getString("schedule_type") + I18nUtil.getString("system_unvalid"))
+                            Response.ofFail("调度类型非法")
                         } else {
                             Response.ofSuccess()
                         }
                     } catch (_: Exception) {
-                        Response.ofFail(I18nUtil.getString("schedule_type") + I18nUtil.getString("system_unvalid"))
+                        Response.ofFail("调度类型非法")
                     }
                 }
             }
@@ -426,9 +425,9 @@ class TaskPilotServiceImpl : TaskPilotService {
      */
     private fun validJob(jobInfo: TaskPilotInfo): Response<String> {
         val glueType = GlueTypeEnum.match(jobInfo.glueType)
-            ?: return Response.ofFail(I18nUtil.getString("jobinfo_field_gluetype") + I18nUtil.getString("system_unvalid"))
+            ?: return Response.ofFail("运行模式非法")
         if (glueType == GlueTypeEnum.BEAN && StringTool.isBlank(jobInfo.executorHandler)) {
-            return Response.ofFail(I18nUtil.getString("system_please_input") + "JobHandler")
+            return Response.ofFail("请输入JobHandler")
         }
         if (glueType == GlueTypeEnum.GLUE_SHELL && jobInfo.glueSource != null) {
             jobInfo.glueSource = jobInfo.glueSource!!.replace("\r", "")
@@ -441,13 +440,13 @@ class TaskPilotServiceImpl : TaskPilotService {
      */
     private fun validAdvanced(jobInfo: TaskPilotInfo): Response<String> {
         if (ExecutorRouteStrategyEnum.match(jobInfo.executorRouteStrategy, null) == null) {
-            return Response.ofFail(I18nUtil.getString("jobinfo_field_executorRouteStrategy") + I18nUtil.getString("system_unvalid"))
+            return Response.ofFail("路由策略非法")
         }
         if (MisfireStrategyEnum.match(jobInfo.misfireStrategy, null) == null) {
-            return Response.ofFail(I18nUtil.getString("misfire_strategy") + I18nUtil.getString("system_unvalid"))
+            return Response.ofFail("调度过期策略非法")
         }
         if (ExecutorBlockStrategyEnum.match(jobInfo.executorBlockStrategy, null) == null) {
-            return Response.ofFail(I18nUtil.getString("jobinfo_field_executorBlockStrategy") + I18nUtil.getString("system_unvalid"))
+            return Response.ofFail("阻塞处理策略非法")
         }
         return Response.ofSuccess()
     }
@@ -470,7 +469,7 @@ class TaskPilotServiceImpl : TaskPilotService {
             if (!StringTool.isNotBlank(childJobIdItem) || !StringTool.isNumeric(childJobIdItem)) {
                 return Response.ofFail(
                     MessageFormat.format(
-                        I18nUtil.getString("jobinfo_field_childJobId") + "({0})" + I18nUtil.getString("system_unvalid"),
+                        "子任务ID({0})非法",
                         childJobIdItem
                     )
                 )
@@ -478,24 +477,20 @@ class TaskPilotServiceImpl : TaskPilotService {
 
             val childJobId = childJobIdItem.toInt()
             if (rejectSelfReference && childJobId == jobInfo.id) {
-                return Response.ofFail(
-                    I18nUtil.getString("jobinfo_field_childJobId") +
-                        "($childJobId)" +
-                        I18nUtil.getString("system_unvalid")
-                )
+                return Response.ofFail("子任务ID($childJobId)非法")
             }
 
             val childJobInfo = taskPilotInfoMapper.loadById(childJobId)
                 ?: return Response.ofFail(
                     MessageFormat.format(
-                        I18nUtil.getString("jobinfo_field_childJobId") + "({0})" + I18nUtil.getString("system_not_found"),
+                        "子任务ID({0})不存在",
                         childJobIdItem
                     )
                 )
             if (!JobGroupPermissionUtil.hasJobGroupPermission(loginInfo, childJobInfo.jobGroup)) {
                 return Response.ofFail(
                     MessageFormat.format(
-                        I18nUtil.getString("jobinfo_field_childJobId") + "({0})" + I18nUtil.getString("system_permission_limit"),
+                        "子任务ID({0})权限拦截",
                         childJobIdItem
                     )
                 )

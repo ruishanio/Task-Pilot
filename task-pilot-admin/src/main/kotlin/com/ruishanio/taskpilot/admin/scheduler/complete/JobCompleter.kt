@@ -5,7 +5,6 @@ import com.ruishanio.taskpilot.admin.mapper.TaskPilotLogMapper
 import com.ruishanio.taskpilot.admin.model.TaskPilotLog
 import com.ruishanio.taskpilot.admin.scheduler.config.TaskPilotAdminBootstrap
 import com.ruishanio.taskpilot.admin.scheduler.trigger.TriggerTypeEnum
-import com.ruishanio.taskpilot.admin.util.I18nUtil
 import com.ruishanio.taskpilot.core.context.TaskPilotContext
 import com.ruishanio.taskpilot.tool.core.StringTool
 import com.ruishanio.taskpilot.tool.response.Response
@@ -47,7 +46,7 @@ class JobCompleter {
             val taskPilotInfo = taskPilotInfoMapper.loadById(taskPilotLog.jobId)
             if (taskPilotInfo != null && StringTool.isNotBlank(taskPilotInfo.childJobId)) {
                 triggerChildMsg =
-                    "<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>${I18nUtil.getString("jobconf_trigger_child_run")}<<<<<<<<<<< </span><br>"
+                    "<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>触发子任务<<<<<<<<<<< </span><br>"
                 val childJobIds = taskPilotInfo.childJobId!!.split(",")
                 for (i in childJobIds.indices) {
                     val childJobId = if (StringTool.isNotBlank(childJobIds[i]) && StringTool.isNumeric(childJobIds[i])) {
@@ -72,16 +71,16 @@ class JobCompleter {
                         )
                         val triggerChildResult = Response.ofSuccess<String>()
                         triggerChildMsg += MessageFormat.format(
-                            I18nUtil.getString("jobconf_callback_child_msg1"),
+                            "{0}/{1} [任务ID={2}], 触发{3}, 触发备注: {4} <br>",
                             i + 1,
                             childJobIds.size,
                             childJobIds[i],
-                            if (triggerChildResult.isSuccess) I18nUtil.getString("system_success") else I18nUtil.getString("system_fail"),
+                            if (triggerChildResult.isSuccess) "成功" else "失败",
                             triggerChildResult.msg
                         )
                     } else {
                         triggerChildMsg += MessageFormat.format(
-                            I18nUtil.getString("jobconf_callback_child_msg2"),
+                            "{0}/{1} [任务ID={2}], 触发失败, 触发备注: 任务ID格式错误 <br>",
                             i + 1,
                             childJobIds.size,
                             childJobIds[i]

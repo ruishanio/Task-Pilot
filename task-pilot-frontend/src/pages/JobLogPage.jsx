@@ -99,7 +99,7 @@ function JobLogPage() {
       } catch (error) {
         setLiveModal((previous) => ({
           ...previous,
-          html: `${previous.html}<br/><span style="color:#f87171;">[Rolling Log Error] ${getErrorMessage(error)}</span>`,
+          html: `${previous.html}<br/><span style="color:#f87171;">[滚动日志拉取失败] ${getErrorMessage(error)}</span>`,
         }));
         if (timerRef.current) {
           clearInterval(timerRef.current);

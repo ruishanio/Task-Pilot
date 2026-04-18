@@ -1,0 +1,34 @@
+server:
+  port: 8082
+  servlet:
+    encoding:
+      force: true
+      charset: UTF-8
+
+logging:
+  config: classpath:logback.xml
+
+spring:
+  main:
+    banner-mode: off
+  ai:
+    model:
+      chat: ollama
+    ollama:
+      base-url: http://localhost:11434
+
+ruishan:
+  task-pilot:
+    admin:
+      addresses: http://127.0.0.1:8080
+      accessToken: default_token
+      timeout: 3
+    executor:
+      enabled: true
+      appname: task-pilot-executor-sample-ai
+      address: ""
+      ip: "127.0.0.1"
+      port: 9997
+      logpath: ${user.home}/logs/task-pilot/jobhandler
+      logretentiondays: 30
+      excludedpackage: ""

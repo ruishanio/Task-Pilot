@@ -1,0 +1,168 @@
+package com.ruishanio.taskpilot.admin.service.impl
+
+import com.ruishanio.taskpilot.admin.mapper.TaskPilotGroupMapper
+import com.ruishanio.taskpilot.admin.mapper.TaskPilotInfoMapper
+import com.ruishanio.taskpilot.admin.mapper.TaskPilotRegistryMapper
+import com.ruishanio.taskpilot.admin.model.TaskPilotGroup
+import com.ruishanio.taskpilot.admin.model.TaskPilotInfo
+import com.ruishanio.taskpilot.admin.service.TaskPilotService
+import com.ruishanio.taskpilot.core.openapi.model.AutoRegisterRequest
+import com.ruishanio.taskpilot.tool.response.Response
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
+import org.mockito.ArgumentMatchers.any
+import org.mockito.ArgumentMatchers.anyInt
+import org.mockito.ArgumentMatchers.argThat
+import org.mockito.Mock
+import org.mockito.Mockito.never
+import org.mockito.Mockito.verify
+import org.mockito.Mockito.`when`
+import org.mockito.junit.jupiter.MockitoExtension
+import org.springframework.test.util.ReflectionTestUtils
+import java.util.Collections
+
+/**
+ * 覆盖自动注册服务在“更新已有任务”和“跳过无差异任务”两条分支上的行为。
+ */
+@ExtendWith(MockitoExtension::class)
+class TaskPilotAutoRegisterServiceTest {
+    @Mock
+    private lateinit var taskPilotGroupMapper: TaskPilotGroupMapper
+
+    @Mock
+    private lateinit var taskPilotInfoMapper: TaskPilotInfoMapper
+
+    @Mock
+    private lateinit var taskPilotRegistryMapper: TaskPilotRegistryMapper
+
+    @Mock
+    private lateinit var taskPilotService: TaskPilotService
+
+    private lateinit var taskPilotAutoRegisterService: TaskPilotAutoRegisterService
+
+    @BeforeEach
+    fun setUp() {
+        taskPilotAutoRegisterService = TaskPilotAutoRegisterService()
+        ReflectionTestUtils.setField(taskPilotAutoRegisterService, "taskPilotGroupMapper", taskPilotGroupMapper)
+        ReflectionTestUtils.setField(taskPilotAutoRegisterService, "taskPilotInfoMapper", taskPilotInfoMapper)
+        ReflectionTestUtils.setField(taskPilotAutoRegisterService, "taskPilotRegistryMapper", taskPilotRegistryMapper)
+        ReflectionTestUtils.setField(taskPilotAutoRegisterService, "taskPilotService", taskPilotService)
+    }
+
+    @Test
+    fun shouldUpdateExistingTaskWhenRegisterConfigChanged() {
+        val request = buildRequest("任务新描述")
+        val group = buildGroup("旧分组标题", "127.0.0.1:9999")
+        val existsTask =
+            buildExistingTask().apply {
+                jobDesc = "任务旧描述"
+                author = "old-author"
+                alarmEmail = "old@test.com"
+                scheduleConf = "0/5 * * * * ?"
+                executorParam = "old-param"
+            }
+
+        `when`(taskPilotGroupMapper.loadByAppname("demo-app")).thenReturn(group)
+        `when`(taskPilotRegistryMapper.findAll(anyInt(), any())).thenReturn(Collections.emptyList())
+        `when`(taskPilotInfoMapper.loadByGroupAndExecutorHandler(11, "demoHandler")).thenReturn(existsTask)
+        `when`(taskPilotService.update(any(TaskPilotInfo::class.java), any())).thenReturn(Response.ofSuccess<String>())
+
+        val response = taskPilotAutoRegisterService.autoRegister(request)
+
+        assertTrue(response.isSuccess)
+        assertTrue(response.data.orEmpty().contains("updatedTaskCount=1"))
+        verify(taskPilotService).update(
+            argThat { jobInfo: TaskPilotInfo ->
+                jobInfo.id == 22 &&
+                    jobInfo.jobDesc == "任务新描述" &&
+                    jobInfo.author == "new-author" &&
+                    jobInfo.alarmEmail == "new@test.com" &&
+                    jobInfo.scheduleConf == "0/10 * * * * ?" &&
+                    jobInfo.executorParam == "new-param"
+            },
+            any()
+        )
+        verify(taskPilotService, never()).add(any(TaskPilotInfo::class.java), any())
+        verify(taskPilotGroupMapper).update(
+            argThat { taskPilotGroup: TaskPilotGroup ->
+                taskPilotGroup.title == "DemoGroup" && taskPilotGroup.addressList == null
+            }
+        )
+    }
+
+    @Test
+    fun shouldSkipExistingTaskWhenRegisterConfigNotChanged() {
+        val request = buildRequest("任务描述")
+        val group = buildGroup("DemoGroup", null)
+        val existsTask = buildExistingTask()
+
+        `when`(taskPilotGroupMapper.loadByAppname("demo-app")).thenReturn(group)
+        `when`(taskPilotRegistryMapper.findAll(anyInt(), any())).thenReturn(Collections.emptyList())
+        `when`(taskPilotInfoMapper.loadByGroupAndExecutorHandler(11, "demoHandler")).thenReturn(existsTask)
+
+        val response = taskPilotAutoRegisterService.autoRegister(request)
+
+        assertTrue(response.isSuccess)
+        assertTrue(response.data.orEmpty().contains("updatedTaskCount=0"))
+        assertTrue(response.data.orEmpty().contains("skippedTaskCount=1"))
+        verify(taskPilotService, never()).update(any(TaskPilotInfo::class.java), any())
+        verify(taskPilotService, never()).add(any(TaskPilotInfo::class.java), any())
+        verify(taskPilotGroupMapper, never()).update(any(TaskPilotGroup::class.java))
+    }
+
+    private fun buildRequest(jobDesc: String): AutoRegisterRequest =
+        AutoRegisterRequest().apply {
+            appname = "demo-app"
+            title = "DemoGroup"
+            val task =
+                AutoRegisterRequest.Task().apply {
+                    executorHandler = "demoHandler"
+                    this.jobDesc = jobDesc
+                    author = "new-author"
+                    alarmEmail = "new@test.com"
+                    scheduleType = "CRON"
+                    scheduleConf = "0/10 * * * * ?"
+                    misfireStrategy = "DO_NOTHING"
+                    executorRouteStrategy = "FIRST"
+                    executorParam = "new-param"
+                    executorBlockStrategy = "SERIAL_EXECUTION"
+                    executorTimeout = 30
+                    executorFailRetryCount = 2
+                    childJobId = "1,2"
+                }
+            tasks.add(task)
+        }
+
+    private fun buildGroup(title: String, addressList: String?): TaskPilotGroup =
+        TaskPilotGroup().apply {
+            id = 11
+            appname = "demo-app"
+            this.title = title
+            addressType = 0
+            this.addressList = addressList
+        }
+
+    /**
+     * 构造与 buildRequest 默认值一致的任务快照，便于只覆盖本次测试关心的差异字段。
+     */
+    private fun buildExistingTask(): TaskPilotInfo =
+        TaskPilotInfo().apply {
+            id = 22
+            jobGroup = 11
+            jobDesc = "任务描述"
+            author = "new-author"
+            alarmEmail = "new@test.com"
+            scheduleType = "CRON"
+            scheduleConf = "0/10 * * * * ?"
+            misfireStrategy = "DO_NOTHING"
+            executorRouteStrategy = "FIRST"
+            executorHandler = "demoHandler"
+            executorParam = "new-param"
+            executorBlockStrategy = "SERIAL_EXECUTION"
+            executorTimeout = 30
+            executorFailRetryCount = 2
+            childJobId = "1,2"
+        }
+}

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruishanio.taskpilot.admin.mapper.TaskPilotRegistryMapper">
+	
+	<resultMap id="TaskPilotRegistry" type="com.ruishanio.taskpilot.admin.model.TaskPilotRegistry" >
+		<result column="id" property="id" />
+	    <result column="registry_group" property="registryGroup" />
+	    <result column="registry_key" property="registryKey" />
+	    <result column="registry_value" property="registryValue" />
+		<result column="update_time" property="updateTime" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		t.id,
+		t.registry_group,
+		t.registry_key,
+		t.registry_value,
+		t.update_time
+	</sql>
+
+	<select id="findDead" parameterType="java.util.HashMap" resultType="java.lang.Integer" >
+		SELECT t.id
+		FROM task_pilot_registry AS t
+		<!-- 显式固定参数类型，避免 PostgreSQL 在预编译场景把表达式误推断成 interval。 -->
+		WHERE t.update_time <![CDATA[ < ]]> (
+			CAST(#{nowTime, jdbcType=TIMESTAMP} AS timestamp)
+			- make_interval(secs => CAST(#{timeout, jdbcType=INTEGER} AS integer))
+		)
+	</select>
+	
+	<delete id="removeDead" parameterType="java.lang.Integer" >
+		DELETE FROM task_pilot_registry
+		WHERE id in
+		<foreach collection="ids" item="item" open="(" close=")" separator="," >
+			#{item}
+		</foreach>
+	</delete>
+
+	<select id="findAll" parameterType="java.util.HashMap" resultMap="TaskPilotRegistry">
+		SELECT <include refid="Base_Column_List" />
+		FROM task_pilot_registry AS t
+		<!-- findAll 与 findDead 共用同一时间边界，避免注册存活判断出现漂移。 -->
+		WHERE t.update_time <![CDATA[ > ]]> (
+			CAST(#{nowTime, jdbcType=TIMESTAMP} AS timestamp)
+			- make_interval(secs => CAST(#{timeout, jdbcType=INTEGER} AS integer))
+		)
+	</select>
+
+	<insert id="registrySaveOrUpdate" >
+		<!-- PostgreSQL 依赖唯一约束做心跳续租，避免先查后写的并发窗口。 -->
+		INSERT INTO task_pilot_registry (registry_group, registry_key, registry_value, update_time)
+		VALUES (#{registryGroup}, #{registryKey}, #{registryValue}, #{updateTime})
+		ON CONFLICT (registry_group, registry_key, registry_value) DO UPDATE
+		SET update_time = EXCLUDED.update_time
+	</insert>
+
+	<delete id="registryDelete" >
+		DELETE FROM task_pilot_registry
+		WHERE registry_group = #{registryGroup}
+			AND registry_key = #{registryKey}
+			AND registry_value = #{registryValue}
+	</delete>
+
+    <delete id="removeByRegistryGroupAndKey" >
+        DELETE FROM task_pilot_registry
+        WHERE registry_group = #{registryGroup}
+          AND registry_key = #{registryKey}
+    </delete>
+
+</mapper>

@@ -1,0 +1,68 @@
+# docker-compose version
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: task-pilot-postgres
+    environment:
+      # 1、数据库账号密码设置，需要与 Admin 中配置一致：
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres_pwd
+      # 2、数据库实例名称，需要与 Admin 中配置一致：
+      POSTGRES_DB: task_pilot
+    ports:
+      - "5432:5432"
+    volumes:
+      # 说明：仅数据库首次初始化时执行；
+      - ./doc/db/tables_task_pilot.sql:/docker-entrypoint-initdb.d/tables_task_pilot.sql:ro
+      # 3、数据库持久化目录位置，建议自定义：
+      - ${POSTGRES_PATH:-/Users/admin/program/docker/instance/postgres}/data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d task_pilot"]
+      timeout: 20s
+      retries: 10
+    networks:
+      - task-pilot-network
+
+  task-pilot-admin:
+    # 4、调度中心本地 Build 设置，如果期望使用推动 DockerHub 的镜像，可以注释当前启用的 image、build 配置，并启用如下设置版本的 image 配置；
+    #image: ruishanio/task-pilot-admin:{version}
+    image: ruishanio/task-pilot-admin:local
+    build:
+      context: ./task-pilot-admin
+      dockerfile: Dockerfile
+    container_name: task-pilot-admin
+    environment:
+      # 5、数据库连接配置，需要与上文 PostgreSQL 中保持一致：
+      PARAMS: >-
+        --spring.datasource.url=jdbc:postgresql://postgres:5432/task_pilot
+        --spring.datasource.username=postgres
+        --spring.datasource.password=postgres_pwd
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - task-pilot-network
+
+  task-pilot-executor-sample-springboot:
+    image: ruishanio/task-pilot-executor-sample-springboot:local
+    build:
+      context: ./task-pilot-executor-samples/task-pilot-executor-sample-springboot
+      dockerfile: Dockerfile
+    container_name: task-pilot-executor-sample-springboot
+    environment:
+      PARAMS: "--ruishan.task-pilot.admin.addresses=http://task-pilot-admin:8080/task-pilot-admin"
+    ports:
+      - "9999:9999"
+    depends_on:
+      task-pilot-admin:
+        condition: service_started
+    networks:
+      - task-pilot-network
+
+networks:
+  task-pilot-network:
+    driver: bridge

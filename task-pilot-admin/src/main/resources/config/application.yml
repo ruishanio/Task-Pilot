@@ -1,0 +1,82 @@
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      base-path: /actuator
+  health:
+    mail:
+      enabled: false
+
+mybatis:
+  mapper-locations: classpath:/mapper/*Mapper.xml
+
+spring:
+  main:
+    banner-mode: off
+  mvc:
+    servlet:
+      load-on-startup: 0
+    static-path-pattern: /static/**
+  web:
+    resources:
+      static-locations: classpath:/static/
+  freemarker:
+    templateLoaderPath: classpath:/templates/
+    suffix: .ftl
+    charset: UTF-8
+    request-context-attribute: request
+    settings:
+      number_format: 0.##########
+      new_builtin_class_resolver: safer
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      minimum-idle: 10
+      maximum-pool-size: 30
+      auto-commit: true
+      idle-timeout: 30000
+      pool-name: HikariCP
+      max-lifetime: 900000
+      connection-timeout: 10000
+      connection-test-query: SELECT 1
+      validation-timeout: 1000
+    url: "jdbc:postgresql://127.0.0.1:5432/task_pilot"
+    username: postgres
+    password: my-secret-pw
+    driver-class-name: org.postgresql.Driver
+  mail:
+    host: smtp.qq.com
+    port: 25
+    username: xxx@qq.com
+    from: xxx@qq.com
+    password: xxx
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          socketFactory:
+            class: javax.net.ssl.SSLSocketFactory
+
+ruishan:
+  task-pilot:
+    accessToken: default_token
+    timeout: 3
+    triggerpool:
+      fast:
+        max: 300
+      slow:
+        max: 200
+    logretentiondays: 30
+    frontend:
+      allowed-origin-patterns: "http://localhost:5173,http://127.0.0.1:5173"
+    auth:
+      token:
+        key: task_pilot_login_token
+        timeout: 604800000
+      excluded-paths: ""
+      login-path: /auth/login

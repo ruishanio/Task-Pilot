@@ -1,0 +1,4907 @@
+[ {
+  "unicode" : "😄",
+  "aliases" : [ "smile" ],
+  "tags" : [ "happy", "joy", "pleased" ]
+}, {
+  "unicode" : "😃",
+  "aliases" : [ "smiley" ],
+  "tags" : [ "happy", "joy", "haha" ]
+}, {
+  "unicode" : "😀",
+  "aliases" : [ "grinning" ],
+  "tags" : [ "smile", "happy" ]
+}, {
+  "unicode" : "😊",
+  "aliases" : [ "blush" ],
+  "tags" : [ "proud" ]
+}, {
+  "unicode" : "☺",
+  "aliases" : [ "relaxed" ],
+  "tags" : [ "blush", "pleased" ]
+}, {
+  "unicode" : "😉",
+  "aliases" : [ "wink" ],
+  "tags" : [ "flirt" ]
+}, {
+  "unicode" : "😍",
+  "aliases" : [ "heart_eyes" ],
+  "tags" : [ "love", "crush" ]
+}, {
+  "unicode" : "😘",
+  "aliases" : [ "kissing_heart" ],
+  "tags" : [ "flirt" ]
+}, {
+  "unicode" : "😚",
+  "aliases" : [ "kissing_closed_eyes" ]
+}, {
+  "unicode" : "😗",
+  "aliases" : [ "kissing" ]
+}, {
+  "unicode" : "😙",
+  "aliases" : [ "kissing_smiling_eyes" ]
+}, {
+  "unicode" : "😜",
+  "aliases" : [ "stuck_out_tongue_winking_eye" ],
+  "tags" : [ "prank", "silly" ]
+}, {
+  "unicode" : "😝",
+  "aliases" : [ "stuck_out_tongue_closed_eyes" ],
+  "tags" : [ "prank" ]
+}, {
+  "unicode" : "😛",
+  "aliases" : [ "stuck_out_tongue" ]
+}, {
+  "unicode" : "😳",
+  "aliases" : [ "flushed" ]
+}, {
+  "unicode" : "😁",
+  "aliases" : [ "grin" ]
+}, {
+  "unicode" : "😔",
+  "aliases" : [ "pensive" ]
+}, {
+  "unicode" : "😌",
+  "aliases" : [ "relieved" ],
+  "tags" : [ "whew" ]
+}, {
+  "unicode" : "😒",
+  "aliases" : [ "unamused" ],
+  "tags" : [ "meh" ]
+}, {
+  "unicode" : "😞",
+  "aliases" : [ "disappointed" ],
+  "tags" : [ "sad" ]
+}, {
+  "unicode" : "😣",
+  "aliases" : [ "persevere" ],
+  "tags" : [ "struggling" ]
+}, {
+  "unicode" : "😢",
+  "aliases" : [ "cry" ],
+  "tags" : [ "sad", "tear" ]
+}, {
+  "unicode" : "😂",
+  "aliases" : [ "joy" ],
+  "tags" : [ "tears" ]
+}, {
+  "unicode" : "😭",
+  "aliases" : [ "sob" ],
+  "tags" : [ "sad", "cry", "bawling" ]
+}, {
+  "unicode" : "😪",
+  "aliases" : [ "sleepy" ],
+  "tags" : [ "tired" ]
+}, {
+  "unicode" : "😥",
+  "aliases" : [ "disappointed_relieved" ],
+  "tags" : [ "phew", "sweat", "nervous" ]
+}, {
+  "unicode" : "😰",
+  "aliases" : [ "cold_sweat" ],
+  "tags" : [ "nervous" ]
+}, {
+  "unicode" : "😅",
+  "aliases" : [ "sweat_smile" ],
+  "tags" : [ "hot" ]
+}, {
+  "unicode" : "😓",
+  "aliases" : [ "sweat" ]
+}, {
+  "unicode" : "😩",
+  "aliases" : [ "weary" ],
+  "tags" : [ "tired" ]
+}, {
+  "unicode" : "😫",
+  "aliases" : [ "tired_face" ],
+  "tags" : [ "upset", "whine" ]
+}, {
+  "unicode" : "😨",
+  "aliases" : [ "fearful" ],
+  "tags" : [ "scared", "shocked", "oops" ]
+}, {
+  "unicode" : "😱",
+  "aliases" : [ "scream" ],
+  "tags" : [ "horror", "shocked" ]
+}, {
+  "unicode" : "😠",
+  "aliases" : [ "angry" ],
+  "tags" : [ "mad", "annoyed" ]
+}, {
+  "unicode" : "😡",
+  "aliases" : [ "rage" ],
+  "tags" : [ "angry" ]
+}, {
+  "unicode" : "😤",
+  "aliases" : [ "triumph" ],
+  "tags" : [ "smug" ]
+}, {
+  "unicode" : "😖",
+  "aliases" : [ "confounded" ]
+}, {
+  "unicode" : "😆",
+  "aliases" : [ "laughing", "satisfied" ],
+  "tags" : [ "happy", "haha" ]
+}, {
+  "unicode" : "😋",
+  "aliases" : [ "yum" ],
+  "tags" : [ "tongue", "lick" ]
+}, {
+  "unicode" : "😷",
+  "aliases" : [ "mask" ],
+  "tags" : [ "sick", "ill" ]
+}, {
+  "unicode" : "😎",
+  "aliases" : [ "sunglasses" ],
+  "tags" : [ "cool" ]
+}, {
+  "unicode" : "😴",
+  "aliases" : [ "sleeping" ],
+  "tags" : [ "zzz" ]
+}, {
+  "unicode" : "😵",
+  "aliases" : [ "dizzy_face" ]
+}, {
+  "unicode" : "😲",
+  "aliases" : [ "astonished" ],
+  "tags" : [ "amazed", "gasp" ]
+}, {
+  "unicode" : "😟",
+  "aliases" : [ "worried" ],
+  "tags" : [ "nervous" ]
+}, {
+  "unicode" : "😦",
+  "aliases" : [ "frowning" ]
+}, {
+  "unicode" : "😧",
+  "aliases" : [ "anguished" ],
+  "tags" : [ "stunned" ]
+}, {
+  "unicode" : "😈",
+  "aliases" : [ "smiling_imp" ],
+  "tags" : [ "devil", "evil", "horns" ]
+}, {
+  "unicode" : "👿",
+  "aliases" : [ "imp" ],
+  "tags" : [ "angry", "devil", "evil", "horns" ]
+}, {
+  "unicode" : "😮",
+  "aliases" : [ "open_mouth" ],
+  "tags" : [ "surprise", "impressed", "wow" ]
+}, {
+  "unicode" : "😬",
+  "aliases" : [ "grimacing" ]
+}, {
+  "unicode" : "😐",
+  "aliases" : [ "neutral_face" ],
+  "tags" : [ "meh" ]
+}, {
+  "unicode" : "😕",
+  "aliases" : [ "confused" ]
+}, {
+  "unicode" : "😯",
+  "aliases" : [ "hushed" ],
+  "tags" : [ "silence", "speechless" ]
+}, {
+  "unicode" : "😶",
+  "aliases" : [ "no_mouth" ],
+  "tags" : [ "mute", "silence" ]
+}, {
+  "unicode" : "😇",
+  "aliases" : [ "innocent" ],
+  "tags" : [ "angel" ]
+}, {
+  "unicode" : "😏",
+  "aliases" : [ "smirk" ],
+  "tags" : [ "smug" ]
+}, {
+  "unicode" : "😑",
+  "aliases" : [ "expressionless" ]
+}, {
+  "unicode" : "👲",
+  "aliases" : [ "man_with_gua_pi_mao" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👳",
+  "aliases" : [ "man_with_turban" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👮",
+  "aliases" : [ "cop" ],
+  "tags" : [ "police", "law" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👷",
+  "aliases" : [ "construction_worker" ],
+  "tags" : [ "helmet" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "💂",
+  "aliases" : [ "guardsman" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👶",
+  "aliases" : [ "baby" ],
+  "tags" : [ "child", "newborn" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👦",
+  "aliases" : [ "boy" ],
+  "tags" : [ "child" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👧",
+  "aliases" : [ "girl" ],
+  "tags" : [ "child" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👨",
+  "aliases" : [ "man" ],
+  "tags" : [ "mustache", "father", "dad" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👩",
+  "aliases" : [ "woman" ],
+  "tags" : [ "girls" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👴",
+  "aliases" : [ "older_man" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👵",
+  "aliases" : [ "older_woman" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👱",
+  "aliases" : [ "person_with_blond_hair" ],
+  "tags" : [ "boy" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👼",
+  "aliases" : [ "angel" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👸",
+  "aliases" : [ "princess" ],
+  "tags" : [ "blonde", "crown", "royal" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "😺",
+  "aliases" : [ "smiley_cat" ]
+}, {
+  "unicode" : "😸",
+  "aliases" : [ "smile_cat" ]
+}, {
+  "unicode" : "😻",
+  "aliases" : [ "heart_eyes_cat" ]
+}, {
+  "unicode" : "😽",
+  "aliases" : [ "kissing_cat" ]
+}, {
+  "unicode" : "😼",
+  "aliases" : [ "smirk_cat" ]
+}, {
+  "unicode" : "🙀",
+  "aliases" : [ "scream_cat" ],
+  "tags" : [ "horror" ]
+}, {
+  "unicode" : "😿",
+  "aliases" : [ "crying_cat_face" ],
+  "tags" : [ "sad", "tear" ]
+}, {
+  "unicode" : "😹",
+  "aliases" : [ "joy_cat" ]
+}, {
+  "unicode" : "😾",
+  "aliases" : [ "pouting_cat" ]
+}, {
+  "unicode" : "👹",
+  "aliases" : [ "japanese_ogre" ],
+  "tags" : [ "monster" ]
+}, {
+  "unicode" : "👺",
+  "aliases" : [ "japanese_goblin" ]
+}, {
+  "unicode" : "🙈",
+  "aliases" : [ "see_no_evil" ],
+  "tags" : [ "monkey", "blind", "ignore" ]
+}, {
+  "unicode" : "🙉",
+  "aliases" : [ "hear_no_evil" ],
+  "tags" : [ "monkey", "deaf" ]
+}, {
+  "unicode" : "🙊",
+  "aliases" : [ "speak_no_evil" ],
+  "tags" : [ "monkey", "mute", "hush" ]
+}, {
+  "unicode" : "💀",
+  "aliases" : [ "skull" ],
+  "tags" : [ "dead", "danger", "poison" ]
+}, {
+  "unicode" : "👽",
+  "aliases" : [ "alien" ],
+  "tags" : [ "ufo" ]
+}, {
+  "unicode" : "💩",
+  "aliases" : [ "hankey", "poop", "shit" ],
+  "tags" : [ "crap" ]
+}, {
+  "unicode" : "🔥",
+  "aliases" : [ "fire" ],
+  "tags" : [ "burn" ]
+}, {
+  "unicode" : "✨",
+  "aliases" : [ "sparkles" ],
+  "tags" : [ "shiny" ]
+}, {
+  "unicode" : "🌟",
+  "aliases" : [ "star2" ]
+}, {
+  "unicode" : "💫",
+  "aliases" : [ "dizzy" ],
+  "tags" : [ "star" ]
+}, {
+  "unicode" : "💥",
+  "aliases" : [ "boom", "collision" ],
+  "tags" : [ "explode" ]
+}, {
+  "unicode" : "💢",
+  "aliases" : [ "anger" ],
+  "tags" : [ "angry" ]
+}, {
+  "unicode" : "💦",
+  "aliases" : [ "sweat_drops" ],
+  "tags" : [ "water", "workout" ]
+}, {
+  "unicode" : "💧",
+  "aliases" : [ "droplet" ],
+  "tags" : [ "water" ]
+}, {
+  "unicode" : "💤",
+  "aliases" : [ "zzz" ],
+  "tags" : [ "sleeping" ]
+}, {
+  "unicode" : "💨",
+  "aliases" : [ "dash" ],
+  "tags" : [ "wind", "blow", "fast" ]
+}, {
+  "unicode" : "👂",
+  "aliases" : [ "ear" ],
+  "tags" : [ "hear", "sound", "listen" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👀",
+  "aliases" : [ "eyes" ],
+  "tags" : [ "look", "see", "watch" ]
+}, {
+  "unicode" : "👃",
+  "aliases" : [ "nose" ],
+  "tags" : [ "smell" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👅",
+  "aliases" : [ "tongue" ],
+  "tags" : [ "taste" ]
+}, {
+  "unicode" : "👄",
+  "aliases" : [ "lips" ],
+  "tags" : [ "kiss" ]
+}, {
+  "unicode" : "👍",
+  "aliases" : [ "+1", "thumbsup" ],
+  "tags" : [ "approve", "ok" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👎",
+  "aliases" : [ "-1", "thumbsdown" ],
+  "tags" : [ "disapprove", "bury" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👌",
+  "aliases" : [ "ok_hand" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👊",
+  "aliases" : [ "facepunch", "punch" ],
+  "tags" : [ "attack" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "✊",
+  "aliases" : [ "fist" ],
+  "tags" : [ "power" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "✌",
+  "aliases" : [ "v" ],
+  "tags" : [ "victory", "peace" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👋",
+  "aliases" : [ "wave" ],
+  "tags" : [ "goodbye" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "✋",
+  "aliases" : [ "hand", "raised_hand" ],
+  "tags" : [ "highfive", "stop" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👐",
+  "aliases" : [ "open_hands" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👆",
+  "aliases" : [ "point_up_2" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👇",
+  "aliases" : [ "point_down" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👉",
+  "aliases" : [ "point_right" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👈",
+  "aliases" : [ "point_left" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🙌",
+  "aliases" : [ "raised_hands" ],
+  "tags" : [ "hooray" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🙏",
+  "aliases" : [ "pray" ],
+  "tags" : [ "please", "hope", "wish" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "☝",
+  "aliases" : [ "point_up" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👏",
+  "aliases" : [ "clap" ],
+  "tags" : [ "praise", "applause" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "💪",
+  "aliases" : [ "muscle" ],
+  "tags" : [ "flex", "bicep", "strong", "workout" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🚶",
+  "aliases" : [ "walking" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🏃",
+  "aliases" : [ "runner", "running" ],
+  "tags" : [ "exercise", "workout", "marathon" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "💃",
+  "aliases" : [ "dancer" ],
+  "tags" : [ "dress" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👫",
+  "aliases" : [ "couple" ],
+  "tags" : [ "date" ]
+}, {
+  "unicode" : "👪",
+  "aliases" : [ "family" ],
+  "tags" : [ "home", "parents", "child" ]
+}, {
+  "unicode" : "👬",
+  "aliases" : [ "two_men_holding_hands" ],
+  "tags" : [ "couple", "date" ]
+}, {
+  "unicode" : "👭",
+  "aliases" : [ "two_women_holding_hands" ],
+  "tags" : [ "couple", "date" ]
+}, {
+  "unicode" : "💏",
+  "aliases" : [ "couplekiss" ]
+}, {
+  "unicode" : "💑",
+  "aliases" : [ "couple_with_heart" ]
+}, {
+  "unicode" : "👯",
+  "aliases" : [ "dancers" ],
+  "tags" : [ "bunny" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🙆",
+  "aliases" : [ "ok_woman" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🙅",
+  "aliases" : [ "no_good" ],
+  "tags" : [ "stop", "halt" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "💁",
+  "aliases" : [ "information_desk_person" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🙋",
+  "aliases" : [ "raising_hand" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "💆",
+  "aliases" : [ "massage" ],
+  "tags" : [ "spa" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "💇",
+  "aliases" : [ "haircut" ],
+  "tags" : [ "beauty" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "💅",
+  "aliases" : [ "nail_care" ],
+  "tags" : [ "beauty", "manicure" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👰",
+  "aliases" : [ "bride_with_veil" ],
+  "tags" : [ "marriage", "wedding" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🙎",
+  "aliases" : [ "person_with_pouting_face" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🙍",
+  "aliases" : [ "person_frowning" ],
+  "tags" : [ "sad" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🙇",
+  "aliases" : [ "bow" ],
+  "tags" : [ "respect", "thanks" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🙇‍♀️",
+  "aliases" : [ "woman_bow", "female_bow" ],
+  "tags" : [ "respect", "thanks" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🙇‍♂️",
+  "aliases" : [ "man_bow", "male_bow" ],
+  "tags" : [ "respect", "thanks" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🎩",
+  "aliases" : [ "tophat" ],
+  "tags" : [ "hat", "classy" ]
+}, {
+  "unicode" : "👑",
+  "aliases" : [ "crown" ],
+  "tags" : [ "king", "queen", "royal" ]
+}, {
+  "unicode" : "👒",
+  "aliases" : [ "womans_hat" ]
+}, {
+  "unicode" : "👟",
+  "aliases" : [ "athletic_shoe" ],
+  "tags" : [ "sneaker", "sport", "running" ]
+}, {
+  "unicode" : "👞",
+  "aliases" : [ "mans_shoe", "shoe" ]
+}, {
+  "unicode" : "👡",
+  "aliases" : [ "sandal" ],
+  "tags" : [ "shoe" ]
+}, {
+  "unicode" : "👠",
+  "aliases" : [ "high_heel" ],
+  "tags" : [ "shoe" ]
+}, {
+  "unicode" : "👢",
+  "aliases" : [ "boot" ]
+}, {
+  "unicode" : "👕",
+  "aliases" : [ "shirt", "tshirt" ]
+}, {
+  "unicode" : "👔",
+  "aliases" : [ "necktie" ],
+  "tags" : [ "shirt", "formal" ]
+}, {
+  "unicode" : "👚",
+  "aliases" : [ "womans_clothes" ]
+}, {
+  "unicode" : "👗",
+  "aliases" : [ "dress" ]
+}, {
+  "unicode" : "🎽",
+  "aliases" : [ "running_shirt_with_sash" ],
+  "tags" : [ "marathon" ]
+}, {
+  "unicode" : "👖",
+  "aliases" : [ "jeans" ],
+  "tags" : [ "pants" ]
+}, {
+  "unicode" : "👘",
+  "aliases" : [ "kimono" ]
+}, {
+  "unicode" : "👙",
+  "aliases" : [ "bikini" ],
+  "tags" : [ "beach" ]
+}, {
+  "unicode" : "💼",
+  "aliases" : [ "briefcase" ],
+  "tags" : [ "business" ]
+}, {
+  "unicode" : "👜",
+  "aliases" : [ "handbag" ],
+  "tags" : [ "bag" ]
+}, {
+  "unicode" : "👝",
+  "aliases" : [ "pouch" ],
+  "tags" : [ "bag" ]
+}, {
+  "unicode" : "👛",
+  "aliases" : [ "purse" ]
+}, {
+  "unicode" : "👓",
+  "aliases" : [ "eyeglasses" ],
+  "tags" : [ "glasses" ]
+}, {
+  "unicode" : "🎀",
+  "aliases" : [ "ribbon" ]
+}, {
+  "unicode" : "🌂",
+  "aliases" : [ "closed_umbrella" ],
+  "tags" : [ "weather", "rain" ]
+}, {
+  "unicode" : "💄",
+  "aliases" : [ "lipstick" ],
+  "tags" : [ "makeup" ]
+}, {
+  "unicode" : "💛",
+  "aliases" : [ "yellow_heart" ]
+}, {
+  "unicode" : "💙",
+  "aliases" : [ "blue_heart" ]
+}, {
+  "unicode" : "💜",
+  "aliases" : [ "purple_heart" ]
+}, {
+  "unicode" : "💚",
+  "aliases" : [ "green_heart" ]
+}, {
+  "unicode" : "❤",
+  "aliases" : [ "heart" ],
+  "tags" : [ "love" ]
+}, {
+  "unicode" : "💔",
+  "aliases" : [ "broken_heart" ]
+}, {
+  "unicode" : "💗",
+  "aliases" : [ "heartpulse" ]
+}, {
+  "unicode" : "💓",
+  "aliases" : [ "heartbeat" ]
+}, {
+  "unicode" : "💕",
+  "aliases" : [ "two_hearts" ]
+}, {
+  "unicode" : "💖",
+  "aliases" : [ "sparkling_heart" ]
+}, {
+  "unicode" : "💞",
+  "aliases" : [ "revolving_hearts" ]
+}, {
+  "unicode" : "💘",
+  "aliases" : [ "cupid" ],
+  "tags" : [ "love", "heart" ]
+}, {
+  "unicode" : "💌",
+  "aliases" : [ "love_letter" ],
+  "tags" : [ "email", "envelope" ]
+}, {
+  "unicode" : "💋",
+  "aliases" : [ "kiss" ],
+  "tags" : [ "lipstick" ]
+}, {
+  "unicode" : "💍",
+  "aliases" : [ "ring" ],
+  "tags" : [ "wedding", "marriage", "engaged" ]
+}, {
+  "unicode" : "💎",
+  "aliases" : [ "gem" ],
+  "tags" : [ "diamond" ]
+}, {
+  "unicode" : "👤",
+  "aliases" : [ "bust_in_silhouette" ],
+  "tags" : [ "user" ]
+}, {
+  "unicode" : "👥",
+  "aliases" : [ "busts_in_silhouette" ],
+  "tags" : [ "users", "group", "team" ]
+}, {
+  "unicode" : "💬",
+  "aliases" : [ "speech_balloon" ],
+  "tags" : [ "comment" ]
+}, {
+  "unicode" : "👣",
+  "aliases" : [ "footprints" ],
+  "tags" : [ "feet", "tracks" ]
+}, {
+  "unicode" : "💭",
+  "aliases" : [ "thought_balloon" ],
+  "tags" : [ "thinking" ]
+}, {
+  "unicode" : "🐶",
+  "aliases" : [ "dog" ],
+  "tags" : [ "pet" ]
+}, {
+  "unicode" : "🐺",
+  "aliases" : [ "wolf" ]
+}, {
+  "unicode" : "🐱",
+  "aliases" : [ "cat" ],
+  "tags" : [ "pet" ]
+}, {
+  "unicode" : "🐭",
+  "aliases" : [ "mouse" ]
+}, {
+  "unicode" : "🐹",
+  "aliases" : [ "hamster" ],
+  "tags" : [ "pet" ]
+}, {
+  "unicode" : "🐰",
+  "aliases" : [ "rabbit" ],
+  "tags" : [ "bunny" ]
+}, {
+  "unicode" : "🐸",
+  "aliases" : [ "frog" ]
+}, {
+  "unicode" : "🐯",
+  "aliases" : [ "tiger" ]
+}, {
+  "unicode" : "🐨",
+  "aliases" : [ "koala" ]
+}, {
+  "unicode" : "🐻",
+  "aliases" : [ "bear" ]
+}, {
+  "unicode" : "🐷",
+  "aliases" : [ "pig" ]
+}, {
+  "unicode" : "🐽",
+  "aliases" : [ "pig_nose" ]
+}, {
+  "unicode" : "🐮",
+  "aliases" : [ "cow" ]
+}, {
+  "unicode" : "🐗",
+  "aliases" : [ "boar" ]
+}, {
+  "unicode" : "🐵",
+  "aliases" : [ "monkey_face" ]
+}, {
+  "unicode" : "🐒",
+  "aliases" : [ "monkey" ]
+}, {
+  "unicode" : "🐴",
+  "aliases" : [ "horse" ]
+}, {
+  "unicode" : "🐑",
+  "aliases" : [ "sheep" ]
+}, {
+  "unicode" : "🐘",
+  "aliases" : [ "elephant" ]
+}, {
+  "unicode" : "🐼",
+  "aliases" : [ "panda_face" ]
+}, {
+  "unicode" : "🐧",
+  "aliases" : [ "penguin" ]
+}, {
+  "unicode" : "🐦",
+  "aliases" : [ "bird" ]
+}, {
+  "unicode" : "🐤",
+  "aliases" : [ "baby_chick" ]
+}, {
+  "unicode" : "🐥",
+  "aliases" : [ "hatched_chick" ]
+}, {
+  "unicode" : "🐣",
+  "aliases" : [ "hatching_chick" ]
+}, {
+  "unicode" : "🐔",
+  "aliases" : [ "chicken" ]
+}, {
+  "unicode" : "🐍",
+  "aliases" : [ "snake" ]
+}, {
+  "unicode" : "🐢",
+  "aliases" : [ "turtle" ],
+  "tags" : [ "slow" ]
+}, {
+  "unicode" : "🐛",
+  "aliases" : [ "bug" ]
+}, {
+  "unicode" : "🐝",
+  "aliases" : [ "bee", "honeybee" ]
+}, {
+  "unicode" : "🐜",
+  "aliases" : [ "ant" ]
+}, {
+  "unicode" : "🐞",
+  "aliases" : [ "beetle" ],
+  "tags" : [ "bug" ]
+}, {
+  "unicode" : "🐌",
+  "aliases" : [ "snail" ],
+  "tags" : [ "slow" ]
+}, {
+  "unicode" : "🐙",
+  "aliases" : [ "octopus" ]
+}, {
+  "unicode" : "🐚",
+  "aliases" : [ "shell" ],
+  "tags" : [ "sea", "beach" ]
+}, {
+  "unicode" : "🐠",
+  "aliases" : [ "tropical_fish" ]
+}, {
+  "unicode" : "🐟",
+  "aliases" : [ "fish" ]
+}, {
+  "unicode" : "🐬",
+  "aliases" : [ "dolphin", "flipper" ]
+}, {
+  "unicode" : "🐳",
+  "aliases" : [ "whale" ],
+  "tags" : [ "sea" ]
+}, {
+  "unicode" : "🐋",
+  "aliases" : [ "whale2" ]
+}, {
+  "unicode" : "🐄",
+  "aliases" : [ "cow2" ]
+}, {
+  "unicode" : "🐏",
+  "aliases" : [ "ram" ]
+}, {
+  "unicode" : "🐀",
+  "aliases" : [ "rat" ]
+}, {
+  "unicode" : "🐃",
+  "aliases" : [ "water_buffalo" ]
+}, {
+  "unicode" : "🐅",
+  "aliases" : [ "tiger2" ]
+}, {
+  "unicode" : "🐇",
+  "aliases" : [ "rabbit2" ]
+}, {
+  "unicode" : "🐉",
+  "aliases" : [ "dragon" ]
+}, {
+  "unicode" : "🐎",
+  "aliases" : [ "racehorse" ],
+  "tags" : [ "speed" ]
+}, {
+  "unicode" : "🐐",
+  "aliases" : [ "goat" ]
+}, {
+  "unicode" : "🐓",
+  "aliases" : [ "rooster" ]
+}, {
+  "unicode" : "🐕",
+  "aliases" : [ "dog2" ]
+}, {
+  "unicode" : "🐖",
+  "aliases" : [ "pig2" ]
+}, {
+  "unicode" : "🐁",
+  "aliases" : [ "mouse2" ]
+}, {
+  "unicode" : "🐂",
+  "aliases" : [ "ox" ]
+}, {
+  "unicode" : "🐲",
+  "aliases" : [ "dragon_face" ]
+}, {
+  "unicode" : "🐡",
+  "aliases" : [ "blowfish" ]
+}, {
+  "unicode" : "🐊",
+  "aliases" : [ "crocodile" ]
+}, {
+  "unicode" : "🐫",
+  "aliases" : [ "camel" ]
+}, {
+  "unicode" : "🐪",
+  "aliases" : [ "dromedary_camel" ],
+  "tags" : [ "desert" ]
+}, {
+  "unicode" : "🐆",
+  "aliases" : [ "leopard" ]
+}, {
+  "unicode" : "🐈",
+  "aliases" : [ "cat2" ]
+}, {
+  "unicode" : "🐩",
+  "aliases" : [ "poodle" ],
+  "tags" : [ "dog" ]
+}, {
+  "unicode" : "🐾",
+  "aliases" : [ "feet", "paw_prints" ]
+}, {
+  "unicode" : "💐",
+  "aliases" : [ "bouquet" ],
+  "tags" : [ "flowers" ]
+}, {
+  "unicode" : "🌸",
+  "aliases" : [ "cherry_blossom" ],
+  "tags" : [ "flower", "spring" ]
+}, {
+  "unicode" : "🌷",
+  "aliases" : [ "tulip" ],
+  "tags" : [ "flower" ]
+}, {
+  "unicode" : "🍀",
+  "aliases" : [ "four_leaf_clover" ],
+  "tags" : [ "luck" ]
+}, {
+  "unicode" : "🌹",
+  "aliases" : [ "rose" ],
+  "tags" : [ "flower" ]
+}, {
+  "unicode" : "🌻",
+  "aliases" : [ "sunflower" ]
+}, {
+  "unicode" : "🌺",
+  "aliases" : [ "hibiscus" ]
+}, {
+  "unicode" : "🍁",
+  "aliases" : [ "maple_leaf" ],
+  "tags" : [ "canada" ]
+}, {
+  "unicode" : "🍃",
+  "aliases" : [ "leaves" ],
+  "tags" : [ "leaf" ]
+}, {
+  "unicode" : "🍂",
+  "aliases" : [ "fallen_leaf" ],
+  "tags" : [ "autumn" ]
+}, {
+  "unicode" : "🌿",
+  "aliases" : [ "herb" ]
+}, {
+  "unicode" : "🌾",
+  "aliases" : [ "ear_of_rice" ]
+}, {
+  "unicode" : "🍄",
+  "aliases" : [ "mushroom" ]
+}, {
+  "unicode" : "🌵",
+  "aliases" : [ "cactus" ]
+}, {
+  "unicode" : "🌴",
+  "aliases" : [ "palm_tree" ]
+}, {
+  "unicode" : "🌲",
+  "aliases" : [ "evergreen_tree" ],
+  "tags" : [ "wood" ]
+}, {
+  "unicode" : "🌳",
+  "aliases" : [ "deciduous_tree" ],
+  "tags" : [ "wood" ]
+}, {
+  "unicode" : "🌰",
+  "aliases" : [ "chestnut" ]
+}, {
+  "unicode" : "🌱",
+  "aliases" : [ "seedling" ],
+  "tags" : [ "plant" ]
+}, {
+  "unicode" : "🌼",
+  "aliases" : [ "blossom" ]
+}, {
+  "unicode" : "🌐",
+  "aliases" : [ "globe_with_meridians" ],
+  "tags" : [ "world", "global", "international" ]
+}, {
+  "unicode" : "🌞",
+  "aliases" : [ "sun_with_face" ],
+  "tags" : [ "summer" ]
+}, {
+  "unicode" : "🌝",
+  "aliases" : [ "full_moon_with_face" ]
+}, {
+  "unicode" : "🌚",
+  "aliases" : [ "new_moon_with_face" ]
+}, {
+  "unicode" : "🌑",
+  "aliases" : [ "new_moon" ]
+}, {
+  "unicode" : "🌒",
+  "aliases" : [ "waxing_crescent_moon" ]
+}, {
+  "unicode" : "🌓",
+  "aliases" : [ "first_quarter_moon" ]
+}, {
+  "unicode" : "🌔",
+  "aliases" : [ "moon", "waxing_gibbous_moon" ]
+}, {
+  "unicode" : "🌕",
+  "aliases" : [ "full_moon" ]
+}, {
+  "unicode" : "🌖",
+  "aliases" : [ "waning_gibbous_moon" ]
+}, {
+  "unicode" : "🌗",
+  "aliases" : [ "last_quarter_moon" ]
+}, {
+  "unicode" : "🌘",
+  "aliases" : [ "waning_crescent_moon" ]
+}, {
+  "unicode" : "🌜",
+  "aliases" : [ "last_quarter_moon_with_face" ]
+}, {
+  "unicode" : "🌛",
+  "aliases" : [ "first_quarter_moon_with_face" ]
+}, {
+  "unicode" : "🌙",
+  "aliases" : [ "crescent_moon" ],
+  "tags" : [ "night" ]
+}, {
+  "unicode" : "🌍",
+  "aliases" : [ "earth_africa" ],
+  "tags" : [ "globe", "world", "international" ]
+}, {
+  "unicode" : "🌎",
+  "aliases" : [ "earth_americas" ],
+  "tags" : [ "globe", "world", "international" ]
+}, {
+  "unicode" : "🌏",
+  "aliases" : [ "earth_asia" ],
+  "tags" : [ "globe", "world", "international" ]
+}, {
+  "unicode" : "🌋",
+  "aliases" : [ "volcano" ]
+}, {
+  "unicode" : "🌌",
+  "aliases" : [ "milky_way" ]
+}, {
+  "unicode" : "🌠",
+  "aliases" : [ "stars" ]
+}, {
+  "unicode" : "⭐",
+  "aliases" : [ "star" ]
+}, {
+  "unicode" : "☀",
+  "aliases" : [ "sunny" ],
+  "tags" : [ "weather" ]
+}, {
+  "unicode" : "⛅",
+  "aliases" : [ "partly_sunny" ],
+  "tags" : [ "weather", "cloud" ]
+}, {
+  "unicode" : "☁",
+  "aliases" : [ "cloud" ]
+}, {
+  "unicode" : "⚡",
+  "aliases" : [ "zap" ],
+  "tags" : [ "lightning", "thunder" ]
+}, {
+  "unicode" : "☔",
+  "aliases" : [ "umbrella" ],
+  "tags" : [ "rain", "weather" ]
+}, {
+  "unicode" : "❄",
+  "aliases" : [ "snowflake" ],
+  "tags" : [ "winter", "cold", "weather" ]
+}, {
+  "unicode" : "⛄",
+  "aliases" : [ "snowman" ],
+  "tags" : [ "winter", "christmas" ]
+}, {
+  "unicode" : "🌀",
+  "aliases" : [ "cyclone" ],
+  "tags" : [ "swirl" ]
+}, {
+  "unicode" : "🌁",
+  "aliases" : [ "foggy" ],
+  "tags" : [ "karl" ]
+}, {
+  "unicode" : "🌈",
+  "aliases" : [ "rainbow" ],
+  "tags" : [ "pride" ]
+}, {
+  "unicode" : "🌊",
+  "aliases" : [ "ocean" ],
+  "tags" : [ "sea" ]
+}, {
+  "unicode" : "🎍",
+  "aliases" : [ "bamboo" ]
+}, {
+  "unicode" : "💝",
+  "aliases" : [ "gift_heart" ],
+  "tags" : [ "chocolates" ]
+}, {
+  "unicode" : "🎎",
+  "aliases" : [ "dolls" ]
+}, {
+  "unicode" : "🎒",
+  "aliases" : [ "school_satchel" ]
+}, {
+  "unicode" : "🎓",
+  "aliases" : [ "mortar_board" ],
+  "tags" : [ "education", "college", "university", "graduation" ]
+}, {
+  "unicode" : "🎏",
+  "aliases" : [ "flags" ]
+}, {
+  "unicode" : "🎆",
+  "aliases" : [ "fireworks" ],
+  "tags" : [ "festival", "celebration" ]
+}, {
+  "unicode" : "🎇",
+  "aliases" : [ "sparkler" ]
+}, {
+  "unicode" : "🎐",
+  "aliases" : [ "wind_chime" ]
+}, {
+  "unicode" : "🎑",
+  "aliases" : [ "rice_scene" ]
+}, {
+  "unicode" : "🎃",
+  "aliases" : [ "jack_o_lantern" ],
+  "tags" : [ "halloween" ]
+}, {
+  "unicode" : "👻",
+  "aliases" : [ "ghost" ],
+  "tags" : [ "halloween" ]
+}, {
+  "unicode" : "🎅",
+  "aliases" : [ "santa" ],
+  "tags" : [ "christmas" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🎄",
+  "aliases" : [ "christmas_tree" ]
+}, {
+  "unicode" : "🎁",
+  "aliases" : [ "gift" ],
+  "tags" : [ "present", "birthday", "christmas" ]
+}, {
+  "unicode" : "🎋",
+  "aliases" : [ "tanabata_tree" ]
+}, {
+  "unicode" : "🎉",
+  "aliases" : [ "tada" ],
+  "tags" : [ "party" ]
+}, {
+  "unicode" : "🎊",
+  "aliases" : [ "confetti_ball" ]
+}, {
+  "unicode" : "🎈",
+  "aliases" : [ "balloon" ],
+  "tags" : [ "party", "birthday" ]
+}, {
+  "unicode" : "🎌",
+  "aliases" : [ "crossed_flags" ]
+}, {
+  "unicode" : "🔮",
+  "aliases" : [ "crystal_ball" ],
+  "tags" : [ "fortune" ]
+}, {
+  "unicode" : "🎥",
+  "aliases" : [ "movie_camera" ],
+  "tags" : [ "film", "video" ]
+}, {
+  "unicode" : "📷",
+  "aliases" : [ "camera" ],
+  "tags" : [ "photo" ]
+}, {
+  "unicode" : "📹",
+  "aliases" : [ "video_camera" ]
+}, {
+  "unicode" : "📼",
+  "aliases" : [ "vhs" ]
+}, {
+  "unicode" : "💿",
+  "aliases" : [ "cd" ]
+}, {
+  "unicode" : "📀",
+  "aliases" : [ "dvd" ]
+}, {
+  "unicode" : "💽",
+  "aliases" : [ "minidisc" ]
+}, {
+  "unicode" : "💾",
+  "aliases" : [ "floppy_disk" ],
+  "tags" : [ "save" ]
+}, {
+  "unicode" : "💻",
+  "aliases" : [ "computer" ],
+  "tags" : [ "desktop", "screen" ]
+}, {
+  "unicode" : "📱",
+  "aliases" : [ "iphone" ],
+  "tags" : [ "smartphone", "mobile" ]
+}, {
+  "unicode" : "☎",
+  "aliases" : [ "phone", "telephone" ]
+}, {
+  "unicode" : "📞",
+  "aliases" : [ "telephone_receiver" ],
+  "tags" : [ "phone", "call" ]
+}, {
+  "unicode" : "📟",
+  "aliases" : [ "pager" ]
+}, {
+  "unicode" : "📠",
+  "aliases" : [ "fax" ]
+}, {
+  "unicode" : "📡",
+  "aliases" : [ "satellite_antenna" ],
+  "tags" : [ "signal" ]
+}, {
+  "unicode" : "📺",
+  "aliases" : [ "tv" ]
+}, {
+  "unicode" : "📻",
+  "aliases" : [ "radio" ],
+  "tags" : [ "podcast" ]
+}, {
+  "unicode" : "🔊",
+  "aliases" : [ "loud_sound" ],
+  "tags" : [ "volume" ]
+}, {
+  "unicode" : "🔉",
+  "aliases" : [ "sound" ],
+  "tags" : [ "volume" ]
+}, {
+  "unicode" : "🔈",
+  "aliases" : [ "speaker" ]
+}, {
+  "unicode" : "🔇",
+  "aliases" : [ "mute" ],
+  "tags" : [ "sound", "volume" ]
+}, {
+  "unicode" : "🔔",
+  "aliases" : [ "bell" ],
+  "tags" : [ "sound", "notification" ]
+}, {
+  "unicode" : "🔕",
+  "aliases" : [ "no_bell" ],
+  "tags" : [ "volume", "off" ]
+}, {
+  "unicode" : "📢",
+  "aliases" : [ "loudspeaker" ],
+  "tags" : [ "announcement" ]
+}, {
+  "unicode" : "📣",
+  "aliases" : [ "mega" ]
+}, {
+  "unicode" : "⏳",
+  "aliases" : [ "hourglass_flowing_sand" ],
+  "tags" : [ "time" ]
+}, {
+  "unicode" : "⌛",
+  "aliases" : [ "hourglass" ],
+  "tags" : [ "time" ]
+}, {
+  "unicode" : "⏰",
+  "aliases" : [ "alarm_clock" ],
+  "tags" : [ "morning" ]
+}, {
+  "unicode" : "⌚",
+  "aliases" : [ "watch" ],
+  "tags" : [ "time" ]
+}, {
+  "unicode" : "🔓",
+  "aliases" : [ "unlock" ],
+  "tags" : [ "security" ]
+}, {
+  "unicode" : "🔒",
+  "aliases" : [ "lock" ],
+  "tags" : [ "security", "private" ]
+}, {
+  "unicode" : "🔏",
+  "aliases" : [ "lock_with_ink_pen" ]
+}, {
+  "unicode" : "🔐",
+  "aliases" : [ "closed_lock_with_key" ],
+  "tags" : [ "security" ]
+}, {
+  "unicode" : "🔑",
+  "aliases" : [ "key" ],
+  "tags" : [ "lock", "password" ]
+}, {
+  "unicode" : "🔎",
+  "aliases" : [ "mag_right" ]
+}, {
+  "unicode" : "💡",
+  "aliases" : [ "bulb" ],
+  "tags" : [ "idea", "light" ]
+}, {
+  "unicode" : "🔦",
+  "aliases" : [ "flashlight" ]
+}, {
+  "unicode" : "🔆",
+  "aliases" : [ "high_brightness" ]
+}, {
+  "unicode" : "🔅",
+  "aliases" : [ "low_brightness" ]
+}, {
+  "unicode" : "🔌",
+  "aliases" : [ "electric_plug" ]
+}, {
+  "unicode" : "🔋",
+  "aliases" : [ "battery" ],
+  "tags" : [ "power" ]
+}, {
+  "unicode" : "🔍",
+  "aliases" : [ "mag" ],
+  "tags" : [ "search", "zoom" ]
+}, {
+  "unicode" : "🛁",
+  "aliases" : [ "bathtub" ]
+}, {
+  "unicode" : "🛀",
+  "aliases" : [ "bath" ],
+  "tags" : [ "shower" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🚿",
+  "aliases" : [ "shower" ],
+  "tags" : [ "bath" ]
+}, {
+  "unicode" : "🚽",
+  "aliases" : [ "toilet" ],
+  "tags" : [ "wc" ]
+}, {
+  "unicode" : "🔧",
+  "aliases" : [ "wrench" ],
+  "tags" : [ "tool" ]
+}, {
+  "unicode" : "🔩",
+  "aliases" : [ "nut_and_bolt" ]
+}, {
+  "unicode" : "🔨",
+  "aliases" : [ "hammer" ],
+  "tags" : [ "tool" ]
+}, {
+  "unicode" : "🚪",
+  "aliases" : [ "door" ]
+}, {
+  "unicode" : "🚬",
+  "aliases" : [ "smoking" ],
+  "tags" : [ "cigarette" ]
+}, {
+  "unicode" : "💣",
+  "aliases" : [ "bomb" ],
+  "tags" : [ "boom" ]
+}, {
+  "unicode" : "🔫",
+  "aliases" : [ "gun" ],
+  "tags" : [ "shoot", "weapon" ]
+}, {
+  "unicode" : "🔪",
+  "aliases" : [ "hocho", "knife" ],
+  "tags" : [ "cut", "chop" ]
+}, {
+  "unicode" : "💊",
+  "aliases" : [ "pill" ],
+  "tags" : [ "health", "medicine" ]
+}, {
+  "unicode" : "💉",
+  "aliases" : [ "syringe" ],
+  "tags" : [ "health", "hospital", "needle" ]
+}, {
+  "unicode" : "💰",
+  "aliases" : [ "moneybag" ],
+  "tags" : [ "dollar", "cream" ]
+}, {
+  "unicode" : "💴",
+  "aliases" : [ "yen" ]
+}, {
+  "unicode" : "💵",
+  "aliases" : [ "dollar" ],
+  "tags" : [ "money" ]
+}, {
+  "unicode" : "💷",
+  "aliases" : [ "pound" ]
+}, {
+  "unicode" : "💶",
+  "aliases" : [ "euro" ]
+}, {
+  "unicode" : "💳",
+  "aliases" : [ "credit_card" ],
+  "tags" : [ "subscription" ]
+}, {
+  "unicode" : "💸",
+  "aliases" : [ "money_with_wings" ],
+  "tags" : [ "dollar" ]
+}, {
+  "unicode" : "📲",
+  "aliases" : [ "calling" ],
+  "tags" : [ "call", "incoming" ]
+}, {
+  "unicode" : "📧",
+  "aliases" : [ "e-mail" ]
+}, {
+  "unicode" : "📥",
+  "aliases" : [ "inbox_tray" ]
+}, {
+  "unicode" : "📤",
+  "aliases" : [ "outbox_tray" ]
+}, {
+  "unicode" : "✉",
+  "aliases" : [ "email", "envelope" ],
+  "tags" : [ "letter" ]
+}, {
+  "unicode" : "📩",
+  "aliases" : [ "envelope_with_arrow" ]
+}, {
+  "unicode" : "📨",
+  "aliases" : [ "incoming_envelope" ]
+}, {
+  "unicode" : "📯",
+  "aliases" : [ "postal_horn" ]
+}, {
+  "unicode" : "📫",
+  "aliases" : [ "mailbox" ]
+}, {
+  "unicode" : "📪",
+  "aliases" : [ "mailbox_closed" ]
+}, {
+  "unicode" : "📬",
+  "aliases" : [ "mailbox_with_mail" ]
+}, {
+  "unicode" : "📭",
+  "aliases" : [ "mailbox_with_no_mail" ]
+}, {
+  "unicode" : "📮",
+  "aliases" : [ "postbox" ]
+}, {
+  "unicode" : "📦",
+  "aliases" : [ "package" ],
+  "tags" : [ "shipping" ]
+}, {
+  "unicode" : "📝",
+  "aliases" : [ "memo", "pencil" ],
+  "tags" : [ "document", "note" ]
+}, {
+  "unicode" : "📄",
+  "aliases" : [ "page_facing_up" ],
+  "tags" : [ "document" ]
+}, {
+  "unicode" : "📃",
+  "aliases" : [ "page_with_curl" ]
+}, {
+  "unicode" : "📑",
+  "aliases" : [ "bookmark_tabs" ]
+}, {
+  "unicode" : "📊",
+  "aliases" : [ "bar_chart" ],
+  "tags" : [ "stats", "metrics" ]
+}, {
+  "unicode" : "📈",
+  "aliases" : [ "chart_with_upwards_trend" ],
+  "tags" : [ "graph", "metrics" ]
+}, {
+  "unicode" : "📉",
+  "aliases" : [ "chart_with_downwards_trend" ],
+  "tags" : [ "graph", "metrics" ]
+}, {
+  "unicode" : "📜",
+  "aliases" : [ "scroll" ],
+  "tags" : [ "document" ]
+}, {
+  "unicode" : "📋",
+  "aliases" : [ "clipboard" ]
+}, {
+  "unicode" : "📅",
+  "aliases" : [ "date" ],
+  "tags" : [ "calendar", "schedule" ]
+}, {
+  "unicode" : "📆",
+  "aliases" : [ "calendar" ],
+  "tags" : [ "schedule" ]
+}, {
+  "unicode" : "📇",
+  "aliases" : [ "card_index" ]
+}, {
+  "unicode" : "📁",
+  "aliases" : [ "file_folder" ],
+  "tags" : [ "directory" ]
+}, {
+  "unicode" : "📂",
+  "aliases" : [ "open_file_folder" ]
+}, {
+  "unicode" : "✂",
+  "aliases" : [ "scissors" ],
+  "tags" : [ "cut" ]
+}, {
+  "unicode" : "📌",
+  "aliases" : [ "pushpin" ],
+  "tags" : [ "location" ]
+}, {
+  "unicode" : "📎",
+  "aliases" : [ "paperclip" ]
+}, {
+  "unicode" : "✒",
+  "aliases" : [ "black_nib" ]
+}, {
+  "unicode" : "✏",
+  "aliases" : [ "pencil2" ]
+}, {
+  "unicode" : "📏",
+  "aliases" : [ "straight_ruler" ]
+}, {
+  "unicode" : "📐",
+  "aliases" : [ "triangular_ruler" ]
+}, {
+  "unicode" : "📕",
+  "aliases" : [ "closed_book" ]
+}, {
+  "unicode" : "📗",
+  "aliases" : [ "green_book" ]
+}, {
+  "unicode" : "📘",
+  "aliases" : [ "blue_book" ]
+}, {
+  "unicode" : "📙",
+  "aliases" : [ "orange_book" ]
+}, {
+  "unicode" : "📓",
+  "aliases" : [ "notebook" ]
+}, {
+  "unicode" : "📔",
+  "aliases" : [ "notebook_with_decorative_cover" ]
+}, {
+  "unicode" : "📒",
+  "aliases" : [ "ledger" ]
+}, {
+  "unicode" : "📚",
+  "aliases" : [ "books" ],
+  "tags" : [ "library" ]
+}, {
+  "unicode" : "📖",
+  "aliases" : [ "book", "open_book" ]
+}, {
+  "unicode" : "🔖",
+  "aliases" : [ "bookmark" ]
+}, {
+  "unicode" : "📛",
+  "aliases" : [ "name_badge" ]
+}, {
+  "unicode" : "🔬",
+  "aliases" : [ "microscope" ],
+  "tags" : [ "science", "laboratory", "investigate" ]
+}, {
+  "unicode" : "🔭",
+  "aliases" : [ "telescope" ]
+}, {
+  "unicode" : "📰",
+  "aliases" : [ "newspaper" ],
+  "tags" : [ "press" ]
+}, {
+  "unicode" : "🎨",
+  "aliases" : [ "art" ],
+  "tags" : [ "design", "paint" ]
+}, {
+  "unicode" : "🎬",
+  "aliases" : [ "clapper" ],
+  "tags" : [ "film" ]
+}, {
+  "unicode" : "🎤",
+  "aliases" : [ "microphone" ],
+  "tags" : [ "sing" ]
+}, {
+  "unicode" : "🎧",
+  "aliases" : [ "headphones" ],
+  "tags" : [ "music", "earphones" ]
+}, {
+  "unicode" : "🎼",
+  "aliases" : [ "musical_score" ]
+}, {
+  "unicode" : "🎵",
+  "aliases" : [ "musical_note" ]
+}, {
+  "unicode" : "🎶",
+  "aliases" : [ "notes" ],
+  "tags" : [ "music" ]
+}, {
+  "unicode" : "🎹",
+  "aliases" : [ "musical_keyboard" ],
+  "tags" : [ "piano" ]
+}, {
+  "unicode" : "🎻",
+  "aliases" : [ "violin" ]
+}, {
+  "unicode" : "🎺",
+  "aliases" : [ "trumpet" ]
+}, {
+  "unicode" : "🎷",
+  "aliases" : [ "saxophone" ]
+}, {
+  "unicode" : "🎸",
+  "aliases" : [ "guitar" ],
+  "tags" : [ "rock" ]
+}, {
+  "unicode" : "👾",
+  "aliases" : [ "space_invader" ],
+  "tags" : [ "game", "retro" ]
+}, {
+  "unicode" : "🎮",
+  "aliases" : [ "video_game" ],
+  "tags" : [ "play", "controller", "console" ]
+}, {
+  "unicode" : "🃏",
+  "aliases" : [ "black_joker" ]
+}, {
+  "unicode" : "🎴",
+  "aliases" : [ "flower_playing_cards" ]
+}, {
+  "unicode" : "🀄",
+  "aliases" : [ "mahjong" ]
+}, {
+  "unicode" : "🎲",
+  "aliases" : [ "game_die" ],
+  "tags" : [ "dice", "gambling" ]
+}, {
+  "unicode" : "🎯",
+  "aliases" : [ "dart" ],
+  "tags" : [ "target" ]
+}, {
+  "unicode" : "🏈",
+  "aliases" : [ "football" ],
+  "tags" : [ "sports" ]
+}, {
+  "unicode" : "🏀",
+  "aliases" : [ "basketball" ],
+  "tags" : [ "sports" ]
+}, {
+  "unicode" : "⚽",
+  "aliases" : [ "soccer" ],
+  "tags" : [ "sports" ]
+}, {
+  "unicode" : "⚾",
+  "aliases" : [ "baseball" ],
+  "tags" : [ "sports" ]
+}, {
+  "unicode" : "🎾",
+  "aliases" : [ "tennis" ],
+  "tags" : [ "sports" ]
+}, {
+  "unicode" : "🎱",
+  "aliases" : [ "8ball" ],
+  "tags" : [ "pool", "billiards" ]
+}, {
+  "unicode" : "🏉",
+  "aliases" : [ "rugby_football" ]
+}, {
+  "unicode" : "🎳",
+  "aliases" : [ "bowling" ]
+}, {
+  "unicode" : "⛳",
+  "aliases" : [ "golf" ]
+}, {
+  "unicode" : "🚵",
+  "aliases" : [ "mountain_bicyclist" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🚴",
+  "aliases" : [ "bicyclist" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🏁",
+  "aliases" : [ "checkered_flag" ],
+  "tags" : [ "milestone", "finish" ]
+}, {
+  "unicode" : "🏇",
+  "aliases" : [ "horse_racing" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🏆",
+  "aliases" : [ "trophy" ],
+  "tags" : [ "award", "contest", "winner" ]
+}, {
+  "unicode" : "🎿",
+  "aliases" : [ "ski" ]
+}, {
+  "unicode" : "🏂",
+  "aliases" : [ "snowboarder" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🏊",
+  "aliases" : [ "swimmer" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🏄",
+  "aliases" : [ "surfer" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🎣",
+  "aliases" : [ "fishing_pole_and_fish" ]
+}, {
+  "unicode" : "☕",
+  "aliases" : [ "coffee" ],
+  "tags" : [ "cafe", "espresso" ]
+}, {
+  "unicode" : "🍵",
+  "aliases" : [ "tea" ],
+  "tags" : [ "green", "breakfast" ]
+}, {
+  "unicode" : "🍶",
+  "aliases" : [ "sake" ]
+}, {
+  "unicode" : "🍼",
+  "aliases" : [ "baby_bottle" ],
+  "tags" : [ "milk" ]
+}, {
+  "unicode" : "🍺",
+  "aliases" : [ "beer" ],
+  "tags" : [ "drink" ]
+}, {
+  "unicode" : "🍻",
+  "aliases" : [ "beers" ],
+  "tags" : [ "drinks" ]
+}, {
+  "unicode" : "🍸",
+  "aliases" : [ "cocktail" ],
+  "tags" : [ "drink" ]
+}, {
+  "unicode" : "🍹",
+  "aliases" : [ "tropical_drink" ],
+  "tags" : [ "summer", "vacation" ]
+}, {
+  "unicode" : "🍷",
+  "aliases" : [ "wine_glass" ]
+}, {
+  "unicode" : "🍴",
+  "aliases" : [ "fork_and_knife" ],
+  "tags" : [ "cutlery" ]
+}, {
+  "unicode" : "🍕",
+  "aliases" : [ "pizza" ]
+}, {
+  "unicode" : "🍔",
+  "aliases" : [ "hamburger" ],
+  "tags" : [ "burger" ]
+}, {
+  "unicode" : "🍟",
+  "aliases" : [ "fries" ]
+}, {
+  "unicode" : "🍗",
+  "aliases" : [ "poultry_leg" ],
+  "tags" : [ "meat", "chicken" ]
+}, {
+  "unicode" : "🍖",
+  "aliases" : [ "meat_on_bone" ]
+}, {
+  "unicode" : "🍝",
+  "aliases" : [ "spaghetti" ],
+  "tags" : [ "pasta" ]
+}, {
+  "unicode" : "🍛",
+  "aliases" : [ "curry" ]
+}, {
+  "unicode" : "🍤",
+  "aliases" : [ "fried_shrimp" ],
+  "tags" : [ "tempura" ]
+}, {
+  "unicode" : "🍱",
+  "aliases" : [ "bento" ]
+}, {
+  "unicode" : "🍣",
+  "aliases" : [ "sushi" ]
+}, {
+  "unicode" : "🍥",
+  "aliases" : [ "fish_cake" ]
+}, {
+  "unicode" : "🍙",
+  "aliases" : [ "rice_ball" ]
+}, {
+  "unicode" : "🍘",
+  "aliases" : [ "rice_cracker" ]
+}, {
+  "unicode" : "🍚",
+  "aliases" : [ "rice" ]
+}, {
+  "unicode" : "🍜",
+  "aliases" : [ "ramen" ],
+  "tags" : [ "noodle" ]
+}, {
+  "unicode" : "🍲",
+  "aliases" : [ "stew" ]
+}, {
+  "unicode" : "🍢",
+  "aliases" : [ "oden" ]
+}, {
+  "unicode" : "🍡",
+  "aliases" : [ "dango" ]
+}, {
+  "unicode" : "🍳",
+  "aliases" : [ "cooking" ],
+  "tags" : [ "breakfast" ]
+}, {
+  "unicode" : "🍞",
+  "aliases" : [ "bread" ],
+  "tags" : [ "toast" ]
+}, {
+  "unicode" : "🍩",
+  "aliases" : [ "doughnut" ]
+}, {
+  "unicode" : "🍮",
+  "aliases" : [ "custard" ]
+}, {
+  "unicode" : "🍦",
+  "aliases" : [ "icecream" ]
+}, {
+  "unicode" : "🍨",
+  "aliases" : [ "ice_cream" ]
+}, {
+  "unicode" : "🍧",
+  "aliases" : [ "shaved_ice" ]
+}, {
+  "unicode" : "🎂",
+  "aliases" : [ "birthday" ],
+  "tags" : [ "party" ]
+}, {
+  "unicode" : "🍰",
+  "aliases" : [ "cake" ],
+  "tags" : [ "dessert" ]
+}, {
+  "unicode" : "🍪",
+  "aliases" : [ "cookie" ]
+}, {
+  "unicode" : "🍫",
+  "aliases" : [ "chocolate_bar" ]
+}, {
+  "unicode" : "🍬",
+  "aliases" : [ "candy" ],
+  "tags" : [ "sweet" ]
+}, {
+  "unicode" : "🍭",
+  "aliases" : [ "lollipop" ]
+}, {
+  "unicode" : "🍯",
+  "aliases" : [ "honey_pot" ]
+}, {
+  "unicode" : "🍎",
+  "aliases" : [ "apple" ]
+}, {
+  "unicode" : "🍏",
+  "aliases" : [ "green_apple" ],
+  "tags" : [ "fruit" ]
+}, {
+  "unicode" : "🍊",
+  "aliases" : [ "tangerine" ]
+}, {
+  "unicode" : "🍋",
+  "aliases" : [ "lemon" ]
+}, {
+  "unicode" : "🍒",
+  "aliases" : [ "cherries" ],
+  "tags" : [ "fruit" ]
+}, {
+  "unicode" : "🍇",
+  "aliases" : [ "grapes" ]
+}, {
+  "unicode" : "🍉",
+  "aliases" : [ "watermelon" ]
+}, {
+  "unicode" : "🍓",
+  "aliases" : [ "strawberry" ],
+  "tags" : [ "fruit" ]
+}, {
+  "unicode" : "🍑",
+  "aliases" : [ "peach" ]
+}, {
+  "unicode" : "🍈",
+  "aliases" : [ "melon" ]
+}, {
+  "unicode" : "🍌",
+  "aliases" : [ "banana" ],
+  "tags" : [ "fruit" ]
+}, {
+  "unicode" : "🍐",
+  "aliases" : [ "pear" ]
+}, {
+  "unicode" : "🍍",
+  "aliases" : [ "pineapple" ]
+}, {
+  "unicode" : "🍠",
+  "aliases" : [ "sweet_potato" ]
+}, {
+  "unicode" : "🍆",
+  "aliases" : [ "eggplant" ],
+  "tags" : [ "aubergine" ]
+}, {
+  "unicode" : "🍅",
+  "aliases" : [ "tomato" ]
+}, {
+  "unicode" : "🌽",
+  "aliases" : [ "corn" ]
+}, {
+  "unicode" : "🏠",
+  "aliases" : [ "house" ]
+}, {
+  "unicode" : "🏡",
+  "aliases" : [ "house_with_garden" ]
+}, {
+  "unicode" : "🏫",
+  "aliases" : [ "school" ]
+}, {
+  "unicode" : "🏢",
+  "aliases" : [ "office" ]
+}, {
+  "unicode" : "🏣",
+  "aliases" : [ "post_office" ]
+}, {
+  "unicode" : "🏥",
+  "aliases" : [ "hospital" ]
+}, {
+  "unicode" : "🏦",
+  "aliases" : [ "bank" ]
+}, {
+  "unicode" : "🏪",
+  "aliases" : [ "convenience_store" ]
+}, {
+  "unicode" : "🏩",
+  "aliases" : [ "love_hotel" ]
+}, {
+  "unicode" : "🏨",
+  "aliases" : [ "hotel" ]
+}, {
+  "unicode" : "💒",
+  "aliases" : [ "wedding" ],
+  "tags" : [ "marriage" ]
+}, {
+  "unicode" : "⛪",
+  "aliases" : [ "church" ]
+}, {
+  "unicode" : "🏬",
+  "aliases" : [ "department_store" ]
+}, {
+  "unicode" : "🏤",
+  "aliases" : [ "european_post_office" ]
+}, {
+  "unicode" : "🌇",
+  "aliases" : [ "city_sunrise" ]
+}, {
+  "unicode" : "🌆",
+  "aliases" : [ "city_sunset" ]
+}, {
+  "unicode" : "🏯",
+  "aliases" : [ "japanese_castle" ]
+}, {
+  "unicode" : "🏰",
+  "aliases" : [ "european_castle" ]
+}, {
+  "unicode" : "⛺",
+  "aliases" : [ "tent" ],
+  "tags" : [ "camping" ]
+}, {
+  "unicode" : "🏭",
+  "aliases" : [ "factory" ]
+}, {
+  "unicode" : "🗼",
+  "aliases" : [ "tokyo_tower" ]
+}, {
+  "unicode" : "🗾",
+  "aliases" : [ "japan" ]
+}, {
+  "unicode" : "🗻",
+  "aliases" : [ "mount_fuji" ]
+}, {
+  "unicode" : "🌄",
+  "aliases" : [ "sunrise_over_mountains" ]
+}, {
+  "unicode" : "🌅",
+  "aliases" : [ "sunrise" ]
+}, {
+  "unicode" : "🌃",
+  "aliases" : [ "night_with_stars" ]
+}, {
+  "unicode" : "🗽",
+  "aliases" : [ "statue_of_liberty" ]
+}, {
+  "unicode" : "🌉",
+  "aliases" : [ "bridge_at_night" ]
+}, {
+  "unicode" : "🎠",
+  "aliases" : [ "carousel_horse" ]
+}, {
+  "unicode" : "🎡",
+  "aliases" : [ "ferris_wheel" ]
+}, {
+  "unicode" : "⛲",
+  "aliases" : [ "fountain" ]
+}, {
+  "unicode" : "🎢",
+  "aliases" : [ "roller_coaster" ]
+}, {
+  "unicode" : "🚢",
+  "aliases" : [ "ship" ]
+}, {
+  "unicode" : "⛵",
+  "aliases" : [ "boat", "sailboat" ]
+}, {
+  "unicode" : "🚤",
+  "aliases" : [ "speedboat" ],
+  "tags" : [ "ship" ]
+}, {
+  "unicode" : "🚣",
+  "aliases" : [ "rowboat" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "⚓",
+  "aliases" : [ "anchor" ],
+  "tags" : [ "ship" ]
+}, {
+  "unicode" : "🚀",
+  "aliases" : [ "rocket" ],
+  "tags" : [ "ship", "launch" ]
+}, {
+  "unicode" : "✈",
+  "aliases" : [ "airplane" ],
+  "tags" : [ "flight" ]
+}, {
+  "unicode" : "💺",
+  "aliases" : [ "seat" ]
+}, {
+  "unicode" : "🚁",
+  "aliases" : [ "helicopter" ]
+}, {
+  "unicode" : "🚂",
+  "aliases" : [ "steam_locomotive" ],
+  "tags" : [ "train" ]
+}, {
+  "unicode" : "🚊",
+  "aliases" : [ "tram" ]
+}, {
+  "unicode" : "🚉",
+  "aliases" : [ "station" ]
+}, {
+  "unicode" : "🚞",
+  "aliases" : [ "mountain_railway" ]
+}, {
+  "unicode" : "🚆",
+  "aliases" : [ "train2" ]
+}, {
+  "unicode" : "🚄",
+  "aliases" : [ "bullettrain_side" ],
+  "tags" : [ "train" ]
+}, {
+  "unicode" : "🚅",
+  "aliases" : [ "bullettrain_front" ],
+  "tags" : [ "train" ]
+}, {
+  "unicode" : "🚈",
+  "aliases" : [ "light_rail" ]
+}, {
+  "unicode" : "🚇",
+  "aliases" : [ "metro" ]
+}, {
+  "unicode" : "🚝",
+  "aliases" : [ "monorail" ]
+}, {
+  "unicode" : "🚋",
+  "aliases" : [ "train" ]
+}, {
+  "unicode" : "🚃",
+  "aliases" : [ "railway_car" ]
+}, {
+  "unicode" : "🚎",
+  "aliases" : [ "trolleybus" ]
+}, {
+  "unicode" : "🚌",
+  "aliases" : [ "bus" ]
+}, {
+  "unicode" : "🚍",
+  "aliases" : [ "oncoming_bus" ]
+}, {
+  "unicode" : "🚙",
+  "aliases" : [ "blue_car" ]
+}, {
+  "unicode" : "🚘",
+  "aliases" : [ "oncoming_automobile" ]
+}, {
+  "unicode" : "🚗",
+  "aliases" : [ "car", "red_car" ]
+}, {
+  "unicode" : "🚕",
+  "aliases" : [ "taxi" ]
+}, {
+  "unicode" : "🚖",
+  "aliases" : [ "oncoming_taxi" ]
+}, {
+  "unicode" : "🚛",
+  "aliases" : [ "articulated_lorry" ]
+}, {
+  "unicode" : "🚚",
+  "aliases" : [ "truck" ]
+}, {
+  "unicode" : "🚨",
+  "aliases" : [ "rotating_light" ],
+  "tags" : [ "911", "emergency" ]
+}, {
+  "unicode" : "🚓",
+  "aliases" : [ "police_car" ]
+}, {
+  "unicode" : "🚔",
+  "aliases" : [ "oncoming_police_car" ]
+}, {
+  "unicode" : "🚒",
+  "aliases" : [ "fire_engine" ]
+}, {
+  "unicode" : "🚑",
+  "aliases" : [ "ambulance" ]
+}, {
+  "unicode" : "🚐",
+  "aliases" : [ "minibus" ]
+}, {
+  "unicode" : "🚲",
+  "aliases" : [ "bike" ],
+  "tags" : [ "bicycle" ]
+}, {
+  "unicode" : "🚡",
+  "aliases" : [ "aerial_tramway" ]
+}, {
+  "unicode" : "🚟",
+  "aliases" : [ "suspension_railway" ]
+}, {
+  "unicode" : "🚠",
+  "aliases" : [ "mountain_cableway" ]
+}, {
+  "unicode" : "🚜",
+  "aliases" : [ "tractor" ]
+}, {
+  "unicode" : "💈",
+  "aliases" : [ "barber" ]
+}, {
+  "unicode" : "🚏",
+  "aliases" : [ "busstop" ]
+}, {
+  "unicode" : "🎫",
+  "aliases" : [ "ticket" ]
+}, {
+  "unicode" : "🚦",
+  "aliases" : [ "vertical_traffic_light" ],
+  "tags" : [ "semaphore" ]
+}, {
+  "unicode" : "🚥",
+  "aliases" : [ "traffic_light" ]
+}, {
+  "unicode" : "⚠",
+  "aliases" : [ "warning" ],
+  "tags" : [ "wip" ]
+}, {
+  "unicode" : "🚧",
+  "aliases" : [ "construction" ],
+  "tags" : [ "wip" ]
+}, {
+  "unicode" : "🔰",
+  "aliases" : [ "beginner" ]
+}, {
+  "unicode" : "⛽",
+  "aliases" : [ "fuelpump" ]
+}, {
+  "unicode" : "🏮",
+  "aliases" : [ "izakaya_lantern", "lantern" ]
+}, {
+  "unicode" : "🎰",
+  "aliases" : [ "slot_machine" ]
+}, {
+  "unicode" : "♨",
+  "aliases" : [ "hotsprings" ]
+}, {
+  "unicode" : "🗿",
+  "aliases" : [ "moyai" ],
+  "tags" : [ "stone" ]
+}, {
+  "unicode" : "🎪",
+  "aliases" : [ "circus_tent" ]
+}, {
+  "unicode" : "🎭",
+  "aliases" : [ "performing_arts" ],
+  "tags" : [ "theater", "drama" ]
+}, {
+  "unicode" : "📍",
+  "aliases" : [ "round_pushpin" ],
+  "tags" : [ "location" ]
+}, {
+  "unicode" : "🚩",
+  "aliases" : [ "triangular_flag_on_post" ]
+}, {
+  "unicode" : "1⃣",
+  "aliases" : [ "one" ]
+}, {
+  "unicode" : "2⃣",
+  "aliases" : [ "two" ]
+}, {
+  "unicode" : "3⃣",
+  "aliases" : [ "three" ]
+}, {
+  "unicode" : "4⃣",
+  "aliases" : [ "four" ]
+}, {
+  "unicode" : "5⃣",
+  "aliases" : [ "five" ]
+}, {
+  "unicode" : "6⃣",
+  "aliases" : [ "six" ]
+}, {
+  "unicode" : "7⃣",
+  "aliases" : [ "seven" ]
+}, {
+  "unicode" : "8⃣",
+  "aliases" : [ "eight" ]
+}, {
+  "unicode" : "9⃣",
+  "aliases" : [ "nine" ]
+}, {
+  "unicode" : "0⃣",
+  "aliases" : [ "zero" ]
+}, {
+  "unicode" : "🔟",
+  "aliases" : [ "keycap_ten" ]
+}, {
+  "unicode" : "🔢",
+  "aliases" : [ "1234" ],
+  "tags" : [ "numbers" ]
+}, {
+  "unicode" : "#⃣",
+  "aliases" : [ "hash" ],
+  "tags" : [ "number" ]
+}, {
+  "unicode" : "🔣",
+  "aliases" : [ "symbols" ]
+}, {
+  "unicode" : "⬆",
+  "aliases" : [ "arrow_up" ]
+}, {
+  "unicode" : "⬇",
+  "aliases" : [ "arrow_down" ]
+}, {
+  "unicode" : "⬅",
+  "aliases" : [ "arrow_left" ]
+}, {
+  "unicode" : "➡",
+  "aliases" : [ "arrow_right" ]
+}, {
+  "unicode" : "🔠",
+  "aliases" : [ "capital_abcd" ],
+  "tags" : [ "letters" ]
+}, {
+  "unicode" : "🔡",
+  "aliases" : [ "abcd" ]
+}, {
+  "unicode" : "🔤",
+  "aliases" : [ "abc" ],
+  "tags" : [ "alphabet" ]
+}, {
+  "unicode" : "↗",
+  "aliases" : [ "arrow_upper_right" ]
+}, {
+  "unicode" : "↖",
+  "aliases" : [ "arrow_upper_left" ]
+}, {
+  "unicode" : "↘",
+  "aliases" : [ "arrow_lower_right" ]
+}, {
+  "unicode" : "↙",
+  "aliases" : [ "arrow_lower_left" ]
+}, {
+  "unicode" : "↔",
+  "aliases" : [ "left_right_arrow" ]
+}, {
+  "unicode" : "↕",
+  "aliases" : [ "arrow_up_down" ]
+}, {
+  "unicode" : "🔄",
+  "aliases" : [ "arrows_counterclockwise" ],
+  "tags" : [ "sync" ]
+}, {
+  "unicode" : "◀",
+  "aliases" : [ "arrow_backward" ]
+}, {
+  "unicode" : "▶",
+  "aliases" : [ "arrow_forward" ]
+}, {
+  "unicode" : "🔼",
+  "aliases" : [ "arrow_up_small" ]
+}, {
+  "unicode" : "🔽",
+  "aliases" : [ "arrow_down_small" ]
+}, {
+  "unicode" : "↩",
+  "aliases" : [ "leftwards_arrow_with_hook" ],
+  "tags" : [ "return" ]
+}, {
+  "unicode" : "↪",
+  "aliases" : [ "arrow_right_hook" ]
+}, {
+  "unicode" : "ℹ",
+  "aliases" : [ "information_source" ]
+}, {
+  "unicode" : "⏪",
+  "aliases" : [ "rewind" ]
+}, {
+  "unicode" : "⏩",
+  "aliases" : [ "fast_forward" ]
+}, {
+  "unicode" : "⏫",
+  "aliases" : [ "arrow_double_up" ]
+}, {
+  "unicode" : "⏬",
+  "aliases" : [ "arrow_double_down" ]
+}, {
+  "unicode" : "⤵",
+  "aliases" : [ "arrow_heading_down" ]
+}, {
+  "unicode" : "⤴",
+  "aliases" : [ "arrow_heading_up" ]
+}, {
+  "unicode" : "🆗",
+  "aliases" : [ "ok" ],
+  "tags" : [ "yes" ]
+}, {
+  "unicode" : "🔀",
+  "aliases" : [ "twisted_rightwards_arrows" ],
+  "tags" : [ "shuffle" ]
+}, {
+  "unicode" : "🔁",
+  "aliases" : [ "repeat" ],
+  "tags" : [ "loop" ]
+}, {
+  "unicode" : "🔂",
+  "aliases" : [ "repeat_one" ]
+}, {
+  "unicode" : "🆕",
+  "aliases" : [ "new" ],
+  "tags" : [ "fresh" ]
+}, {
+  "unicode" : "🆙",
+  "aliases" : [ "up" ]
+}, {
+  "unicode" : "🆒",
+  "aliases" : [ "cool" ]
+}, {
+  "unicode" : "🆓",
+  "aliases" : [ "free" ]
+}, {
+  "unicode" : "🆖",
+  "aliases" : [ "squared_ng" ]
+}, {
+  "unicode" : "📶",
+  "aliases" : [ "signal_strength" ],
+  "tags" : [ "wifi" ]
+}, {
+  "unicode" : "🎦",
+  "aliases" : [ "cinema" ],
+  "tags" : [ "film", "movie" ]
+}, {
+  "unicode" : "🈁",
+  "aliases" : [ "koko" ]
+}, {
+  "unicode" : "🈯",
+  "aliases" : [ "u6307" ]
+}, {
+  "unicode" : "🈳",
+  "aliases" : [ "u7a7a" ]
+}, {
+  "unicode" : "🈵",
+  "aliases" : [ "u6e80" ]
+}, {
+  "unicode" : "🈴",
+  "aliases" : [ "u5408" ]
+}, {
+  "unicode" : "🈲",
+  "aliases" : [ "u7981" ]
+}, {
+  "unicode" : "🉐",
+  "aliases" : [ "ideograph_advantage" ]
+}, {
+  "unicode" : "🈹",
+  "aliases" : [ "u5272" ]
+}, {
+  "unicode" : "🈺",
+  "aliases" : [ "u55b6" ]
+}, {
+  "unicode" : "🈶",
+  "aliases" : [ "u6709" ]
+}, {
+  "unicode" : "🈚",
+  "aliases" : [ "u7121" ]
+}, {
+  "unicode" : "🚻",
+  "aliases" : [ "restroom" ],
+  "tags" : [ "toilet" ]
+}, {
+  "unicode" : "🚹",
+  "aliases" : [ "mens" ]
+}, {
+  "unicode" : "🚺",
+  "aliases" : [ "womens" ]
+}, {
+  "unicode" : "🚼",
+  "aliases" : [ "baby_symbol" ]
+}, {
+  "unicode" : "🚾",
+  "aliases" : [ "wc" ],
+  "tags" : [ "toilet", "restroom" ]
+}, {
+  "unicode" : "🚰",
+  "aliases" : [ "potable_water" ]
+}, {
+  "unicode" : "🚮",
+  "aliases" : [ "put_litter_in_its_place" ]
+}, {
+  "unicode" : "🅿",
+  "aliases" : [ "parking" ]
+}, {
+  "unicode" : "♿",
+  "aliases" : [ "wheelchair" ],
+  "tags" : [ "accessibility" ]
+}, {
+  "unicode" : "🚭",
+  "aliases" : [ "no_smoking" ]
+}, {
+  "unicode" : "🈷",
+  "aliases" : [ "u6708" ]
+}, {
+  "unicode" : "🈸",
+  "aliases" : [ "u7533" ]
+}, {
+  "unicode" : "🈂",
+  "aliases" : [ "sa" ]
+}, {
+  "unicode" : "Ⓜ",
+  "aliases" : [ "m" ]
+}, {
+  "unicode" : "🛂",
+  "aliases" : [ "passport_control" ]
+}, {
+  "unicode" : "🛄",
+  "aliases" : [ "baggage_claim" ],
+  "tags" : [ "airport" ]
+}, {
+  "unicode" : "🛅",
+  "aliases" : [ "left_luggage" ]
+}, {
+  "unicode" : "🛃",
+  "aliases" : [ "customs" ]
+}, {
+  "unicode" : "🉑",
+  "aliases" : [ "accept" ]
+}, {
+  "unicode" : "㊙",
+  "aliases" : [ "secret" ]
+}, {
+  "unicode" : "㊗",
+  "aliases" : [ "congratulations" ]
+}, {
+  "unicode" : "🆑",
+  "aliases" : [ "cl" ]
+}, {
+  "unicode" : "🆘",
+  "aliases" : [ "sos" ],
+  "tags" : [ "help", "emergency" ]
+}, {
+  "unicode" : "🆔",
+  "aliases" : [ "id" ]
+}, {
+  "unicode" : "🚫",
+  "aliases" : [ "no_entry_sign" ],
+  "tags" : [ "block", "forbidden" ]
+}, {
+  "unicode" : "🔞",
+  "aliases" : [ "underage" ]
+}, {
+  "unicode" : "📵",
+  "aliases" : [ "no_mobile_phones" ]
+}, {
+  "unicode" : "🚯",
+  "aliases" : [ "do_not_litter" ]
+}, {
+  "unicode" : "🚱",
+  "aliases" : [ "non-potable_water" ]
+}, {
+  "unicode" : "🚳",
+  "aliases" : [ "no_bicycles" ]
+}, {
+  "unicode" : "🚷",
+  "aliases" : [ "no_pedestrians" ]
+}, {
+  "unicode" : "🚸",
+  "aliases" : [ "children_crossing" ]
+}, {
+  "unicode" : "⛔",
+  "aliases" : [ "no_entry" ],
+  "tags" : [ "limit" ]
+}, {
+  "unicode" : "✳",
+  "aliases" : [ "eight_spoked_asterisk" ]
+}, {
+  "unicode" : "❇",
+  "aliases" : [ "sparkle" ]
+}, {
+  "unicode" : "❎",
+  "aliases" : [ "negative_squared_cross_mark" ]
+}, {
+  "unicode" : "✅",
+  "aliases" : [ "white_check_mark" ]
+}, {
+  "unicode" : "✴",
+  "aliases" : [ "eight_pointed_black_star" ]
+}, {
+  "unicode" : "💟",
+  "aliases" : [ "heart_decoration" ]
+}, {
+  "unicode" : "🆚",
+  "aliases" : [ "vs" ]
+}, {
+  "unicode" : "📳",
+  "aliases" : [ "vibration_mode" ]
+}, {
+  "unicode" : "📴",
+  "aliases" : [ "mobile_phone_off" ],
+  "tags" : [ "mute", "off" ]
+}, {
+  "unicode" : "🅰",
+  "aliases" : [ "a" ]
+}, {
+  "unicode" : "🅱",
+  "aliases" : [ "b" ]
+}, {
+  "unicode" : "🆎",
+  "aliases" : [ "ab" ]
+}, {
+  "unicode" : "🅾",
+  "aliases" : [ "o2" ]
+}, {
+  "unicode" : "💠",
+  "aliases" : [ "diamond_shape_with_a_dot_inside" ]
+}, {
+  "unicode" : "➿",
+  "aliases" : [ "loop" ]
+}, {
+  "unicode" : "♻",
+  "aliases" : [ "recycle" ],
+  "tags" : [ "environment", "green" ]
+}, {
+  "unicode" : "♈",
+  "aliases" : [ "aries" ]
+}, {
+  "unicode" : "♉",
+  "aliases" : [ "taurus" ]
+}, {
+  "unicode" : "♊",
+  "aliases" : [ "gemini" ]
+}, {
+  "unicode" : "♋",
+  "aliases" : [ "cancer" ]
+}, {
+  "unicode" : "♌",
+  "aliases" : [ "leo" ]
+}, {
+  "unicode" : "♍",
+  "aliases" : [ "virgo" ]
+}, {
+  "unicode" : "♎",
+  "aliases" : [ "libra" ]
+}, {
+  "unicode" : "♏",
+  "aliases" : [ "scorpius" ]
+}, {
+  "unicode" : "♐",
+  "aliases" : [ "sagittarius" ]
+}, {
+  "unicode" : "♑",
+  "aliases" : [ "capricorn" ]
+}, {
+  "unicode" : "♒",
+  "aliases" : [ "aquarius" ]
+}, {
+  "unicode" : "♓",
+  "aliases" : [ "pisces" ]
+}, {
+  "unicode" : "⛎",
+  "aliases" : [ "ophiuchus" ]
+}, {
+  "unicode" : "🔯",
+  "aliases" : [ "six_pointed_star" ]
+}, {
+  "unicode" : "🏧",
+  "aliases" : [ "atm" ]
+}, {
+  "unicode" : "💹",
+  "aliases" : [ "chart" ]
+}, {
+  "unicode" : "💲",
+  "aliases" : [ "heavy_dollar_sign" ]
+}, {
+  "unicode" : "💱",
+  "aliases" : [ "currency_exchange" ]
+}, {
+  "unicode" : "©",
+  "aliases" : [ "copyright" ]
+}, {
+  "unicode" : "®",
+  "aliases" : [ "registered" ]
+}, {
+  "unicode" : "™",
+  "aliases" : [ "tm" ],
+  "tags" : [ "trademark" ]
+}, {
+  "unicode" : "❌",
+  "aliases" : [ "x" ]
+}, {
+  "unicode" : "‼",
+  "aliases" : [ "bangbang" ]
+}, {
+  "unicode" : "⁉",
+  "aliases" : [ "interrobang" ]
+}, {
+  "unicode" : "❗",
+  "aliases" : [ "exclamation", "heavy_exclamation_mark" ],
+  "tags" : [ "bang" ]
+}, {
+  "unicode" : "❓",
+  "aliases" : [ "question" ],
+  "tags" : [ "confused" ]
+}, {
+  "unicode" : "❕",
+  "aliases" : [ "grey_exclamation" ]
+}, {
+  "unicode" : "❔",
+  "aliases" : [ "grey_question" ]
+}, {
+  "unicode" : "⭕",
+  "aliases" : [ "o" ]
+}, {
+  "unicode" : "🔝",
+  "aliases" : [ "top" ]
+}, {
+  "unicode" : "🔚",
+  "aliases" : [ "end" ]
+}, {
+  "unicode" : "🔙",
+  "aliases" : [ "back" ]
+}, {
+  "unicode" : "🔛",
+  "aliases" : [ "on" ]
+}, {
+  "unicode" : "🔜",
+  "aliases" : [ "soon" ]
+}, {
+  "unicode" : "🔃",
+  "aliases" : [ "arrows_clockwise" ]
+}, {
+  "unicode" : "🕛",
+  "aliases" : [ "clock12" ]
+}, {
+  "unicode" : "🕧",
+  "aliases" : [ "clock1230" ]
+}, {
+  "unicode" : "🕐",
+  "aliases" : [ "clock1" ]
+}, {
+  "unicode" : "🕜",
+  "aliases" : [ "clock130" ]
+}, {
+  "unicode" : "🕑",
+  "aliases" : [ "clock2" ]
+}, {
+  "unicode" : "🕝",
+  "aliases" : [ "clock230" ]
+}, {
+  "unicode" : "🕒",
+  "aliases" : [ "clock3" ]
+}, {
+  "unicode" : "🕞",
+  "aliases" : [ "clock330" ]
+}, {
+  "unicode" : "🕓",
+  "aliases" : [ "clock4" ]
+}, {
+  "unicode" : "🕟",
+  "aliases" : [ "clock430" ]
+}, {
+  "unicode" : "🕔",
+  "aliases" : [ "clock5" ]
+}, {
+  "unicode" : "🕠",
+  "aliases" : [ "clock530" ]
+}, {
+  "unicode" : "🕕",
+  "aliases" : [ "clock6" ]
+}, {
+  "unicode" : "🕖",
+  "aliases" : [ "clock7" ]
+}, {
+  "unicode" : "🕗",
+  "aliases" : [ "clock8" ]
+}, {
+  "unicode" : "🕘",
+  "aliases" : [ "clock9" ]
+}, {
+  "unicode" : "🕙",
+  "aliases" : [ "clock10" ]
+}, {
+  "unicode" : "🕚",
+  "aliases" : [ "clock11" ]
+}, {
+  "unicode" : "🕡",
+  "aliases" : [ "clock630" ]
+}, {
+  "unicode" : "🕢",
+  "aliases" : [ "clock730" ]
+}, {
+  "unicode" : "🕣",
+  "aliases" : [ "clock830" ]
+}, {
+  "unicode" : "🕤",
+  "aliases" : [ "clock930" ]
+}, {
+  "unicode" : "🕥",
+  "aliases" : [ "clock1030" ]
+}, {
+  "unicode" : "🕦",
+  "aliases" : [ "clock1130" ]
+}, {
+  "unicode" : "✖",
+  "aliases" : [ "heavy_multiplication_x" ]
+}, {
+  "unicode" : "➕",
+  "aliases" : [ "heavy_plus_sign" ]
+}, {
+  "unicode" : "➖",
+  "aliases" : [ "heavy_minus_sign" ]
+}, {
+  "unicode" : "➗",
+  "aliases" : [ "heavy_division_sign" ]
+}, {
+  "unicode" : "♠",
+  "aliases" : [ "spades" ]
+}, {
+  "unicode" : "♥",
+  "aliases" : [ "hearts" ]
+}, {
+  "unicode" : "♣",
+  "aliases" : [ "clubs" ]
+}, {
+  "unicode" : "♦",
+  "aliases" : [ "diamonds" ]
+}, {
+  "unicode" : "💮",
+  "aliases" : [ "white_flower" ]
+}, {
+  "unicode" : "💯",
+  "aliases" : [ "100" ],
+  "tags" : [ "score", "perfect" ]
+}, {
+  "unicode" : "✔",
+  "aliases" : [ "heavy_check_mark" ]
+}, {
+  "unicode" : "☑",
+  "aliases" : [ "ballot_box_with_check" ]
+}, {
+  "unicode" : "🔘",
+  "aliases" : [ "radio_button" ]
+}, {
+  "unicode" : "🔗",
+  "aliases" : [ "link" ]
+}, {
+  "unicode" : "➰",
+  "aliases" : [ "curly_loop" ]
+}, {
+  "unicode" : "〰",
+  "aliases" : [ "wavy_dash" ]
+}, {
+  "unicode" : "〽",
+  "aliases" : [ "part_alternation_mark" ]
+}, {
+  "unicode" : "🔱",
+  "aliases" : [ "trident" ]
+}, {
+  "unicode" : "◼",
+  "aliases" : [ "black_medium_square" ]
+}, {
+  "unicode" : "◻",
+  "aliases" : [ "white_medium_square" ]
+}, {
+  "unicode" : "◾",
+  "aliases" : [ "black_medium_small_square" ]
+}, {
+  "unicode" : "◽",
+  "aliases" : [ "white_medium_small_square" ]
+}, {
+  "unicode" : "▪",
+  "aliases" : [ "black_small_square" ]
+}, {
+  "unicode" : "▫",
+  "aliases" : [ "white_small_square" ]
+}, {
+  "unicode" : "🔺",
+  "aliases" : [ "small_red_triangle" ]
+}, {
+  "unicode" : "🔲",
+  "aliases" : [ "black_square_button" ]
+}, {
+  "unicode" : "🔳",
+  "aliases" : [ "white_square_button" ]
+}, {
+  "unicode" : "⚫",
+  "aliases" : [ "black_circle" ]
+}, {
+  "unicode" : "⚪",
+  "aliases" : [ "white_circle" ]
+}, {
+  "unicode" : "🔴",
+  "aliases" : [ "red_circle" ]
+}, {
+  "unicode" : "🔵",
+  "aliases" : [ "large_blue_circle" ]
+}, {
+  "unicode" : "🔻",
+  "aliases" : [ "small_red_triangle_down" ]
+}, {
+  "unicode" : "⬜",
+  "aliases" : [ "white_large_square" ]
+}, {
+  "unicode" : "⬛",
+  "aliases" : [ "black_large_square" ]
+}, {
+  "unicode" : "🔶",
+  "aliases" : [ "large_orange_diamond" ]
+}, {
+  "unicode" : "🔷",
+  "aliases" : [ "large_blue_diamond" ]
+}, {
+  "unicode" : "🔸",
+  "aliases" : [ "small_orange_diamond" ]
+}, {
+  "unicode" : "🔹",
+  "aliases" : [ "small_blue_diamond" ]
+}, {
+  "unicode" : "🇦🇫",
+  "aliases" : [ "af" ],
+  "tags" : [ "flag", "afghanistan" ]
+}, {
+  "unicode" : "🇦🇱",
+  "aliases" : [ "al" ],
+  "tags" : [ "flag", "albania" ]
+}, {
+  "unicode" : "🇩🇿",
+  "aliases" : [ "dz" ],
+  "tags" : [ "flag", "algeria" ]
+}, {
+  "unicode" : "🇦🇸",
+  "aliases" : [ "as" ],
+  "tags" : [ "flag", "american samoa" ]
+}, {
+  "unicode" : "🇦🇩",
+  "aliases" : [ "ad" ],
+  "tags" : [ "flag", "andorra" ]
+}, {
+  "unicode" : "🇦🇴",
+  "aliases" : [ "ao" ],
+  "tags" : [ "flag", "angola" ]
+}, {
+  "unicode" : "🇦🇮",
+  "aliases" : [ "ai" ],
+  "tags" : [ "flag", "anguilla" ]
+}, {
+  "unicode" : "🇦🇬",
+  "aliases" : [ "ag" ],
+  "tags" : [ "flag", "antigua and barbuda" ]
+}, {
+  "unicode" : "🇦🇷",
+  "aliases" : [ "ar" ],
+  "tags" : [ "flag", "argentina" ]
+}, {
+  "unicode" : "🇦🇲",
+  "aliases" : [ "am" ],
+  "tags" : [ "flag", "armenia" ]
+}, {
+  "unicode" : "🇦🇼",
+  "aliases" : [ "aw" ],
+  "tags" : [ "flag", "aruba" ]
+}, {
+  "unicode" : "🇦🇺",
+  "aliases" : [ "au" ],
+  "tags" : [ "flag", "australia" ]
+}, {
+  "unicode" : "🇦🇹",
+  "aliases" : [ "at" ],
+  "tags" : [ "flag", "austria" ]
+}, {
+  "unicode" : "🇦🇿",
+  "aliases" : [ "az" ],
+  "tags" : [ "flag", "azerbaijan" ]
+}, {
+  "unicode" : "🇧🇸",
+  "aliases" : [ "bs" ],
+  "tags" : [ "flag", "bahamas" ]
+}, {
+  "unicode" : "🇧🇭",
+  "aliases" : [ "bh" ],
+  "tags" : [ "flag", "bahrain" ]
+}, {
+  "unicode" : "🇧🇩",
+  "aliases" : [ "bd" ],
+  "tags" : [ "flag", "bangladesh" ]
+}, {
+  "unicode" : "🇧🇧",
+  "aliases" : [ "bb" ],
+  "tags" : [ "flag", "barbados" ]
+}, {
+  "unicode" : "🇧🇾",
+  "aliases" : [ "by" ],
+  "tags" : [ "flag", "belarus" ]
+}, {
+  "unicode" : "🇧🇪",
+  "aliases" : [ "be" ],
+  "tags" : [ "flag", "belgium" ]
+}, {
+  "unicode" : "🇧🇿",
+  "aliases" : [ "bz" ],
+  "tags" : [ "flag", "belize" ]
+}, {
+  "unicode" : "🇧🇯",
+  "aliases" : [ "bj" ],
+  "tags" : [ "flag", "benin" ]
+}, {
+  "unicode" : "🇧🇲",
+  "aliases" : [ "bm" ],
+  "tags" : [ "flag", "bermuda" ]
+}, {
+  "unicode" : "🇧🇹",
+  "aliases" : [ "bt" ],
+  "tags" : [ "flag", "bhutan" ]
+}, {
+  "unicode" : "🇧🇴",
+  "aliases" : [ "bo" ],
+  "tags" : [ "flag", "bolivia" ]
+}, {
+  "unicode" : "🇧🇦",
+  "aliases" : [ "ba" ],
+  "tags" : [ "flag", "bosnia and herzegovina" ]
+}, {
+  "unicode" : "🇧🇼",
+  "aliases" : [ "bw" ],
+  "tags" : [ "flag", "botswana" ]
+}, {
+  "unicode" : "🇧🇷",
+  "aliases" : [ "br" ],
+  "tags" : [ "flag", "brazil" ]
+}, {
+  "unicode" : "🇻🇬",
+  "aliases" : [ "vg" ],
+  "tags" : [ "flag", "british virgin islands" ]
+}, {
+  "unicode" : "🇧🇳",
+  "aliases" : [ "bn" ],
+  "tags" : [ "flag", "brunei darussalam" ]
+}, {
+  "unicode" : "🇧🇬",
+  "aliases" : [ "bg" ],
+  "tags" : [ "flag", "bulgaria" ]
+}, {
+  "unicode" : "🇧🇫",
+  "aliases" : [ "bf" ],
+  "tags" : [ "flag", "burkina faso" ]
+}, {
+  "unicode" : "🇧🇮",
+  "aliases" : [ "bi" ],
+  "tags" : [ "flag", "burundi" ]
+}, {
+  "unicode" : "🇰🇭",
+  "aliases" : [ "kh" ],
+  "tags" : [ "flag", "cambodia" ]
+}, {
+  "unicode" : "🇨🇲",
+  "aliases" : [ "cm" ],
+  "tags" : [ "flag", "cameroon" ]
+}, {
+  "unicode" : "🇨🇦",
+  "aliases" : [ "ca" ],
+  "tags" : [ "flag", "canada" ]
+}, {
+  "unicode" : "🇨🇻",
+  "aliases" : [ "cv" ],
+  "tags" : [ "flag", "cape verde" ]
+}, {
+  "unicode" : "🇰🇾",
+  "aliases" : [ "ky" ],
+  "tags" : [ "flag", "cayman islands" ]
+}, {
+  "unicode" : "🇨🇫",
+  "aliases" : [ "cf" ],
+  "tags" : [ "flag", "central african republic" ]
+}, {
+  "unicode" : "🇨🇱",
+  "aliases" : [ "cl_flag" ],
+  "tags" : [ "flag", "chile" ]
+}, {
+  "unicode" : "🇨🇳",
+  "aliases" : [ "cn" ],
+  "tags" : [ "flag", "china" ]
+}, {
+  "unicode" : "🇨🇴",
+  "aliases" : [ "co" ],
+  "tags" : [ "flag", "colombia" ]
+}, {
+  "unicode" : "🇰🇲",
+  "aliases" : [ "km" ],
+  "tags" : [ "flag", "comoros" ]
+}, {
+  "unicode" : "🇨🇩",
+  "aliases" : [ "cd_flag" ],
+  "tags" : [ "flag", "democratic republic of the congo" ]
+}, {
+  "unicode" : "🇨🇬",
+  "aliases" : [ "cg" ],
+  "tags" : [ "flag", "republic of the congo" ]
+}, {
+  "unicode" : "🇨🇰",
+  "aliases" : [ "ck" ],
+  "tags" : [ "flag", "cook islands" ]
+}, {
+  "unicode" : "🇨🇷",
+  "aliases" : [ "cr" ],
+  "tags" : [ "flag", "costa rica" ]
+}, {
+  "unicode" : "🇭🇷",
+  "aliases" : [ "hr" ],
+  "tags" : [ "flag", "croatia" ]
+}, {
+  "unicode" : "🇨🇺",
+  "aliases" : [ "cu" ],
+  "tags" : [ "flag", "cuba" ]
+}, {
+  "unicode" : "🇨🇼",
+  "aliases" : [ "cw" ],
+  "tags" : [ "flag", "curacao" ]
+}, {
+  "unicode" : "🇨🇾",
+  "aliases" : [ "cy" ],
+  "tags" : [ "flag", "cyprus" ]
+}, {
+  "unicode" : "🇨🇿",
+  "aliases" : [ "cz" ],
+  "tags" : [ "flag", "czech republic" ]
+}, {
+  "unicode" : "🇩🇰",
+  "aliases" : [ "dk" ],
+  "tags" : [ "flag", "denmark" ]
+}, {
+  "unicode" : "🇩🇯",
+  "aliases" : [ "dj" ],
+  "tags" : [ "flag", "djibouti" ]
+}, {
+  "unicode" : "🇩🇲",
+  "aliases" : [ "dm" ],
+  "tags" : [ "flag", "dominica" ]
+}, {
+  "unicode" : "🇩🇴",
+  "aliases" : [ "do" ],
+  "tags" : [ "flag", "dominican republic" ]
+}, {
+  "unicode" : "🇪🇨",
+  "aliases" : [ "ec" ],
+  "tags" : [ "flag", "ecuador" ]
+}, {
+  "unicode" : "🇪🇬",
+  "aliases" : [ "eg" ],
+  "tags" : [ "flag", "egypt" ]
+}, {
+  "unicode" : "🇸🇻",
+  "aliases" : [ "sv" ],
+  "tags" : [ "flag", "el salvador" ]
+}, {
+  "unicode" : "🇬🇶",
+  "aliases" : [ "gq" ],
+  "tags" : [ "flag", "equatorial guinea" ]
+}, {
+  "unicode" : "🇪🇷",
+  "aliases" : [ "er" ],
+  "tags" : [ "flag", "eritrea" ]
+}, {
+  "unicode" : "🇪🇪",
+  "aliases" : [ "ee" ],
+  "tags" : [ "flag", "estonia" ]
+}, {
+  "unicode" : "🇪🇹",
+  "aliases" : [ "et" ],
+  "tags" : [ "flag", "ethiopia" ]
+}, {
+  "unicode" : "🇫🇴",
+  "aliases" : [ "fo" ],
+  "tags" : [ "flag", "faroe islands" ]
+}, {
+  "unicode" : "🇫🇯",
+  "aliases" : [ "fj" ],
+  "tags" : [ "flag", "fiji" ]
+}, {
+  "unicode" : "🇫🇮",
+  "aliases" : [ "fi" ],
+  "tags" : [ "flag", "finland" ]
+}, {
+  "unicode" : "🇫🇷",
+  "aliases" : [ "fr" ],
+  "tags" : [ "flag", "france" ]
+}, {
+  "unicode" : "🇬🇫",
+  "aliases" : [ "gf" ],
+  "tags" : [ "flag", "french guiana" ]
+}, {
+  "unicode" : "🇹🇫",
+  "aliases" : [ "tf" ],
+  "tags" : [ "flag", "french southern territories" ]
+}, {
+  "unicode" : "🇬🇦",
+  "aliases" : [ "ga" ],
+  "tags" : [ "flag", "gabon" ]
+}, {
+  "unicode" : "🇬🇲",
+  "aliases" : [ "gm" ],
+  "tags" : [ "flag", "gambia" ]
+}, {
+  "unicode" : "🇬🇪",
+  "aliases" : [ "ge" ],
+  "tags" : [ "flag", "georgia" ]
+}, {
+  "unicode" : "🇩🇪",
+  "aliases" : [ "de" ],
+  "tags" : [ "flag", "germany" ]
+}, {
+  "unicode" : "🇬🇭",
+  "aliases" : [ "gh" ],
+  "tags" : [ "flag", "ghana" ]
+}, {
+  "unicode" : "🇬🇮",
+  "aliases" : [ "gi" ],
+  "tags" : [ "flag", "gibraltar" ]
+}, {
+  "unicode" : "🇬🇷",
+  "aliases" : [ "gr" ],
+  "tags" : [ "flag", "greece" ]
+}, {
+  "unicode" : "🇬🇩",
+  "aliases" : [ "gd" ],
+  "tags" : [ "flag", "grenada" ]
+}, {
+  "unicode" : "🇬🇵",
+  "aliases" : [ "gp" ],
+  "tags" : [ "flag", "guadeloupe" ]
+}, {
+  "unicode" : "🇬🇺",
+  "aliases" : [ "gu" ],
+  "tags" : [ "flag", "guam" ]
+}, {
+  "unicode" : "🇬🇹",
+  "aliases" : [ "gt" ],
+  "tags" : [ "flag", "guatemala" ]
+}, {
+  "unicode" : "🇬🇳",
+  "aliases" : [ "gn" ],
+  "tags" : [ "flag", "guinea" ]
+}, {
+  "unicode" : "🇬🇼",
+  "aliases" : [ "gw" ],
+  "tags" : [ "flag", "guinea-bissau" ]
+}, {
+  "unicode" : "🇬🇾",
+  "aliases" : [ "gy" ],
+  "tags" : [ "flag", "guyana" ]
+}, {
+  "unicode" : "🇭🇹",
+  "aliases" : [ "ht" ],
+  "tags" : [ "flag", "haiti" ]
+}, {
+  "unicode" : "🇭🇳",
+  "aliases" : [ "hn" ],
+  "tags" : [ "flag", "honduras" ]
+}, {
+  "unicode" : "🇭🇰",
+  "aliases" : [ "hk" ],
+  "tags" : [ "flag", "hong kong" ]
+}, {
+  "unicode" : "🇭🇺",
+  "aliases" : [ "hu" ],
+  "tags" : [ "flag", "hungary" ]
+}, {
+  "unicode" : "🇮🇸",
+  "aliases" : [ "is" ],
+  "tags" : [ "flag", "iceland" ]
+}, {
+  "unicode" : "🇮🇳",
+  "aliases" : [ "in" ],
+  "tags" : [ "flag", "india" ]
+}, {
+  "unicode" : "🇮🇩",
+  "aliases" : [ "id_flag" ],
+  "tags" : [ "flag", "indonesia" ]
+}, {
+  "unicode" : "🇮🇷",
+  "aliases" : [ "ir" ],
+  "tags" : [ "flag", "iran" ]
+}, {
+  "unicode" : "🇮🇶",
+  "aliases" : [ "iq" ],
+  "tags" : [ "flag", "iraq" ]
+}, {
+  "unicode" : "🇮🇪",
+  "aliases" : [ "ie" ],
+  "tags" : [ "flag", "ireland" ]
+}, {
+  "unicode" : "🇮🇱",
+  "aliases" : [ "il" ],
+  "tags" : [ "flag", "israel" ]
+}, {
+  "unicode" : "🇮🇹",
+  "aliases" : [ "it" ],
+  "tags" : [ "flag", "italy" ]
+}, {
+  "unicode" : "🇨🇮",
+  "aliases" : [ "ci" ],
+  "tags" : [ "flag", "ivory coast" ]
+}, {
+  "unicode" : "🇯🇲",
+  "aliases" : [ "jm" ],
+  "tags" : [ "flag", "jamaica" ]
+}, {
+  "unicode" : "🇯🇵",
+  "aliases" : [ "jp" ],
+  "tags" : [ "flag", "japan" ]
+}, {
+  "unicode" : "🇯🇴",
+  "aliases" : [ "jo" ],
+  "tags" : [ "flag", "jordan" ]
+}, {
+  "unicode" : "🇰🇿",
+  "aliases" : [ "kz" ],
+  "tags" : [ "flag", "kazakhstan" ]
+}, {
+  "unicode" : "🇰🇪",
+  "aliases" : [ "ke" ],
+  "tags" : [ "flag", "kenya" ]
+}, {
+  "unicode" : "🇰🇮",
+  "aliases" : [ "ki" ],
+  "tags" : [ "flag", "kiribati" ]
+}, {
+  "unicode" : "🇰🇼",
+  "aliases" : [ "kw" ],
+  "tags" : [ "flag", "kuwait" ]
+}, {
+  "unicode" : "🇰🇬",
+  "aliases" : [ "kg" ],
+  "tags" : [ "flag", "kyrgyzstan" ]
+}, {
+  "unicode" : "🇱🇦",
+  "aliases" : [ "la" ],
+  "tags" : [ "flag", "laos" ]
+}, {
+  "unicode" : "🇱🇻",
+  "aliases" : [ "lv" ],
+  "tags" : [ "flag", "latvia" ]
+}, {
+  "unicode" : "🇱🇧",
+  "aliases" : [ "lb" ],
+  "tags" : [ "flag", "lebanon" ]
+}, {
+  "unicode" : "🇱🇸",
+  "aliases" : [ "ls" ],
+  "tags" : [ "flag", "lesotho" ]
+}, {
+  "unicode" : "🇱🇷",
+  "aliases" : [ "lr" ],
+  "tags" : [ "flag", "liberia" ]
+}, {
+  "unicode" : "🇱🇾",
+  "aliases" : [ "ly" ],
+  "tags" : [ "flag", "libya" ]
+}, {
+  "unicode" : "🇱🇮",
+  "aliases" : [ "li" ],
+  "tags" : [ "flag", "liechtenstein" ]
+}, {
+  "unicode" : "🇱🇹",
+  "aliases" : [ "lt" ],
+  "tags" : [ "flag", "lithuania" ]
+}, {
+  "unicode" : "🇱🇺",
+  "aliases" : [ "lu" ],
+  "tags" : [ "flag", "luxembourg" ]
+}, {
+  "unicode" : "🇲🇴",
+  "aliases" : [ "mo" ],
+  "tags" : [ "flag", "macau" ]
+}, {
+  "unicode" : "🇲🇰",
+  "aliases" : [ "mk" ],
+  "tags" : [ "flag", "macedonia" ]
+}, {
+  "unicode" : "🇲🇬",
+  "aliases" : [ "mg" ],
+  "tags" : [ "flag", "madagascar" ]
+}, {
+  "unicode" : "🇲🇼",
+  "aliases" : [ "mw" ],
+  "tags" : [ "flag", "malawi" ]
+}, {
+  "unicode" : "🇲🇾",
+  "aliases" : [ "my" ],
+  "tags" : [ "flag", "malaysia" ]
+}, {
+  "unicode" : "🇲🇻",
+  "aliases" : [ "mv" ],
+  "tags" : [ "flag", "maldives" ]
+}, {
+  "unicode" : "🇲🇱",
+  "aliases" : [ "ml" ],
+  "tags" : [ "flag", "mali" ]
+}, {
+  "unicode" : "🇲🇹",
+  "aliases" : [ "mt" ],
+  "tags" : [ "flag", "malta" ]
+}, {
+  "unicode" : "🇲🇶",
+  "aliases" : [ "mq" ],
+  "tags" : [ "flag", "martinique" ]
+}, {
+  "unicode" : "🇲🇷",
+  "aliases" : [ "mr" ],
+  "tags" : [ "flag", "mauritania" ]
+}, {
+  "unicode" : "🇲🇽",
+  "aliases" : [ "mx" ],
+  "tags" : [ "flag", "mexico" ]
+}, {
+  "unicode" : "🇲🇩",
+  "aliases" : [ "md" ],
+  "tags" : [ "flag", "moldova" ]
+}, {
+  "unicode" : "🇲🇳",
+  "aliases" : [ "mn" ],
+  "tags" : [ "flag", "mongolia" ]
+}, {
+  "unicode" : "🇲🇪",
+  "aliases" : [ "me" ],
+  "tags" : [ "flag", "montenegro" ]
+}, {
+  "unicode" : "🇲🇸",
+  "aliases" : [ "ms" ],
+  "tags" : [ "flag", "montserrat" ]
+}, {
+  "unicode" : "🇲🇦",
+  "aliases" : [ "ma" ],
+  "tags" : [ "flag", "morocco" ]
+}, {
+  "unicode" : "🇲🇿",
+  "aliases" : [ "mz" ],
+  "tags" : [ "flag", "mozambique" ]
+}, {
+  "unicode" : "🇲🇲",
+  "aliases" : [ "mm" ],
+  "tags" : [ "flag", "myanmar" ]
+}, {
+  "unicode" : "🇳🇦",
+  "aliases" : [ "na" ],
+  "tags" : [ "flag", "namibia" ]
+}, {
+  "unicode" : "🇳🇵",
+  "aliases" : [ "np" ],
+  "tags" : [ "flag", "nepal" ]
+}, {
+  "unicode" : "🇳🇱",
+  "aliases" : [ "nl" ],
+  "tags" : [ "flag", "netherlands" ]
+}, {
+  "unicode" : "🇳🇨",
+  "aliases" : [ "nc" ],
+  "tags" : [ "flag", "new caledonia" ]
+}, {
+  "unicode" : "🇳🇿",
+  "aliases" : [ "nz" ],
+  "tags" : [ "flag", "new zealand" ]
+}, {
+  "unicode" : "🇳🇮",
+  "aliases" : [ "ni" ],
+  "tags" : [ "flag", "nicaragua" ]
+}, {
+  "unicode" : "🇳🇪",
+  "aliases" : [ "ne" ],
+  "tags" : [ "flag", "niger" ]
+}, {
+  "unicode" : "🇳🇬",
+  "aliases" : [ "ng" ],
+  "tags" : [ "flag", "nigeria" ]
+}, {
+  "unicode" : "🇳🇺",
+  "aliases" : [ "nu" ],
+  "tags" : [ "flag", "niue" ]
+}, {
+  "unicode" : "🇰🇵",
+  "aliases" : [ "kp" ],
+  "tags" : [ "flag", "north korea" ]
+}, {
+  "unicode" : "🇲🇵",
+  "aliases" : [ "mp" ],
+  "tags" : [ "flag", "northern mariana islands" ]
+}, {
+  "unicode" : "🇳🇴",
+  "aliases" : [ "no" ],
+  "tags" : [ "flag", "norway" ]
+}, {
+  "unicode" : "🇴🇲",
+  "aliases" : [ "om" ],
+  "tags" : [ "flag", "oman" ]
+}, {
+  "unicode" : "🇵🇰",
+  "aliases" : [ "pk" ],
+  "tags" : [ "flag", "pakistan" ]
+}, {
+  "unicode" : "🇵🇼",
+  "aliases" : [ "pw" ],
+  "tags" : [ "flag", "palau" ]
+}, {
+  "unicode" : "🇵🇸",
+  "aliases" : [ "ps" ],
+  "tags" : [ "flag", "palestine" ]
+}, {
+  "unicode" : "🇵🇦",
+  "aliases" : [ "pa" ],
+  "tags" : [ "flag", "panama" ]
+}, {
+  "unicode" : "🇵🇬",
+  "aliases" : [ "pg" ],
+  "tags" : [ "flag", "papua new guinea" ]
+}, {
+  "unicode" : "🇵🇾",
+  "aliases" : [ "py" ],
+  "tags" : [ "flag", "paraguay" ]
+}, {
+  "unicode" : "🇵🇪",
+  "aliases" : [ "pe" ],
+  "tags" : [ "flag", "peru" ]
+}, {
+  "unicode" : "🇵🇭",
+  "aliases" : [ "ph" ],
+  "tags" : [ "flag", "philippines" ]
+}, {
+  "unicode" : "🇵🇱",
+  "aliases" : [ "pl" ],
+  "tags" : [ "flag", "poland" ]
+}, {
+  "unicode" : "🇵🇹",
+  "aliases" : [ "pt" ],
+  "tags" : [ "flag", "portugal" ]
+}, {
+  "unicode" : "🇵🇷",
+  "aliases" : [ "pr" ],
+  "tags" : [ "flag", "puerto rico" ]
+}, {
+  "unicode" : "🇶🇦",
+  "aliases" : [ "qa" ],
+  "tags" : [ "flag", "qatar" ]
+}, {
+  "unicode" : "🇷🇪",
+  "aliases" : [ "re" ],
+  "tags" : [ "flag", "reunion" ]
+}, {
+  "unicode" : "🇷🇴",
+  "aliases" : [ "ro" ],
+  "tags" : [ "flag", "romania" ]
+}, {
+  "unicode" : "🇷🇺",
+  "aliases" : [ "ru" ],
+  "tags" : [ "flag", "russia" ]
+}, {
+  "unicode" : "🇷🇼",
+  "aliases" : [ "rw" ],
+  "tags" : [ "flag", "rwanda" ]
+}, {
+  "unicode" : "🇼🇸",
+  "aliases" : [ "ws" ],
+  "tags" : [ "flag", "samoa" ]
+}, {
+  "unicode" : "🇸🇲",
+  "aliases" : [ "sm" ],
+  "tags" : [ "flag", "san marino" ]
+}, {
+  "unicode" : "🇸🇹",
+  "aliases" : [ "st" ],
+  "tags" : [ "flag", "sao tome and principe" ]
+}, {
+  "unicode" : "🇸🇦",
+  "aliases" : [ "sa_flag" ],
+  "tags" : [ "flag", "saudi arabia" ]
+}, {
+  "unicode" : "🇸🇳",
+  "aliases" : [ "sn" ],
+  "tags" : [ "flag", "senegal" ]
+}, {
+  "unicode" : "🇷🇸",
+  "aliases" : [ "rs" ],
+  "tags" : [ "flag", "serbia" ]
+}, {
+  "unicode" : "🇸🇨",
+  "aliases" : [ "sc" ],
+  "tags" : [ "flag", "seychelles" ]
+}, {
+  "unicode" : "🇸🇱",
+  "aliases" : [ "sl" ],
+  "tags" : [ "flag", "sierra leone" ]
+}, {
+  "unicode" : "🇸🇬",
+  "aliases" : [ "sg" ],
+  "tags" : [ "flag", "singapore" ]
+}, {
+  "unicode" : "🇸🇰",
+  "aliases" : [ "sk" ],
+  "tags" : [ "flag", "slovakia" ]
+}, {
+  "unicode" : "🇸🇮",
+  "aliases" : [ "si" ],
+  "tags" : [ "flag", "slovenia" ]
+}, {
+  "unicode" : "🇸🇧",
+  "aliases" : [ "sb" ],
+  "tags" : [ "flag", "solomon islands" ]
+}, {
+  "unicode" : "🇸🇴",
+  "aliases" : [ "so" ],
+  "tags" : [ "flag", "somalia" ]
+}, {
+  "unicode" : "🇿🇦",
+  "aliases" : [ "za" ],
+  "tags" : [ "flag", "south africa" ]
+}, {
+  "unicode" : "🇰🇷",
+  "aliases" : [ "kr" ],
+  "tags" : [ "flag", "south korea" ]
+}, {
+  "unicode" : "🇸🇸",
+  "aliases" : [ "ss" ],
+  "tags" : [ "flag", "south sudan" ]
+}, {
+  "unicode" : "🇪🇸",
+  "aliases" : [ "es" ],
+  "tags" : [ "flag", "spain" ]
+}, {
+  "unicode" : "🇱🇰",
+  "aliases" : [ "lk" ],
+  "tags" : [ "flag", "sri lanka" ]
+}, {
+  "unicode" : "🇸🇩",
+  "aliases" : [ "sd" ],
+  "tags" : [ "flag", "sudan" ]
+}, {
+  "unicode" : "🇸🇷",
+  "aliases" : [ "sr" ],
+  "tags" : [ "flag", "suriname" ]
+}, {
+  "unicode" : "🇸🇿",
+  "aliases" : [ "sz" ],
+  "tags" : [ "flag", "swaziland" ]
+}, {
+  "unicode" : "🇸🇪",
+  "aliases" : [ "se" ],
+  "tags" : [ "flag", "sweden" ]
+}, {
+  "unicode" : "🇨🇭",
+  "aliases" : [ "ch" ],
+  "tags" : [ "flag", "switzerland" ]
+}, {
+  "unicode" : "🇸🇾",
+  "aliases" : [ "sy" ],
+  "tags" : [ "flag", "syria" ]
+}, {
+  "unicode" : "🇹🇯",
+  "aliases" : [ "tj" ],
+  "tags" : [ "flag", "tajikistan" ]
+}, {
+  "unicode" : "🇹🇿",
+  "aliases" : [ "tz" ],
+  "tags" : [ "flag", "tanzania" ]
+}, {
+  "unicode" : "🇹🇭",
+  "aliases" : [ "th" ],
+  "tags" : [ "flag", "thailand" ]
+}, {
+  "unicode" : "🇹🇱",
+  "aliases" : [ "tl" ],
+  "tags" : [ "flag", "east timor" ]
+}, {
+  "unicode" : "🇹🇬",
+  "aliases" : [ "tg" ],
+  "tags" : [ "flag", "togo" ]
+}, {
+  "unicode" : "🇹🇴",
+  "aliases" : [ "to" ],
+  "tags" : [ "flag", "tonga" ]
+}, {
+  "unicode" : "🇹🇹",
+  "aliases" : [ "tt" ],
+  "tags" : [ "flag", "trinidad and tobago" ]
+}, {
+  "unicode" : "🇹🇳",
+  "aliases" : [ "tn" ],
+  "tags" : [ "flag", "tunisia" ]
+}, {
+  "unicode" : "🇹🇷",
+  "aliases" : [ "tr" ],
+  "tags" : [ "flag", "turkey" ]
+}, {
+  "unicode" : "🇹🇲",
+  "aliases" : [ "tm_flag" ],
+  "tags" : [ "flag", "turkmenistan" ]
+}, {
+  "unicode" : "🇹🇨",
+  "aliases" : [ "tc" ],
+  "tags" : [ "flag", "turks and caicos islands" ]
+}, {
+  "unicode" : "🇹🇻",
+  "aliases" : [ "tv_flag" ],
+  "tags" : [ "flag", "tuvalu" ]
+}, {
+  "unicode" : "🇺🇬",
+  "aliases" : [ "ug" ],
+  "tags" : [ "flag", "uganda" ]
+}, {
+  "unicode" : "🇺🇦",
+  "aliases" : [ "ua" ],
+  "tags" : [ "flag", "ukraine" ]
+}, {
+  "unicode" : "🇦🇪",
+  "aliases" : [ "ae" ],
+  "tags" : [ "flag", "united arab emirates" ]
+}, {
+  "unicode" : "🇬🇧",
+  "aliases" : [ "gb" ],
+  "tags" : [ "flag", "united kingdom" ]
+}, {
+  "unicode" : "🇺🇾",
+  "aliases" : [ "uy" ],
+  "tags" : [ "flag", "uruguay" ]
+}, {
+  "unicode" : "🇺🇸",
+  "aliases" : [ "us" ],
+  "tags" : [ "flag", "united states of america" ]
+}, {
+  "unicode" : "🇻🇮",
+  "aliases" : [ "vi" ],
+  "tags" : [ "flag", "us virgin islands" ]
+}, {
+  "unicode" : "🇺🇿",
+  "aliases" : [ "uz" ],
+  "tags" : [ "flag", "uzbekistan" ]
+}, {
+  "unicode" : "🇻🇨",
+  "aliases" : [ "vc" ],
+  "tags" : [ "flag", "st vincent grenadines" ]
+}, {
+  "unicode" : "🇻🇺",
+  "aliases" : [ "vu" ],
+  "tags" : [ "flag", "vanuatu" ]
+}, {
+  "unicode" : "🇻🇪",
+  "aliases" : [ "ve" ],
+  "tags" : [ "flag", "venezuela" ]
+}, {
+  "unicode" : "🇻🇳",
+  "aliases" : [ "vn" ],
+  "tags" : [ "flag", "vietnam" ]
+}, {
+  "unicode" : "🇾🇪",
+  "aliases" : [ "ye" ],
+  "tags" : [ "flag", "yemen" ]
+}, {
+  "unicode" : "🇿🇲",
+  "aliases" : [ "zm" ],
+  "tags" : [ "flag", "zambia" ]
+}, {
+  "unicode" : "🇿🇼",
+  "aliases" : [ "zw" ],
+  "tags" : [ "flag", "zimbabwe" ]
+}, {
+  "unicode" : "🇦",
+  "aliases" : [ "regional_indicator_symbol_a" ],
+  "tags" : [ "letter", "a" ]
+}, {
+  "unicode" : "🇧",
+  "aliases" : [ "regional_indicator_symbol_b" ],
+  "tags" : [ "letter", "b" ]
+}, {
+  "unicode" : "🇨",
+  "aliases" : [ "regional_indicator_symbol_c" ],
+  "tags" : [ "letter", "c" ]
+}, {
+  "unicode" : "🇩",
+  "aliases" : [ "regional_indicator_symbol_d" ],
+  "tags" : [ "letter", "d" ]
+}, {
+  "unicode" : "🇪",
+  "aliases" : [ "regional_indicator_symbol_e" ],
+  "tags" : [ "letter", "e" ]
+}, {
+  "unicode" : "🇫",
+  "aliases" : [ "regional_indicator_symbol_f" ],
+  "tags" : [ "letter", "f" ]
+}, {
+  "unicode" : "🇬",
+  "aliases" : [ "regional_indicator_symbol_g" ],
+  "tags" : [ "letter", "g" ]
+}, {
+  "unicode" : "🇭",
+  "aliases" : [ "regional_indicator_symbol_h" ],
+  "tags" : [ "letter", "h" ]
+}, {
+  "unicode" : "🇮",
+  "aliases" : [ "regional_indicator_symbol_i" ],
+  "tags" : [ "letter", "i" ]
+}, {
+  "unicode" : "🇯",
+  "aliases" : [ "regional_indicator_symbol_j" ],
+  "tags" : [ "letter", "j" ]
+}, {
+  "unicode" : "🇰",
+  "aliases" : [ "regional_indicator_symbol_k" ],
+  "tags" : [ "letter", "k" ]
+}, {
+  "unicode" : "🇱",
+  "aliases" : [ "regional_indicator_symbol_l" ],
+  "tags" : [ "letter", "l" ]
+}, {
+  "unicode" : "🇲",
+  "aliases" : [ "regional_indicator_symbol_m" ],
+  "tags" : [ "letter", "m" ]
+}, {
+  "unicode" : "🇳",
+  "aliases" : [ "regional_indicator_symbol_n" ],
+  "tags" : [ "letter", "n" ]
+}, {
+  "unicode" : "🇴",
+  "aliases" : [ "regional_indicator_symbol_o" ],
+  "tags" : [ "letter", "o" ]
+}, {
+  "unicode" : "🇵",
+  "aliases" : [ "regional_indicator_symbol_p" ],
+  "tags" : [ "letter", "p" ]
+}, {
+  "unicode" : "🇶",
+  "aliases" : [ "regional_indicator_symbol_q" ],
+  "tags" : [ "letter", "q" ]
+}, {
+  "unicode" : "🇷",
+  "aliases" : [ "regional_indicator_symbol_r" ],
+  "tags" : [ "letter", "r" ]
+}, {
+  "unicode" : "🇸",
+  "aliases" : [ "regional_indicator_symbol_s" ],
+  "tags" : [ "letter", "s" ]
+}, {
+  "unicode" : "🇹",
+  "aliases" : [ "regional_indicator_symbol_t" ],
+  "tags" : [ "letter", "t" ]
+}, {
+  "unicode" : "🇺",
+  "aliases" : [ "regional_indicator_symbol_u" ],
+  "tags" : [ "letter", "u" ]
+}, {
+  "unicode" : "🇻",
+  "aliases" : [ "regional_indicator_symbol_v" ],
+  "tags" : [ "letter", "v" ]
+}, {
+  "unicode" : "🇼",
+  "aliases" : [ "regional_indicator_symbol_w" ],
+  "tags" : [ "letter", "w" ]
+}, {
+  "unicode" : "🇽",
+  "aliases" : [ "regional_indicator_symbol_x" ],
+  "tags" : [ "letter", "x" ]
+}, {
+  "unicode" : "🇾",
+  "aliases" : [ "regional_indicator_symbol_y" ],
+  "tags" : [ "letter", "y" ]
+}, {
+  "unicode" : "🇿",
+  "aliases" : [ "regional_indicator_symbol_z" ],
+  "tags" : [ "letter", "z" ]
+}, {
+  "unicode" : "👨‍👩‍👦",
+  "aliases" : [ "family_man_woman_boy" ],
+  "tags" : [ "family", "man", "woman", "boy" ]
+}, {
+  "unicode" : "👨‍👩‍👧",
+  "aliases" : [ "family_man_woman_girl" ],
+  "tags" : [ "family", "man", "woman", "girl" ]
+}, {
+  "unicode" : "👨‍👩‍👦‍👦",
+  "aliases" : [ "family_man_woman_boy_boy" ],
+  "tags" : [ "family", "man", "woman", "boy" ]
+}, {
+  "unicode" : "👨‍👩‍👧‍👧",
+  "aliases" : [ "family_man_woman_girl_girl" ],
+  "tags" : [ "family", "man", "woman", "girl" ]
+}, {
+  "unicode" : "👨‍👩‍👧‍👦",
+  "aliases" : [ "family_man_woman_girl_boy" ],
+  "tags" : [ "family", "man", "woman", "girl", "boy" ]
+}, {
+  "unicode" : "👩‍👩‍👦",
+  "aliases" : [ "family_woman_woman_boy" ],
+  "tags" : [ "family", "woman", "boy" ]
+}, {
+  "unicode" : "👩‍👩‍👧",
+  "aliases" : [ "family_woman_woman_girl" ],
+  "tags" : [ "family", "woman", "girl" ]
+}, {
+  "unicode" : "👩‍👩‍👧‍👦",
+  "aliases" : [ "family_woman_woman_girl_boy" ],
+  "tags" : [ "family", "woman", "girl", "boy" ]
+}, {
+  "unicode" : "👩‍👩‍👦‍👦",
+  "aliases" : [ "family_woman_woman_boy_boy" ],
+  "tags" : [ "family", "woman", "boy" ]
+}, {
+  "unicode" : "👩‍👩‍👧‍👧",
+  "aliases" : [ "family_woman_woman_girl_girl" ],
+  "tags" : [ "family", "woman", "girl" ]
+}, {
+  "unicode" : "👨‍👨‍👦",
+  "aliases" : [ "family_man_man_boy" ],
+  "tags" : [ "family", "man", "boy" ]
+}, {
+  "unicode" : "👨‍👨‍👧",
+  "aliases" : [ "family_man_man_girl" ],
+  "tags" : [ "family", "man", "girl" ]
+}, {
+  "unicode" : "👨‍👨‍👧‍👦",
+  "aliases" : [ "family_man_man_girl_boy" ],
+  "tags" : [ "family", "man", "girl", "boy" ]
+}, {
+  "unicode" : "👨‍👨‍👦‍👦",
+  "aliases" : [ "family_man_man_boy_boy" ],
+  "tags" : [ "family", "man", "boy" ]
+}, {
+  "unicode" : "👨‍👨‍👧‍👧",
+  "aliases" : [ "family_man_man_girl_girl" ],
+  "tags" : [ "family", "man", "girl" ]
+}, {
+  "unicode" : "👩‍❤️‍👩",
+  "aliases" : [ "couple_with_heart_woman_woman" ],
+  "tags" : [ "couple", "heart", "woman" ]
+}, {
+  "unicode" : "👨‍❤️‍👨",
+  "aliases" : [ "couple_with_heart_man_man" ],
+  "tags" : [ "couple", "heart", "man" ]
+}, {
+  "unicode" : "👩‍❤️‍💋‍👩",
+  "aliases" : [ "couplekiss_woman_woman" ],
+  "tags" : [ "couple", "kiss", "woman" ]
+}, {
+  "unicode" : "👨‍❤️‍💋‍👨",
+  "aliases" : [ "couplekiss_man_man" ],
+  "tags" : [ "couple", "kiss", "man" ]
+}, {
+  "unicode" : "🖖",
+  "aliases" : [ "vulcan_salute" ],
+  "tags" : [ "vulcan", "salute" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🖕",
+  "aliases" : [ "middle_finger" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🙂",
+  "aliases" : [ "slightly_smiling", "slight_smile" ]
+}, {
+  "unicode" : "🤗",
+  "aliases" : [ "hugging", "hug", "hugs" ]
+}, {
+  "unicode" : "🤔",
+  "aliases" : [ "thinking", "think", "thinker" ]
+}, {
+  "unicode" : "🙄",
+  "aliases" : [ "eye_roll", "rolling_eyes" ]
+}, {
+  "unicode" : "🤐",
+  "aliases" : [ "zipper_mouth", "zip_it", "sealed_lips", "lips_sealed" ]
+}, {
+  "unicode" : "🤓",
+  "aliases" : [ "nerd", "nerdy" ]
+}, {
+  "unicode" : "☹",
+  "aliases" : [ "frowning_face" ]
+}, {
+  "unicode" : "🙁",
+  "aliases" : [ "slightly_frowning" ]
+}, {
+  "unicode" : "🙃",
+  "aliases" : [ "upside_down", "flipped_face" ]
+}, {
+  "unicode" : "🤒",
+  "aliases" : [ "sick", "ill", "thermometer_face" ]
+}, {
+  "unicode" : "🤕",
+  "aliases" : [ "injured", "head_bandage", "head_bandaged", "bandaged" ]
+}, {
+  "unicode" : "🤑",
+  "aliases" : [ "money_mouth", "money_face" ]
+}, {
+  "unicode" : "⛑",
+  "aliases" : [ "helmet_white_cross" ]
+}, {
+  "unicode" : "🕵",
+  "aliases" : [ "detective", "sleuth", "private_eye", "spy" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🗣",
+  "aliases" : [ "speaking_head_in_silhouette" ]
+}, {
+  "unicode" : "🕴",
+  "aliases" : [ "hovering_man", "levitating_man" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🤘",
+  "aliases" : [ "horns_sign", "rock_on", "heavy_metal", "devil_fingers" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🖐",
+  "aliases" : [ "raised_hand_with_fingers_splayed", "splayed_hand" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "✍",
+  "aliases" : [ "writing", "writing_hand" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👁",
+  "aliases" : [ "eye" ]
+}, {
+  "unicode" : "❣",
+  "aliases" : [ "exclamation_heart" ]
+}, {
+  "unicode" : "🕳",
+  "aliases" : [ "hole" ]
+}, {
+  "unicode" : "🗯",
+  "aliases" : [ "right_anger_bubble", "zig_zag_bubble" ]
+}, {
+  "unicode" : "🕶",
+  "aliases" : [ "dark_sunglasses" ]
+}, {
+  "unicode" : "🛍",
+  "aliases" : [ "shopping_bags" ]
+}, {
+  "unicode" : "📿",
+  "aliases" : [ "prayer_beads", "dhikr_beads", "rosary_beads" ]
+}, {
+  "unicode" : "☠",
+  "aliases" : [ "skull_crossbones" ]
+}, {
+  "unicode" : "🤖",
+  "aliases" : [ "robot_face", "bot_face" ]
+}, {
+  "unicode" : "🦁",
+  "aliases" : [ "lion_face", "cute_lion", "timid_lion" ]
+}, {
+  "unicode" : "🦄",
+  "aliases" : [ "unicorn_face" ]
+}, {
+  "unicode" : "🐿",
+  "aliases" : [ "chipmunk", "squirrel" ]
+}, {
+  "unicode" : "🦃",
+  "aliases" : [ "turkey" ]
+}, {
+  "unicode" : "🕊",
+  "aliases" : [ "dove", "dove_peace" ]
+}, {
+  "unicode" : "🦀",
+  "aliases" : [ "crab" ]
+}, {
+  "unicode" : "🕷",
+  "aliases" : [ "spider" ]
+}, {
+  "unicode" : "🕸",
+  "aliases" : [ "spider_web", "cobweb" ]
+}, {
+  "unicode" : "🦂",
+  "aliases" : [ "scorpion" ]
+}, {
+  "unicode" : "🏵",
+  "aliases" : [ "rosette" ]
+}, {
+  "unicode" : "☘",
+  "aliases" : [ "shamrock", "st_patrick" ]
+}, {
+  "unicode" : "🌶",
+  "aliases" : [ "hot_pepper", "chili_pepper", "spice", "spicy" ]
+}, {
+  "unicode" : "🧀",
+  "aliases" : [ "cheese" ]
+}, {
+  "unicode" : "🌭",
+  "aliases" : [ "hot_dog" ]
+}, {
+  "unicode" : "🌮",
+  "aliases" : [ "taco" ]
+}, {
+  "unicode" : "🌯",
+  "aliases" : [ "burrito", "wrap" ]
+}, {
+  "unicode" : "🍿",
+  "aliases" : [ "popcorn" ]
+}, {
+  "unicode" : "🍾",
+  "aliases" : [ "champagne", "sparkling_wine" ]
+}, {
+  "unicode" : "🍽",
+  "aliases" : [ "fork_knife_plate" ]
+}, {
+  "unicode" : "🏺",
+  "aliases" : [ "amphora", "jar", "vase" ]
+}, {
+  "unicode" : "🗺",
+  "aliases" : [ "world_map" ]
+}, {
+  "unicode" : "🏔",
+  "aliases" : [ "snow_capped_mountain", "mont_fuji" ]
+}, {
+  "unicode" : "⛰",
+  "aliases" : [ "mountain" ]
+}, {
+  "unicode" : "🏕",
+  "aliases" : [ "camping", "campsite" ]
+}, {
+  "unicode" : "🏖",
+  "aliases" : [ "breach" ]
+}, {
+  "unicode" : "🏜",
+  "aliases" : [ "desert" ]
+}, {
+  "unicode" : "🏝",
+  "aliases" : [ "desert_island" ]
+}, {
+  "unicode" : "🏞",
+  "aliases" : [ "national_park" ]
+}, {
+  "unicode" : "🏟",
+  "aliases" : [ "stadium" ]
+}, {
+  "unicode" : "🏛",
+  "aliases" : [ "classical_building" ]
+}, {
+  "unicode" : "🏗",
+  "aliases" : [ "building_construction", "crane" ]
+}, {
+  "unicode" : "🏘",
+  "aliases" : [ "house_buildings", "multiple_houses" ]
+}, {
+  "unicode" : "🏙",
+  "aliases" : [ "cityscape" ]
+}, {
+  "unicode" : "🏚",
+  "aliases" : [ "derelict_house", "old_house", "abandoned_house" ]
+}, {
+  "unicode" : "🛐",
+  "aliases" : [ "worship_building", "worship_place", "religious_building", "religious_place" ]
+}, {
+  "unicode" : "🕋",
+  "aliases" : [ "kaaba", "mecca" ]
+}, {
+  "unicode" : "🕌",
+  "aliases" : [ "mosque", "minaret", "domed_roof" ]
+}, {
+  "unicode" : "🕍",
+  "aliases" : [ "synagogue", "temple", "jewish" ]
+}, {
+  "unicode" : "🖼",
+  "aliases" : [ "picture_frame", "painting", "gallery" ]
+}, {
+  "unicode" : "🛢",
+  "aliases" : [ "oil_drum" ]
+}, {
+  "unicode" : "🛣",
+  "aliases" : [ "motorway", "highway", "road", "interstate", "freeway" ]
+}, {
+  "unicode" : "🛤",
+  "aliases" : [ "railway_track" ]
+}, {
+  "unicode" : "🛳",
+  "aliases" : [ "passenger_ship" ]
+}, {
+  "unicode" : "⛴",
+  "aliases" : [ "ferry" ]
+}, {
+  "unicode" : "🛥",
+  "aliases" : [ "motor_boat" ]
+}, {
+  "unicode" : "🛩",
+  "aliases" : [ "small_airplane" ]
+}, {
+  "unicode" : "🛫",
+  "aliases" : [ "airplane_departure", "take_off" ]
+}, {
+  "unicode" : "🛬",
+  "aliases" : [ "airplane_arriving", "airplane_arrival", "landing" ]
+}, {
+  "unicode" : "🛰",
+  "aliases" : [ "satellite" ]
+}, {
+  "unicode" : "🛎",
+  "aliases" : [ "bellhop_bell" ]
+}, {
+  "unicode" : "🛌",
+  "aliases" : [ "sleeping_accommodation" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🛏",
+  "aliases" : [ "bed", "bedroom" ]
+}, {
+  "unicode" : "🛋",
+  "aliases" : [ "couch_lamp", "couch", "sofa", "lounge" ]
+}, {
+  "unicode" : "⏱",
+  "aliases" : [ "stopwatch" ]
+}, {
+  "unicode" : "⏲",
+  "aliases" : [ "timer_clock" ]
+}, {
+  "unicode" : "🕰",
+  "aliases" : [ "mantelpiece_clock" ]
+}, {
+  "unicode" : "🌡",
+  "aliases" : [ "thermometer", "hot_weather", "temperature" ]
+}, {
+  "unicode" : "⛈",
+  "aliases" : [ "thunder_cloud_rain" ]
+}, {
+  "unicode" : "🌤",
+  "aliases" : [ "white_sun_small_cloud" ]
+}, {
+  "unicode" : "🌥",
+  "aliases" : [ "white_sun_behind_cloud" ]
+}, {
+  "unicode" : "🌦",
+  "aliases" : [ "white_sun_behind_cloud_rain" ]
+}, {
+  "unicode" : "🌧",
+  "aliases" : [ "cloud_rain" ]
+}, {
+  "unicode" : "🌨",
+  "aliases" : [ "cloud_snow" ]
+}, {
+  "unicode" : "🌩",
+  "aliases" : [ "cloud_lightning" ]
+}, {
+  "unicode" : "🌪",
+  "aliases" : [ "cloud_tornado" ]
+}, {
+  "unicode" : "🌫",
+  "aliases" : [ "fog" ]
+}, {
+  "unicode" : "🌬",
+  "aliases" : [ "wind_blowing_face", "mother_nature", "blowing_wind" ]
+}, {
+  "unicode" : "☂",
+  "aliases" : [ "open_umbrella" ]
+}, {
+  "unicode" : "⛱",
+  "aliases" : [ "planted_umbrella", "umbrella_on_ground" ]
+}, {
+  "unicode" : "☃",
+  "aliases" : [ "snowman_with_snow", "snowing_snowman" ]
+}, {
+  "unicode" : "☄",
+  "aliases" : [ "comet", "light_beam", "blue_beam" ]
+}, {
+  "unicode" : "🕎",
+  "aliases" : [ "menorah", "candelabrum", "chanukiah" ]
+}, {
+  "unicode" : "🎖",
+  "aliases" : [ "military_medal", "military_decoration" ]
+}, {
+  "unicode" : "🎗",
+  "aliases" : [ "reminder_ribbon", "awareness_ribbon" ]
+}, {
+  "unicode" : "🎞",
+  "aliases" : [ "film_frames" ]
+}, {
+  "unicode" : "🎟",
+  "aliases" : [ "admission_ticket" ]
+}, {
+  "unicode" : "🏷",
+  "aliases" : [ "label" ]
+}, {
+  "unicode" : "🏌",
+  "aliases" : [ "golfer", "golf_club" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🏌️‍♂️",
+  "aliases" : [ "man_golfer", "male_golfer", "man_golfing", "male_golfing" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🏌️‍♀️",
+  "aliases" : [ "woman_golfer", "female_golfer", "woman_golfing", "female_golfing" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "⛸",
+  "aliases" : [ "ice_skate", "ice_skating" ]
+}, {
+  "unicode" : "⛷",
+  "aliases" : [ "skier" ]
+}, {
+  "unicode" : "⛹",
+  "aliases" : [ "person_with_ball" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🏋",
+  "aliases" : [ "weight_lifter" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🏎",
+  "aliases" : [ "racing_car", "formula_one", "f1" ]
+}, {
+  "unicode" : "🏍",
+  "aliases" : [ "racing_motorcycle", "motorcycle", "motorbike" ]
+}, {
+  "unicode" : "🏅",
+  "aliases" : [ "sports_medal", "sports_decoration" ]
+}, {
+  "unicode" : "🏏",
+  "aliases" : [ "cricket" ]
+}, {
+  "unicode" : "🏐",
+  "aliases" : [ "volleyball" ]
+}, {
+  "unicode" : "🏑",
+  "aliases" : [ "field_hockey" ]
+}, {
+  "unicode" : "🏒",
+  "aliases" : [ "ice_hockey" ]
+}, {
+  "unicode" : "🏓",
+  "aliases" : [ "table_tennis", "ping_pong" ]
+}, {
+  "unicode" : "🏸",
+  "aliases" : [ "badminton" ]
+}, {
+  "unicode" : "🕹",
+  "aliases" : [ "joystick" ]
+}, {
+  "unicode" : "⏭",
+  "aliases" : [ "black_right_pointing_double_triangle_with_vertical_bar" ]
+}, {
+  "unicode" : "⏯",
+  "aliases" : [ "black_right_pointing_triangle_with_double_vertical_bar" ]
+}, {
+  "unicode" : "⏮",
+  "aliases" : [ "black_left_pointing_double_triangle_with_vertical_bar" ]
+}, {
+  "unicode" : "⏸",
+  "aliases" : [ "double_vertical_bar" ]
+}, {
+  "unicode" : "⏹",
+  "aliases" : [ "black_square_for_stop" ]
+}, {
+  "unicode" : "⏺",
+  "aliases" : [ "black_circle_for_record" ]
+}, {
+  "unicode" : "🎙",
+  "aliases" : [ "studio_microphone" ]
+}, {
+  "unicode" : "🎚",
+  "aliases" : [ "level_slider" ]
+}, {
+  "unicode" : "🎛",
+  "aliases" : [ "control_knobs" ]
+}, {
+  "unicode" : "*⃣",
+  "aliases" : [ "keycap_asterisk", "star_keycap" ]
+}, {
+  "unicode" : "🖥",
+  "aliases" : [ "desktop_computer", "pc_tower", "imac" ]
+}, {
+  "unicode" : "🖨",
+  "aliases" : [ "printer" ]
+}, {
+  "unicode" : "⌨",
+  "aliases" : [ "keyboard" ]
+}, {
+  "unicode" : "🖱",
+  "aliases" : [ "computer_mouse", "three_button_mouse" ]
+}, {
+  "unicode" : "🖲",
+  "aliases" : [ "trackball" ]
+}, {
+  "unicode" : "📽",
+  "aliases" : [ "film_projector" ]
+}, {
+  "unicode" : "📸",
+  "aliases" : [ "camera_flash" ]
+}, {
+  "unicode" : "🕯",
+  "aliases" : [ "candle" ]
+}, {
+  "unicode" : "🗞",
+  "aliases" : [ "rolled_up_newspaper", "newspaper_delivery" ]
+}, {
+  "unicode" : "🗳",
+  "aliases" : [ "ballot", "ballot_box" ]
+}, {
+  "unicode" : "🖋",
+  "aliases" : [ "lower_left_fountain_pen" ]
+}, {
+  "unicode" : "🖊",
+  "aliases" : [ "lower_left_ballpoint_pen" ]
+}, {
+  "unicode" : "🖌",
+  "aliases" : [ "lower_left_paintbrush" ]
+}, {
+  "unicode" : "🖍",
+  "aliases" : [ "lower_left_crayon" ]
+}, {
+  "unicode" : "🗂",
+  "aliases" : [ "card_index_dividers" ]
+}, {
+  "unicode" : "🗒",
+  "aliases" : [ "spiral_note_pad" ]
+}, {
+  "unicode" : "🗓",
+  "aliases" : [ "spiral_calendar_pad" ]
+}, {
+  "unicode" : "🖇",
+  "aliases" : [ "linked_paperclips" ]
+}, {
+  "unicode" : "🗃",
+  "aliases" : [ "card_file_box" ]
+}, {
+  "unicode" : "🗄",
+  "aliases" : [ "file_cabinet" ]
+}, {
+  "unicode" : "🗑",
+  "aliases" : [ "wastebasket" ]
+}, {
+  "unicode" : "🗝",
+  "aliases" : [ "old_key" ]
+}, {
+  "unicode" : "⛏",
+  "aliases" : [ "pick" ]
+}, {
+  "unicode" : "⚒",
+  "aliases" : [ "hammer_and_pick" ]
+}, {
+  "unicode" : "🛠",
+  "aliases" : [ "hammer_and_wrench" ]
+}, {
+  "unicode" : "⚙",
+  "aliases" : [ "gear" ]
+}, {
+  "unicode" : "🗜",
+  "aliases" : [ "compression" ]
+}, {
+  "unicode" : "⚗",
+  "aliases" : [ "alembic" ]
+}, {
+  "unicode" : "⚖",
+  "aliases" : [ "scales", "scales_of_justice" ]
+}, {
+  "unicode" : "⛓",
+  "aliases" : [ "chains" ]
+}, {
+  "unicode" : "🗡",
+  "aliases" : [ "dagger", "dagger_knife", "knife_weapon" ]
+}, {
+  "unicode" : "⚔",
+  "aliases" : [ "crossed_swords" ]
+}, {
+  "unicode" : "🛡",
+  "aliases" : [ "shield" ]
+}, {
+  "unicode" : "🏹",
+  "aliases" : [ "bow_and_arrow", "bow_arrow", "archery" ]
+}, {
+  "unicode" : "⚰",
+  "aliases" : [ "coffin", "funeral", "casket" ]
+}, {
+  "unicode" : "⚱",
+  "aliases" : [ "funeral_urn" ]
+}, {
+  "unicode" : "🏳",
+  "aliases" : [ "waving_white_flag" ]
+}, {
+  "unicode" : "🏴",
+  "aliases" : [ "waving_black_flag" ]
+}, {
+  "unicode" : "⚜",
+  "aliases" : [ "fleur_de_lis", "scouts" ]
+}, {
+  "unicode" : "⚛",
+  "aliases" : [ "atom", "atom_symbol" ]
+}, {
+  "unicode" : "🕉",
+  "aliases" : [ "om_symbol", "pranava", "aumkara", "omkara" ]
+}, {
+  "unicode" : "✡",
+  "aliases" : [ "star_of_david" ]
+}, {
+  "unicode" : "☸",
+  "aliases" : [ "wheel_of_dharma" ]
+}, {
+  "unicode" : "☯",
+  "aliases" : [ "yin_yang" ]
+}, {
+  "unicode" : "✝",
+  "aliases" : [ "latin_cross", "christian_cross" ]
+}, {
+  "unicode" : "☦",
+  "aliases" : [ "orthodox_cross" ]
+}, {
+  "unicode" : "⛩",
+  "aliases" : [ "shinto_shrine", "kami_no_michi" ]
+}, {
+  "unicode" : "☪",
+  "aliases" : [ "star_and_crescent", "star_crescent" ]
+}, {
+  "unicode" : "☮",
+  "aliases" : [ "peace_symbol", "peace_sign" ]
+}, {
+  "unicode" : "☢",
+  "aliases" : [ "radioactive", "radioactive_symbol", "radioactive_sign" ]
+}, {
+  "unicode" : "☣",
+  "aliases" : [ "biohazard", "biohazard_symbol", "biohazard_sign" ]
+}, {
+  "unicode" : "🗨",
+  "aliases" : [ "left_speech_bubble" ]
+}, {
+  "unicode" : "👁‍🗨",
+  "aliases" : [ "eye_in_speech_bubble", "i_am_a_witness" ]
+}, {
+  "unicode" : "🤣",
+  "aliases" : [ "rolling_on_the_floor_laughing", "rofl" ]
+}, {
+  "unicode" : "🤠",
+  "aliases" : [ "face_with_cowboy_hat", "cowboy" ]
+}, {
+  "unicode" : "🤡",
+  "aliases" : [ "clown_face", "clown" ]
+}, {
+  "unicode" : "🤥",
+  "aliases" : [ "lying_face" ]
+}, {
+  "unicode" : "🤤",
+  "aliases" : [ "drooling_face" ]
+}, {
+  "unicode" : "🤢",
+  "aliases" : [ "nauseated_face" ]
+}, {
+  "unicode" : "🤧",
+  "aliases" : [ "sneezing_face" ]
+}, {
+  "unicode" : "🤴",
+  "aliases" : [ "prince" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🤶",
+  "aliases" : [ "mother_christmas" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🤵",
+  "aliases" : [ "man_in_tuxedo" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🤷",
+  "aliases" : [ "shrug" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🤦",
+  "aliases" : [ "face_palm" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🤰",
+  "aliases" : [ "pregnant_woman" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🕺",
+  "aliases" : [ "man_dancing" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🤳",
+  "aliases" : [ "selfie" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🤞",
+  "aliases" : [ "hand_with_index_and_middle_fingers_crossed" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🤙",
+  "aliases" : [ "call_me_hand" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🤛",
+  "aliases" : [ "left-facing_fist" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🤜",
+  "aliases" : [ "right-facing_fist" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🤚",
+  "aliases" : [ "raised_back_of_hand" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🤝",
+  "aliases" : [ "handshake" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🖤",
+  "aliases" : [ "black_heart" ]
+}, {
+  "unicode" : "🦍",
+  "aliases" : [ "gorilla" ]
+}, {
+  "unicode" : "🦊",
+  "aliases" : [ "fox_face" ]
+}, {
+  "unicode" : "🦌",
+  "aliases" : [ "deer" ]
+}, {
+  "unicode" : "🦏",
+  "aliases" : [ "rhinoceros" ]
+}, {
+  "unicode" : "🦇",
+  "aliases" : [ "bat" ]
+}, {
+  "unicode" : "🦅",
+  "aliases" : [ "eagle" ]
+}, {
+  "unicode" : "🦆",
+  "aliases" : [ "duck" ]
+}, {
+  "unicode" : "🦉",
+  "aliases" : [ "owl" ]
+}, {
+  "unicode" : "🦎",
+  "aliases" : [ "lizard" ]
+}, {
+  "unicode" : "🦈",
+  "aliases" : [ "shark" ]
+}, {
+  "unicode" : "🦐",
+  "aliases" : [ "shrimp" ]
+}, {
+  "unicode" : "🦑",
+  "aliases" : [ "squid" ]
+}, {
+  "unicode" : "🦋",
+  "aliases" : [ "butterfly" ]
+}, {
+  "unicode" : "🥀",
+  "aliases" : [ "wilted_flower" ]
+}, {
+  "unicode" : "🥝",
+  "aliases" : [ "kiwifruit" ]
+}, {
+  "unicode" : "🥑",
+  "aliases" : [ "avocado" ]
+}, {
+  "unicode" : "🥔",
+  "aliases" : [ "potato" ]
+}, {
+  "unicode" : "🥕",
+  "aliases" : [ "carrot" ]
+}, {
+  "unicode" : "🥒",
+  "aliases" : [ "cucumber" ]
+}, {
+  "unicode" : "🥜",
+  "aliases" : [ "peanuts" ]
+}, {
+  "unicode" : "🥐",
+  "aliases" : [ "croissant" ]
+}, {
+  "unicode" : "🥖",
+  "aliases" : [ "baguette_bread" ]
+}, {
+  "unicode" : "🥞",
+  "aliases" : [ "pancakes" ]
+}, {
+  "unicode" : "🥓",
+  "aliases" : [ "bacon" ]
+}, {
+  "unicode" : "🥙",
+  "aliases" : [ "stuffed_flatbread" ]
+}, {
+  "unicode" : "🥚",
+  "aliases" : [ "egg" ]
+}, {
+  "unicode" : "🥘",
+  "aliases" : [ "shallow_pan_of_food" ]
+}, {
+  "unicode" : "🥗",
+  "aliases" : [ "green_salad" ]
+}, {
+  "unicode" : "🥛",
+  "aliases" : [ "glass_of_milk" ]
+}, {
+  "unicode" : "🥂",
+  "aliases" : [ "clinking_glasses" ]
+}, {
+  "unicode" : "🥃",
+  "aliases" : [ "tumbler_glass" ]
+}, {
+  "unicode" : "🥄",
+  "aliases" : [ "spoon" ]
+}, {
+  "unicode" : "🛑",
+  "aliases" : [ "octagonal_sign", "stop_sign" ]
+}, {
+  "unicode" : "🛴",
+  "aliases" : [ "scooter" ]
+}, {
+  "unicode" : "🛵",
+  "aliases" : [ "motor_scooter" ]
+}, {
+  "unicode" : "🛶",
+  "aliases" : [ "canoe" ]
+}, {
+  "unicode" : "🥇",
+  "aliases" : [ "first_place_medal" ]
+}, {
+  "unicode" : "🥈",
+  "aliases" : [ "second_place_medal" ]
+}, {
+  "unicode" : "🥉",
+  "aliases" : [ "third_place_medal" ]
+}, {
+  "unicode" : "🥊",
+  "aliases" : [ "boxing_glove" ]
+}, {
+  "unicode" : "🥋",
+  "aliases" : [ "martial_arts_uniform" ]
+}, {
+  "unicode" : "🤸",
+  "aliases" : [ "person_doing_cartwheel" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🤸‍♂️",
+  "aliases" : [ "man_doing_cartwheel", "male_doing_cartwheel" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🤸‍♀️",
+  "aliases" : [ "woman_doing_cartwheel", "female_doing_cartwheel" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🤼",
+  "aliases" : [ "wrestlers" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🤼‍♂️",
+  "aliases" : [ "man_wrestlers", "male_wrestlers" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🤼‍♀️",
+  "aliases" : [ "woman_wrestlers", "female_wrestlers" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🤽",
+  "aliases" : [ "water_polo" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🤽‍♂️",
+  "aliases" : [ "man_water_polo", "male_water_polo" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🤽‍♀️",
+  "aliases" : [ "woman_water_polo", "female_water_polo" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🤾",
+  "aliases" : [ "handball" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🤾‍♂️",
+  "aliases" : [ "man_handball", "male_handball" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🤾‍♀️",
+  "aliases" : [ "woman_handball", "female_handball" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🤺",
+  "aliases" : [ "fencer" ]
+}, {
+  "unicode" : "🥅",
+  "aliases" : [ "goal_net" ]
+}, {
+  "unicode" : "🤹",
+  "aliases" : [ "juggling" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🤹‍♂️",
+  "aliases" : [ "man_juggling", "male_juggling" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🤹‍♀️",
+  "aliases" : [ "woman_juggling", "female_juggling" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🥁",
+  "aliases" : [ "drum_with_drumsticks" ]
+}, {
+  "unicode" : "🛒",
+  "aliases" : [ "shopping_trolley", "shopping_cart" ]
+}, {
+  "unicode" : "👨‍⚕️",
+  "aliases" : [ "male_health_worker", "man_health_worker" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👩‍⚕️",
+  "aliases" : [ "female_health_worker", "woman_health_worker" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👨‍🎓",
+  "aliases" : [ "male_student", "man_student" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👩‍🎓",
+  "aliases" : [ "female_student", "woman_student" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👨‍🏫",
+  "aliases" : [ "male_teacher", "man_teacher" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👩‍🏫",
+  "aliases" : [ "female_teacher", "woman_teacher" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👨‍🌾",
+  "aliases" : [ "male_farmer", "man_farmer" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👩‍🌾",
+  "aliases" : [ "female_farmer", "woman_farmer" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👨‍🍳",
+  "aliases" : [ "male_cook", "man_cook" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👩‍🍳",
+  "aliases" : [ "female_cook", "woman_cook" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👨‍🔧",
+  "aliases" : [ "male_mechanic", "man_mechanic" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👩‍🔧",
+  "aliases" : [ "female_mechanic", "woman_mechanic" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👨‍🏭",
+  "aliases" : [ "male_factory_worker", "man_factory_worker" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👩‍🏭",
+  "aliases" : [ "female_factory_worker", "woman_factory_worker" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👨‍💼",
+  "aliases" : [ "male_office_worker", "man_office_worker" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👩‍💼",
+  "aliases" : [ "female_office_worker", "woman_office_worker" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👨‍🔬",
+  "aliases" : [ "male_scientist", "man_scientist" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👩‍🔬",
+  "aliases" : [ "female_scientist", "woman_scientist" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👨‍💻",
+  "aliases" : [ "male_technologist", "man_technologist" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👩‍💻",
+  "aliases" : [ "female_technologist", "woman_technologist" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👨‍🎤",
+  "aliases" : [ "male_singer", "man_singer" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👩‍🎤",
+  "aliases" : [ "female_singer", "woman_singer" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👨‍🎨",
+  "aliases" : [ "male_artist", "man_artist" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👩‍🎨",
+  "aliases" : [ "female_artist", "woman_artist" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👨‍✈️",
+  "aliases" : [ "male_pilot", "man_pilot" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👩‍✈️",
+  "aliases" : [ "female_pilot", "woman_pilot" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👨‍🚀",
+  "aliases" : [ "male_astronaut", "man_astronaut" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👩‍🚀",
+  "aliases" : [ "female_astronaut", "woman_astronaut" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👨‍🚒",
+  "aliases" : [ "male_firefighter", "man_firefighter" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "👩‍🚒",
+  "aliases" : [ "female_firefighter", "woman_firefighter" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🤦‍♀️",
+  "aliases" : [ "female_facepalm", "woman_facepalm" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🤷‍♂️",
+  "aliases" : [ "male_shrug", "man_shrug" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "🤷‍♀️",
+  "aliases" : [ "female_shrug", "woman_shrug" ],
+  "supports_fitzpatrick" : true
+}, {
+  "unicode" : "⚕",
+  "aliases" : [ "medical_symbol", "staff_of_aesculapius" ]
+}, {
+  "unicode" : "👨‍⚖️",
+  "aliases" : [ "man_judge", "male_judge" ]
+}, {
+  "unicode" : "👩‍⚖️",
+  "aliases" : [ "woman_judge", "female_judge" ]
+} ]

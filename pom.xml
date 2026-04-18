@@ -1,0 +1,345 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.ruishanio</groupId>
+	<artifactId>task-pilot</artifactId>
+	<version>3.3.2</version>
+	<packaging>pom</packaging>
+
+	<name>${project.artifactId}</name>
+	<description>A distributed task scheduling framework.</description>
+	<url>https://github.com/ruishanio/Task-Pilot</url>
+
+	<modules>
+		<module>task-pilot-tool</module>
+		<module>task-pilot-core</module>
+		<module>task-pilot-spring-boot-starter</module>
+		<module>task-pilot-admin</module>
+		<module>task-pilot-executor-samples</module>
+    </modules>
+
+	<properties>
+		<!-- env -->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>17</maven.compiler.target>
+		<maven.test.skip>true</maven.test.skip>
+		<!-- plugin -->
+		<maven-compiler-plugin.version>3.14.1</maven-compiler-plugin.version>
+		<maven-source-plugin.version>3.4.0</maven-source-plugin.version>
+		<maven-javadoc-plugin.version>3.12.0</maven-javadoc-plugin.version>
+		<maven-gpg-plugin.version>3.2.8</maven-gpg-plugin.version>
+		<central-publishing-maven-plugin.version>0.9.0</central-publishing-maven-plugin.version>
+		<!-- base -->
+		<slf4j-api.version>2.0.17</slf4j-api.version>
+		<junit-jupiter.version>6.0.1</junit-jupiter.version>
+
+		<!-- jakarta.annotation-api -->
+		<jakarta.annotation-api.version>3.0.0</jakarta.annotation-api.version>
+
+		<!-- spring -->
+		<spring-boot.version>4.0.1</spring-boot.version>
+		<spring.version>7.0.2</spring.version>
+		<!-- kotlin -->
+		<kotlin.version>2.3.20</kotlin.version>
+		<!-- mybatis & db -->
+		<mybatis-spring-boot-starter.version>4.0.1</mybatis-spring-boot-starter.version>
+		<postgresql.version>42.7.7</postgresql.version>
+
+		<!-- net -->
+		<netty.version>4.2.9.Final</netty.version>
+		<!-- groovy -->
+		<groovy.version>5.0.3</groovy.version>
+
+		<!-- task-pilot-tool -->
+		<task-pilot-tool.version>2.4.2</task-pilot-tool.version>
+		<!-- gson -->
+		<gson.version>2.13.2</gson.version>
+
+		<!-- spring-ai -->
+		<spring-ai.version>2.0.0-M1</spring-ai.version>
+		<!-- dify -->
+		<dify-java-client.version>1.2.3</dify-java-client.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<!-- kotlin-bom：需置于 spring-boot-dependencies 之前，统一覆盖 Spring Boot BOM 中的 Kotlin 版本（含 stdlib），避免与 ${kotlin.version} 编译器版本漂移导致运行期 NoClassDefFoundError。 -->
+			<dependency>
+				<groupId>org.jetbrains.kotlin</groupId>
+				<artifactId>kotlin-bom</artifactId>
+				<version>${kotlin.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<!-- springboot -->
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-dependencies</artifactId>
+				<version>${spring-boot.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+			<!-- slf4j -->
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>${slf4j-api.version}</version>
+			</dependency>
+			<!-- slf4j-reload4j -->
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-reload4j</artifactId>
+				<version>${slf4j-api.version}</version>
+			</dependency>
+
+			<!-- junit -->
+			<dependency>
+				<groupId>org.junit.jupiter</groupId>
+				<artifactId>junit-jupiter-engine</artifactId>
+				<version>${junit-jupiter.version}</version>
+			</dependency>
+
+			<!-- jakarta -->
+			<dependency>
+				<groupId>jakarta.annotation</groupId>
+				<artifactId>jakarta.annotation-api</artifactId>
+				<version>${jakarta.annotation-api.version}</version>
+			</dependency>
+
+			<!-- netty -->
+			<dependency>
+				<groupId>io.netty</groupId>
+				<artifactId>netty-codec-http</artifactId>
+				<version>${netty.version}</version>
+			</dependency>
+			<!-- gson -->
+			<dependency>
+				<groupId>com.google.code.gson</groupId>
+				<artifactId>gson</artifactId>
+				<version>${gson.version}</version>
+			</dependency>
+			<!-- kotlin-reflect -->
+			<dependency>
+				<groupId>org.jetbrains.kotlin</groupId>
+				<artifactId>kotlin-reflect</artifactId>
+				<version>${kotlin.version}</version>
+			</dependency>
+
+			<!-- task-pilot-tool -->
+			<dependency>
+				<groupId>com.ruishanio</groupId>
+				<artifactId>task-pilot-tool</artifactId>
+				<version>${task-pilot-tool.version}</version>
+			</dependency>
+
+			<!-- groovy -->
+			<dependency>
+				<groupId>org.apache.groovy</groupId>
+				<artifactId>groovy</artifactId>
+				<version>${groovy.version}</version>
+			</dependency>
+
+			<!-- spring-context -->
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context</artifactId>
+				<version>${spring.version}</version>
+				<scope>provided</scope>
+			</dependency>
+
+			<!-- mybatis-starter：mybatis + mybatis-spring + hikari（default） -->
+			<dependency>
+				<groupId>org.mybatis.spring.boot</groupId>
+				<artifactId>mybatis-spring-boot-starter</artifactId>
+				<version>${mybatis-spring-boot-starter.version}</version>
+			</dependency>
+			<!-- postgresql -->
+			<dependency>
+				<groupId>org.postgresql</groupId>
+				<artifactId>postgresql</artifactId>
+				<version>${postgresql.version}</version>
+			</dependency>
+
+			<!-- task-pilot-core -->
+			<dependency>
+				<groupId>com.ruishanio</groupId>
+				<artifactId>task-pilot-core</artifactId>
+				<version>${project.parent.version}</version>
+			</dependency>
+			<!-- task-pilot-spring-boot-starter -->
+			<dependency>
+				<groupId>com.ruishanio</groupId>
+				<artifactId>task-pilot-spring-boot-starter</artifactId>
+				<version>${project.parent.version}</version>
+			</dependency>
+
+			<!-- spring-ai -->
+			<dependency>
+				<groupId>org.springframework.ai</groupId>
+				<artifactId>spring-ai-starter-model-ollama</artifactId>
+				<version>${spring-ai.version}</version>
+			</dependency>
+			<!-- dify -->
+			<dependency>
+				<groupId>io.github.imfangs</groupId>
+				<artifactId>dify-java-client</artifactId>
+				<version>${dify-java-client.version}</version>
+			</dependency>
+
+		</dependencies>
+	</dependencyManagement>
+
+	<scm>
+		<tag>master</tag>
+		<url>https://github.com/ruishanio/Task-Pilot.git</url>
+		<connection>scm:git:https://github.com/ruishanio/Task-Pilot.git</connection>
+		<developerConnection>scm:git:git@github.com:ruishanio/Task-Pilot.git</developerConnection>
+	</scm>
+	<developers>
+		<developer>
+			<id>ruishanio</id>
+			<name>ruishanio</name>
+			<email>harryrong@ruishanio.com</email>
+			<url>https://github.com/ruishanio</url>
+		</developer>
+	</developers>
+
+	<build>
+		<!-- 全仓已切到纯 Kotlin 目录布局，显式覆盖 Maven 默认的 src/main|test/java。 -->
+		<sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
+		<testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
+		<plugins>
+			<!-- 统一开启 Kotlin/Java 混编，支持逐模块渐进迁移。 -->
+			<plugin>
+				<groupId>org.jetbrains.kotlin</groupId>
+				<artifactId>kotlin-maven-plugin</artifactId>
+				<version>${kotlin.version}</version>
+				<configuration>
+					<jvmTarget>${maven.compiler.target}</jvmTarget>
+					<compilerPlugins>
+						<plugin>spring</plugin>
+					</compilerPlugins>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.jetbrains.kotlin</groupId>
+						<artifactId>kotlin-maven-allopen</artifactId>
+						<version>${kotlin.version}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<!-- 保持 Java 编译参数与现有模块一致，避免 Kotlin 接入后行为漂移。 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven-compiler-plugin.version}</version>
+				<configuration>
+					<source>${maven.compiler.source}</source>
+					<target>${maven.compiler.target}</target>
+					<parameters>true</parameters>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<profiles>
+
+		<profile>
+			<id>release</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<modules>
+				<!-- release 构建中显式纳入本地 task-pilot-tool，避免回退到远程依赖 -->
+				<module>task-pilot-tool</module>
+				<module>task-pilot-core</module>
+				<module>task-pilot-spring-boot-starter</module>
+			</modules>
+			<build>
+				<plugins>
+					<!-- Compiler -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<version>${maven-compiler-plugin.version}</version>
+						<configuration>
+							<source>${maven.compiler.source}</source>
+							<target>${maven.compiler.target}</target>
+							<parameters>true</parameters>
+						</configuration>
+					</plugin>
+					<!-- Source -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-source-plugin</artifactId>
+						<version>${maven-source-plugin.version}</version>
+						<executions>
+							<execution>
+								<phase>package</phase>
+								<goals>
+									<goal>jar-no-fork</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<!-- Javadoc -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<version>${maven-javadoc-plugin.version}</version>
+						<executions>
+							<execution>
+								<phase>package</phase>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+								<configuration>
+									<doclint>none</doclint>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<!-- GPG -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>${maven-gpg-plugin.version}</version>
+						<configuration>
+							<useAgent>false</useAgent>
+						</configuration>
+                        <executions>
+                            <execution>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+					<!-- maven central -->
+					<plugin>
+						<groupId>org.sonatype.central</groupId>
+						<artifactId>central-publishing-maven-plugin</artifactId>
+						<version>${central-publishing-maven-plugin.version}</version>
+						<extensions>true</extensions>
+						<configuration>
+							<publishingServerId>central</publishingServerId>
+							<excludeArtifacts>
+								<artifact>task-pilot-admin</artifact>
+								<artifact>task-pilot-executor-samples</artifact>
+								<artifact>task-pilot-executor-sample-frameless</artifact>
+								<artifact>task-pilot-executor-sample-springboot</artifact>
+								<artifact>task-pilot-executor-sample-springboot-ai</artifact>
+							</excludeArtifacts>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+</project>

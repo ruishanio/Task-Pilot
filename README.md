@@ -76,7 +76,7 @@ docker-compose up --build
 <dependency>
     <groupId>com.ruishanio</groupId>
     <artifactId>task-pilot-spring-boot-starter</artifactId>
-    <version>3.3.2</version>
+    <version>1.0.0</version>
 </dependency>
 ```
 

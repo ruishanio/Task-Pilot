@@ -23,6 +23,8 @@ import com.ruishanio.taskpilot.tool.core.StringTool
 import com.ruishanio.taskpilot.tool.response.Response
 import jakarta.annotation.Resource
 import jakarta.servlet.http.HttpServletRequest
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.info.BuildProperties
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
@@ -36,6 +38,9 @@ import java.util.HashMap
 @RestController
 @RequestMapping("/api/frontend")
 class FrontendApiController {
+    @Autowired(required = false)
+    private var buildProperties: BuildProperties? = null
+
     @Resource
     private lateinit var taskPilotService: TaskPilotService
 
@@ -52,10 +57,19 @@ class FrontendApiController {
         val data = HashMap<String, Any>()
         data["appName"] = "Task Pilot"
         data["appNameFull"] = "Task Pilot｜分布式任务调度平台"
-        data["version"] = "3.3.2"
+        data["version"] = resolveAppVersion()
         data["menus"] = buildMenuList(loginInfo)
         data["user"] = buildUserInfo(loginInfo)
         return Response.ofSuccess(data)
+    }
+
+    /**
+     * 优先使用构建期注入的版本元信息，避免接口展示版本与 Maven 实际发布版本脱节。
+     */
+    private fun resolveAppVersion(): String {
+        return buildProperties?.version
+            ?: javaClass.`package`?.implementationVersion
+            ?: "1.0.0"
     }
 
     /**

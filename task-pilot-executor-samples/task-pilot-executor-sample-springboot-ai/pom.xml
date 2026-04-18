@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.ruishanio</groupId>
         <artifactId>task-pilot-executor-samples</artifactId>
-        <version>3.3.2</version>
+        <version>1.0.0</version>
     </parent>
     <artifactId>task-pilot-executor-sample-springboot-ai</artifactId>
     <packaging>jar</packaging>

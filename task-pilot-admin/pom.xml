@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>com.ruishanio</groupId>
 		<artifactId>task-pilot</artifactId>
-		<version>3.3.2</version>
+		<version>1.0.0</version>
 	</parent>
 	<artifactId>task-pilot-admin</artifactId>
 	<packaging>jar</packaging>
@@ -160,6 +160,13 @@
 				<version>${spring-boot.version}</version>
 				<executions>
 					<execution>
+						<id>build-info</id>
+						<goals>
+							<goal>build-info</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>repackage</id>
 						<goals>
 							<goal>repackage</goal>
 						</goals>

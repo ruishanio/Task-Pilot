@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.ruishanio</groupId>
     <artifactId>task-pilot-tool</artifactId>
-    <version>2.4.2</version>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
 
     <name>task-pilot-tool</name>

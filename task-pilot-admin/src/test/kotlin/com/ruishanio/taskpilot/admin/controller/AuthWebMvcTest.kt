@@ -16,13 +16,13 @@ class AuthWebMvcTest : AbstractSpringMvcTest() {
     fun pageRequestRedirectsToLoginWhenAnonymous() {
         mockMvc.perform(get("/"))
             .andExpect(status().is3xxRedirection)
-            .andExpect(redirectedUrl("/auth/login"))
+            .andExpect(redirectedUrl("/web/login"))
     }
 
     @Test
     @Throws(Exception::class)
     fun bootstrapReturns401WhenAnonymous() {
-        mockMvc.perform(get("/api/frontend/bootstrap"))
+        mockMvc.perform(get("/api/manage/frontend/bootstrap"))
             .andExpect(status().isOk)
             .andExpect(content().string(containsString("\"code\":401")))
     }

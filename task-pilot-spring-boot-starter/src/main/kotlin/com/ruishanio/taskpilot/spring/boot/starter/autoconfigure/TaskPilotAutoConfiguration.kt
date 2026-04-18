@@ -17,7 +17,7 @@ import org.springframework.util.StringUtils
  * TaskPilot 自动配置。
  *
  * 设计取舍：
- * 1、仅在显式启用 ruishan.task-pilot.executor.enabled=true 时装配，避免引入 Starter 后无配置也被强制启动；
+ * 1、仅在显式启用 task-pilot.executor.enabled=true 时装配，避免引入 Starter 后无配置也被强制启动；
  * 2、对 admin.addresses 和 executor.appname 做最小必要校验，尽早暴露配置缺失问题。
  */
 @AutoConfiguration
@@ -29,7 +29,7 @@ class TaskPilotAutoConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean(TaskPilotSpringExecutor::class)
-    @ConditionalOnProperty(prefix = "ruishan.task-pilot.executor", name = ["enabled"], havingValue = "true")
+    @ConditionalOnProperty(prefix = "task-pilot.executor", name = ["enabled"], havingValue = "true")
     fun taskPilotSpringExecutor(properties: TaskPilotProperties): TaskPilotSpringExecutor {
         validateRequiredProperties(properties)
 
@@ -58,7 +58,7 @@ class TaskPilotAutoConfiguration {
      */
     @Bean
     @ConditionalOnBean(TaskPilotSpringExecutor::class)
-    @ConditionalOnProperty(prefix = "ruishan.task-pilot.auto-register", name = ["enabled"], havingValue = "true")
+    @ConditionalOnProperty(prefix = "task-pilot.auto-register", name = ["enabled"], havingValue = "true")
     fun taskPilotAutoRegisterRunner(
         properties: TaskPilotProperties,
         applicationContext: ApplicationContext
@@ -69,10 +69,10 @@ class TaskPilotAutoConfiguration {
      */
     private fun validateRequiredProperties(properties: TaskPilotProperties) {
         if (!StringUtils.hasText(properties.admin.addresses)) {
-            throw IllegalStateException("启用 TaskPilot 执行器时必须配置 ruishan.task-pilot.admin.addresses。")
+            throw IllegalStateException("启用 TaskPilot 执行器时必须配置 task-pilot.admin.addresses。")
         }
         if (!StringUtils.hasText(properties.executor.appname)) {
-            throw IllegalStateException("启用 TaskPilot 执行器时必须配置 ruishan.task-pilot.executor.appname。")
+            throw IllegalStateException("启用 TaskPilot 执行器时必须配置 task-pilot.executor.appname。")
         }
     }
 

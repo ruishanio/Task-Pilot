@@ -8,20 +8,19 @@ server:
 logging:
   config: classpath:logback.xml
 
-ruishan:
-  task-pilot:
-    admin:
-      addresses: http://127.0.0.1:8080
-      accessToken: default_token
-      timeout: 3
-    executor:
-      enabled: true
-      appname: task-pilot-executor-sample
-      address: ""
-      ip: "127.0.0.1"
-      port: 9999
-      logpath: ${user.home}/logs/task-pilot/jobhandler
-      logretentiondays: 30
-      excludedpackage: ""
-    auto-register:
-      enabled: true
+task-pilot:
+  admin:
+    addresses: http://127.0.0.1:8080
+    accessToken: default_token
+    timeout: 3
+  executor:
+    enabled: true
+    appname: task-pilot-executor-sample
+    address: ""
+    ip: "127.0.0.1"
+    port: 9999
+    logpath: ${user.home}/logs/task-pilot/jobhandler
+    logretentiondays: 30
+    excludedpackage: ""
+  auto-register:
+    enabled: true

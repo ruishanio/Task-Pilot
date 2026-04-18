@@ -50,7 +50,7 @@ services:
       dockerfile: Dockerfile
     container_name: task-pilot-executor-sample-springboot
     environment:
-      PARAMS: "--ruishan.task-pilot.admin.addresses=http://task-pilot-admin:8080/task-pilot-admin"
+      PARAMS: "--task-pilot.admin.addresses=http://task-pilot-admin:8080"
     ports:
       - "9999:9999"
     depends_on:

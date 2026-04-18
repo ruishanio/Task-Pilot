@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseBody
 
 /**
- * 执行器侧 OpenAPI 入口。
+ * 执行器访问调度中心的 OpenAPI 入口。
  *
  * 保持单入口分发模式，避免执行器端协议升级时需要同时改动多个 HTTP 路由。
  */
@@ -32,7 +32,7 @@ class OpenApiController {
     /**
      * 统一校验请求方法、token 与请求体，再按 uri 分发到管理接口。
      */
-    @RequestMapping("/api/{uri}")
+    @RequestMapping(Const.ADMIN_OPEN_API_PREFIX + "/{uri}")
     @ResponseBody
     @TaskPilotAuth(login = false)
     fun api(

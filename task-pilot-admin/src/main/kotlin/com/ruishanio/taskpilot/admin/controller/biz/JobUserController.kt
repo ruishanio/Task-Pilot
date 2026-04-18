@@ -6,7 +6,7 @@ import com.ruishanio.taskpilot.admin.auth.model.LoginInfo
 import com.ruishanio.taskpilot.admin.constant.Consts
 import com.ruishanio.taskpilot.admin.mapper.TaskPilotUserMapper
 import com.ruishanio.taskpilot.admin.model.TaskPilotUser
-import com.ruishanio.taskpilot.admin.util.FrontendEntry
+import com.ruishanio.taskpilot.admin.web.ManageRoute
 import com.ruishanio.taskpilot.tool.core.CollectionTool
 import com.ruishanio.taskpilot.tool.core.StringTool
 import com.ruishanio.taskpilot.tool.crypto.Sha256Tool
@@ -23,14 +23,10 @@ import org.springframework.web.bind.annotation.ResponseBody
  * 管理端用户控制器。
  */
 @Controller
-@RequestMapping("/user")
+@RequestMapping(ManageRoute.API_MANAGE_USER)
 class JobUserController {
     @Resource
     private lateinit var taskPilotUserMapper: TaskPilotUserMapper
-
-    @RequestMapping
-    @TaskPilotAuth(role = Consts.ADMIN_ROLE)
-    fun index(): String = FrontendEntry.route("/user")
 
     @RequestMapping("/pageList")
     @ResponseBody

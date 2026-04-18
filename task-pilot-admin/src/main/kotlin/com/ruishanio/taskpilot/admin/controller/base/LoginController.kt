@@ -5,18 +5,18 @@ import com.ruishanio.taskpilot.admin.auth.helper.TaskPilotAuthHelper
 import com.ruishanio.taskpilot.admin.auth.model.LoginInfo
 import com.ruishanio.taskpilot.admin.mapper.TaskPilotUserMapper
 import com.ruishanio.taskpilot.admin.model.TaskPilotUser
-import com.ruishanio.taskpilot.admin.util.FrontendEntry
+import com.ruishanio.taskpilot.admin.web.ManageRoute
 import com.ruishanio.taskpilot.tool.core.StringTool
 import com.ruishanio.taskpilot.tool.crypto.Sha256Tool
 import com.ruishanio.taskpilot.tool.id.UUIDTool
 import com.ruishanio.taskpilot.tool.response.Response
 import jakarta.annotation.Resource
 import jakarta.servlet.http.HttpServletRequest
-import jakarta.servlet.http.HttpServletResponse
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.ResponseBody
+import jakarta.servlet.http.HttpServletResponse
 
 /**
  * 登录与密码维护控制器。
@@ -24,17 +24,10 @@ import org.springframework.web.bind.annotation.ResponseBody
  * 继续复用本地认证 Helper 的登录/登出逻辑，只保留管理端自身的账号密码校验。
  */
 @Controller
-@RequestMapping("/auth")
+@RequestMapping(ManageRoute.API_MANAGE_AUTH)
 class LoginController {
     @Resource
     private lateinit var taskPilotUserMapper: TaskPilotUserMapper
-
-    @RequestMapping("/login")
-    @TaskPilotAuth(login = false)
-    fun login(request: HttpServletRequest, response: HttpServletResponse): String {
-        val loginInfoResponse = TaskPilotAuthHelper.loginCheckWithCookie(request, response)
-        return if (loginInfoResponse.isSuccess) FrontendEntry.route("/dashboard") else FrontendEntry.route("/login")
-    }
 
     /**
      * 管理端仍然走本地用户表校验，校验通过后再创建本地登录态。

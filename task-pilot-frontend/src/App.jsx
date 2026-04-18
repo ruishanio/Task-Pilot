@@ -37,7 +37,9 @@ function App() {
           <Route path="dashboard" element={<DashboardPage />} />
           <Route path="jobgroup" element={<JobGroupPage />} />
           <Route path="jobinfo" element={<JobInfoPage />} />
+          <Route path="jobcode" element={<JobInfoPage />} />
           <Route path="joblog" element={<JobLogPage />} />
+          <Route path="joblog/detail" element={<JobLogPage />} />
           <Route path="user" element={<UserPage />} />
         </Route>
         <Route path="*" element={<NotFoundPage />} />

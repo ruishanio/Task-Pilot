@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { HashRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import { App as AntdApp, ConfigProvider } from 'antd';
 import zhCN from 'antd/locale/zh_CN';
 import dayjs from 'dayjs';
@@ -26,12 +26,12 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       }}
     >
       <AntdApp>
-        {/* 生产环境会以静态文件方式挂回后端，因此使用 HashRouter 避免依赖服务端路由回退。 */}
-        <HashRouter>
+        {/* 管理端统一挂在 `/web/*` 下，使用 basename 保持前后端地址语义一致。 */}
+        <BrowserRouter basename="/web">
           <AuthProvider>
             <App />
           </AuthProvider>
-        </HashRouter>
+        </BrowserRouter>
       </AntdApp>
     </ConfigProvider>
   </React.StrictMode>,

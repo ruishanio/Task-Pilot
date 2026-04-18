@@ -4,12 +4,10 @@ import com.ruishanio.taskpilot.admin.auth.annotation.TaskPilotAuth
 import com.ruishanio.taskpilot.admin.auth.constant.AuthConst
 import com.ruishanio.taskpilot.admin.auth.exception.TaskPilotAuthException
 import com.ruishanio.taskpilot.admin.auth.helper.TaskPilotAuthHelper
-import com.ruishanio.taskpilot.tool.core.StringTool
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.LoggerFactory
 import org.springframework.core.annotation.AnnotatedElementUtils
-import org.springframework.util.AntPathMatcher
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.HandlerInterceptor
@@ -17,38 +15,11 @@ import org.springframework.web.servlet.HandlerInterceptor
 /**
  * 管理端本地认证拦截器。
  *
- * 页面请求按老系统习惯跳登录页，JSON 请求则统一抛业务码，兼容后台模板和前端 SPA 两种入口。
+ * 页面请求统一跳默认登录页，JSON 请求则统一抛业务码，兼容后台模板和前端 SPA 两种入口。
  */
-class TaskPilotAuthInterceptor(
-    private val excludedPaths: String?,
-    loginPath: String?
-) : HandlerInterceptor {
-    private val antPathMatcher = AntPathMatcher()
-    private val loginPath: String = if (StringTool.isBlank(loginPath)) AuthConst.LOGIN_URL else loginPath!!
-
+class TaskPilotAuthInterceptor : HandlerInterceptor {
     init {
         logger.info("TaskPilotAuthInterceptor initialized.")
-    }
-
-    /**
-     * 公开排除规则判断，便于测试和后续配置诊断复用。
-     */
-    fun isMatchExcludedPaths(request: HttpServletRequest): Boolean {
-        if (StringTool.isBlank(excludedPaths)) {
-            return false
-        }
-
-        val servletPath = request.servletPath
-        for (excludedPath in excludedPaths!!.split(",")) {
-            val uriPattern = excludedPath.trim()
-            if (StringTool.isBlank(uriPattern)) {
-                continue
-            }
-            if (antPathMatcher.match(uriPattern, servletPath)) {
-                return true
-            }
-        }
-        return false
     }
 
     override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
@@ -65,7 +36,7 @@ class TaskPilotAuthInterceptor(
         val permission = taskPilotAuth?.permission
         val role = taskPilotAuth?.role
 
-        if (isMatchExcludedPaths(request) || !needLogin) {
+        if (!needLogin) {
             return true
         }
 
@@ -76,7 +47,7 @@ class TaskPilotAuthInterceptor(
                 throw TaskPilotAuthException(AuthConst.CODE_LOGIN_FAIL, "not login for path:${request.servletPath}")
             }
 
-            response.sendRedirect("${request.contextPath}$loginPath")
+            response.sendRedirect("${request.contextPath}${AuthConst.LOGIN_URL}")
             return false
         }
 

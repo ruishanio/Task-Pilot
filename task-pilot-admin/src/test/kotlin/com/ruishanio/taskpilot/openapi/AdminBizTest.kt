@@ -18,9 +18,8 @@ import org.slf4j.LoggerFactory
  */
 class AdminBizTest {
     private fun buildClient(): AdminBiz {
-        val finalUrl = "$addressUrl/api"
         return HttpTool.createClient()
-            .url(finalUrl)
+            .url(addressUrl)
             .timeout(3 * 1000)
             .header(Const.TASK_PILOT_ACCESS_TOKEN, accessToken)
             .proxy(AdminBiz::class.java)

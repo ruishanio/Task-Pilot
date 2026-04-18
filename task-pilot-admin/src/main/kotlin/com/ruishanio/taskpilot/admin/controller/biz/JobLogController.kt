@@ -4,8 +4,8 @@ import com.ruishanio.taskpilot.admin.mapper.TaskPilotInfoMapper
 import com.ruishanio.taskpilot.admin.mapper.TaskPilotLogMapper
 import com.ruishanio.taskpilot.admin.model.TaskPilotLog
 import com.ruishanio.taskpilot.admin.scheduler.config.TaskPilotAdminBootstrap
-import com.ruishanio.taskpilot.admin.util.FrontendEntry
 import com.ruishanio.taskpilot.admin.util.JobGroupPermissionUtil
+import com.ruishanio.taskpilot.admin.web.ManageRoute
 import com.ruishanio.taskpilot.core.context.TaskPilotContext
 import com.ruishanio.taskpilot.core.openapi.ExecutorBiz
 import com.ruishanio.taskpilot.core.openapi.model.KillRequest
@@ -30,19 +30,13 @@ import java.util.HashMap
  * 任务日志控制器。
  */
 @Controller
-@RequestMapping("/joblog")
+@RequestMapping(ManageRoute.API_MANAGE_JOBLOG)
 class JobLogController {
     @Resource
     lateinit var taskPilotInfoMapper: TaskPilotInfoMapper
 
     @Resource
     lateinit var taskPilotLogMapper: TaskPilotLogMapper
-
-    @RequestMapping
-    fun index(
-        @RequestParam(value = "jobGroup", required = false, defaultValue = "0") jobGroup: Int?,
-        @RequestParam(value = "jobId", required = false, defaultValue = "0") jobId: Int?
-    ): String = FrontendEntry.route("/joblog?jobGroup=${jobGroup ?: 0}&jobId=${jobId ?: 0}")
 
     @RequestMapping("/pageList")
     @ResponseBody
@@ -167,9 +161,6 @@ class JobLogController {
 
         return Response.ofSuccess()
     }
-
-    @RequestMapping("/logDetailPage")
-    fun logDetailPage(@RequestParam("id") id: Long): String = FrontendEntry.route("/joblog?logId=$id")
 
     /**
      * 读取执行器日志时在管理端做一层 XSS 过滤，并在任务已结束后补齐 end 标记。

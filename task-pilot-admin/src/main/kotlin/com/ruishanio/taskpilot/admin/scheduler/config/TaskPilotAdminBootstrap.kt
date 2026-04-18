@@ -44,22 +44,22 @@ class TaskPilotAdminBootstrap : InitializingBean, DisposableBean {
     lateinit var jobLogReportHelper: JobLogReportHelper
     lateinit var jobScheduleHelper: JobScheduleHelper
 
-    @Value("\${ruishan.task-pilot.accessToken}")
+    @Value("\${task-pilot.accessToken}")
     var accessToken: String = ""
 
-    @Value("\${ruishan.task-pilot.timeout}")
+    @Value("\${task-pilot.timeout}")
     var timeout: Int = 0
 
     @Value("\${spring.mail.from}")
     var emailFrom: String = ""
 
-    @Value("\${ruishan.task-pilot.triggerpool.fast.max}")
+    @Value("\${task-pilot.triggerpool.fast.max}")
     private var triggerPoolFastMaxInternal: Int = 0
 
-    @Value("\${ruishan.task-pilot.triggerpool.slow.max}")
+    @Value("\${task-pilot.triggerpool.slow.max}")
     private var triggerPoolSlowMaxInternal: Int = 0
 
-    @Value("\${ruishan.task-pilot.logretentiondays}")
+    @Value("\${task-pilot.logretentiondays}")
     private var logretentiondaysInternal: Int = 0
 
     @Resource
@@ -183,7 +183,9 @@ class TaskPilotAdminBootstrap : InitializingBean, DisposableBean {
                 return null
             }
 
-            val normalizedAddress = address!!.trim()
+            // 执行器地址约定为服务根地址，这里只做基础清洗，避免缓存 key 因尾部斜杠分裂。
+            var normalizedAddress = address!!.trim()
+            normalizedAddress = StringTool.removeSuffix(normalizedAddress, "/") ?: normalizedAddress
             executorBizRepository[normalizedAddress]?.let { return it }
 
             val executorBiz = HttpTool.createClient()

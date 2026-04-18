@@ -23,7 +23,7 @@ class JobInfoControllerTest : AbstractSpringMvcTest() {
         val ret =
             mockMvc
                 .perform(
-                    post("/auth/doLogin")
+                    post("/api/manage/auth/doLogin")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .param("userName", "admin")
                         .param("password", "123456")
@@ -41,7 +41,7 @@ class JobInfoControllerTest : AbstractSpringMvcTest() {
         val ret: MvcResult =
             mockMvc
                 .perform(
-                    post("/jobinfo/pageList")
+                    post("/api/manage/jobinfo/pageList")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .params(parameters)
                         .cookie(cookie)

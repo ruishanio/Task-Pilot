@@ -100,8 +100,9 @@ open class TaskPilotExecutor {
                 continue
             }
 
+            // 调度中心地址约定为服务根地址，这里只清理尾部斜杠，避免客户端缓存被不同写法打散。
             var finalAddress = address.trim()
-            finalAddress = if (finalAddress.endsWith("/")) finalAddress + "api" else "$finalAddress/api"
+            finalAddress = StringTool.removeSuffix(finalAddress, "/") ?: finalAddress
             val finalTimeout = if (timeout in 1..10) timeout else 3
 
             val adminBiz =

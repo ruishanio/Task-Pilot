@@ -78,21 +78,20 @@ class SampleJob {
 `application.yml`：
 
 ```yaml
-ruishan:
-  task-pilot:
-    admin:
-      addresses: http://127.0.0.1:8080/task-pilot-admin
-      accessToken: default_token
-      timeout: 3
-    executor:
-      enabled: true
-      appname: task-pilot-executor-sample
-      ip: ""                 # 留空自动识别
-      port: 9999
-      logpath: ${user.home}/logs/task-pilot/jobhandler
-      logretentiondays: 30
-    auto-register:
-      enabled: true
+task-pilot:
+  admin:
+    addresses: http://127.0.0.1:8080
+    accessToken: default_token
+    timeout: 3
+  executor:
+    enabled: true
+    appname: task-pilot-executor-sample
+    ip: ""                 # 留空自动识别
+    port: 9999
+    logpath: ${user.home}/logs/task-pilot/jobhandler
+    logretentiondays: 30
+  auto-register:
+    enabled: true
 ```
 
 ## License

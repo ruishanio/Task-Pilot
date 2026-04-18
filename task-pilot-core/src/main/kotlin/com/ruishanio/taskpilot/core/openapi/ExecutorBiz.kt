@@ -6,10 +6,12 @@ import com.ruishanio.taskpilot.core.openapi.model.LogRequest
 import com.ruishanio.taskpilot.core.openapi.model.LogResult
 import com.ruishanio.taskpilot.core.openapi.model.TriggerRequest
 import com.ruishanio.taskpilot.tool.response.Response
+import com.ruishanio.taskpilot.tool.http.client.HttpClientService
 
 /**
  * 执行器对外暴露的远程调用接口。
  */
+@HttpClientService
 interface ExecutorBiz {
     /**
      * 心跳探测。

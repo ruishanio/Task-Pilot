@@ -1,13 +1,16 @@
 package com.ruishanio.taskpilot.core.openapi
 
+import com.ruishanio.taskpilot.core.constant.Const
 import com.ruishanio.taskpilot.core.openapi.model.AutoRegisterRequest
 import com.ruishanio.taskpilot.core.openapi.model.CallbackRequest
 import com.ruishanio.taskpilot.core.openapi.model.RegistryRequest
 import com.ruishanio.taskpilot.tool.response.Response
+import com.ruishanio.taskpilot.tool.http.client.HttpClientService
 
 /**
- * 调度中心对执行器暴露的管理接口。
+ * 调度中心暴露给执行器的远程接口。
  */
+@HttpClientService(path = Const.ADMIN_OPEN_API_PREFIX)
 interface AdminBiz {
     /**
      * 回调执行结果。

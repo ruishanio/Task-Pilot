@@ -6,8 +6,8 @@ import com.ruishanio.taskpilot.admin.scheduler.misfire.MisfireStrategyEnum
 import com.ruishanio.taskpilot.admin.scheduler.route.ExecutorRouteStrategyEnum
 import com.ruishanio.taskpilot.admin.scheduler.type.ScheduleTypeEnum
 import com.ruishanio.taskpilot.admin.service.TaskPilotService
-import com.ruishanio.taskpilot.admin.util.FrontendEntry
 import com.ruishanio.taskpilot.admin.util.JobGroupPermissionUtil
+import com.ruishanio.taskpilot.admin.web.ManageRoute
 import com.ruishanio.taskpilot.core.constant.ExecutorBlockStrategyEnum
 import com.ruishanio.taskpilot.core.glue.GlueTypeEnum
 import com.ruishanio.taskpilot.tool.core.CollectionTool
@@ -29,15 +29,10 @@ import java.util.Date
  * 任务配置管理控制器。
  */
 @Controller
-@RequestMapping("/jobinfo")
+@RequestMapping(ManageRoute.API_MANAGE_JOBINFO)
 class JobInfoController {
     @Resource
     private lateinit var taskPilotService: TaskPilotService
-
-    @RequestMapping
-    fun index(
-        @RequestParam(value = "jobGroup", required = false, defaultValue = "-1") jobGroup: Int
-    ): String = FrontendEntry.route("/jobinfo?jobGroup=$jobGroup")
 
     @RequestMapping("/pageList")
     @ResponseBody

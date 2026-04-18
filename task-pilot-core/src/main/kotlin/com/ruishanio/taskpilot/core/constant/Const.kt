@@ -12,6 +12,11 @@ object Const {
     const val TASK_PILOT_ACCESS_TOKEN: String = "TASK-PILOT-ACCESS-TOKEN"
 
     /**
+     * 调度中心对执行器暴露的协议入口前缀。
+     */
+    const val ADMIN_OPEN_API_PREFIX: String = "/api/executor"
+
+    /**
      * 注册心跳周期，单位秒。
      */
     const val BEAT_TIMEOUT: Int = 30

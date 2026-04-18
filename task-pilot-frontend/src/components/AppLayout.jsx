@@ -45,6 +45,19 @@ function AppLayout() {
   const [passwordSubmitting, setPasswordSubmitting] = useState(false);
   const [passwordForm] = Form.useForm();
 
+  /**
+   * 兼容 `/jobcode`、`/joblog/detail` 这类历史页面别名，确保侧边栏高亮仍落在主功能页上。
+   */
+  function normalizeMenuPath(pathname) {
+    if (pathname.startsWith('/jobcode')) {
+      return '/jobinfo';
+    }
+    if (pathname.startsWith('/joblog/detail')) {
+      return '/joblog';
+    }
+    return pathname;
+  }
+
   // 统一把后端菜单结构转换成 Ant Design 可消费的数据。
   const menuItems = useMemo(
     () =>
@@ -56,8 +69,9 @@ function AppLayout() {
     [menus],
   );
 
+  const currentPath = normalizeMenuPath(location.pathname);
   const currentMenu =
-    menuItems.find((item) => location.pathname.startsWith(item.key)) || menuItems[0];
+    menuItems.find((item) => currentPath.startsWith(item.key)) || menuItems[0];
   const footerText = ['TASK PILOT', version].filter(Boolean).join(' ');
 
   async function handleLogout() {

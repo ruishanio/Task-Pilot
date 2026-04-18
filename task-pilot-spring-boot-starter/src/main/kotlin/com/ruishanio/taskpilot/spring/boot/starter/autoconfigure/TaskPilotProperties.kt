@@ -8,10 +8,10 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty
  * TaskPilot Spring Boot Starter 配置项。
  *
  * 说明：
- * 1、统一使用 ruishan.task-pilot.admin.* / ruishan.task-pilot.executor.* / ruishan.task-pilot.auto-register.* 配置结构；
+ * 1、统一使用 task-pilot.admin.* / task-pilot.executor.* / task-pilot.auto-register.* 配置结构；
  * 2、执行器负责对外暴露运行能力，auto-register 负责把注解声明同步到调度中心。
  */
-@ConfigurationProperties(prefix = "ruishan.task-pilot")
+@ConfigurationProperties(prefix = "task-pilot")
 class TaskPilotProperties {
     @field:NestedConfigurationProperty
     val admin: Admin = Admin()

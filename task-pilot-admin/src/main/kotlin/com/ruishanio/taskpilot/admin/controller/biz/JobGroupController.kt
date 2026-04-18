@@ -7,7 +7,7 @@ import com.ruishanio.taskpilot.admin.mapper.TaskPilotInfoMapper
 import com.ruishanio.taskpilot.admin.mapper.TaskPilotRegistryMapper
 import com.ruishanio.taskpilot.admin.model.TaskPilotGroup
 import com.ruishanio.taskpilot.admin.model.TaskPilotRegistry
-import com.ruishanio.taskpilot.admin.util.FrontendEntry
+import com.ruishanio.taskpilot.admin.web.ManageRoute
 import com.ruishanio.taskpilot.core.constant.Const
 import com.ruishanio.taskpilot.core.constant.RegistType
 import com.ruishanio.taskpilot.tool.core.CollectionTool
@@ -28,7 +28,7 @@ import java.util.HashMap
  * 执行器分组管理控制器。
  */
 @Controller
-@RequestMapping("/jobgroup")
+@RequestMapping(ManageRoute.API_MANAGE_JOBGROUP)
 class JobGroupController {
     @Resource
     lateinit var taskPilotInfoMapper: TaskPilotInfoMapper
@@ -38,10 +38,6 @@ class JobGroupController {
 
     @Resource
     private lateinit var taskPilotRegistryMapper: TaskPilotRegistryMapper
-
-    @RequestMapping
-    @TaskPilotAuth(role = Consts.ADMIN_ROLE)
-    fun index(): String = FrontendEntry.route("/jobgroup")
 
     @RequestMapping("/pageList")
     @ResponseBody

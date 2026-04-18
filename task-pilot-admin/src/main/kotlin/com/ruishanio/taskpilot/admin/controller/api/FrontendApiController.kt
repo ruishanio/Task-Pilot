@@ -16,6 +16,7 @@ import com.ruishanio.taskpilot.admin.scheduler.route.ExecutorRouteStrategyEnum
 import com.ruishanio.taskpilot.admin.scheduler.type.ScheduleTypeEnum
 import com.ruishanio.taskpilot.admin.service.TaskPilotService
 import com.ruishanio.taskpilot.admin.util.JobGroupPermissionUtil
+import com.ruishanio.taskpilot.admin.web.ManageRoute
 import com.ruishanio.taskpilot.core.constant.ExecutorBlockStrategyEnum
 import com.ruishanio.taskpilot.core.glue.GlueTypeEnum
 import com.ruishanio.taskpilot.tool.core.CollectionTool
@@ -36,7 +37,7 @@ import java.util.HashMap
  * 前后端分离场景下的首屏与元数据接口。
  */
 @RestController
-@RequestMapping("/api/frontend")
+@RequestMapping(ManageRoute.API_MANAGE_FRONTEND)
 class FrontendApiController {
     @Autowired(required = false)
     private var buildProperties: BuildProperties? = null

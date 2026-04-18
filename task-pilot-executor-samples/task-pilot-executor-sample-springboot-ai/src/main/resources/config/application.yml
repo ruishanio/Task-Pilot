@@ -17,18 +17,17 @@ spring:
     ollama:
       base-url: http://localhost:11434
 
-ruishan:
-  task-pilot:
-    admin:
-      addresses: http://127.0.0.1:8080
-      accessToken: default_token
-      timeout: 3
-    executor:
-      enabled: true
-      appname: task-pilot-executor-sample-ai
-      address: ""
-      ip: "127.0.0.1"
-      port: 9997
-      logpath: ${user.home}/logs/task-pilot/jobhandler
-      logretentiondays: 30
-      excludedpackage: ""
+task-pilot:
+  admin:
+    addresses: http://127.0.0.1:8080
+    accessToken: default_token
+    timeout: 3
+  executor:
+    enabled: true
+    appname: task-pilot-executor-sample-ai
+    address: ""
+    ip: "127.0.0.1"
+    port: 9997
+    logpath: ${user.home}/logs/task-pilot/jobhandler
+    logretentiondays: 30
+    excludedpackage: ""

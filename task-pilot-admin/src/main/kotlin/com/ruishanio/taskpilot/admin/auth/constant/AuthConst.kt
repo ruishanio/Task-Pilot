@@ -7,12 +7,7 @@ object AuthConst {
     /**
      * 默认登录页地址。
      */
-    const val LOGIN_URL: String = "/login"
-
-    /**
-     * 默认注销地址。
-     */
-    const val LOGOUT_URL: String = "/logout"
+    const val LOGIN_URL: String = "/web/login"
 
     /**
      * 登录令牌在 Cookie/Header 中使用的键名。

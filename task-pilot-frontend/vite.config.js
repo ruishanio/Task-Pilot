@@ -20,8 +20,8 @@ export default defineConfig(({ mode }) => {
   }
 
   return {
-    // 生产产物会被放回 Spring Boot 的静态目录中访问，因此资源路径需要保持相对路径。
-    base: './',
+    // 管理端前端统一以 `/web/*` 对外提供，资源路径也固定落在该前缀下。
+    base: '/web/',
     plugins: [react()],
     build: {
       rollupOptions: {
@@ -43,13 +43,7 @@ export default defineConfig(({ mode }) => {
       host: '0.0.0.0',
       port: 5173,
       proxy: {
-        '/api': createProxyConfig(),
-        '/auth': createProxyConfig(),
-        '/jobgroup': createProxyConfig(),
-        '/jobinfo': createProxyConfig(),
-        '/joblog': createProxyConfig(),
-        '/user': createProxyConfig(),
-        '/chartInfo': createProxyConfig(),
+        '/api/manage': createProxyConfig(),
       },
     },
   };

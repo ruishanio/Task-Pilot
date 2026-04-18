@@ -2,12 +2,12 @@ package com.ruishanio.taskpilot.admin.controller.base
 
 import com.ruishanio.taskpilot.admin.auth.annotation.TaskPilotAuth
 import com.ruishanio.taskpilot.admin.service.TaskPilotService
-import com.ruishanio.taskpilot.admin.util.FrontendEntry
+import com.ruishanio.taskpilot.admin.web.ManageRoute
 import com.ruishanio.taskpilot.tool.response.Response
 import jakarta.annotation.Resource
 import jakarta.servlet.http.HttpServletResponse
-import org.springframework.beans.propertyeditors.CustomDateEditor
 import org.springframework.stereotype.Controller
+import org.springframework.beans.propertyeditors.CustomDateEditor
 import org.springframework.web.bind.WebDataBinder
 import org.springframework.web.bind.annotation.InitBinder
 import org.springframework.web.bind.annotation.RequestMapping
@@ -17,29 +17,21 @@ import java.text.SimpleDateFormat
 import java.util.Date
 
 /**
- * 管理端入口控制器。
+ * 管理端基础 API 控制器。
  */
 @Controller
 class IndexController {
     @Resource
     private lateinit var taskPilotService: TaskPilotService
 
-    @RequestMapping("/")
-    @TaskPilotAuth
-    fun index(): String = FrontendEntry.route("/dashboard")
-
-    @RequestMapping("/dashboard")
-    @TaskPilotAuth
-    fun dashboard(): String = FrontendEntry.route("/dashboard")
-
-    @RequestMapping("/chartInfo")
+    @RequestMapping(ManageRoute.API_MANAGE_CHART_INFO)
     @ResponseBody
     fun chartInfo(
         @RequestParam("startDate") startDate: Date,
         @RequestParam("endDate") endDate: Date
     ): Response<Map<String, Any>> = taskPilotService.chartInfo(startDate, endDate)
 
-    @RequestMapping("/errorpage")
+    @RequestMapping(ManageRoute.API_MANAGE_ERROR_PAGE)
     @ResponseBody
     @TaskPilotAuth(login = false)
     fun errorPage(response: HttpServletResponse): String = "HTTP Status Code: ${response.status}"

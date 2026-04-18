@@ -148,10 +148,11 @@ class EmbedServer {
             requestData: String,
             accessTokenReq: String?
         ): Any {
+            val normalizedUri = normalizeUri(uri)
             if (HttpMethod.POST != httpMethod) {
                 return Response.ofFail<String>("invalid request, HttpMethod not support.")
             }
-            if (uri.isNullOrBlank()) {
+            if (normalizedUri.isNullOrBlank()) {
                 return Response.ofFail<String>("invalid request, uri-mapping empty.")
             }
             if (!accessToken.isNullOrBlank() && accessToken != accessTokenReq) {
@@ -159,19 +160,28 @@ class EmbedServer {
             }
 
             return try {
-                when (uri) {
+                when (normalizedUri) {
                     "/beat" -> executorBiz.beat()
-                    "/idleBeat" -> executorBiz.idleBeat(GsonTool.fromJson(requestData, IdleBeatRequest::class.java))
-                    "/run" -> executorBiz.run(GsonTool.fromJson(requestData, TriggerRequest::class.java))
-                    "/kill" -> executorBiz.kill(GsonTool.fromJson(requestData, KillRequest::class.java))
-                    "/log" -> executorBiz.log(GsonTool.fromJson(requestData, LogRequest::class.java))
-                    else -> Response.ofFail<String>("invalid request, uri-mapping($uri) not found.")
+                    "/idleBeat" ->
+                        executorBiz.idleBeat(GsonTool.fromJson(requestData, IdleBeatRequest::class.java))
+                    "/run" ->
+                        executorBiz.run(GsonTool.fromJson(requestData, TriggerRequest::class.java))
+                    "/kill" ->
+                        executorBiz.kill(GsonTool.fromJson(requestData, KillRequest::class.java))
+                    "/log" ->
+                        executorBiz.log(GsonTool.fromJson(requestData, LogRequest::class.java))
+                    else -> Response.ofFail<String>("invalid request, uri-mapping($normalizedUri) not found.")
                 }
             } catch (e: Throwable) {
                 logger.error(">>>>>>>>>>> task-pilot 处理远程请求时发生异常。", e)
                 Response.ofFail<String>("request error:" + ThrowableTool.toString(e))
             }
         }
+
+        /**
+         * Netty `uri()` 可能携带查询串，这里先做标准化，避免协议匹配被 `?` 后缀干扰。
+         */
+        private fun normalizeUri(uri: String?): String? = uri?.substringBefore("?")
 
         /**
          * 回写 HTTP 响应。

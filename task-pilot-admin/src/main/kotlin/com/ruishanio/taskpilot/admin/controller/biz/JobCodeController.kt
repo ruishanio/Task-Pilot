@@ -4,8 +4,8 @@ import com.ruishanio.taskpilot.admin.auth.model.LoginInfo
 import com.ruishanio.taskpilot.admin.mapper.TaskPilotInfoMapper
 import com.ruishanio.taskpilot.admin.mapper.TaskPilotLogGlueMapper
 import com.ruishanio.taskpilot.admin.model.TaskPilotLogGlue
-import com.ruishanio.taskpilot.admin.util.FrontendEntry
 import com.ruishanio.taskpilot.admin.util.JobGroupPermissionUtil
+import com.ruishanio.taskpilot.admin.web.ManageRoute
 import com.ruishanio.taskpilot.tool.core.StringTool
 import com.ruishanio.taskpilot.tool.json.GsonTool
 import com.ruishanio.taskpilot.tool.response.Response
@@ -22,16 +22,13 @@ import java.util.Date
  * GLUE 代码编辑控制器。
  */
 @Controller
-@RequestMapping("/jobcode")
+@RequestMapping(ManageRoute.API_MANAGE_JOBCODE)
 class JobCodeController {
     @Resource
     private lateinit var taskPilotInfoMapper: TaskPilotInfoMapper
 
     @Resource
     private lateinit var taskPilotLogGlueMapper: TaskPilotLogGlueMapper
-
-    @RequestMapping
-    fun index(@RequestParam("jobId") jobId: Int): String = FrontendEntry.route("/jobinfo?jobId=$jobId")
 
     /**
      * 保存 GLUE 源码时同步记录历史快照，便于后续回溯。

@@ -30,10 +30,10 @@ npm run build
 task-pilot-admin/src/main/resources/static
 ```
 
-由于生产环境是静态文件回挂到后端访问，前端路由使用 `HashRouter`，访问形态类似：
+由于生产环境是静态文件回挂到后端访问，前端路由使用 `BrowserRouter`，并统一挂在 `/web/*` 下，访问形态类似：
 
 ```text
-/static/index.html#/dashboard
+/web/dashboard
 ```
 
 如果你把构建产物放到子目录，例如 `static/task-pilot-frontend/`，也可以直接访问：

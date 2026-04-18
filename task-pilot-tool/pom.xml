@@ -8,6 +8,30 @@
 
     <name>task-pilot-tool</name>
     <description>Task-Pilot-Tool is a Java tool library that makes Java development more efficient. The tools include "collection, cache, concurrency, string, IO, Excel, emoji ..." and so on.</description>
+    <url>https://github.com/ruishanio/Task-Pilot</url>
+    <licenses>
+        <license>
+            <name>GNU General Public License v3.0</name>
+            <url>https://www.gnu.org/licenses/gpl-3.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <scm>
+        <tag>HEAD</tag>
+        <url>https://github.com/ruishanio/Task-Pilot.git</url>
+        <connection>scm:git:https://github.com/ruishanio/Task-Pilot.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/ruishanio/Task-Pilot.git</developerConnection>
+    </scm>
+    <developers>
+        <developer>
+            <id>ruishanio</id>
+            <name>ruishanio</name>
+            <email>harryrong@ruishanio.com</email>
+            <organization>Ruishan IO</organization>
+            <organizationUrl>https://github.com/ruishanio</organizationUrl>
+            <url>https://github.com/ruishanio</url>
+        </developer>
+    </developers>
 
     <properties>
         <!-- env -->
@@ -25,6 +49,7 @@
         <maven-javadoc-plugin.version>3.12.0</maven-javadoc-plugin.version>
         <maven-gpg-plugin.version>3.2.8</maven-gpg-plugin.version>
         <central-publishing-maven-plugin.version>0.9.0</central-publishing-maven-plugin.version>
+        <dokka-maven-plugin.version>2.2.0</dokka-maven-plugin.version>
         <kotlin.version>2.3.20</kotlin.version>
         <!-- base -->
         <slf4j-api.version>2.0.17</slf4j-api.version>
@@ -205,9 +230,6 @@
 
         <profile>
             <id>release</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
             <build>
                 <plugins>
                     <!-- Source -->
@@ -224,19 +246,20 @@
                             </execution>
                         </executions>
                     </plugin>
-                    <!-- Javadoc -->
+                    <!-- 纯 Kotlin 模块通过 Dokka 产出 javadoc.jar，满足 Central 的校验要求。 -->
                     <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>${maven-javadoc-plugin.version}</version>
+                        <groupId>org.jetbrains.dokka</groupId>
+                        <artifactId>dokka-maven-plugin</artifactId>
+                        <version>${dokka-maven-plugin.version}</version>
                         <executions>
                             <execution>
                                 <phase>package</phase>
                                 <goals>
-                                    <goal>jar</goal>
+                                    <goal>javadocJar</goal>
                                 </goals>
                                 <configuration>
-                                    <doclint>none</doclint>
+                                    <jdkVersion>${java.version}</jdkVersion>
+                                    <failOnWarning>false</failOnWarning>
                                 </configuration>
                             </execution>
                         </executions>
@@ -266,6 +289,8 @@
                         <extensions>true</extensions>
                         <configuration>
                             <publishingServerId>central</publishingServerId>
+                            <autoPublish>true</autoPublish>
+                            <waitUntil>published</waitUntil>
                         </configuration>
                     </plugin>
                 </plugins>

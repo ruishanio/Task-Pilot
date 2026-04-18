@@ -18,11 +18,23 @@ COPY --from=frontend-builder /workspace/task-pilot-frontend/dist ./task-pilot-fr
 RUN rm -rf task-pilot-admin/src/main/resources/static \
     && mkdir -p task-pilot-admin/src/main/resources/static \
     && cp -r task-pilot-frontend/dist/. task-pilot-admin/src/main/resources/static/ \
-    && mvn -pl task-pilot-admin -am package -DskipTests
+    && mvn -B -ntp -P '!release' -pl task-pilot-admin -am package -DskipTests
 
 # 运行时阶段仅保留最终 Jar 和启动参数，尽量收窄镜像体积。
 FROM eclipse-temurin:21-jre-jammy AS runtime
 WORKDIR /app
+
+ARG VERSION=dev
+ARG VCS_REF=unknown
+ARG BUILD_DATE=unknown
+
+LABEL org.opencontainers.image.title="task-pilot-admin" \
+      org.opencontainers.image.description="Task-Pilot admin server image" \
+      org.opencontainers.image.url="https://hub.docker.com/r/ruishan/task-pilot" \
+      org.opencontainers.image.source="https://github.com/ruishanio/Task-Pilot" \
+      org.opencontainers.image.version="${VERSION}" \
+      org.opencontainers.image.revision="${VCS_REF}" \
+      org.opencontainers.image.created="${BUILD_DATE}"
 
 ENV PARAMS=""
 ENV JAVA_OPTS=""

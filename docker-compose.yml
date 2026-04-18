@@ -26,9 +26,8 @@ services:
       - task-pilot-network
 
   task-pilot-admin:
-    # 4、调度中心本地 Build 设置，如果期望使用推动 DockerHub 的镜像，可以注释当前启用的 image、build 配置，并启用如下设置版本的 image 配置；
-    #image: ruishanio/task-pilot-admin:{version}
-    image: ruishanio/task-pilot-admin:local
+    # 4、默认沿用官方 Docker Hub 仓库名；本地联调时继续打 local 标签，避免误覆盖远端版本。
+    image: ${TASK_PILOT_ADMIN_IMAGE:-ruishan/task-pilot:local}
     build:
       context: .
       dockerfile: Dockerfile

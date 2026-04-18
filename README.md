@@ -13,41 +13,13 @@
 - 日志回溯：任务执行日志按任务 ID 聚合，支持 rolling 自动清理
 - 管理端本地认证：Token 登录，Cookie 会话，可通过 SPI 接入外部认证
 
-## 模块结构
-
-```
-task-pilot/
-├── task-pilot-tool/                      # 通用工具库：collection / cache / concurrency / http / json / emoji ...
-├── task-pilot-core/                      # 核心框架：调度协议、执行器、路由、日志
-├── task-pilot-spring-boot-starter/       # Spring Boot Starter，自动装配执行器
-├── task-pilot-admin/                     # 调度中心（Web 管理后台）
-├── task-pilot-executor-samples/
-│   ├── task-pilot-executor-sample-springboot/       # SpringBoot 执行器示例
-│   └── task-pilot-executor-sample-springboot-ai/    # Spring AI / Dify 集成示例
-├── task-pilot-frontend/                  # 前端工程（Vite + Vue）
-├── doc/db/tables_task_pilot.sql          # PostgreSQL 建表脚本
-└── docker-compose.yml                    # 一键启动：Postgres + Admin + 示例执行器
-```
-
-## 技术栈
-
-| 领域       | 选型                                           |
-| ---------- | ---------------------------------------------- |
-| 运行时     | JDK 21+ · Kotlin 2.3.20                        |
-| 框架       | Spring Boot 4.0.1 · Spring 7.0                 |
-| 通信       | Netty 4.2                                      |
-| 存储       | PostgreSQL 16 · MyBatis · HikariCP             |
-| 脚本       | Groovy 5 · Shell · Python · PHP                |
-| 可选       | Spring AI (Ollama) · Dify Java Client          |
-| 构建       | Maven 3.9+                                     |
-
 ## 快速开始
 
 ### 方式一：Docker Compose（推荐）
 
 ```bash
-# 1. 本地构建各模块（跳过测试与 release profile）
-mvn -P '!release' -DskipTests clean install
+# 1. 本地构建各模块（开发态默认不会触发 release profile）
+mvn -DskipTests clean install
 
 # 2. 启动 Postgres + 调度中心 + 示例执行器
 docker-compose up --build
@@ -57,16 +29,15 @@ docker-compose up --build
 - 示例执行器：`http://127.0.0.1:9999`
 - PostgreSQL：`127.0.0.1:5432`，库 `task_pilot`
 
-### 方式二：IDEA 本地开发
+### 方式二：本地开发
 
 1. 初始化数据库：
    ```bash
    psql -U postgres -c "CREATE DATABASE task_pilot;"
    psql -U postgres -d task_pilot -f doc/db/tables_task_pilot.sql
    ```
-2. IDEA 中用根 `pom.xml` 导入，Maven 面板 **Reload All Maven Projects**
-3. 启动 `task-pilot-admin` 的 `TaskPilotAdminApplication`
-4. 启动 `task-pilot-executor-sample-springboot` 的 `TaskPilotExecutorApplication`
+2. 启动 `task-pilot-admin` 的 `TaskPilotAdminApplication`
+3. 启动 `task-pilot-executor-sample-springboot` 的 `TaskPilotExecutorApplication`
 
 ## 编写一个任务（Bean 模式）
 
@@ -124,18 +95,6 @@ ruishan:
     auto-register:
       enabled: true
 ```
-
-## 前端
-
-`task-pilot-frontend` 提供 Vite + Vue 的新版管理前端：
-
-```bash
-cd task-pilot-frontend
-npm install
-npm run dev
-```
-
-调度中心已放通本地 5173 端口跨域（`ruishan.task-pilot.frontend.allowed-origin-patterns`）。
 
 ## License
 

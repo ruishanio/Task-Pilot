@@ -128,4 +128,32 @@
 		</plugins>
 	</build>
 
+	<profiles>
+		<profile>
+			<id>release</id>
+			<build>
+				<plugins>
+					<!-- 纯 Kotlin 模块通过 Dokka 生成 javadoc.jar，避免 Maven Javadoc 对空 Java 源码目录直接跳过。 -->
+					<plugin>
+						<groupId>org.jetbrains.dokka</groupId>
+						<artifactId>dokka-maven-plugin</artifactId>
+						<version>${dokka-maven-plugin.version}</version>
+						<executions>
+							<execution>
+								<phase>package</phase>
+								<goals>
+									<goal>javadocJar</goal>
+								</goals>
+								<configuration>
+									<jdkVersion>${java.version}</jdkVersion>
+									<failOnWarning>false</failOnWarning>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
 </project>

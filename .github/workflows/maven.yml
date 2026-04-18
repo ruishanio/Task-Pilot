@@ -1,4 +1,4 @@
-name: Java CI
+name: Maven CI
 
 on:
   push:
@@ -13,11 +13,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - name: Set up JDK 17
+      - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
-          java-version: '17'
+          java-version: '21'
           distribution: 'temurin'
           cache: maven
       - name: Build with Maven
-        run: mvn -B package --file pom.xml
+        # 日常 CI 明确关闭 release profile，避免误触发 GPG/Central 发布链路。
+        run: mvn -B -ntp -P '!release' clean verify --file pom.xml

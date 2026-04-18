@@ -9,6 +9,13 @@
 	<name>${project.artifactId}</name>
 	<description>A distributed task scheduling framework.</description>
 	<url>https://github.com/ruishanio/Task-Pilot</url>
+	<licenses>
+		<license>
+			<name>GNU General Public License v3.0</name>
+			<url>https://www.gnu.org/licenses/gpl-3.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
 
 	<modules>
 		<module>task-pilot-tool</module>
@@ -34,6 +41,7 @@
 		<maven-javadoc-plugin.version>3.12.0</maven-javadoc-plugin.version>
 		<maven-gpg-plugin.version>3.2.8</maven-gpg-plugin.version>
 		<central-publishing-maven-plugin.version>0.9.0</central-publishing-maven-plugin.version>
+		<dokka-maven-plugin.version>2.2.0</dokka-maven-plugin.version>
 		<!-- base -->
 		<slf4j-api.version>2.0.17</slf4j-api.version>
 		<junit-jupiter.version>6.0.1</junit-jupiter.version>
@@ -56,7 +64,7 @@
 		<groovy.version>5.0.3</groovy.version>
 
 		<!-- task-pilot-tool -->
-		<task-pilot-tool.version>1.0.0</task-pilot-tool.version>
+		<task-pilot-tool.version>${project.version}</task-pilot-tool.version>
 		<!-- gson -->
 		<gson.version>2.13.2</gson.version>
 
@@ -170,13 +178,13 @@
 			<dependency>
 				<groupId>com.ruishanio</groupId>
 				<artifactId>task-pilot-core</artifactId>
-				<version>${project.parent.version}</version>
+				<version>${project.version}</version>
 			</dependency>
 			<!-- task-pilot-spring-boot-starter -->
 			<dependency>
 				<groupId>com.ruishanio</groupId>
 				<artifactId>task-pilot-spring-boot-starter</artifactId>
-				<version>${project.parent.version}</version>
+				<version>${project.version}</version>
 			</dependency>
 
 			<!-- spring-ai -->
@@ -196,19 +204,33 @@
 	</dependencyManagement>
 
 	<scm>
-		<tag>master</tag>
+		<tag>HEAD</tag>
 		<url>https://github.com/ruishanio/Task-Pilot.git</url>
 		<connection>scm:git:https://github.com/ruishanio/Task-Pilot.git</connection>
-		<developerConnection>scm:git:git@github.com:ruishanio/Task-Pilot.git</developerConnection>
+		<developerConnection>scm:git:ssh://git@github.com/ruishanio/Task-Pilot.git</developerConnection>
 	</scm>
+	<organization>
+		<name>Ruishan IO</name>
+		<url>https://github.com/ruishanio</url>
+	</organization>
 	<developers>
 		<developer>
 			<id>ruishanio</id>
 			<name>ruishanio</name>
 			<email>harryrong@ruishanio.com</email>
+			<organization>Ruishan IO</organization>
+			<organizationUrl>https://github.com/ruishanio</organizationUrl>
 			<url>https://github.com/ruishanio</url>
 		</developer>
 	</developers>
+	<issueManagement>
+		<system>GitHub Issues</system>
+		<url>https://github.com/ruishanio/Task-Pilot/issues</url>
+	</issueManagement>
+	<ciManagement>
+		<system>GitHub Actions</system>
+		<url>https://github.com/ruishanio/Task-Pilot/actions</url>
+	</ciManagement>
 
 	<build>
 		<!-- 全仓已切到纯 Kotlin 目录布局，显式覆盖 Maven 默认的 src/main|test/java。 -->
@@ -251,9 +273,6 @@
 
 		<profile>
 			<id>release</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
 			<modules>
 				<!-- release 构建中显式纳入本地 task-pilot-tool，避免回退到远程依赖 -->
 				<module>task-pilot-tool</module>
@@ -286,23 +305,6 @@
 							</execution>
 						</executions>
 					</plugin>
-					<!-- Javadoc -->
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-javadoc-plugin</artifactId>
-						<version>${maven-javadoc-plugin.version}</version>
-						<executions>
-							<execution>
-								<phase>package</phase>
-								<goals>
-									<goal>jar</goal>
-								</goals>
-								<configuration>
-									<doclint>none</doclint>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
 					<!-- GPG -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
@@ -328,6 +330,9 @@
 						<extensions>true</extensions>
 						<configuration>
 							<publishingServerId>central</publishingServerId>
+							<!-- Central Portal 在 CI 中建议自动发布并等待到 published，避免上传后还要手工点发布。 -->
+							<autoPublish>true</autoPublish>
+							<waitUntil>published</waitUntil>
 							<excludeArtifacts>
 								<artifact>task-pilot-admin</artifact>
 								<artifact>task-pilot-executor-samples</artifact>

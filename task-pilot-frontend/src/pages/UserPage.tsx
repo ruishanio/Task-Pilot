@@ -17,13 +17,18 @@ import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { frontendApi, userApi } from '../services/api';
 import { getErrorMessage, joinPermissions, parsePagePayload, parsePermissions } from '../utils/format';
 
+interface UserMeta {
+  groups: Array<{ id: number | string; title: string; appname: string }>;
+  roleOptions: Array<{ label: string; value: string }>;
+}
+
 function UserPage() {
   const [filters, setFilters] = useState({ role: '-1', username: '' });
   const [pagination, setPagination] = useState({ current: 1, pageSize: 10 });
   const [loading, setLoading] = useState(false);
   const [rows, setRows] = useState([]);
   const [total, setTotal] = useState(0);
-  const [meta, setMeta] = useState({ groups: [], roleOptions: [] });
+  const [meta, setMeta] = useState<UserMeta>({ groups: [], roleOptions: [] });
   const [form] = Form.useForm();
   const [modalOpen, setModalOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -40,7 +45,7 @@ function UserPage() {
   async function loadMeta() {
     try {
       const response = await frontendApi.userMeta();
-      setMeta(response.data || { groups: [], roleOptions: [] });
+      setMeta((response.data as UserMeta) || { groups: [], roleOptions: [] });
     } catch (error) {
       message.error(getErrorMessage(error, '加载用户元数据失败'));
     }

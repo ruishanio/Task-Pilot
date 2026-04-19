@@ -1,6 +1,11 @@
+@page-background: #f5f7fa;
+@page-background-soft: #eef3f8;
+@text-primary: #0f172a;
+@brand-primary: #1677ff;
+
 :root {
   color-scheme: light;
-  background: #f5f7fa;
+  background: @page-background;
 }
 
 * {
@@ -16,8 +21,8 @@ body,
 
 body {
   font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
-  color: #0f172a;
-  background: #f5f7fa;
+  color: @text-primary;
+  background: @page-background;
 }
 
 a {
@@ -38,7 +43,7 @@ a {
   justify-content: center;
   overflow: hidden;
   padding: 24px 16px;
-  background: linear-gradient(180deg, #f5f7fa 0%, #eef3f8 100%);
+  background: linear-gradient(180deg, @page-background 0%, @page-background-soft 100%);
 }
 
 .auth-background {
@@ -54,7 +59,7 @@ a {
   top: -220px;
   left: -160px;
   background:
-    radial-gradient(circle at 55% 55%, rgba(22, 119, 255, 0.18), rgba(22, 119, 255, 0) 62%),
+    radial-gradient(circle at 55% 55%, fade(@brand-primary, 18%), rgba(22, 119, 255, 0) 62%),
     radial-gradient(circle at 35% 35%, rgba(114, 46, 209, 0.12), rgba(114, 46, 209, 0) 58%);
 }
 
@@ -63,7 +68,7 @@ a {
   bottom: -240px;
   background:
     radial-gradient(circle at 40% 40%, rgba(19, 194, 194, 0.16), rgba(19, 194, 194, 0) 58%),
-    radial-gradient(circle at 60% 60%, rgba(22, 119, 255, 0.14), rgba(22, 119, 255, 0) 60%);
+    radial-gradient(circle at 60% 60%, fade(@brand-primary, 14%), rgba(22, 119, 255, 0) 60%);
 }
 
 .auth-main {

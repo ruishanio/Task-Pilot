@@ -48,17 +48,64 @@ echo "task-pilot: hello shell"`,
   GLUE_PHP: `<?php echo "task-pilot: hello php";`,
 };
 
+interface OptionItem {
+  label: string;
+  value: string | number;
+}
+
+interface JobGroupItem {
+  id: number;
+  title: string;
+}
+
+interface JobInfoMeta {
+  groups: JobGroupItem[];
+  selectedJobGroup: number;
+  triggerStatusOptions: OptionItem[];
+  scheduleTypeOptions: OptionItem[];
+  glueTypeOptions: OptionItem[];
+  executorRouteStrategyOptions: OptionItem[];
+  executorBlockStrategyOptions: OptionItem[];
+  misfireStrategyOptions: OptionItem[];
+}
+
+interface JobInfoRow {
+  id: number;
+  jobGroup: number;
+  jobDesc: string;
+  author?: string;
+  alarmEmail?: string;
+  scheduleType?: string;
+  scheduleConf?: string;
+  glueType?: string;
+  executorHandler?: string;
+  executorParam?: string;
+  executorRouteStrategy?: string;
+  childJobId?: string;
+  misfireStrategy?: string;
+  executorBlockStrategy?: string;
+  executorTimeout?: number;
+  executorFailRetryCount?: number;
+  glueRemark?: string;
+  glueSource?: string;
+  triggerStatus?: number;
+  triggerNextTime?: number | string;
+  [key: string]: any;
+}
+
+const defaultJobInfoMeta: JobInfoMeta = {
+  groups: [],
+  selectedJobGroup: -1,
+  triggerStatusOptions: [],
+  scheduleTypeOptions: [],
+  glueTypeOptions: [],
+  executorRouteStrategyOptions: [],
+  executorBlockStrategyOptions: [],
+  misfireStrategyOptions: [],
+};
+
 function JobInfoPage() {
-  const [meta, setMeta] = useState({
-    groups: [],
-    selectedJobGroup: -1,
-    triggerStatusOptions: [],
-    scheduleTypeOptions: [],
-    glueTypeOptions: [],
-    executorRouteStrategyOptions: [],
-    executorBlockStrategyOptions: [],
-    misfireStrategyOptions: [],
-  });
+  const [meta, setMeta] = useState<JobInfoMeta>(defaultJobInfoMeta);
   const [filters, setFilters] = useState({
     jobGroup: -1,
     triggerStatus: '-1',
@@ -68,17 +115,17 @@ function JobInfoPage() {
   });
   const [pagination, setPagination] = useState({ current: 1, pageSize: 10 });
   const [loading, setLoading] = useState(false);
-  const [rows, setRows] = useState([]);
+  const [rows, setRows] = useState<JobInfoRow[]>([]);
   const [total, setTotal] = useState(0);
   const [form] = Form.useForm();
   const [modalOpen, setModalOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [editingRecord, setEditingRecord] = useState(null);
-  const [triggerModal, setTriggerModal] = useState({ open: false, record: null });
+  const [editingRecord, setEditingRecord] = useState<JobInfoRow | null>(null);
+  const [triggerModal, setTriggerModal] = useState<{ open: boolean; record: JobInfoRow | null }>({ open: false, record: null });
   const [triggerSubmitting, setTriggerSubmitting] = useState(false);
   const [triggerForm] = Form.useForm();
-  const [nextTimesModal, setNextTimesModal] = useState({ open: false, list: [], title: '' });
-  const [registryModal, setRegistryModal] = useState({ open: false, title: '', list: [] });
+  const [nextTimesModal, setNextTimesModal] = useState<{ open: boolean; list: string[]; title: string }>({ open: false, list: [], title: '' });
+  const [registryModal, setRegistryModal] = useState<{ open: boolean; title: string; list: string[] }>({ open: false, title: '', list: [] });
   const metaLoadedRef = useRef(false);
 
   const scheduleType = Form.useWatch('scheduleType', form);
@@ -108,7 +155,7 @@ function JobInfoPage() {
   async function loadMeta() {
     try {
       const response = await frontendApi.jobInfoMeta();
-      const payload = response.data || meta;
+      const payload = (response.data as JobInfoMeta) || meta;
       metaLoadedRef.current = true;
       setMeta(payload);
       setFilters((previous) => ({
@@ -140,7 +187,7 @@ function JobInfoPage() {
         author: customFilters.author,
       });
       const page = parsePagePayload(response);
-      setRows(page.list);
+      setRows(page.list as JobInfoRow[]);
       setTotal(page.total);
     } catch (error) {
       message.error(getErrorMessage(error, '加载任务列表失败'));
@@ -321,7 +368,7 @@ function JobInfoPage() {
       });
       setNextTimesModal({
         open: true,
-        list: response.data || [],
+        list: (response.data as string[]) || [],
         title: `${record.jobDesc} 的下次触发时间`,
       });
     } catch (error) {
@@ -335,7 +382,7 @@ function JobInfoPage() {
       setRegistryModal({
         open: true,
         title: `${record.jobDesc} 的注册节点`,
-        list: response.data?.registryList || [],
+        list: ((response.data as { registryList?: string[] } | undefined)?.registryList) || [],
       });
     } catch (error) {
       message.error(getErrorMessage(error, '加载注册节点失败'));
@@ -420,7 +467,7 @@ function JobInfoPage() {
       {
         title: '操作',
         key: 'action',
-        fixed: 'right',
+        fixed: 'right' as const,
         width: 220,
         render: (_, record) => (
           <Space wrap>

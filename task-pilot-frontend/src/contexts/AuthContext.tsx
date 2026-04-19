@@ -1,21 +1,46 @@
-import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { authApi, frontendApi } from '../services/api';
 import { registerAuthFailureHandler } from '../services/http';
+import type { AuthUser, BootstrapPayload, MenuItem } from '../types/domain';
 
-const AuthContext = createContext(null);
+interface BootstrapOptions {
+  silent?: boolean;
+}
 
-export function AuthProvider({ children }) {
-  const [state, setState] = useState({
-    initialized: false,
-    loading: true,
-    appName: 'Task Pilot',
-    appNameFull: 'Task Pilot',
-    version: '',
-    user: null,
-    menus: [],
-  });
+interface AuthState {
+  initialized: boolean;
+  loading: boolean;
+  appName: string;
+  appNameFull: string;
+  user: AuthUser | null;
+  menus: MenuItem[];
+}
 
-  async function refreshBootstrap(options = {}) {
+interface AuthContextValue extends AuthState {
+  refreshBootstrap: (options?: BootstrapOptions) => Promise<BootstrapPayload | null>;
+  clearAuthState: () => void;
+  logout: () => Promise<void>;
+}
+
+interface AuthProviderProps {
+  children: ReactNode;
+}
+
+const defaultAuthState: AuthState = {
+  initialized: false,
+  loading: true,
+  appName: 'Task Pilot',
+  appNameFull: 'Task Pilot',
+  user: null,
+  menus: [],
+};
+
+const AuthContext = createContext<AuthContextValue | null>(null);
+
+export function AuthProvider({ children }: AuthProviderProps) {
+  const [state, setState] = useState<AuthState>(defaultAuthState);
+
+  async function refreshBootstrap(options: BootstrapOptions = {}): Promise<BootstrapPayload | null> {
     const silent = options.silent ?? false;
     setState((previous) => ({
       ...previous,
@@ -31,12 +56,11 @@ export function AuthProvider({ children }) {
         loading: false,
         appName: payload.appName || 'Task Pilot',
         appNameFull: payload.appNameFull || payload.appName || 'Task Pilot',
-        version: payload.version || '',
         user: payload.user || null,
         menus: payload.menus || [],
       });
       return payload;
-    } catch (error) {
+    } catch {
       setState((previous) => ({
         ...previous,
         initialized: true,
@@ -48,7 +72,7 @@ export function AuthProvider({ children }) {
     }
   }
 
-  function clearAuthState() {
+  function clearAuthState(): void {
     setState((previous) => ({
       ...previous,
       initialized: true,
@@ -58,7 +82,7 @@ export function AuthProvider({ children }) {
     }));
   }
 
-  async function logout() {
+  async function logout(): Promise<void> {
     try {
       await authApi.logout();
     } finally {
@@ -90,7 +114,7 @@ export function AuthProvider({ children }) {
   return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;
 }
 
-export function useAuth() {
+export function useAuth(): AuthContextValue {
   const context = useContext(AuthContext);
   if (!context) {
     throw new Error('useAuth 必须在 AuthProvider 内部使用');

@@ -1,4 +1,4 @@
-import { defineConfig, loadEnv } from 'vite';
+import { defineConfig, loadEnv, type ProxyOptions } from 'vite';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig(({ mode }) => {
@@ -7,7 +7,7 @@ export default defineConfig(({ mode }) => {
 
   // 开发环境通过本地代理转发接口时，主动移除浏览器 Origin，
   // 避免后端把“代理请求”误判成跨域直连请求。
-  function createProxyConfig() {
+  function createProxyConfig(): ProxyOptions {
     return {
       target: proxyTarget,
       changeOrigin: true,
@@ -27,7 +27,7 @@ export default defineConfig(({ mode }) => {
       rollupOptions: {
         output: {
           // 图表库仅在仪表盘使用，单独拆包可显著降低非仪表盘页面首屏体积。
-          manualChunks(id) {
+          manualChunks(id: string) {
             if (!id.includes('node_modules')) {
               return undefined;
             }

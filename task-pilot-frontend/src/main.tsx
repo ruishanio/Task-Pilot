@@ -7,11 +7,17 @@ import dayjs from 'dayjs';
 import 'dayjs/locale/zh-cn';
 import App from './App';
 import { AuthProvider } from './contexts/AuthContext';
-import './styles/index.css';
+import './styles/index.less';
 
 dayjs.locale('zh-cn');
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+const rootElement = document.getElementById('root');
+
+if (!rootElement) {
+  throw new Error('未找到根节点 #root');
+}
+
+ReactDOM.createRoot(rootElement).render(
   <React.StrictMode>
     <ConfigProvider
       locale={zhCN}

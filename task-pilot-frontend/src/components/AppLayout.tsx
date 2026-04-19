@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import type { MenuProps } from 'antd';
 import {
   AppstoreOutlined,
   ClockCircleOutlined,
@@ -26,6 +27,7 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { authApi } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 import { getErrorMessage } from '../utils/format';
+import type { MenuItem } from '../types/domain';
 
 const { Header, Content, Footer, Sider } = Layout;
 const iconMap = {
@@ -36,19 +38,25 @@ const iconMap = {
   'fa-users': <TeamOutlined />,
 };
 
+interface PasswordFormValues {
+  oldPassword: string;
+  password: string;
+  confirmPassword: string;
+}
+
 function AppLayout() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { appName, version, user, menus, logout, refreshBootstrap } = useAuth();
+  const { appName, user, menus, logout, refreshBootstrap } = useAuth();
 
   const [passwordModalOpen, setPasswordModalOpen] = useState(false);
   const [passwordSubmitting, setPasswordSubmitting] = useState(false);
-  const [passwordForm] = Form.useForm();
+  const [passwordForm] = Form.useForm<PasswordFormValues>();
 
   /**
    * 兼容 `/jobcode`、`/joblog/detail` 这类历史页面别名，确保侧边栏高亮仍落在主功能页上。
    */
-  function normalizeMenuPath(pathname) {
+  function normalizeMenuPath(pathname: string): string {
     if (pathname.startsWith('/jobcode')) {
       return '/jobinfo';
     }
@@ -61,9 +69,9 @@ function AppLayout() {
   // 统一把后端菜单结构转换成 Ant Design 可消费的数据。
   const menuItems = useMemo(
     () =>
-      menus.map((item) => ({
+      menus.map((item: MenuItem) => ({
         key: item.url,
-        icon: iconMap[item.icon] || <AppstoreOutlined />,
+        icon: iconMap[item.icon as keyof typeof iconMap] || <AppstoreOutlined />,
         label: item.url === '/dashboard' ? '工作台' : item.name,
       })),
     [menus],
@@ -72,7 +80,7 @@ function AppLayout() {
   const currentPath = normalizeMenuPath(location.pathname);
   const currentMenu =
     menuItems.find((item) => currentPath.startsWith(item.key)) || menuItems[0];
-  const footerText = ['TASK PILOT', version].filter(Boolean).join(' ');
+  const footerText = appName || 'TASK PILOT';
 
   async function handleLogout() {
     await logout();
@@ -91,7 +99,7 @@ function AppLayout() {
       passwordForm.resetFields();
       setPasswordModalOpen(false);
     } catch (error) {
-      if (error?.errorFields) {
+      if ((error as { errorFields?: unknown })?.errorFields) {
         return;
       }
       message.error(getErrorMessage(error, '密码更新失败'));
@@ -100,7 +108,7 @@ function AppLayout() {
     }
   }
 
-  const dropdownItems = [
+  const dropdownItems: MenuProps['items'] = [
     {
       key: 'refresh',
       icon: <ReloadOutlined />,
@@ -140,7 +148,7 @@ function AppLayout() {
           mode="inline"
           selectedKeys={[currentMenu?.key || '/dashboard']}
           items={menuItems}
-          onClick={({ key }) => navigate(key)}
+          onClick={({ key }) => navigate(String(key))}
         />
       </Sider>
       <Layout>

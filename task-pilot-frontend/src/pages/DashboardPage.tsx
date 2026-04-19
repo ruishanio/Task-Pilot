@@ -2,20 +2,43 @@ import { useEffect, useMemo, useState } from 'react';
 import { Card, Col, DatePicker, Empty, Row, Space, Spin, Statistic, Typography, message } from 'antd';
 import { CloudServerOutlined, PlayCircleOutlined, ScheduleOutlined } from '@ant-design/icons';
 import ReactECharts from 'echarts-for-react';
-import dayjs from 'dayjs';
+import dayjs, { type Dayjs } from 'dayjs';
 import { frontendApi } from '../services/api';
 import { getErrorMessage } from '../utils/format';
 
+interface DashboardSummary {
+  jobInfoCount: number;
+  jobLogCount: number;
+  executorCount: number;
+}
+
+interface DashboardChart {
+  triggerDayList?: string[];
+  triggerDayCountSucList?: number[];
+  triggerDayCountFailList?: number[];
+  triggerDayCountRunningList?: number[];
+  triggerCountSucTotal?: number;
+  triggerCountFailTotal?: number;
+  triggerCountRunningTotal?: number;
+}
+
+type DateRange = [Dayjs, Dayjs];
+
+const defaultSummary: DashboardSummary = {
+  jobInfoCount: 0,
+  jobLogCount: 0,
+  executorCount: 0,
+};
+
 function DashboardPage() {
-  const [summary, setSummary] = useState({
-    jobInfoCount: 0,
-    jobLogCount: 0,
-    executorCount: 0,
-  });
-  const [chart, setChart] = useState(null);
+  const [summary, setSummary] = useState<DashboardSummary>(defaultSummary);
+  const [chart, setChart] = useState<DashboardChart | null>(null);
   const [loading, setLoading] = useState(true);
   const [chartLoading, setChartLoading] = useState(true);
-  const [range, setRange] = useState([dayjs().subtract(6, 'day').startOf('day'), dayjs().endOf('day')]);
+  const [range, setRange] = useState<DateRange>([
+    dayjs().subtract(6, 'day').startOf('day'),
+    dayjs().endOf('day'),
+  ]);
 
   useEffect(() => {
     loadSummary();
@@ -29,7 +52,7 @@ function DashboardPage() {
     try {
       setLoading(true);
       const response = await frontendApi.dashboard();
-      setSummary(response.data || {});
+      setSummary({ ...defaultSummary, ...(response.data as Partial<DashboardSummary>) });
     } catch (error) {
       message.error(getErrorMessage(error, '加载仪表盘统计失败'));
     } finally {
@@ -37,14 +60,14 @@ function DashboardPage() {
     }
   }
 
-  async function loadChart(dateRange) {
+  async function loadChart(dateRange: DateRange) {
     try {
       setChartLoading(true);
       const response = await frontendApi.chartInfo({
         startDate: dateRange[0].format('YYYY-MM-DD HH:mm:ss'),
         endDate: dateRange[1].format('YYYY-MM-DD HH:mm:ss'),
       });
-      setChart(response.data || null);
+      setChart((response.data as DashboardChart | null) || null);
     } catch (error) {
       message.error(getErrorMessage(error, '加载图表数据失败'));
     } finally {
@@ -171,7 +194,11 @@ function DashboardPage() {
               allowClear={false}
               showTime
               value={range}
-              onChange={(value) => value && setRange(value)}
+              onChange={(value) => {
+                if (value?.[0] && value?.[1]) {
+                  setRange([value[0], value[1]]);
+                }
+              }}
             />
           </Space>
 

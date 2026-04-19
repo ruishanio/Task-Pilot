@@ -1,8 +1,13 @@
+import type { ReactNode } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { Spin } from 'antd';
 import { useAuth } from '../contexts/AuthContext';
 
-function ProtectedRoute({ children }) {
+interface ProtectedRouteProps {
+  children: ReactNode;
+}
+
+function ProtectedRoute({ children }: ProtectedRouteProps) {
   const location = useLocation();
   const { initialized, loading, user } = useAuth();
 

@@ -14,26 +14,65 @@ import {
   message,
 } from 'antd';
 import { EyeOutlined, StopOutlined } from '@ant-design/icons';
-import dayjs from 'dayjs';
+import dayjs, { type Dayjs } from 'dayjs';
 import { useSearchParams } from 'react-router-dom';
 import { frontendApi, jobLogApi } from '../services/api';
 import { formatDateTime, getErrorMessage, parsePagePayload } from '../utils/format';
 
+interface JobLogMeta {
+  groups: Array<{ id: number; title: string }>;
+  jobs: Array<{ id: number; jobDesc: string }>;
+  selectedJobGroup: number;
+  selectedJobId: number;
+  logStatusOptions: Array<{ label: string; value: string }>;
+  clearLogOptions: Array<{ label: string; value: string }>;
+}
+
+interface JobLogRow {
+  id: number;
+  jobId: number;
+  triggerTime?: string | number;
+  triggerCode?: number;
+  handleCode?: number;
+  executorAddress?: string;
+  executorHandler?: string;
+  title?: string;
+  jobDesc?: string;
+  [key: string]: any;
+}
+
+interface LiveLogPayload {
+  fromLineNum: number;
+  toLineNum: number;
+  logContent?: string;
+  end?: boolean;
+}
+
+interface LiveModalState {
+  open: boolean;
+  row: JobLogRow | null;
+  html: string;
+}
+
+type DateRange = [Dayjs, Dayjs];
+
+const defaultJobLogMeta: JobLogMeta = {
+  groups: [],
+  jobs: [],
+  selectedJobGroup: 0,
+  selectedJobId: 0,
+  logStatusOptions: [],
+  clearLogOptions: [],
+};
+
 function JobLogPage() {
   const [searchParams] = useSearchParams();
-  const [meta, setMeta] = useState({
-    groups: [],
-    jobs: [],
-    selectedJobGroup: 0,
-    selectedJobId: 0,
-    logStatusOptions: [],
-    clearLogOptions: [],
-  });
+  const [meta, setMeta] = useState<JobLogMeta>(defaultJobLogMeta);
   const [filters, setFilters] = useState({
     jobGroup: 0,
     jobId: 0,
     logStatus: '-1',
-    filterTime: [dayjs().subtract(7, 'day').startOf('day'), dayjs().endOf('day')],
+    filterTime: [dayjs().subtract(7, 'day').startOf('day'), dayjs().endOf('day')] as DateRange,
   });
   const [pagination, setPagination] = useState({ current: 1, pageSize: 10 });
   const [loading, setLoading] = useState(false);
@@ -42,9 +81,9 @@ function JobLogPage() {
   const [clearModalOpen, setClearModalOpen] = useState(false);
   const [clearSubmitting, setClearSubmitting] = useState(false);
   const [clearForm] = Form.useForm();
-  const [liveModal, setLiveModal] = useState({ open: false, row: null, html: '' });
+  const [liveModal, setLiveModal] = useState<LiveModalState>({ open: false, row: null, html: '' });
   const lineNumberRef = useRef(1);
-  const timerRef = useRef(null);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const metaLoadedRef = useRef(false);
 
   useEffect(() => {
@@ -75,7 +114,7 @@ function JobLogPage() {
           logId: liveModal.row.id,
           fromLineNum: lineNumberRef.current,
         });
-        const payload = response.data;
+        const payload = response.data as LiveLogPayload | undefined;
         if (!payload) {
           return;
         }
@@ -137,14 +176,17 @@ function JobLogPage() {
   async function loadMeta(params = {}) {
     try {
       const response = await frontendApi.jobLogMeta(params);
-      const payload = response.data || meta;
+      const payload = (response.data as JobLogMeta) || meta;
       metaLoadedRef.current = true;
       setMeta(payload);
       const nextFilters = {
         jobGroup: payload.selectedJobGroup,
         jobId: payload.selectedJobId,
         logStatus: '-1',
-        filterTime: [dayjs().subtract(7, 'day').startOf('day'), dayjs().endOf('day')],
+        filterTime: [
+          dayjs().subtract(7, 'day').startOf('day'),
+          dayjs().endOf('day'),
+        ] as DateRange,
       };
       setFilters(nextFilters);
       const nextPagination = { current: 1, pageSize: pagination.pageSize };
@@ -317,7 +359,11 @@ function JobLogPage() {
             allowClear={false}
             showTime
             value={filters.filterTime}
-            onChange={(value) => value && setFilters((previous) => ({ ...previous, filterTime: value }))}
+            onChange={(value) => {
+              if (value?.[0] && value?.[1]) {
+                setFilters((previous) => ({ ...previous, filterTime: [value[0], value[1]] }));
+              }
+            }}
           />
           <Button
             type="primary"
@@ -335,7 +381,10 @@ function JobLogPage() {
                 jobGroup: meta.selectedJobGroup,
                 jobId: meta.selectedJobId,
                 logStatus: '-1',
-                filterTime: [dayjs().subtract(7, 'day').startOf('day'), dayjs().endOf('day')],
+                filterTime: [
+                  dayjs().subtract(7, 'day').startOf('day'),
+                  dayjs().endOf('day'),
+                ] as DateRange,
               };
               const nextPagination = { ...pagination, current: 1 };
               setFilters(nextFilters);

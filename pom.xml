@@ -52,8 +52,8 @@
 		<jakarta.servlet-api.version>6.1.0</jakarta.servlet-api.version>
 
 		<!-- spring -->
-		<spring-boot.version>4.0.1</spring-boot.version>
-		<spring.version>7.0.2</spring.version>
+		<spring-boot.version>4.0.5</spring-boot.version>
+		<spring.version>7.0.6</spring.version>
 		<!-- kotlin -->
 		<kotlin.version>2.3.20</kotlin.version>
 		<!-- mybatis & db -->

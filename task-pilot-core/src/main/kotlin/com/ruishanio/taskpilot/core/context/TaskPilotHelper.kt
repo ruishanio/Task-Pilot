@@ -19,12 +19,12 @@ object TaskPilotHelper {
     /**
      * 获取当前任务 ID。
      */
-    fun getJobId(): Long = TaskPilotContext.getTaskPilotContext()?.jobId ?: -1
+    fun getTaskId(): Long = TaskPilotContext.getTaskPilotContext()?.taskId ?: -1
 
     /**
      * 获取当前任务参数。
      */
-    fun getJobParam(): String? = TaskPilotContext.getTaskPilotContext()?.jobParam
+    fun getTaskParam(): String? = TaskPilotContext.getTaskPilotContext()?.taskParam
 
     /**
      * 获取当前日志 ID。

@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit
  *
  * 先通过 alarmStatus 做乐观锁占位，再执行重试和告警，避免多实例重复处理同一条失败日志。
  */
-class JobFailAlarmMonitorHelper {
+class TaskFailAlarmMonitorHelper {
     private lateinit var monitorThread: Thread
 
     @Volatile
@@ -20,7 +20,7 @@ class JobFailAlarmMonitorHelper {
         monitorThread = Thread {
             while (!toStop) {
                 try {
-                    val failLogIds = TaskPilotAdminBootstrap.instance.taskLogMapper.findFailJobLogIds(1000)
+                    val failLogIds = TaskPilotAdminBootstrap.instance.taskLogMapper.findFailTaskLogIds(1000)
                     if (failLogIds.isNotEmpty()) {
                         for (failLogId in failLogIds) {
                             val lockRet = TaskPilotAdminBootstrap.instance.taskLogMapper.updateAlarmStatus(failLogId, 0, -1)
@@ -32,7 +32,7 @@ class JobFailAlarmMonitorHelper {
                             val info = TaskPilotAdminBootstrap.instance.taskInfoMapper.loadById(log.taskId)
 
                             if (log.executorFailRetryCount > 0) {
-                                TaskPilotAdminBootstrap.instance.jobTriggerPoolHelper.trigger(
+                                TaskPilotAdminBootstrap.instance.taskTriggerPoolHelper.trigger(
                                     log.taskId,
                                     TriggerTypeEnum.RETRY,
                                     log.executorFailRetryCount - 1,
@@ -47,7 +47,7 @@ class JobFailAlarmMonitorHelper {
                             }
 
                             val newAlarmStatus = if (info != null) {
-                                val alarmResult = TaskPilotAdminBootstrap.instance.jobAlarmer.alarm(info, log)
+                                val alarmResult = TaskPilotAdminBootstrap.instance.taskAlarmer.alarm(info, log)
                                 if (alarmResult) 2 else 3
                             } else {
                                 1
@@ -72,7 +72,7 @@ class JobFailAlarmMonitorHelper {
             logger.info(">>>>>>>>>>> task-pilot 失败任务告警线程已停止。")
         }
         monitorThread.isDaemon = true
-        monitorThread.name = "task-pilot, admin JobFailMonitorHelper"
+        monitorThread.name = "task-pilot, admin TaskFailMonitorHelper"
         monitorThread.start()
     }
 
@@ -87,6 +87,6 @@ class JobFailAlarmMonitorHelper {
     }
 
     companion object {
-        private val logger = LoggerFactory.getLogger(JobFailAlarmMonitorHelper::class.java)
+        private val logger = LoggerFactory.getLogger(TaskFailAlarmMonitorHelper::class.java)
     }
 }

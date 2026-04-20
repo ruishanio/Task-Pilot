@@ -39,7 +39,7 @@ class DbLoginStore : LoginStore {
         }
 
         val roleList = if (user.role == 1) listOf(Consts.ADMIN_ROLE) else null
-        val extraInfo = mapOf("jobGroups" to (user.permission ?: ""))
+        val extraInfo = mapOf("executorIds" to (user.permission ?: ""))
         val loginInfo = LoginInfo(
             userId = normalizedUserId,
             userName = user.username,

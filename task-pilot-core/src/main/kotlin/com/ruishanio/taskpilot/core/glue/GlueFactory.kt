@@ -1,7 +1,7 @@
 package com.ruishanio.taskpilot.core.glue
 
 import com.ruishanio.taskpilot.core.glue.impl.SpringGlueFactory
-import com.ruishanio.taskpilot.core.handler.IJobHandler
+import com.ruishanio.taskpilot.core.handler.ITaskHandler
 import groovy.lang.GroovyClassLoader
 import java.math.BigInteger
 import java.security.MessageDigest
@@ -24,18 +24,18 @@ open class GlueFactory {
      * 基于源码创建新的任务处理器实例。
      */
     @Throws(Exception::class)
-    open fun loadNewInstance(codeSource: String?): IJobHandler {
+    open fun loadNewInstance(codeSource: String?): ITaskHandler {
         if (!codeSource.isNullOrBlank()) {
             val clazz = getCodeSourceClass(codeSource)
             if (clazz != null) {
                 val instance = clazz.getDeclaredConstructor().newInstance()
-                if (instance is IJobHandler) {
+                if (instance is ITaskHandler) {
                     injectService(instance)
                     return instance
                 }
                 throw IllegalArgumentException(
                     ">>>>>>>>>>> task-pilot-glue, loadNewInstance error, " +
-                        "cannot convert from instance[${instance.javaClass}] to IJobHandler"
+                        "cannot convert from instance[${instance.javaClass}] to ITaskHandler"
                 )
             }
         }

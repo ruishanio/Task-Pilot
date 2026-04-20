@@ -12,11 +12,11 @@ import com.ruishanio.taskpilot.admin.model.TaskInfo
 import com.ruishanio.taskpilot.admin.model.TaskReport
 import com.ruishanio.taskpilot.admin.scheduler.config.TaskPilotAdminBootstrap
 import com.ruishanio.taskpilot.admin.scheduler.cron.CronExpression
-import com.ruishanio.taskpilot.admin.scheduler.thread.JobScheduleHelper
+import com.ruishanio.taskpilot.admin.scheduler.thread.TaskScheduleHelper
 import com.ruishanio.taskpilot.admin.scheduler.trigger.TriggerTypeEnum
 import com.ruishanio.taskpilot.admin.scheduler.type.toScheduleType
 import com.ruishanio.taskpilot.admin.service.TaskPilotService
-import com.ruishanio.taskpilot.admin.util.JobGroupPermissionUtil
+import com.ruishanio.taskpilot.admin.util.ExecutorPermissionUtil
 import com.ruishanio.taskpilot.core.enums.ScheduleTypeEnum
 import com.ruishanio.taskpilot.core.glue.GlueTypeEnum
 import com.ruishanio.taskpilot.tool.core.DateTool
@@ -80,9 +80,9 @@ class TaskPilotServiceImpl : TaskPilotService {
             return baseValidResult
         }
 
-        val jobValidResult = validJob(taskInfo)
-        if (!jobValidResult.isSuccess) {
-            return jobValidResult
+        val taskValidResult = validTask(taskInfo)
+        if (!taskValidResult.isSuccess) {
+            return taskValidResult
         }
 
         val advancedValidResult = validAdvanced(taskInfo)
@@ -111,7 +111,7 @@ class TaskPilotServiceImpl : TaskPilotService {
         logger.info(
             ">>>>>>>>>>> task-pilot 操作日志：operator={}, type={}, content={}",
             loginInfo.userName,
-            "jobinfo-save",
+            "task-info-save",
             GsonTool.toJson(taskInfo)
         )
         return Response.ofSuccess(taskInfo.id.toString())
@@ -156,17 +156,17 @@ class TaskPilotServiceImpl : TaskPilotService {
         val executor = executorMapper.load(taskInfo.executorId)
             ?: return Response.ofFail("执行器非法")
 
-        val existsJobInfo = taskInfoMapper.loadById(taskInfo.id)
+        val existsTaskInfo = taskInfoMapper.loadById(taskInfo.id)
             ?: return Response.ofFail("任务ID不存在")
 
-        var nextTriggerTime = existsJobInfo.triggerNextTime
-        val scheduleDataNotChanged = taskInfo.scheduleType == existsJobInfo.scheduleType &&
-            taskInfo.scheduleConf == existsJobInfo.scheduleConf
-        if (existsJobInfo.triggerStatus == TriggerStatus.RUNNING.value && !scheduleDataNotChanged) {
+        var nextTriggerTime = existsTaskInfo.triggerNextTime
+        val scheduleDataNotChanged = taskInfo.scheduleType == existsTaskInfo.scheduleType &&
+            taskInfo.scheduleConf == existsTaskInfo.scheduleConf
+        if (existsTaskInfo.triggerStatus == TriggerStatus.RUNNING.value && !scheduleDataNotChanged) {
             try {
                 val nextValidTime = scheduleTypeEnum.toScheduleType().generateNextTriggerTime(
                     taskInfo,
-                    Date(System.currentTimeMillis() + JobScheduleHelper.PRE_READ_MS)
+                    Date(System.currentTimeMillis() + TaskScheduleHelper.PRE_READ_MS)
                 ) ?: return Response.ofFail("调度类型非法")
                 nextTriggerTime = nextValidTime.time
             } catch (e: Exception) {
@@ -175,37 +175,37 @@ class TaskPilotServiceImpl : TaskPilotService {
             }
         }
 
-        existsJobInfo.executorId = executor.id
-        existsJobInfo.taskName = taskInfo.taskName
-        existsJobInfo.taskDesc = taskInfo.taskDesc
-        existsJobInfo.author = taskInfo.author
-        existsJobInfo.alarmEmail = taskInfo.alarmEmail
-        existsJobInfo.scheduleType = taskInfo.scheduleType
-        existsJobInfo.scheduleConf = taskInfo.scheduleConf
-        existsJobInfo.misfireStrategy = taskInfo.misfireStrategy
-        existsJobInfo.executorRouteStrategy = taskInfo.executorRouteStrategy
-        existsJobInfo.executorHandler = taskInfo.executorHandler?.trim()
-        existsJobInfo.executorParam = taskInfo.executorParam
-        existsJobInfo.executorBlockStrategy = taskInfo.executorBlockStrategy
-        existsJobInfo.executorTimeout = taskInfo.executorTimeout
-        existsJobInfo.executorFailRetryCount = taskInfo.executorFailRetryCount
-        existsJobInfo.childTaskId = taskInfo.childTaskId
-        existsJobInfo.triggerNextTime = nextTriggerTime
-        existsJobInfo.updateTime = Date()
-        taskInfoMapper.update(existsJobInfo)
+        existsTaskInfo.executorId = executor.id
+        existsTaskInfo.taskName = taskInfo.taskName
+        existsTaskInfo.taskDesc = taskInfo.taskDesc
+        existsTaskInfo.author = taskInfo.author
+        existsTaskInfo.alarmEmail = taskInfo.alarmEmail
+        existsTaskInfo.scheduleType = taskInfo.scheduleType
+        existsTaskInfo.scheduleConf = taskInfo.scheduleConf
+        existsTaskInfo.misfireStrategy = taskInfo.misfireStrategy
+        existsTaskInfo.executorRouteStrategy = taskInfo.executorRouteStrategy
+        existsTaskInfo.executorHandler = taskInfo.executorHandler?.trim()
+        existsTaskInfo.executorParam = taskInfo.executorParam
+        existsTaskInfo.executorBlockStrategy = taskInfo.executorBlockStrategy
+        existsTaskInfo.executorTimeout = taskInfo.executorTimeout
+        existsTaskInfo.executorFailRetryCount = taskInfo.executorFailRetryCount
+        existsTaskInfo.childTaskId = taskInfo.childTaskId
+        existsTaskInfo.triggerNextTime = nextTriggerTime
+        existsTaskInfo.updateTime = Date()
+        taskInfoMapper.update(existsTaskInfo)
 
         logger.info(
             ">>>>>>>>>>> task-pilot 操作日志：operator={}, type={}, content={}",
             loginInfo.userName,
-            "jobinfo-update",
-            GsonTool.toJson(existsJobInfo)
+            "task-info-update",
+            GsonTool.toJson(existsTaskInfo)
         )
         return Response.ofSuccess()
     }
 
     override fun remove(id: Int, loginInfo: LoginInfo): Response<String> {
         val taskInfo = taskInfoMapper.loadById(id) ?: return Response.ofSuccess()
-        if (!JobGroupPermissionUtil.hasJobGroupPermission(loginInfo, taskInfo.executorId)) {
+        if (!ExecutorPermissionUtil.hasExecutorPermission(loginInfo, taskInfo.executorId)) {
             return Response.ofFail("权限拦截")
         }
 
@@ -216,7 +216,7 @@ class TaskPilotServiceImpl : TaskPilotService {
         logger.info(
             ">>>>>>>>>>> task-pilot 操作日志：operator={}, type={}, content={}",
             loginInfo.userName,
-            "jobinfo-remove",
+            "task-info-remove",
             id
         )
         return Response.ofSuccess()
@@ -225,7 +225,7 @@ class TaskPilotServiceImpl : TaskPilotService {
     override fun start(id: Int, loginInfo: LoginInfo): Response<String> {
         val taskInfo = taskInfoMapper.loadById(id)
             ?: return Response.ofFail("任务ID非法")
-        if (!JobGroupPermissionUtil.hasJobGroupPermission(loginInfo, taskInfo.executorId)) {
+        if (!ExecutorPermissionUtil.hasExecutorPermission(loginInfo, taskInfo.executorId)) {
             return Response.ofFail("权限拦截")
         }
 
@@ -237,11 +237,11 @@ class TaskPilotServiceImpl : TaskPilotService {
         val nextTriggerTime = try {
             val nextValidTime = scheduleTypeEnum.toScheduleType().generateNextTriggerTime(
                 taskInfo,
-                Date(System.currentTimeMillis() + JobScheduleHelper.PRE_READ_MS)
+                Date(System.currentTimeMillis() + TaskScheduleHelper.PRE_READ_MS)
             ) ?: return Response.ofFail("调度类型非法")
             nextValidTime.time
         } catch (e: Exception) {
-            logger.error("启动任务并计算下次触发时间时发生异常。jobId={}", id, e)
+            logger.error("启动任务并计算下次触发时间时发生异常。taskId={}", id, e)
             return Response.ofFail("调度类型非法")
         }
 
@@ -254,7 +254,7 @@ class TaskPilotServiceImpl : TaskPilotService {
         logger.info(
             ">>>>>>>>>>> task-pilot 操作日志：operator={}, type={}, content={}",
             loginInfo.userName,
-            "jobinfo-start",
+            "task-info-start",
             id
         )
         return Response.ofSuccess()
@@ -263,7 +263,7 @@ class TaskPilotServiceImpl : TaskPilotService {
     override fun stop(id: Int, loginInfo: LoginInfo): Response<String> {
         val taskInfo = taskInfoMapper.loadById(id)
             ?: return Response.ofFail("任务ID非法")
-        if (!JobGroupPermissionUtil.hasJobGroupPermission(loginInfo, taskInfo.executorId)) {
+        if (!ExecutorPermissionUtil.hasExecutorPermission(loginInfo, taskInfo.executorId)) {
             return Response.ofFail("权限拦截")
         }
 
@@ -276,7 +276,7 @@ class TaskPilotServiceImpl : TaskPilotService {
         logger.info(
             ">>>>>>>>>>> task-pilot 操作日志：operator={}, type={}, content={}",
             loginInfo.userName,
-            "jobinfo-stop",
+            "task-info-stop",
             id
         )
         return Response.ofSuccess()
@@ -290,11 +290,11 @@ class TaskPilotServiceImpl : TaskPilotService {
     ): Response<String> {
         val taskInfo = taskInfoMapper.loadById(taskId)
             ?: return Response.ofFail("任务ID非法")
-        if (!JobGroupPermissionUtil.hasJobGroupPermission(loginInfo, taskInfo.executorId)) {
+        if (!ExecutorPermissionUtil.hasExecutorPermission(loginInfo, taskInfo.executorId)) {
             return Response.ofFail("权限拦截")
         }
 
-        TaskPilotAdminBootstrap.instance.jobTriggerPoolHelper.trigger(
+        TaskPilotAdminBootstrap.instance.taskTriggerPoolHelper.trigger(
             taskId,
             TriggerTypeEnum.MANUAL,
             -1,
@@ -306,20 +306,20 @@ class TaskPilotServiceImpl : TaskPilotService {
         logger.info(
             ">>>>>>>>>>> task-pilot 操作日志：operator={}, type={}, content={}",
             loginInfo.userName,
-            "jobinfo-trigger",
+            "task-info-trigger",
             taskId
         )
         return Response.ofSuccess()
     }
 
     override fun dashboardInfo(): Map<String, Any> {
-        val jobInfoCount = taskInfoMapper.findAllCount()
-        var jobLogCount = 0
-        var jobLogSuccessCount = 0
+        val taskInfoCount = taskInfoMapper.findAllCount()
+        var taskLogCount = 0
+        var taskLogSuccessCount = 0
         val taskReport = taskReportMapper.queryLogReportTotal()
         if (taskReport != null) {
-            jobLogCount = taskReport.runningCount + taskReport.sucCount + taskReport.failCount
-            jobLogSuccessCount = taskReport.sucCount
+            taskLogCount = taskReport.runningCount + taskReport.sucCount + taskReport.failCount
+            taskLogSuccessCount = taskReport.sucCount
         }
 
         val executorAddressSet = HashSet<String>()
@@ -330,9 +330,9 @@ class TaskPilotServiceImpl : TaskPilotService {
         }
 
         val dashboardMap = HashMap<String, Any>()
-        dashboardMap["jobInfoCount"] = jobInfoCount
-        dashboardMap["jobLogCount"] = jobLogCount
-        dashboardMap["jobLogSuccessCount"] = jobLogSuccessCount
+        dashboardMap["taskInfoCount"] = taskInfoCount
+        dashboardMap["taskLogCount"] = taskLogCount
+        dashboardMap["taskLogSuccessCount"] = taskLogSuccessCount
         dashboardMap["executorCount"] = executorAddressSet.size
         return dashboardMap
     }
@@ -386,44 +386,44 @@ class TaskPilotServiceImpl : TaskPilotService {
     /**
      * 基础字段和调度配置校验分离出来，避免新增与更新逻辑重复展开。
      */
-    private fun validBaseAndTrigger(jobInfo: TaskInfo): Response<String> {
-        executorMapper.load(jobInfo.executorId)
+    private fun validBaseAndTrigger(taskInfo: TaskInfo): Response<String> {
+        executorMapper.load(taskInfo.executorId)
             ?: return Response.ofFail("请选择执行器")
-        if (StringTool.isBlank(jobInfo.taskName)) {
+        if (StringTool.isBlank(taskInfo.taskName)) {
             return Response.ofFail("请输入任务名称")
         }
-        if (jobInfo.taskName!!.length > 128) {
+        if (taskInfo.taskName!!.length > 128) {
             return Response.ofFail("任务名称长度不能超过128")
         }
-        if (StringTool.isBlank(jobInfo.taskDesc)) {
+        if (StringTool.isBlank(taskInfo.taskDesc)) {
             return Response.ofFail("请输入任务描述")
         }
-        if (StringTool.isBlank(jobInfo.author)) {
+        if (StringTool.isBlank(taskInfo.author)) {
             return Response.ofFail("请输入负责人")
         }
 
-        val scheduleTypeEnum = jobInfo.scheduleType ?: return Response.ofFail("调度类型非法")
-        return validSchedule(jobInfo, scheduleTypeEnum)
+        val scheduleTypeEnum = taskInfo.scheduleType ?: return Response.ofFail("调度类型非法")
+        return validSchedule(taskInfo, scheduleTypeEnum)
     }
 
     /**
      * 调度表达式合法性仍由既有 Cron/FixRate 规则决定，避免影响线上任务的保存行为。
      */
-    private fun validSchedule(jobInfo: TaskInfo, scheduleTypeEnum: ScheduleTypeEnum): Response<String> {
+    private fun validSchedule(taskInfo: TaskInfo, scheduleTypeEnum: ScheduleTypeEnum): Response<String> {
         return when (scheduleTypeEnum) {
             ScheduleTypeEnum.CRON -> {
-                if (jobInfo.scheduleConf == null || !CronExpression.isValidExpression(jobInfo.scheduleConf)) {
+                if (taskInfo.scheduleConf == null || !CronExpression.isValidExpression(taskInfo.scheduleConf)) {
                     Response.ofFail("Cron非法")
                 } else {
                     Response.ofSuccess()
                 }
             }
             ScheduleTypeEnum.FIX_RATE -> {
-                if (jobInfo.scheduleConf == null) {
+                if (taskInfo.scheduleConf == null) {
                     Response.ofFail("调度类型")
                 } else {
                     try {
-                        val fixSecond = jobInfo.scheduleConf!!.toInt()
+                        val fixSecond = taskInfo.scheduleConf!!.toInt()
                         if (fixSecond < 1) {
                             Response.ofFail("调度类型非法")
                         } else {
@@ -441,14 +441,14 @@ class TaskPilotServiceImpl : TaskPilotService {
     /**
      * 任务类型校验仍沿用旧规则，脚本类型只做换行归一化，不额外修改内容。
      */
-    private fun validJob(jobInfo: TaskInfo): Response<String> {
-        val glueType = GlueTypeEnum.match(jobInfo.glueType)
+    private fun validTask(taskInfo: TaskInfo): Response<String> {
+        val glueType = GlueTypeEnum.match(taskInfo.glueType)
             ?: return Response.ofFail("运行模式非法")
-        if (glueType == GlueTypeEnum.BEAN && StringTool.isBlank(jobInfo.executorHandler)) {
-            return Response.ofFail("请输入JobHandler")
+        if (glueType == GlueTypeEnum.BEAN && StringTool.isBlank(taskInfo.executorHandler)) {
+            return Response.ofFail("请输入执行器处理器")
         }
-        if (glueType == GlueTypeEnum.GLUE_SHELL && jobInfo.glueSource != null) {
-            jobInfo.glueSource = jobInfo.glueSource!!.replace("\r", "")
+        if (glueType == GlueTypeEnum.GLUE_SHELL && taskInfo.glueSource != null) {
+            taskInfo.glueSource = taskInfo.glueSource!!.replace("\r", "")
         }
         return Response.ofSuccess()
     }
@@ -456,18 +456,18 @@ class TaskPilotServiceImpl : TaskPilotService {
     /**
      * 唯一键校验前先统一裁剪并归一化空字符串，避免“空白字符不同”绕过唯一规则。
      */
-    private fun normalizeTaskInfoKeyFields(jobInfo: TaskInfo) {
-        jobInfo.taskName = jobInfo.taskName?.trim()
-        jobInfo.taskDesc = jobInfo.taskDesc?.trim()
-        jobInfo.author = jobInfo.author?.trim()
-        jobInfo.executorHandler = jobInfo.executorHandler?.trim()?.takeIf { it.isNotEmpty() }
+    private fun normalizeTaskInfoKeyFields(taskInfo: TaskInfo) {
+        taskInfo.taskName = taskInfo.taskName?.trim()
+        taskInfo.taskDesc = taskInfo.taskDesc?.trim()
+        taskInfo.author = taskInfo.author?.trim()
+        taskInfo.executorHandler = taskInfo.executorHandler?.trim()?.takeIf { it.isNotEmpty() }
     }
 
     /**
      * 任务名称只要求在同一执行器下唯一，允许不同执行器复用相同任务名。
      */
-    private fun validUniqueFields(jobInfo: TaskInfo, currentId: Int?): Response<String> {
-        val existsTaskByName = taskInfoMapper.loadByExecutorIdAndTaskName(jobInfo.executorId, jobInfo.taskName)
+    private fun validUniqueFields(taskInfo: TaskInfo, currentId: Int?): Response<String> {
+        val existsTaskByName = taskInfoMapper.loadByExecutorIdAndTaskName(taskInfo.executorId, taskInfo.taskName)
         if (existsTaskByName != null && existsTaskByName.id != currentId) {
             return Response.ofFail("任务名称重复")
         }
@@ -477,14 +477,14 @@ class TaskPilotServiceImpl : TaskPilotService {
     /**
      * 高级配置项按枚举名做校验，保证数据库中只落已知策略值。
      */
-    private fun validAdvanced(jobInfo: TaskInfo): Response<String> {
-        if (jobInfo.executorRouteStrategy == null) {
+    private fun validAdvanced(taskInfo: TaskInfo): Response<String> {
+        if (taskInfo.executorRouteStrategy == null) {
             return Response.ofFail("路由策略非法")
         }
-        if (jobInfo.misfireStrategy == null) {
+        if (taskInfo.misfireStrategy == null) {
             return Response.ofFail("调度过期策略非法")
         }
-        if (jobInfo.executorBlockStrategy == null) {
+        if (taskInfo.executorBlockStrategy == null) {
             return Response.ofFail("阻塞处理策略非法")
         }
         return Response.ofSuccess()
@@ -494,15 +494,15 @@ class TaskPilotServiceImpl : TaskPilotService {
      * 子任务配置需要同时校验格式、存在性和跨任务组权限，并在成功后归一化为无多余逗号的串。
      */
     private fun validAndNormalizeChildTask(
-        jobInfo: TaskInfo,
+        taskInfo: TaskInfo,
         loginInfo: LoginInfo,
         rejectSelfReference: Boolean
     ): Response<String> {
-        if (!StringTool.isNotBlank(jobInfo.childTaskId)) {
+        if (!StringTool.isNotBlank(taskInfo.childTaskId)) {
             return Response.ofSuccess()
         }
 
-        val childTaskIds = jobInfo.childTaskId!!.split(",")
+        val childTaskIds = taskInfo.childTaskId!!.split(",")
         val normalizedChildTaskIds = ArrayList<String>()
         for (childTaskIdItem in childTaskIds) {
             if (!StringTool.isNotBlank(childTaskIdItem) || !StringTool.isNumeric(childTaskIdItem)) {
@@ -515,7 +515,7 @@ class TaskPilotServiceImpl : TaskPilotService {
             }
 
             val childTaskId = childTaskIdItem.toInt()
-            if (rejectSelfReference && childTaskId == jobInfo.id) {
+            if (rejectSelfReference && childTaskId == taskInfo.id) {
                 return Response.ofFail("子任务ID($childTaskId)非法")
             }
 
@@ -526,7 +526,7 @@ class TaskPilotServiceImpl : TaskPilotService {
                         childTaskIdItem
                     )
                 )
-            if (!JobGroupPermissionUtil.hasJobGroupPermission(loginInfo, childTaskInfo.executorId)) {
+            if (!ExecutorPermissionUtil.hasExecutorPermission(loginInfo, childTaskInfo.executorId)) {
                 return Response.ofFail(
                     MessageFormat.format(
                         "子任务ID({0})权限拦截",
@@ -537,7 +537,7 @@ class TaskPilotServiceImpl : TaskPilotService {
             normalizedChildTaskIds.add(childTaskIdItem)
         }
 
-        jobInfo.childTaskId = normalizedChildTaskIds.joinToString(",")
+        taskInfo.childTaskId = normalizedChildTaskIds.joinToString(",")
         return Response.ofSuccess()
     }
 

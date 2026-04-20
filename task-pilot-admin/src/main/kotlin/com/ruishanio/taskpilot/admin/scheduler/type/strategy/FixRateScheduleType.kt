@@ -9,6 +9,6 @@ import java.util.Date
  */
 class FixRateScheduleType : ScheduleType() {
     @Throws(Exception::class)
-    override fun generateNextTriggerTime(jobInfo: TaskInfo, fromTime: Date): Date =
-        Date(fromTime.time + jobInfo.scheduleConf!!.toLong() * 1000L)
+    override fun generateNextTriggerTime(taskInfo: TaskInfo, fromTime: Date): Date =
+        Date(fromTime.time + taskInfo.scheduleConf!!.toLong() * 1000L)
 }

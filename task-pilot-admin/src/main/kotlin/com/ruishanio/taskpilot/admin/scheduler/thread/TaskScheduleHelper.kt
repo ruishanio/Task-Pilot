@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit
  *
  * 主线程负责预读和刷新下次触发时间，时间轮只负责秒级触发，保持旧版两段式调度模型不变。
  */
-class JobScheduleHelper {
+class TaskScheduleHelper {
     private lateinit var scheduleThread: Thread
     private lateinit var ringThread: Thread
 
@@ -61,47 +61,47 @@ class JobScheduleHelper {
                     // 通过查询锁表记录拿到数据库级锁，避免多实例重复调度。
                     TaskPilotAdminBootstrap.instance.taskLockMapper.scheduleLock()
                     val nowTime = System.currentTimeMillis()
-                    val scheduleList = TaskPilotAdminBootstrap.instance.taskInfoMapper.scheduleJobQuery(
+                    val scheduleList = TaskPilotAdminBootstrap.instance.taskInfoMapper.scheduleTaskQuery(
                         nowTime + PRE_READ_MS,
                         preReadCount
                     )
 
                     if (CollectionTool.isNotEmpty(scheduleList)) {
-                        for (jobInfo in scheduleList) {
-                            if (nowTime > jobInfo.triggerNextTime + PRE_READ_MS) {
-                                val misfireStrategyEnum = jobInfo.misfireStrategy ?: MisfireStrategyEnum.DO_NOTHING
-                                misfireStrategyEnum.toMisfireHandler().handle(jobInfo.id)
-                                refreshNextTriggerTime(jobInfo, Date())
-                            } else if (nowTime > jobInfo.triggerNextTime) {
-                                TaskPilotAdminBootstrap.instance.jobTriggerPoolHelper.trigger(
-                                    jobInfo.id,
+                        for (taskInfo in scheduleList) {
+                            if (nowTime > taskInfo.triggerNextTime + PRE_READ_MS) {
+                                val misfireStrategyEnum = taskInfo.misfireStrategy ?: MisfireStrategyEnum.DO_NOTHING
+                                misfireStrategyEnum.toMisfireHandler().handle(taskInfo.id)
+                                refreshNextTriggerTime(taskInfo, Date())
+                            } else if (nowTime > taskInfo.triggerNextTime) {
+                                TaskPilotAdminBootstrap.instance.taskTriggerPoolHelper.trigger(
+                                    taskInfo.id,
                                     TriggerTypeEnum.CRON,
                                     -1,
                                     null,
                                     null,
                                     null
                                 )
-                                logger.debug(">>>>>>>>>>> task-pilot 调度过期，直接触发任务，jobId={}", jobInfo.id)
-                                refreshNextTriggerTime(jobInfo, Date())
+                                logger.debug(">>>>>>>>>>> task-pilot 调度过期，直接触发任务，taskId={}", taskInfo.id)
+                                refreshNextTriggerTime(taskInfo, Date())
 
-                                if (jobInfo.triggerStatus == TriggerStatus.RUNNING.value &&
-                                    nowTime + PRE_READ_MS > jobInfo.triggerNextTime
+                                if (taskInfo.triggerStatus == TriggerStatus.RUNNING.value &&
+                                    nowTime + PRE_READ_MS > taskInfo.triggerNextTime
                                 ) {
-                                    val ringSecond = ((jobInfo.triggerNextTime / 1000) % 60).toInt()
-                                    pushTimeRing(ringSecond, jobInfo.id)
-                                    logger.debug(">>>>>>>>>>> task-pilot 调度预读命中，推入时间轮，jobId={}", jobInfo.id)
-                                    refreshNextTriggerTime(jobInfo, Date(jobInfo.triggerNextTime))
+                                    val ringSecond = ((taskInfo.triggerNextTime / 1000) % 60).toInt()
+                                    pushTimeRing(ringSecond, taskInfo.id)
+                                    logger.debug(">>>>>>>>>>> task-pilot 调度预读命中，推入时间轮，taskId={}", taskInfo.id)
+                                    refreshNextTriggerTime(taskInfo, Date(taskInfo.triggerNextTime))
                                 }
                             } else {
-                                val ringSecond = ((jobInfo.triggerNextTime / 1000) % 60).toInt()
-                                pushTimeRing(ringSecond, jobInfo.id)
-                                logger.debug(">>>>>>>>>>> task-pilot 常规调度推入时间轮，jobId={}", jobInfo.id)
-                                refreshNextTriggerTime(jobInfo, Date(jobInfo.triggerNextTime))
+                                val ringSecond = ((taskInfo.triggerNextTime / 1000) % 60).toInt()
+                                pushTimeRing(ringSecond, taskInfo.id)
+                                logger.debug(">>>>>>>>>>> task-pilot 常规调度推入时间轮，taskId={}", taskInfo.id)
+                                refreshNextTriggerTime(taskInfo, Date(taskInfo.triggerNextTime))
                             }
                         }
 
-                        for (jobInfo in scheduleList) {
-                            TaskPilotAdminBootstrap.instance.taskInfoMapper.scheduleUpdate(jobInfo)
+                        for (taskInfo in scheduleList) {
+                            TaskPilotAdminBootstrap.instance.taskInfoMapper.scheduleUpdate(taskInfo)
                         }
                     } else {
                         preReadSuc = false
@@ -136,7 +136,7 @@ class JobScheduleHelper {
             logger.info(">>>>>>>>>>> task-pilot 调度线程已停止。")
         }
         scheduleThread.isDaemon = true
-        scheduleThread.name = "task-pilot, admin JobScheduleHelper#scheduleThread"
+        scheduleThread.name = "task-pilot, admin TaskScheduleHelper#scheduleThread"
         scheduleThread.start()
 
         ringThread = Thread {
@@ -157,17 +157,17 @@ class JobScheduleHelper {
                         if (CollectionTool.isNotEmpty(ringItemList)) {
                             val ringItemListDistinct = ringItemList!!.distinct()
                             if (ringItemListDistinct.size < ringItemList.size) {
-                                logger.warn(">>>>>>>>>>> task-pilot 时间轮检测到重复刻度任务，second={}, jobs={}", nowSecond, ringItemData)
+                                logger.warn(">>>>>>>>>>> task-pilot 时间轮检测到重复刻度任务，second={}, tasks={}", nowSecond, ringItemData)
                             }
                             ringItemData.addAll(ringItemListDistinct)
                         }
                     }
 
-                    logger.debug(">>>>>>>>>>> task-pilot 时间轮触发刻度，second={}, jobs={}", nowSecond, ringItemData)
+                    logger.debug(">>>>>>>>>>> task-pilot 时间轮触发刻度，second={}, tasks={}", nowSecond, ringItemData)
                     if (CollectionTool.isNotEmpty(ringItemData)) {
-                        for (jobId in ringItemData) {
-                            TaskPilotAdminBootstrap.instance.jobTriggerPoolHelper.trigger(
-                                jobId,
+                        for (taskId in ringItemData) {
+                            TaskPilotAdminBootstrap.instance.taskTriggerPoolHelper.trigger(
+                                taskId,
                                 TriggerTypeEnum.CRON,
                                 -1,
                                 null,
@@ -186,42 +186,42 @@ class JobScheduleHelper {
             logger.info(">>>>>>>>>>> task-pilot 时间轮线程已停止。")
         }
         ringThread.isDaemon = true
-        ringThread.name = "task-pilot, admin JobScheduleHelper#ringThread"
+        ringThread.name = "task-pilot, admin TaskScheduleHelper#ringThread"
         ringThread.start()
     }
 
     /**
      * 生成下次触发时间失败时直接停掉任务，防止非法配置反复进入调度循环。
      */
-    private fun refreshNextTriggerTime(jobInfo: TaskInfo, fromTime: Date) {
+    private fun refreshNextTriggerTime(taskInfo: TaskInfo, fromTime: Date) {
         try {
-            val scheduleTypeEnum = jobInfo.scheduleType ?: ScheduleTypeEnum.NONE
-            val nextTriggerTime = scheduleTypeEnum.toScheduleType().generateNextTriggerTime(jobInfo, fromTime)
+            val scheduleTypeEnum = taskInfo.scheduleType ?: ScheduleTypeEnum.NONE
+            val nextTriggerTime = scheduleTypeEnum.toScheduleType().generateNextTriggerTime(taskInfo, fromTime)
 
             if (nextTriggerTime != null) {
-                jobInfo.triggerStatus = -1
-                jobInfo.triggerLastTime = jobInfo.triggerNextTime
-                jobInfo.triggerNextTime = nextTriggerTime.time
+                taskInfo.triggerStatus = -1
+                taskInfo.triggerLastTime = taskInfo.triggerNextTime
+                taskInfo.triggerNextTime = nextTriggerTime.time
             } else {
-                jobInfo.triggerStatus = TriggerStatus.STOPPED.value
-                jobInfo.triggerLastTime = 0
-                jobInfo.triggerNextTime = 0
+                taskInfo.triggerStatus = TriggerStatus.STOPPED.value
+                taskInfo.triggerLastTime = 0
+                taskInfo.triggerNextTime = 0
                 logger.error(
-                    ">>>>>>>>>>> task-pilot 刷新下次触发时间失败，任务已停止。jobId={}, scheduleType={}, scheduleConf={}",
-                    jobInfo.id,
-                    jobInfo.scheduleType,
-                    jobInfo.scheduleConf
+                    ">>>>>>>>>>> task-pilot 刷新下次触发时间失败，任务已停止。taskId={}, scheduleType={}, scheduleConf={}",
+                    taskInfo.id,
+                    taskInfo.scheduleType,
+                    taskInfo.scheduleConf
                 )
             }
         } catch (e: Throwable) {
-            jobInfo.triggerStatus = TriggerStatus.STOPPED.value
-            jobInfo.triggerLastTime = 0
-            jobInfo.triggerNextTime = 0
+            taskInfo.triggerStatus = TriggerStatus.STOPPED.value
+            taskInfo.triggerLastTime = 0
+            taskInfo.triggerNextTime = 0
             logger.error(
-                ">>>>>>>>>>> task-pilot 刷新下次触发时间时发生异常，任务已停止。jobId={}, scheduleType={}, scheduleConf={}",
-                jobInfo.id,
-                jobInfo.scheduleType,
-                jobInfo.scheduleConf,
+                ">>>>>>>>>>> task-pilot 刷新下次触发时间时发生异常，任务已停止。taskId={}, scheduleType={}, scheduleConf={}",
+                taskInfo.id,
+                taskInfo.scheduleType,
+                taskInfo.scheduleConf,
                 e
             )
         }
@@ -230,10 +230,10 @@ class JobScheduleHelper {
     /**
      * 时间轮内只存任务 ID，真正执行时再交给触发线程池处理，避免时间轮本身阻塞。
      */
-    private fun pushTimeRing(ringSecond: Int, jobId: Int) {
+    private fun pushTimeRing(ringSecond: Int, taskId: Int) {
         val ringItemList = ringData.computeIfAbsent(ringSecond) { ArrayList() }
-        ringItemList.add(jobId)
-        logger.debug(">>>>>>>>>>> task-pilot 推入时间轮，second={}, jobs={}", ringSecond, ringItemList)
+        ringItemList.add(taskId)
+        logger.debug(">>>>>>>>>>> task-pilot 推入时间轮，second={}, tasks={}", ringSecond, ringItemList)
     }
 
     fun stop() {
@@ -289,7 +289,7 @@ class JobScheduleHelper {
     }
 
     companion object {
-        private val logger = LoggerFactory.getLogger(JobScheduleHelper::class.java)
+        private val logger = LoggerFactory.getLogger(TaskScheduleHelper::class.java)
 
         /**
          * 调度线程预读窗口，控制任务何时进入时间轮。

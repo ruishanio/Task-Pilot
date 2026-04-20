@@ -15,13 +15,13 @@ import java.util.concurrent.ConcurrentMap
  * 计数按任务维度维护，并在地址集变化时同步剔除失效节点，避免旧地址持续参与比较。
  */
 class ExecutorRouteLFU : ExecutorRouter() {
-    fun route(jobId: Int, addressList: List<String>): String {
+    fun route(taskId: Int, addressList: List<String>): String {
         if (System.currentTimeMillis() > cacheValidTime) {
-            jobLfuMap.clear()
+            taskLfuMap.clear()
             cacheValidTime = System.currentTimeMillis() + 1000L * 60 * 60 * 24
         }
 
-        val lfuItemMap = jobLfuMap.computeIfAbsent(jobId) { HashMap() }
+        val lfuItemMap = taskLfuMap.computeIfAbsent(taskId) { HashMap() }
 
         for (address in addressList) {
             if (!lfuItemMap.containsKey(address) || (lfuItemMap[address] ?: 0) > 1_000_000) {
@@ -45,10 +45,10 @@ class ExecutorRouteLFU : ExecutorRouter() {
     }
 
     override fun route(triggerParam: TriggerRequest, addressList: List<String>): Response<String> =
-        Response.ofSuccess(route(triggerParam.jobId, addressList))
+        Response.ofSuccess(route(triggerParam.taskId, addressList))
 
     companion object {
-        private val jobLfuMap: ConcurrentMap<Int, HashMap<String, Int>> = ConcurrentHashMap()
+        private val taskLfuMap: ConcurrentMap<Int, HashMap<String, Int>> = ConcurrentHashMap()
         private var cacheValidTime: Long = 0
     }
 }

@@ -24,7 +24,7 @@ class TaskPilotSyncRunnerTest {
         AnnotationConfigApplicationContext(TestConfiguration::class.java).use { applicationContext ->
             val properties = TaskPilotProperties().apply {
                 executor.appname = "demo-executor"
-                sync.groupTitle = "示例执行器"
+                sync.executorTitle = "示例执行器"
                 sync.defaultTaskAuthor = "默认负责人"
                 sync.defaultTaskAlarmEmail = "notice@test.com"
             }
@@ -35,7 +35,7 @@ class TaskPilotSyncRunnerTest {
                     ?: error("buildSyncRequest should not return null")
 
             assertEquals("demo-executor", request.appName)
-            assertEquals("示例执行器", request.groupTitle)
+            assertEquals("示例执行器", request.executorTitle)
             assertEquals(4, request.tasks.size)
 
             val taskMap = request.tasks.associateBy { it.executorHandler }

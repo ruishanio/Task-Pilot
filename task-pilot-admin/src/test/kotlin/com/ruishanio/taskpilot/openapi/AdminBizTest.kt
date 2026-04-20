@@ -81,7 +81,7 @@ class AdminBizTest {
         val request =
             SyncRequest().apply {
                 appName = "demo-app"
-                groupTitle = "示例执行器"
+                executorTitle = "示例执行器"
                 tasks.add(
                     SyncRequest.Task().apply {
                         executorHandler = "demoHandler"
@@ -106,8 +106,8 @@ class AdminBizTest {
 
     @Test
     @Throws(Exception::class)
-    fun jobManage() {
-        logger.info("jobAdd、jobUpdate、jobRemove、jobStart、jobStop")
+    fun taskManage() {
+        logger.info("taskAdd、taskUpdate、taskRemove、taskStart、taskStop")
     }
 
     companion object {

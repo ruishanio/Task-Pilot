@@ -7,8 +7,9 @@ import { frontendApi } from '../services/api';
 import { getErrorMessage } from '../utils/format';
 
 interface DashboardSummary {
-  jobInfoCount: number;
-  jobLogCount: number;
+  taskInfoCount: number;
+  taskLogCount: number;
+  taskLogSuccessCount: number;
   executorCount: number;
 }
 
@@ -25,8 +26,9 @@ interface DashboardChart {
 type DateRange = [Dayjs, Dayjs];
 
 const defaultSummary: DashboardSummary = {
-  jobInfoCount: 0,
-  jobLogCount: 0,
+  taskInfoCount: 0,
+  taskLogCount: 0,
+  taskLogSuccessCount: 0,
   executorCount: 0,
 };
 
@@ -148,7 +150,7 @@ function DashboardPage() {
           <Card className="dashboard-stat-card page-card" loading={loading}>
             <Statistic
               title="任务总数"
-              value={summary.jobInfoCount}
+              value={summary.taskInfoCount}
               prefix={<ScheduleOutlined />}
               suffix="个"
             />
@@ -158,7 +160,7 @@ function DashboardPage() {
           <Card className="dashboard-stat-card page-card" loading={loading}>
             <Statistic
               title="调度次数"
-              value={summary.jobLogCount}
+              value={summary.taskLogCount}
               prefix={<PlayCircleOutlined />}
               suffix="次"
             />

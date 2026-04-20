@@ -15,7 +15,7 @@ import java.util.TreeMap
  * 使用虚拟节点平衡分布，保证同一任务在地址集稳定时尽量落到固定执行器。
  */
 class ExecutorRouteConsistentHash : ExecutorRouter() {
-    fun hashJob(jobId: Int, addressList: List<String>): String {
+    fun hashTask(taskId: Int, addressList: List<String>): String {
         val addressRing = TreeMap<Long, String>()
         for (address in addressList) {
             for (i in 0 until VIRTUAL_NODE_NUM) {
@@ -24,8 +24,8 @@ class ExecutorRouteConsistentHash : ExecutorRouter() {
             }
         }
 
-        val jobHash = hash(jobId.toString())
-        val tailRing: SortedMap<Long, String> = addressRing.tailMap(jobHash)
+        val taskHash = hash(taskId.toString())
+        val tailRing: SortedMap<Long, String> = addressRing.tailMap(taskHash)
         return if (tailRing.isNotEmpty()) {
             tailRing[tailRing.firstKey()]!!
         } else {
@@ -34,7 +34,7 @@ class ExecutorRouteConsistentHash : ExecutorRouter() {
     }
 
     override fun route(triggerParam: TriggerRequest, addressList: List<String>): Response<String> =
-        Response.ofSuccess(hashJob(triggerParam.jobId, addressList))
+        Response.ofSuccess(hashTask(triggerParam.taskId, addressList))
 
     companion object {
         private const val VIRTUAL_NODE_NUM = 100

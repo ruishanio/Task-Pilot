@@ -5,7 +5,7 @@ package com.ruishanio.taskpilot.core.handler
  *
  * 继续保留 `execute/init/destroy` 三段生命周期，避免脚本任务与方法任务的接入方式变化。
  */
-abstract class IJobHandler {
+abstract class ITaskHandler {
     /**
      * 执行任务主体逻辑。
      */

@@ -1,14 +1,14 @@
 package com.ruishanio.taskpilot.core.executor
 
 import com.ruishanio.taskpilot.core.constant.Const
-import com.ruishanio.taskpilot.core.handler.IJobHandler
+import com.ruishanio.taskpilot.core.handler.ITaskHandler
 import com.ruishanio.taskpilot.core.handler.annotation.TaskPilot
-import com.ruishanio.taskpilot.core.handler.impl.MethodJobHandler
+import com.ruishanio.taskpilot.core.handler.impl.MethodTaskHandler
 import com.ruishanio.taskpilot.core.log.TaskPilotFileAppender
 import com.ruishanio.taskpilot.core.openapi.AdminBiz
 import com.ruishanio.taskpilot.core.server.EmbedServer
-import com.ruishanio.taskpilot.core.thread.JobLogFileCleanThread
-import com.ruishanio.taskpilot.core.thread.JobThread
+import com.ruishanio.taskpilot.core.thread.TaskLogFileCleanThread
+import com.ruishanio.taskpilot.core.thread.TaskThread
 import com.ruishanio.taskpilot.core.thread.TriggerCallbackThread
 import com.ruishanio.taskpilot.tool.core.StringTool
 import com.ruishanio.taskpilot.tool.http.HttpTool
@@ -49,7 +49,7 @@ open class TaskPilotExecutor {
 
         TaskPilotFileAppender.initLogPath(logPath)
         initAdminBizList(adminAddresses, accessToken, timeout)
-        JobLogFileCleanThread.getInstance().start(logRetentionDays.toLong())
+        TaskLogFileCleanThread.getInstance().start(logRetentionDays.toLong())
         TriggerCallbackThread.getInstance().start()
         initEmbedServer(address, ip, port, appname, accessToken)
     }
@@ -60,28 +60,28 @@ open class TaskPilotExecutor {
     open fun destroy() {
         stopEmbedServer()
 
-        if (jobThreadRepository.isNotEmpty()) {
+        if (taskThreadRepository.isNotEmpty()) {
             try {
                 TimeUnit.SECONDS.sleep(ELEGANT_SHUTDOWN_WAITING_SECONDS)
             } catch (e: Throwable) {
                 logger.error(">>>>>>>>>>> task-pilot 执行器优雅关闭等待任务完成时发生异常。", e)
             }
 
-            for ((jobId, _) in jobThreadRepository) {
-                val oldJobThread = removeJobThread(jobId, "web container destroy and kill the job.")
-                if (oldJobThread != null) {
+            for ((taskId, _) in taskThreadRepository) {
+                val oldTaskThread = removeTaskThread(taskId, "web container destroy and kill the task.")
+                if (oldTaskThread != null) {
                     try {
-                        oldJobThread.join()
+                        oldTaskThread.join()
                     } catch (e: InterruptedException) {
-                        logger.error(">>>>>>>>>>> task-pilot 销毁任务线程并等待结束时发生异常，jobId={}", jobId, e)
+                        logger.error(">>>>>>>>>>> task-pilot 销毁任务线程并等待结束时发生异常，taskId={}", taskId, e)
                     }
                 }
             }
-            jobThreadRepository.clear()
+            taskThreadRepository.clear()
         }
-        jobHandlerRepository.clear()
+        taskHandlerRepository.clear()
 
-        JobLogFileCleanThread.getInstance().toStop()
+        TaskLogFileCleanThread.getInstance().toStop()
         TriggerCallbackThread.getInstance().toStop()
     }
 
@@ -160,7 +160,7 @@ open class TaskPilotExecutor {
     /**
      * 注册方法型任务处理器。
      */
-    protected fun registryJobHandler(taskPilot: TaskPilot?, bean: Any, executeMethod: Method) {
+    protected fun registerTaskHandler(taskPilot: TaskPilot?, bean: Any, executeMethod: Method) {
         if (taskPilot == null) {
             return
         }
@@ -171,7 +171,7 @@ open class TaskPilotExecutor {
         if (name.trim().isEmpty()) {
             throw RuntimeException("task-pilot method-jobhandler name invalid, for[$clazz#$methodName] .")
         }
-        if (loadJobHandler(name) != null) {
+        if (loadTaskHandler(name) != null) {
             throw RuntimeException("task-pilot jobhandler[$name] naming conflicts.")
         }
 
@@ -197,7 +197,7 @@ open class TaskPilotExecutor {
             }
         }
 
-        registryJobHandler(name, MethodJobHandler(bean, executeMethod, initMethod, destroyMethod))
+        registerTaskHandler(name, MethodTaskHandler(bean, executeMethod, initMethod, destroyMethod))
     }
 
     companion object {
@@ -205,8 +205,8 @@ open class TaskPilotExecutor {
         private const val ELEGANT_SHUTDOWN_WAITING_SECONDS: Long = 5
 
         private var adminBizList: MutableList<AdminBiz>? = null
-        private val jobHandlerRepository: ConcurrentMap<String, IJobHandler> = ConcurrentHashMap()
-        private val jobThreadRepository: ConcurrentMap<Int, JobThread> = ConcurrentHashMap()
+        private val taskHandlerRepository: ConcurrentMap<String, ITaskHandler> = ConcurrentHashMap()
+        private val taskThreadRepository: ConcurrentMap<Int, TaskThread> = ConcurrentHashMap()
 
         /**
          * 获取调度中心客户端列表。
@@ -216,42 +216,42 @@ open class TaskPilotExecutor {
         /**
          * 按名称加载任务处理器。
          */
-        fun loadJobHandler(name: String): IJobHandler? = jobHandlerRepository[name]
+        fun loadTaskHandler(name: String): ITaskHandler? = taskHandlerRepository[name]
 
         /**
          * 注册任务处理器。
          */
-        fun registryJobHandler(name: String, jobHandler: IJobHandler): IJobHandler? {
-            logger.info(">>>>>>>>>>> task-pilot 注册任务处理器成功，name={}, jobHandler={}", name, jobHandler)
-            return jobHandlerRepository.put(name, jobHandler)
+        fun registerTaskHandler(name: String, taskHandler: ITaskHandler): ITaskHandler? {
+            logger.info(">>>>>>>>>>> task-pilot 注册任务处理器成功，name={}, taskHandler={}", name, taskHandler)
+            return taskHandlerRepository.put(name, taskHandler)
         }
 
         /**
          * 注册任务线程，并在必要时替换旧线程。
          */
-        fun registJobThread(jobId: Int, handler: IJobHandler, removeOldReason: String?): JobThread {
-            val newJobThread = JobThread(jobId, handler)
-            newJobThread.start()
-            logger.info(">>>>>>>>>>> task-pilot 注册任务线程成功，jobId={}, handler={}", jobId, handler)
+        fun registerTaskThread(taskId: Int, handler: ITaskHandler, removeOldReason: String?): TaskThread {
+            val newTaskThread = TaskThread(taskId, handler)
+            newTaskThread.start()
+            logger.info(">>>>>>>>>>> task-pilot 注册任务线程成功，taskId={}, handler={}", taskId, handler)
 
-            val oldJobThread = jobThreadRepository.put(jobId, newJobThread)
-            if (oldJobThread != null) {
-                oldJobThread.toStop(removeOldReason)
-                oldJobThread.interrupt()
+            val oldTaskThread = taskThreadRepository.put(taskId, newTaskThread)
+            if (oldTaskThread != null) {
+                oldTaskThread.toStop(removeOldReason)
+                oldTaskThread.interrupt()
             }
 
-            return newJobThread
+            return newTaskThread
         }
 
         /**
          * 移除任务线程。
          */
-        fun removeJobThread(jobId: Int, removeOldReason: String?): JobThread? {
-            val oldJobThread = jobThreadRepository.remove(jobId)
-            if (oldJobThread != null) {
-                oldJobThread.toStop(removeOldReason)
-                oldJobThread.interrupt()
-                return oldJobThread
+        fun removeTaskThread(taskId: Int, removeOldReason: String?): TaskThread? {
+            val oldTaskThread = taskThreadRepository.remove(taskId)
+            if (oldTaskThread != null) {
+                oldTaskThread.toStop(removeOldReason)
+                oldTaskThread.interrupt()
+                return oldTaskThread
             }
             return null
         }
@@ -259,6 +259,6 @@ open class TaskPilotExecutor {
         /**
          * 按任务 ID 加载线程。
          */
-        fun loadJobThread(jobId: Int): JobThread? = jobThreadRepository[jobId]
+        fun loadTaskThread(taskId: Int): TaskThread? = taskThreadRepository[taskId]
     }
 }

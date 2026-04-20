@@ -26,7 +26,7 @@ class TaskPilotSpringExecutor :
      * 在 Spring 完成单例 Bean 初始化后启动执行器。
      */
     override fun afterSingletonsInstantiated() {
-        scanJobHandlerMethod(applicationContext)
+        scanTaskHandlerMethod(applicationContext)
         GlueFactory.refreshInstance(1)
         try {
             super.start()
@@ -42,13 +42,13 @@ class TaskPilotSpringExecutor :
     /**
      * 从 Spring 容器中扫描并注册任务方法。
      */
-    private fun scanJobHandlerMethod(applicationContext: ApplicationContext?) {
+    private fun scanTaskHandlerMethod(applicationContext: ApplicationContext?) {
         if (applicationContext == null) {
             return
         }
 
         for (definition in TaskPilotMethodScanner.scan(applicationContext, excludedPackage)) {
-            registryJobHandler(definition.taskPilot(), definition.bean(), definition.method())
+            registerTaskHandler(definition.taskPilot(), definition.bean(), definition.method())
         }
     }
 

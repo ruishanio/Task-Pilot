@@ -12,29 +12,29 @@ import jakarta.servlet.http.HttpServletRequest
  *
  * 统一收口任务组权限判断，避免 controller 与 service 各自复制权限逻辑。
  */
-object JobGroupPermissionUtil {
+object ExecutorPermissionUtil {
     /**
-     * 管理员默认拥有全部任务组权限，普通用户则从扩展信息中的 jobGroups 字段判断。
+     * 管理员默认拥有全部执行器权限，普通用户则从扩展信息中的 executorIds 字段判断。
      */
-    fun hasJobGroupPermission(loginInfo: LoginInfo, jobGroup: Int): Boolean {
+    fun hasExecutorPermission(loginInfo: LoginInfo, executorId: Int): Boolean {
         if (TaskPilotAuthHelper.hasRole(loginInfo, Consts.ADMIN_ROLE).isSuccess) {
             return true
         }
-        val jobGroups: List<String> = if (loginInfo.extraInfo != null && loginInfo.extraInfo!!.containsKey("jobGroups")) {
-            StringTool.split(loginInfo.extraInfo!!["jobGroups"], ",")
+        val executorIds: List<String> = if (loginInfo.extraInfo != null && loginInfo.extraInfo!!.containsKey("executorIds")) {
+            StringTool.split(loginInfo.extraInfo!!["executorIds"], ",")
         } else {
             ArrayList()
         } ?: emptyList()
-        return jobGroups.contains(jobGroup.toString())
+        return executorIds.contains(executorId.toString())
     }
 
     /**
      * 权限校验失败时直接抛错，让上层沿用统一异常处理逻辑。
      */
-    fun validJobGroupPermission(request: HttpServletRequest, jobGroup: Int): LoginInfo {
+    fun validExecutorPermission(request: HttpServletRequest, executorId: Int): LoginInfo {
         val loginInfoResponse = TaskPilotAuthHelper.loginCheckWithAttr(request)
         val loginInfo = loginInfoResponse.data
-        if (!(loginInfoResponse.isSuccess && loginInfo != null && hasJobGroupPermission(loginInfo, jobGroup))) {
+        if (!(loginInfoResponse.isSuccess && loginInfo != null && hasExecutorPermission(loginInfo, executorId))) {
             throw RuntimeException("权限拦截[username=${loginInfo?.userName}]")
         }
         return loginInfo
@@ -43,19 +43,19 @@ object JobGroupPermissionUtil {
     /**
      * 普通用户只能看到被授予的任务组，管理员保持原列表不变。
      */
-    fun filterJobGroupByPermission(request: HttpServletRequest, jobGroupListTotal: List<Executor>): List<Executor> {
+    fun filterExecutorByPermission(request: HttpServletRequest, executorListTotal: List<Executor>): List<Executor> {
         val loginInfoResponse = TaskPilotAuthHelper.loginCheckWithAttr(request)
         val loginInfo = loginInfoResponse.data ?: return ArrayList()
         if (TaskPilotAuthHelper.hasRole(loginInfo, Consts.ADMIN_ROLE).isSuccess) {
-            return jobGroupListTotal
+            return executorListTotal
         }
 
         val extraInfo = loginInfo.extraInfo
-        val jobGroups: List<String> = if (extraInfo != null && extraInfo["jobGroups"] != null) {
-            StringTool.split(extraInfo["jobGroups"], ",")
+        val executorIds: List<String> = if (extraInfo != null && extraInfo["executorIds"] != null) {
+            StringTool.split(extraInfo["executorIds"], ",")
         } else {
             ArrayList()
         } ?: emptyList()
-        return jobGroupListTotal.filter { jobGroups.contains(it.id.toString()) }
+        return executorListTotal.filter { executorIds.contains(it.id.toString()) }
     }
 }

@@ -7,5 +7,5 @@ abstract class MisfireHandler {
     /**
      * 处理指定任务的失火补偿逻辑。
      */
-    abstract fun handle(jobId: Int)
+    abstract fun handle(taskId: Int)
 }

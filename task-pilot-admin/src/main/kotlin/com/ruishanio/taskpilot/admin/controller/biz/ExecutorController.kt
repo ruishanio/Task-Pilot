@@ -3,9 +3,9 @@ package com.ruishanio.taskpilot.admin.controller.biz
 import com.ruishanio.taskpilot.admin.auth.annotation.TaskPilotAuth
 import com.ruishanio.taskpilot.admin.constant.Consts
 import com.ruishanio.taskpilot.admin.mapper.ExecutorMapper
-import com.ruishanio.taskpilot.admin.model.Executor
 import com.ruishanio.taskpilot.admin.mapper.RegistryMapper
 import com.ruishanio.taskpilot.admin.mapper.TaskInfoMapper
+import com.ruishanio.taskpilot.admin.model.Executor
 import com.ruishanio.taskpilot.admin.model.Registry
 import com.ruishanio.taskpilot.admin.web.ManageRoute
 import com.ruishanio.taskpilot.core.constant.Const
@@ -29,7 +29,7 @@ import java.util.HashMap
  */
 @Controller
 @RequestMapping(ManageRoute.API_MANAGE_EXECUTOR)
-class JobGroupController {
+class ExecutorController {
     @Resource
     lateinit var taskInfoMapper: TaskInfoMapper
 
@@ -63,7 +63,7 @@ class JobGroupController {
     @ResponseBody
     @TaskPilotAuth(role = Consts.ADMIN_ROLE)
     fun insert(executor: Executor): Response<String> {
-        val validResult = validGroup(executor, false)
+        val validResult = validExecutor(executor, false)
         if (!validResult.isSuccess) {
             return validResult
         }
@@ -77,7 +77,7 @@ class JobGroupController {
     @ResponseBody
     @TaskPilotAuth(role = Consts.ADMIN_ROLE)
     fun update(executor: Executor): Response<String> {
-        val validResult = validGroup(executor, true)
+        val validResult = validExecutor(executor, true)
         if (!validResult.isSuccess) {
             return validResult
         }
@@ -115,14 +115,14 @@ class JobGroupController {
     @RequestMapping("/load_by_id")
     @ResponseBody
     fun loadById(@RequestParam("id") id: Int): Response<Executor> {
-        val jobGroup = executorMapper.load(id)
-        return if (jobGroup != null) Response.ofSuccess(jobGroup) else Response.ofFail()
+        val executor = executorMapper.load(id)
+        return if (executor != null) Response.ofSuccess(executor) else Response.ofFail()
     }
 
     /**
      * 手动录入地址要校验 URL 形式，自动注册则直接按注册表回填。
      */
-    private fun validGroup(executor: Executor, isUpdate: Boolean): Response<String> {
+    private fun validExecutor(executor: Executor, isUpdate: Boolean): Response<String> {
         executor.appname = executor.appname?.trim()
         executor.title = executor.title?.trim()
         if (StringTool.isBlank(executor.appname)) {

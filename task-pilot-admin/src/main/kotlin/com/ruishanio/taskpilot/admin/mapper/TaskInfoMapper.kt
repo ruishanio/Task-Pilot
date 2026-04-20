@@ -56,7 +56,7 @@ interface TaskInfoMapper {
     /**
      * 查询待调度任务，仅返回启用状态的记录。
      */
-    fun scheduleJobQuery(
+    fun scheduleTaskQuery(
         @Param("maxNextTime") maxNextTime: Long,
         @Param("pagesize") pagesize: Int
     ): List<TaskInfo>

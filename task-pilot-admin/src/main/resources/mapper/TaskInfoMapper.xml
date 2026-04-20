@@ -234,7 +234,7 @@
 	</select>
 
 
-	<select id="scheduleJobQuery" parameterType="java.util.HashMap" resultMap="TaskInfo">
+	<select id="scheduleTaskQuery" parameterType="java.util.HashMap" resultMap="TaskInfo">
 		SELECT <include refid="Base_Column_List" />
 		FROM task_info AS t
 		WHERE t.trigger_status = 1

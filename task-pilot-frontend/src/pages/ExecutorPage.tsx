@@ -14,10 +14,10 @@ import {
   message,
 } from 'antd';
 import { DeleteOutlined, EditOutlined, EyeOutlined, PlusOutlined } from '@ant-design/icons';
-import { jobGroupApi } from '../services/api';
+import { executorApi } from '../services/api';
 import { formatDateTime, getErrorMessage, parsePagePayload } from '../utils/format';
 
-function JobGroupPage() {
+function ExecutorPage() {
   const [filters, setFilters] = useState({ appname: '', title: '' });
   const [pagination, setPagination] = useState({ current: 1, pageSize: 10 });
   const [loading, setLoading] = useState(false);
@@ -36,7 +36,7 @@ function JobGroupPage() {
   async function loadData(customFilters = filters, customPagination = pagination) {
     try {
       setLoading(true);
-      const response = await jobGroupApi.page({
+      const response = await executorApi.page({
         offset: (customPagination.current - 1) * customPagination.pageSize,
         pagesize: customPagination.pageSize,
         appname: customFilters.appname,
@@ -83,10 +83,10 @@ function JobGroupPage() {
         addressList: values.addressList || '',
       };
       if (editingRecord) {
-        await jobGroupApi.update(payload);
+        await executorApi.update(payload);
         message.success('执行器已更新');
       } else {
-        await jobGroupApi.create(payload);
+        await executorApi.create(payload);
         message.success('执行器已创建');
       }
       setModalOpen(false);
@@ -104,7 +104,7 @@ function JobGroupPage() {
 
   async function handleDelete(record) {
     try {
-      await jobGroupApi.remove(record.id);
+      await executorApi.remove(record.id);
       message.success('执行器已删除');
       loadData();
     } catch (error) {
@@ -315,4 +315,4 @@ function JobGroupPage() {
   );
 }
 
-export default JobGroupPage;
+export default ExecutorPage;

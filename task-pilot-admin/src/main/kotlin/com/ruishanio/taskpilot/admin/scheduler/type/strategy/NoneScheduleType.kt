@@ -9,5 +9,5 @@ import java.util.Date
  */
 class NoneScheduleType : ScheduleType() {
     @Throws(Exception::class)
-    override fun generateNextTriggerTime(jobInfo: TaskInfo, fromTime: Date): Date? = null
+    override fun generateNextTriggerTime(taskInfo: TaskInfo, fromTime: Date): Date? = null
 }

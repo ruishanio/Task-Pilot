@@ -26,7 +26,7 @@ import java.util.HashMap
  */
 @Controller
 @RequestMapping(ManageRoute.API_MANAGE_USER)
-class JobUserController {
+class UserController {
     @Resource
     private lateinit var executorMapper: ExecutorMapper
 
@@ -41,7 +41,7 @@ class JobUserController {
     @TaskPilotAuth(role = Consts.ADMIN_ROLE)
     fun meta(): Response<Map<String, Any>> {
         val data = HashMap<String, Any>()
-        data["groups"] = executorMapper.findAll()
+        data["executors"] = executorMapper.findAll()
         data["roleOptions"] = listOf(
             option("1", "管理员"),
             option("0", "普通用户")

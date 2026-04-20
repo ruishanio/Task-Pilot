@@ -3,7 +3,7 @@ package com.ruishanio.taskpilot.core.thread
 import com.ruishanio.taskpilot.core.context.TaskPilotContext
 import com.ruishanio.taskpilot.core.context.TaskPilotHelper
 import com.ruishanio.taskpilot.core.executor.TaskPilotExecutor
-import com.ruishanio.taskpilot.core.handler.IJobHandler
+import com.ruishanio.taskpilot.core.handler.ITaskHandler
 import com.ruishanio.taskpilot.core.log.TaskPilotFileAppender
 import com.ruishanio.taskpilot.core.openapi.model.CallbackRequest
 import com.ruishanio.taskpilot.core.openapi.model.TriggerRequest
@@ -24,9 +24,9 @@ import java.util.concurrent.TimeoutException
  *
  * 负责串行消费同一任务的触发请求，并在执行结束后统一回调调度中心。
  */
-class JobThread(
-    private val jobId: Int,
-    val handler: IJobHandler
+class TaskThread(
+    private val taskId: Int,
+    val handler: ITaskHandler
 ) : Thread() {
     private val triggerQueue = LinkedBlockingQueue<TriggerRequest>()
     private val triggerLogIdSet: MutableSet<Long> = ConcurrentHashMap.newKeySet()
@@ -39,7 +39,7 @@ class JobThread(
     private var idleTimes: Int = 0
 
     init {
-        name = "task-pilot, JobThread-$jobId-${System.currentTimeMillis()}"
+        name = "task-pilot, TaskThread-$taskId-${System.currentTimeMillis()}"
     }
 
     /**
@@ -72,7 +72,7 @@ class JobThread(
         try {
             handler.init()
         } catch (e: Throwable) {
-            logger.error(">>>>>>>>>>> 初始化任务处理器时发生异常。jobId={}", jobId, e)
+            logger.error(">>>>>>>>>>> 初始化任务处理器时发生异常。taskId={}", taskId, e)
         }
 
         while (!toStop) {
@@ -91,8 +91,8 @@ class JobThread(
                         TaskPilotFileAppender.makeLogFileName(Date(triggerParam.logDateTime), triggerParam.logId)
                     val taskPilotContext =
                         TaskPilotContext(
-                            triggerParam.jobId.toLong(),
-                            triggerParam.executorParams,
+                            triggerParam.taskId.toLong(),
+                            triggerParam.executorParam,
                             triggerParam.logId,
                             triggerParam.logDateTime,
                             logFileName,
@@ -101,7 +101,7 @@ class JobThread(
                         )
                     TaskPilotContext.setTaskPilotContext(taskPilotContext)
 
-                    TaskPilotHelper.log("<br>----------- task-pilot 任务执行开始 -----------<br>----------- 参数:${taskPilotContext.jobParam}")
+                    TaskPilotHelper.log("<br>----------- task-pilot 任务执行开始 -----------<br>----------- 参数:${taskPilotContext.taskParam}")
 
                     if (triggerParam.executorTimeout > 0) {
                         var futureThread: Thread? = null
@@ -146,7 +146,7 @@ class JobThread(
                             finalContext?.handleMsg
                     )
                 } else if (idleTimes > 30 && triggerQueue.isEmpty()) {
-                    TaskPilotExecutor.removeJobThread(jobId, "执行器空闲次数超过阈值。")
+                    TaskPilotExecutor.removeTaskThread(taskId, "执行器空闲次数超过阈值。")
                 }
             } catch (e: Throwable) {
                 if (toStop) {
@@ -200,13 +200,13 @@ class JobThread(
         try {
             handler.destroy()
         } catch (e: Throwable) {
-            logger.error(">>>>>>>>>>> 销毁任务处理器时发生异常。jobId={}", jobId, e)
+            logger.error(">>>>>>>>>>> 销毁任务处理器时发生异常。taskId={}", taskId, e)
         }
 
         logger.info(">>>>>>>>>>> task-pilot 任务线程已停止，thread:{}", currentThread())
     }
 
     companion object {
-        private val logger = LoggerFactory.getLogger(JobThread::class.java)
+        private val logger = LoggerFactory.getLogger(TaskThread::class.java)
     }
 }

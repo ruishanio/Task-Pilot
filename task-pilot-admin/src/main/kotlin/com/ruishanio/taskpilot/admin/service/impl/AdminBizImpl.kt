@@ -20,13 +20,13 @@ class AdminBizImpl : AdminBiz {
     private lateinit var taskPilotSyncService: TaskPilotSyncService
 
     override fun callback(callbackRequestList: List<CallbackRequest>): Response<String> =
-        TaskPilotAdminBootstrap.instance.jobCompleteHelper.callback(callbackRequestList)
+        TaskPilotAdminBootstrap.instance.taskCompleteHelper.callback(callbackRequestList)
 
     override fun registry(registryRequest: RegistryRequest): Response<String> =
-        TaskPilotAdminBootstrap.instance.jobRegistryHelper.registry(registryRequest)
+        TaskPilotAdminBootstrap.instance.executorRegistryHelper.registry(registryRequest)
 
     override fun unregister(registryRequest: RegistryRequest): Response<String> =
-        TaskPilotAdminBootstrap.instance.jobRegistryHelper.registryRemove(registryRequest)
+        TaskPilotAdminBootstrap.instance.executorRegistryHelper.unregister(registryRequest)
 
     override fun sync(syncRequest: SyncRequest): Response<String> =
         taskPilotSyncService.sync(syncRequest)

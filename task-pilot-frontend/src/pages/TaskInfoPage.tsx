@@ -24,16 +24,16 @@ import {
   PlusOutlined,
   ThunderboltOutlined,
 } from '@ant-design/icons';
-import { jobGroupApi, jobInfoApi } from '../services/api';
+import { executorApi, taskInfoApi } from '../services/api';
 import { formatDateTime, getErrorMessage, parsePagePayload } from '../utils/format';
 
 const GLUE_SOURCE_TEMPLATES = {
   GLUE_GROOVY: `package com.ruishanio.taskpilot.service.handler;
 
 import com.ruishanio.taskpilot.core.context.TaskPilotHelper;
-import com.ruishanio.taskpilot.core.handler.IJobHandler;
+import com.ruishanio.taskpilot.core.handler.ITaskHandler;
 
-public class DemoGlueJobHandler extends IJobHandler {
+public class DemoGlueTaskHandler extends ITaskHandler {
     @Override
     public void execute() throws Exception {
         TaskPilotHelper.log("TASK-PILOT, Hello World.");
@@ -53,13 +53,13 @@ interface OptionItem {
   value: string | number;
 }
 
-interface JobGroupItem {
+interface ExecutorItem {
   id: number;
   title: string;
 }
 
-interface JobInfoMeta {
-  groups: JobGroupItem[];
+interface TaskInfoMeta {
+  executors: ExecutorItem[];
   selectedExecutorId: number;
   triggerStatusOptions: OptionItem[];
   scheduleTypeOptions: OptionItem[];
@@ -88,7 +88,7 @@ type MisfireStrategy = 'DO_NOTHING' | 'FIRE_ONCE_NOW';
 // 与后端 `ExecutorBlockStrategyEnum` 对齐，约束执行器阻塞策略的可选值。
 type ExecutorBlockStrategy = 'SERIAL_EXECUTION' | 'DISCARD_LATER' | 'COVER_EARLY';
 
-interface JobInfoRow {
+interface TaskInfoRow {
   id: number;
   executorId: number;
   taskName: string;
@@ -113,8 +113,8 @@ interface JobInfoRow {
   [key: string]: any;
 }
 
-const defaultJobInfoMeta: JobInfoMeta = {
-  groups: [],
+const defaultTaskInfoMeta: TaskInfoMeta = {
+  executors: [],
   selectedExecutorId: -1,
   triggerStatusOptions: [],
   scheduleTypeOptions: [],
@@ -124,8 +124,8 @@ const defaultJobInfoMeta: JobInfoMeta = {
   misfireStrategyOptions: [],
 };
 
-function JobInfoPage() {
-  const [meta, setMeta] = useState<JobInfoMeta>(defaultJobInfoMeta);
+function TaskInfoPage() {
+  const [meta, setMeta] = useState<TaskInfoMeta>(defaultTaskInfoMeta);
   const [filters, setFilters] = useState({
     executorId: -1,
     triggerStatus: '-1',
@@ -136,13 +136,13 @@ function JobInfoPage() {
   });
   const [pagination, setPagination] = useState({ current: 1, pageSize: 10 });
   const [loading, setLoading] = useState(false);
-  const [rows, setRows] = useState<JobInfoRow[]>([]);
+  const [rows, setRows] = useState<TaskInfoRow[]>([]);
   const [total, setTotal] = useState(0);
   const [form] = Form.useForm();
   const [modalOpen, setModalOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [editingRecord, setEditingRecord] = useState<JobInfoRow | null>(null);
-  const [triggerModal, setTriggerModal] = useState<{ open: boolean; record: JobInfoRow | null }>({ open: false, record: null });
+  const [editingRecord, setEditingRecord] = useState<TaskInfoRow | null>(null);
+  const [triggerModal, setTriggerModal] = useState<{ open: boolean; record: TaskInfoRow | null }>({ open: false, record: null });
   const [triggerSubmitting, setTriggerSubmitting] = useState(false);
   const [triggerForm] = Form.useForm();
   const [nextTimesModal, setNextTimesModal] = useState<{ open: boolean; list: string[]; title: string }>({ open: false, list: [], title: '' });
@@ -175,8 +175,8 @@ function JobInfoPage() {
 
   async function loadMeta() {
     try {
-      const response = await jobInfoApi.meta();
-      const payload = (response.data as JobInfoMeta) || meta;
+      const response = await taskInfoApi.meta();
+      const payload = (response.data as TaskInfoMeta) || meta;
       metaLoadedRef.current = true;
       setMeta(payload);
       setFilters((previous) => ({
@@ -198,7 +198,7 @@ function JobInfoPage() {
   async function loadData(customFilters = filters, customPagination = pagination) {
     try {
       setLoading(true);
-      const response = await jobInfoApi.page({
+      const response = await taskInfoApi.page({
         offset: (customPagination.current - 1) * customPagination.pageSize,
         pagesize: customPagination.pageSize,
         executorId: customFilters.executorId,
@@ -209,7 +209,7 @@ function JobInfoPage() {
         author: customFilters.author,
       });
       const page = parsePagePayload(response);
-      setRows(page.list as JobInfoRow[]);
+      setRows(page.list as TaskInfoRow[]);
       setTotal(page.total);
     } catch (error) {
       message.error(getErrorMessage(error, '加载任务列表失败'));
@@ -281,10 +281,10 @@ function JobInfoPage() {
       };
 
       if (editingRecord) {
-        await jobInfoApi.update(payload);
+        await taskInfoApi.update(payload);
         message.success('任务已更新');
       } else {
-        await jobInfoApi.create(payload);
+        await taskInfoApi.create(payload);
         message.success('任务已创建');
       }
 
@@ -303,7 +303,7 @@ function JobInfoPage() {
 
   async function handleDelete(record) {
     try {
-      await jobInfoApi.remove(record.id);
+      await taskInfoApi.remove(record.id);
       message.success('任务已删除');
       loadData();
     } catch (error) {
@@ -313,7 +313,7 @@ function JobInfoPage() {
 
   async function handleStart(record) {
     try {
-      await jobInfoApi.start(record.id);
+      await taskInfoApi.start(record.id);
       message.success('任务已启动');
       loadData();
     } catch (error) {
@@ -323,7 +323,7 @@ function JobInfoPage() {
 
   async function handleStop(record) {
     try {
-      await jobInfoApi.stop(record.id);
+      await taskInfoApi.stop(record.id);
       message.success('任务已停止');
       loadData();
     } catch (error) {
@@ -385,7 +385,7 @@ function JobInfoPage() {
 
   async function handlePreviewNextTimes(record) {
     try {
-      const response = await jobInfoApi.nextTriggerTime({
+      const response = await taskInfoApi.nextTriggerTime({
         scheduleType: record.scheduleType,
         scheduleConf: record.scheduleConf,
       });
@@ -401,7 +401,7 @@ function JobInfoPage() {
 
   async function handleShowRegistry(record) {
     try {
-      const response = await jobGroupApi.loadById(record.executorId);
+      const response = await executorApi.loadById(record.executorId);
       setRegistryModal({
         open: true,
         title: `${record.taskDesc} 的注册节点`,
@@ -416,7 +416,7 @@ function JobInfoPage() {
     try {
       const values = await triggerForm.validateFields();
       setTriggerSubmitting(true);
-      await jobInfoApi.trigger({
+      await taskInfoApi.trigger({
         id: triggerModal.record.id,
         executorParam: values.executorParam || '',
         addressList: values.addressList || '',
@@ -434,9 +434,9 @@ function JobInfoPage() {
     }
   }
 
-  const groupMap = useMemo(
-    () => new Map(meta.groups.map((item) => [item.id, item.title])),
-    [meta.groups],
+  const executorMap = useMemo(
+    () => new Map(meta.executors.map((item) => [item.id, item.title])),
+    [meta.executors],
   );
 
   const scheduleConfLabel = scheduleType === 'FIX_RATE' ? '固定频率（秒）' : 'Cron 表达式';
@@ -448,10 +448,10 @@ function JobInfoPage() {
         width: 80,
       },
       {
-        title: '任务组',
+        title: '执行器',
         dataIndex: 'executorId',
         width: 140,
-        render: (value) => groupMap.get(value) || value,
+        render: (value) => executorMap.get(value) || value,
       },
       {
         title: '任务名称',
@@ -464,7 +464,7 @@ function JobInfoPage() {
         width: 220,
       },
       {
-        title: 'JobHandler',
+        title: '执行器处理器',
         dataIndex: 'executorHandler',
         width: 180,
       },
@@ -521,7 +521,7 @@ function JobInfoPage() {
         ),
       },
     ],
-    [groupMap],
+    [executorMap],
   );
 
   return (
@@ -530,9 +530,9 @@ function JobInfoPage() {
         <div className="toolbar">
           <Select
             className="toolbar-grow"
-            placeholder="任务组"
+            placeholder="执行器"
             value={filters.executorId}
-            options={meta.groups.map((item) => ({ value: item.id, label: item.title }))}
+            options={meta.executors.map((item) => ({ value: item.id, label: item.title }))}
             onChange={(value) => setFilters((previous) => ({ ...previous, executorId: value }))}
           />
           <Select
@@ -555,7 +555,7 @@ function JobInfoPage() {
           />
           <Input
             className="toolbar-grow"
-            placeholder="按 JobHandler 搜索"
+            placeholder="按执行器处理器搜索"
             value={filters.executorHandler}
             onChange={(event) =>
               setFilters((previous) => ({ ...previous, executorHandler: event.target.value }))
@@ -636,12 +636,12 @@ function JobInfoPage() {
           </Form.Item>
           <Space style={{ width: '100%' }} size="middle" align="start">
             <Form.Item
-              label="任务组"
+              label="执行器"
               name="executorId"
               style={{ width: '100%' }}
-              rules={[{ required: true, message: '请选择任务组' }]}
+              rules={[{ required: true, message: '请选择执行器' }]}
             >
-              <Select options={meta.groups.map((item) => ({ value: item.id, label: item.title }))} />
+              <Select options={meta.executors.map((item) => ({ value: item.id, label: item.title }))} />
             </Form.Item>
             <Form.Item
               label="任务名称"
@@ -707,21 +707,21 @@ function JobInfoPage() {
               <Select disabled={Boolean(editingRecord)} options={meta.glueTypeOptions} />
             </Form.Item>
             <Form.Item
-              label="JobHandler"
+              label="执行器处理器"
               name="executorHandler"
               style={{ width: '100%' }}
               rules={[
                 ({ getFieldValue }) => ({
                   validator(_, value) {
                     if (getFieldValue('glueType') === 'BEAN' && !value) {
-                      return Promise.reject(new Error('BEAN 模式下必须填写 JobHandler'));
+                      return Promise.reject(new Error('BEAN 模式下必须填写执行器处理器'));
                     }
                     return Promise.resolve();
                   },
                 }),
               ]}
             >
-              <Input placeholder="请输入 JobHandler" />
+              <Input placeholder="请输入执行器处理器" />
             </Form.Item>
           </Space>
 
@@ -824,4 +824,4 @@ function JobInfoPage() {
   );
 }
 
-export default JobInfoPage;
+export default TaskInfoPage;

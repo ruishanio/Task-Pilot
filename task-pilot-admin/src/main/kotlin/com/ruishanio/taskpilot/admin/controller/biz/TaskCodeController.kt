@@ -1,10 +1,10 @@
 package com.ruishanio.taskpilot.admin.controller.biz
 
 import com.ruishanio.taskpilot.admin.auth.model.LoginInfo
-import com.ruishanio.taskpilot.admin.mapper.TaskInfoMapper
 import com.ruishanio.taskpilot.admin.mapper.GlueLogMapper
+import com.ruishanio.taskpilot.admin.mapper.TaskInfoMapper
 import com.ruishanio.taskpilot.admin.model.GlueLog
-import com.ruishanio.taskpilot.admin.util.JobGroupPermissionUtil
+import com.ruishanio.taskpilot.admin.util.ExecutorPermissionUtil
 import com.ruishanio.taskpilot.admin.web.ManageRoute
 import com.ruishanio.taskpilot.tool.core.StringTool
 import com.ruishanio.taskpilot.tool.json.GsonTool
@@ -22,8 +22,8 @@ import java.util.Date
  * GLUE 代码编辑控制器。
  */
 @Controller
-@RequestMapping(ManageRoute.API_MANAGE_JOBCODE)
-class JobCodeController {
+@RequestMapping(ManageRoute.API_MANAGE_TASK_CODE)
+class TaskCodeController {
     @Resource
     private lateinit var taskInfoMapper: TaskInfoMapper
 
@@ -51,37 +51,37 @@ class JobCodeController {
             return Response.ofFail("源码备注长度限制为4~100")
         }
 
-        val existsJobInfo = taskInfoMapper.loadById(id)
+        val existsTaskInfo = taskInfoMapper.loadById(id)
             ?: return Response.ofFail("任务ID非法")
-        val loginInfo: LoginInfo = JobGroupPermissionUtil.validJobGroupPermission(request, existsJobInfo.executorId)
+        val loginInfo: LoginInfo = ExecutorPermissionUtil.validExecutorPermission(request, existsTaskInfo.executorId)
 
-        existsJobInfo.glueSource = glueSource
-        existsJobInfo.glueRemark = glueRemark
-        existsJobInfo.glueUpdateTime = Date()
-        existsJobInfo.updateTime = Date()
-        taskInfoMapper.update(existsJobInfo)
+        existsTaskInfo.glueSource = glueSource
+        existsTaskInfo.glueRemark = glueRemark
+        existsTaskInfo.glueUpdateTime = Date()
+        existsTaskInfo.updateTime = Date()
+        taskInfoMapper.update(existsTaskInfo)
 
         val glueLog = GlueLog().apply {
-            taskId = existsJobInfo.id
-            glueType = existsJobInfo.glueType
+            taskId = existsTaskInfo.id
+            glueType = existsTaskInfo.glueType
             this.glueSource = glueSource
             this.glueRemark = glueRemark
             addTime = Date()
             updateTime = Date()
         }
         glueLogMapper.save(glueLog)
-        glueLogMapper.removeOld(existsJobInfo.id, 30)
+        glueLogMapper.removeOld(existsTaskInfo.id, 30)
 
         logger.info(
             ">>>>>>>>>>> task-pilot 操作日志：operator={}, type={}, content={}",
             loginInfo.userName,
-            "jobcode-update",
+            "task-code-update",
             GsonTool.toJson(glueLog)
         )
         return Response.ofSuccess()
     }
 
     companion object {
-        private val logger = LoggerFactory.getLogger(JobCodeController::class.java)
+        private val logger = LoggerFactory.getLogger(TaskCodeController::class.java)
     }
 }

@@ -3,7 +3,7 @@ package com.ruishanio.taskpilot.core.handler.impl
 import com.ruishanio.taskpilot.core.context.TaskPilotContext
 import com.ruishanio.taskpilot.core.context.TaskPilotHelper
 import com.ruishanio.taskpilot.core.glue.GlueTypeEnum
-import com.ruishanio.taskpilot.core.handler.IJobHandler
+import com.ruishanio.taskpilot.core.handler.ITaskHandler
 import com.ruishanio.taskpilot.core.log.TaskPilotFileAppender
 import com.ruishanio.taskpilot.core.util.ScriptUtil
 import java.io.File
@@ -13,19 +13,19 @@ import java.io.File
  *
  * 每次 GLUE 版本变化都会清理旧脚本文件，避免历史脚本残留导致执行来源混淆。
  */
-class ScriptJobHandler(
-    private val jobId: Int,
+class ScriptTaskHandler(
+    private val taskId: Int,
     private val glueUpdateTime: Long,
-    private val gluesource: String?,
+    private val glueSource: String?,
     private val glueType: GlueTypeEnum?
-) : IJobHandler() {
+) : ITaskHandler() {
     init {
         val glueSrcPath = File(TaskPilotFileAppender.getGlueSrcPath())
         if (glueSrcPath.exists()) {
             val glueSrcFileList = glueSrcPath.listFiles()
             if (glueSrcFileList != null) {
                 for (glueSrcFileItem in glueSrcFileList) {
-                    if (glueSrcFileItem.name.startsWith("${jobId}_")) {
+                    if (glueSrcFileItem.name.startsWith("${taskId}_")) {
                         glueSrcFileItem.delete()
                     }
                 }
@@ -50,15 +50,15 @@ class ScriptJobHandler(
         }
 
         val scriptFileName =
-            TaskPilotFileAppender.getGlueSrcPath() +
+                TaskPilotFileAppender.getGlueSrcPath() +
                 File.separator +
-                jobId +
+                taskId +
                 "_" +
                 glueUpdateTime +
                 suffix
         val scriptFile = File(scriptFileName)
         if (!scriptFile.exists()) {
-            ScriptUtil.markScriptFile(scriptFileName, gluesource)
+            ScriptUtil.markScriptFile(scriptFileName, glueSource)
         }
 
         val taskPilotContext = TaskPilotContext.getTaskPilotContext()
@@ -69,10 +69,10 @@ class ScriptJobHandler(
         }
         val currentTaskPilotContext = requireNotNull(taskPilotContext)
 
-        val jobParam = TaskPilotHelper.getJobParam() ?: ""
+        val taskParam = TaskPilotHelper.getTaskParam() ?: ""
         val shardIndex = currentTaskPilotContext.shardIndex
         val shardTotal = currentTaskPilotContext.shardTotal
-        val scriptParams = arrayOf(jobParam, shardIndex.toString(), shardTotal.toString())
+        val scriptParams = arrayOf(taskParam, shardIndex.toString(), shardTotal.toString())
 
         TaskPilotHelper.log("----------- 脚本文件:{} -----------", scriptFileName)
         val exitValue = ScriptUtil.execToFile(cmd, scriptFileName, logFileName, *scriptParams)

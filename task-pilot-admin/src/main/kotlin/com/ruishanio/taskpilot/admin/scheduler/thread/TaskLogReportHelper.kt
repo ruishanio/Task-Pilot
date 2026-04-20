@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit
  *
  * 报表只回刷最近 3 天，兼顾首页统计准确性和全表扫描成本。
  */
-class JobLogReportHelper {
+class TaskLogReportHelper {
     private lateinit var logReportThread: Thread
 
     @Volatile
@@ -110,7 +110,7 @@ class JobLogReportHelper {
             logger.info(">>>>>>>>>>> task-pilot 任务日志报表线程已停止。")
         }
         logReportThread.isDaemon = true
-        logReportThread.name = "task-pilot, admin JobLogReportHelper"
+        logReportThread.name = "task-pilot, admin TaskLogReportHelper"
         logReportThread.start()
     }
 
@@ -125,6 +125,6 @@ class JobLogReportHelper {
     }
 
     companion object {
-        private val logger = LoggerFactory.getLogger(JobLogReportHelper::class.java)
+        private val logger = LoggerFactory.getLogger(TaskLogReportHelper::class.java)
     }
 }

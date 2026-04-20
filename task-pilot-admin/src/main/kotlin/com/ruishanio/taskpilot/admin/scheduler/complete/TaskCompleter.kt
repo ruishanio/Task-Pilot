@@ -19,7 +19,7 @@ import java.text.MessageFormat
  * 完成回调时会串联子任务触发与日志裁剪，确保最终入库的 handleMsg 不超过数据库可承受范围。
  */
 @Component
-class JobCompleter {
+class TaskCompleter {
     @Resource
     private lateinit var taskInfoMapper: TaskInfoMapper
 
@@ -61,7 +61,7 @@ class JobCompleter {
                             continue
                         }
 
-                        TaskPilotAdminBootstrap.instance.jobTriggerPoolHelper.trigger(
+                        TaskPilotAdminBootstrap.instance.taskTriggerPoolHelper.trigger(
                             childTaskId,
                             TriggerTypeEnum.PARENT,
                             -1,
@@ -96,6 +96,6 @@ class JobCompleter {
     }
 
     companion object {
-        private val logger = LoggerFactory.getLogger(JobCompleter::class.java)
+        private val logger = LoggerFactory.getLogger(TaskCompleter::class.java)
     }
 }

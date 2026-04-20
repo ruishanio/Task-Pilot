@@ -1,32 +1,32 @@
 package com.ruishanio.taskpilot.core.handler.impl
 
 import com.ruishanio.taskpilot.core.context.TaskPilotHelper
-import com.ruishanio.taskpilot.core.handler.IJobHandler
+import com.ruishanio.taskpilot.core.handler.ITaskHandler
 
 /**
  * GLUE 包装处理器。
  *
  * 在实际任务执行前追加版本日志，便于定位脚本热更新后的执行来源。
  */
-class GlueJobHandler(
-    private val jobHandler: IJobHandler,
+class GlueTaskHandler(
+    private val taskHandler: ITaskHandler,
     private val glueUpdateTime: Long
-) : IJobHandler() {
+) : ITaskHandler() {
     fun getGlueUpdateTime(): Long = glueUpdateTime
 
     @Throws(Exception::class)
     override fun execute() {
         TaskPilotHelper.log("----------- GLUE 版本:{} -----------", glueUpdateTime)
-        jobHandler.execute()
+        taskHandler.execute()
     }
 
     @Throws(Exception::class)
     override fun init() {
-        jobHandler.init()
+        taskHandler.init()
     }
 
     @Throws(Exception::class)
     override fun destroy() {
-        jobHandler.destroy()
+        taskHandler.destroy()
     }
 }

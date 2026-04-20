@@ -17,7 +17,7 @@ import java.util.concurrent.ConcurrentMap
  *
  * 仍然保留快慢双线程池与按分钟滚动的超时统计，避免单个慢任务持续挤占普通触发流量。
  */
-class JobTriggerPoolHelper {
+class TaskTriggerPoolHelper {
     private lateinit var fastTriggerPool: ThreadPoolExecutor
     private lateinit var slowTriggerPool: ThreadPoolExecutor
 
@@ -25,7 +25,7 @@ class JobTriggerPoolHelper {
     private var minTim: Long = System.currentTimeMillis() / 60000
 
     @Volatile
-    private var jobTimeoutCountMap: ConcurrentMap<Int, AtomicInteger> = ConcurrentHashMap()
+    private var taskTimeoutCountMap: ConcurrentMap<Int, AtomicInteger> = ConcurrentHashMap()
 
     fun start() {
         fastTriggerPool = ThreadPoolExecutor(
@@ -35,7 +35,7 @@ class JobTriggerPoolHelper {
             TimeUnit.SECONDS,
             LinkedBlockingQueue(2000),
             ThreadFactory { runnable ->
-                Thread(runnable, "task-pilot, admin JobTriggerPoolHelper-fastTriggerPool-${runnable.hashCode()}")
+                Thread(runnable, "task-pilot, admin TaskTriggerPoolHelper-fastTriggerPool-${runnable.hashCode()}")
             },
             RejectedExecutionHandler { runnable, _ ->
                 logger.error(">>>>>>>>>>> task-pilot 快速触发线程池执行过于频繁，任务被拒绝。runnable={}", runnable)
@@ -49,7 +49,7 @@ class JobTriggerPoolHelper {
             TimeUnit.SECONDS,
             LinkedBlockingQueue(5000),
             ThreadFactory { runnable ->
-                Thread(runnable, "task-pilot, admin JobTriggerPoolHelper-slowTriggerPool-${runnable.hashCode()}")
+                Thread(runnable, "task-pilot, admin TaskTriggerPoolHelper-slowTriggerPool-${runnable.hashCode()}")
             },
             RejectedExecutionHandler { runnable, _ ->
                 logger.error(">>>>>>>>>>> task-pilot 慢速触发线程池执行过于频繁，任务被拒绝。runnable={}", runnable)
@@ -67,7 +67,7 @@ class JobTriggerPoolHelper {
      * 同一任务在 1 分钟内超时过多时切换到慢线程池，降低对普通任务的干扰。
      */
     fun trigger(
-        jobId: Int,
+        taskId: Int,
         triggerType: TriggerTypeEnum,
         failRetryCount: Int,
         executorShardingParam: String?,
@@ -75,8 +75,8 @@ class JobTriggerPoolHelper {
         addressList: String?
     ) {
         var triggerPool = fastTriggerPool
-        val jobTimeoutCount = jobTimeoutCountMap[jobId]
-        if (jobTimeoutCount != null && jobTimeoutCount.get() > 10) {
+        val taskTimeoutCount = taskTimeoutCountMap[taskId]
+        if (taskTimeoutCount != null && taskTimeoutCount.get() > 10) {
             triggerPool = slowTriggerPool
         }
 
@@ -84,8 +84,8 @@ class JobTriggerPoolHelper {
             override fun run() {
                 val start = System.currentTimeMillis()
                 try {
-                    TaskPilotAdminBootstrap.instance.jobTrigger.trigger(
-                        jobId,
+                    TaskPilotAdminBootstrap.instance.taskTrigger.trigger(
+                        taskId,
                         triggerType,
                         failRetryCount,
                         executorShardingParam,
@@ -93,27 +93,27 @@ class JobTriggerPoolHelper {
                         addressList
                     )
                 } catch (e: Throwable) {
-                    logger.error("触发任务时发生异常。jobId={}, triggerType={}", jobId, triggerType, e)
+                    logger.error("触发任务时发生异常。taskId={}, triggerType={}", taskId, triggerType, e)
                 } finally {
                     val minTimNow = System.currentTimeMillis() / 60000
                     if (minTim != minTimNow) {
                         minTim = minTimNow
-                        jobTimeoutCountMap.clear()
+                        taskTimeoutCountMap.clear()
                     }
 
                     val cost = System.currentTimeMillis() - start
                     if (cost > 500) {
-                        val timeoutCount = jobTimeoutCountMap.putIfAbsent(jobId, AtomicInteger(1))
+                        val timeoutCount = taskTimeoutCountMap.putIfAbsent(taskId, AtomicInteger(1))
                         timeoutCount?.incrementAndGet()
                     }
                 }
             }
 
-            override fun toString(): String = "Job Runnable, jobId:$jobId"
+            override fun toString(): String = "Task Runnable, taskId:$taskId"
         })
     }
 
     companion object {
-        private val logger = LoggerFactory.getLogger(JobTriggerPoolHelper::class.java)
+        private val logger = LoggerFactory.getLogger(TaskTriggerPoolHelper::class.java)
     }
 }

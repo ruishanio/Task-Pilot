@@ -1,6 +1,6 @@
 package com.ruishanio.taskpilot.core.handler.impl
 
-import com.ruishanio.taskpilot.core.handler.IJobHandler
+import com.ruishanio.taskpilot.core.handler.ITaskHandler
 import java.lang.reflect.Method
 
 /**
@@ -8,12 +8,12 @@ import java.lang.reflect.Method
  *
  * 继续允许调用无参方法和仅引用类型参数的方法，保持旧版方法型任务的接入方式不变。
  */
-class MethodJobHandler(
+class MethodTaskHandler(
     private val target: Any,
     private val method: Method,
     private var initMethod: Method?,
     private var destroyMethod: Method?
-) : IJobHandler() {
+) : ITaskHandler() {
     @Throws(Exception::class)
     override fun execute() {
         val paramTypes = method.parameterTypes

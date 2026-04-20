@@ -54,7 +54,7 @@ class TaskPilotSyncRunner(
     private fun buildSyncRequest(): SyncRequest {
         val request = SyncRequest()
         request.appName = properties.executor.appname.orEmpty()
-        request.groupTitle = resolveGroupTitle()
+        request.executorTitle = resolveExecutorTitle()
 
         for (definition in TaskPilotMethodScanner.scan(applicationContext, properties.executor.excludedpackage)) {
             val taskPilot = definition.taskPilot()
@@ -117,9 +117,9 @@ class TaskPilotSyncRunner(
     /**
      * 统一处理执行器标题默认值，避免业务侧必须重复配置。
      */
-    private fun resolveGroupTitle(): String {
-        val groupTitle = properties.sync.groupTitle
-        return if (StringTool.isNotBlank(groupTitle)) groupTitle.trim() else properties.executor.appname.orEmpty()
+    private fun resolveExecutorTitle(): String {
+        val executorTitle = properties.sync.executorTitle
+        return if (StringTool.isNotBlank(executorTitle)) executorTitle.trim() else properties.executor.appname.orEmpty()
     }
 
     /**

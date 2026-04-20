@@ -10,7 +10,7 @@ class TaskPilotSimpleExecutor : TaskPilotExecutor() {
     var taskPilotBeanList: List<Any> = ArrayList()
 
     override fun start() {
-        initJobHandlerMethodRepository(taskPilotBeanList)
+        initTaskHandlerMethodRepository(taskPilotBeanList)
         try {
             super.start()
         } catch (e: Exception) {
@@ -25,7 +25,7 @@ class TaskPilotSimpleExecutor : TaskPilotExecutor() {
     /**
      * 从显式传入的 Bean 列表中扫描并注册任务方法。
      */
-    private fun initJobHandlerMethodRepository(taskPilotBeanList: List<Any>?) {
+    private fun initTaskHandlerMethodRepository(taskPilotBeanList: List<Any>?) {
         if (taskPilotBeanList.isNullOrEmpty()) {
             return
         }
@@ -37,7 +37,7 @@ class TaskPilotSimpleExecutor : TaskPilotExecutor() {
             }
             for (executeMethod in methods) {
                 val taskPilot = executeMethod.getAnnotation(TaskPilot::class.java)
-                registryJobHandler(taskPilot, bean, executeMethod)
+                registerTaskHandler(taskPilot, bean, executeMethod)
             }
         }
     }

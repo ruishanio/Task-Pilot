@@ -8,7 +8,7 @@ import com.ruishanio.taskpilot.admin.model.TaskInfo
 import com.ruishanio.taskpilot.admin.model.TaskLog
 import com.ruishanio.taskpilot.admin.scheduler.config.TaskPilotAdminBootstrap
 import com.ruishanio.taskpilot.admin.scheduler.exception.TaskPilotException
-import com.ruishanio.taskpilot.admin.util.JobGroupPermissionUtil
+import com.ruishanio.taskpilot.admin.util.ExecutorPermissionUtil
 import com.ruishanio.taskpilot.admin.web.ManageRoute
 import com.ruishanio.taskpilot.core.context.TaskPilotContext
 import com.ruishanio.taskpilot.core.openapi.ExecutorBiz
@@ -36,7 +36,7 @@ import java.util.HashMap
  */
 @Controller
 @RequestMapping(ManageRoute.API_MANAGE_TASK_LOG)
-class JobLogController {
+class TaskLogController {
     @Resource
     lateinit var executorMapper: ExecutorMapper
 
@@ -56,31 +56,35 @@ class JobLogController {
         @RequestParam(value = "executorId", required = false, defaultValue = "0") executorId: Int?,
         @RequestParam(value = "taskId", required = false, defaultValue = "0") taskId: Int?
     ): Response<Map<String, Any>> {
-        val jobGroupList = JobGroupPermissionUtil.filterJobGroupByPermission(request, executorMapper.findAll())
-        if (CollectionTool.isEmpty(jobGroupList)) {
+        val executorList = ExecutorPermissionUtil.filterExecutorByPermission(request, executorMapper.findAll())
+        if (CollectionTool.isEmpty(executorList)) {
             throw TaskPilotException("不存在有效执行器,请联系管理员")
         }
 
         var selectedExecutorParam = executorId ?: 0
         if (taskId != null && taskId > 0) {
-            val jobInfo = taskInfoMapper.loadById(taskId)
+            val taskInfo = taskInfoMapper.loadById(taskId)
                 ?: throw RuntimeException("任务ID非法")
-            selectedExecutorParam = jobInfo.executorId
+            selectedExecutorParam = taskInfo.executorId
         }
 
-        val accessibleGroupIds = jobGroupList.map(Executor::id)
-        val selectedExecutorId = if (accessibleGroupIds.contains(selectedExecutorParam)) selectedExecutorParam else jobGroupList[0].id
+        val accessibleExecutorIds = executorList.map(Executor::id)
+        val selectedExecutorId = if (accessibleExecutorIds.contains(selectedExecutorParam)) {
+            selectedExecutorParam
+        } else {
+            executorList[0].id
+        }
 
-        val jobInfoList = taskInfoMapper.getTasksByExecutorId(selectedExecutorId)
+        val taskInfoList = taskInfoMapper.getTasksByExecutorId(selectedExecutorId)
         var selectedTaskId = 0
-        if (CollectionTool.isNotEmpty(jobInfoList)) {
-            val accessibleJobIds = jobInfoList.map(TaskInfo::id)
-            selectedTaskId = if (taskId != null && accessibleJobIds.contains(taskId)) taskId else jobInfoList[0].id
+        if (CollectionTool.isNotEmpty(taskInfoList)) {
+            val accessibleTaskIds = taskInfoList.map(TaskInfo::id)
+            selectedTaskId = if (taskId != null && accessibleTaskIds.contains(taskId)) taskId else taskInfoList[0].id
         }
 
         val data = HashMap<String, Any>()
-        data["groups"] = jobGroupList
-        data["jobs"] = jobInfoList
+        data["executors"] = executorList
+        data["tasks"] = taskInfoList
         data["selectedExecutorId"] = selectedExecutorId
         data["selectedTaskId"] = selectedTaskId
         data["logStatusOptions"] = listOf(
@@ -114,7 +118,7 @@ class JobLogController {
         @RequestParam logStatus: Int,
         @RequestParam filterTime: String?
     ): Response<PageModel<TaskLog>> {
-        JobGroupPermissionUtil.validJobGroupPermission(request, executorId)
+        ExecutorPermissionUtil.validExecutorPermission(request, executorId)
         if (taskId < 1) {
             return Response.ofFail("请选择任务")
         }
@@ -160,28 +164,28 @@ class JobLogController {
     @RequestMapping("/log_kill")
     @ResponseBody
     fun logKill(request: HttpServletRequest, @RequestParam("id") id: Long): Response<String> {
-        val log = taskLogMapper.load(id) ?: return Response.ofFail("日志ID非法")
-        val jobInfo = taskInfoMapper.loadById(log.taskId)
+        val taskLog = taskLogMapper.load(id) ?: return Response.ofFail("日志ID非法")
+        val taskInfo = taskInfoMapper.loadById(taskLog.taskId)
             ?: return Response.ofFail("任务ID非法")
-        if (TaskPilotContext.HANDLE_CODE_SUCCESS != log.triggerCode) {
+        if (TaskPilotContext.HANDLE_CODE_SUCCESS != taskLog.triggerCode) {
             return Response.ofFail("调度失败，无法终止日志")
         }
 
-        JobGroupPermissionUtil.validJobGroupPermission(request, jobInfo.executorId)
+        ExecutorPermissionUtil.validExecutorPermission(request, taskInfo.executorId)
 
         val runResult = try {
-            val executorBiz: ExecutorBiz = TaskPilotAdminBootstrap.getExecutorBiz(log.executorAddress)!!
-            executorBiz.kill(KillRequest(jobInfo.id))
+            val executorBiz: ExecutorBiz = TaskPilotAdminBootstrap.getExecutorBiz(taskLog.executorAddress)!!
+            executorBiz.kill(KillRequest(taskInfo.id))
         } catch (e: Exception) {
             logger.error("终止任务执行时发生异常。logId={}", id, e)
             Response.ofFail<String>(e.message)
         }
 
         return if (TaskPilotContext.HANDLE_CODE_SUCCESS == runResult.code) {
-            log.handleCode = TaskPilotContext.HANDLE_CODE_FAIL
-            log.handleMsg = "人为操作，主动终止:" + (runResult.msg ?: "")
-            log.handleTime = Date()
-            TaskPilotAdminBootstrap.instance.jobCompleter.complete(log)
+            taskLog.handleCode = TaskPilotContext.HANDLE_CODE_FAIL
+            taskLog.handleMsg = "人为操作，主动终止:" + (runResult.msg ?: "")
+            taskLog.handleTime = Date()
+            TaskPilotAdminBootstrap.instance.taskCompleter.complete(taskLog)
             Response.ofSuccess(runResult.msg)
         } else {
             Response.ofFail(runResult.msg)
@@ -196,7 +200,7 @@ class JobLogController {
         @RequestParam("taskId") taskId: Int,
         @RequestParam("type") type: Int
     ): Response<String> {
-        JobGroupPermissionUtil.validJobGroupPermission(request, executorId)
+        ExecutorPermissionUtil.validExecutorPermission(request, executorId)
         if (taskId < 1) {
             return Response.ofFail("请选择任务")
         }
@@ -237,13 +241,13 @@ class JobLogController {
         @RequestParam("fromLineNum") fromLineNum: Int
     ): Response<LogResult> {
         return try {
-            val jobLog = taskLogMapper.load(logId)
+            val taskLog = taskLogMapper.load(logId)
                 ?: return Response.ofFail("日志ID非法")
-            val executorBiz: ExecutorBiz = TaskPilotAdminBootstrap.getExecutorBiz(jobLog.executorAddress)!!
-            val logResult = executorBiz.log(LogRequest(jobLog.triggerTime!!.time, logId, fromLineNum))
+            val executorBiz: ExecutorBiz = TaskPilotAdminBootstrap.getExecutorBiz(taskLog.executorAddress)!!
+            val logResult = executorBiz.log(LogRequest(taskLog.triggerTime!!.time, logId, fromLineNum))
             val logData = logResult.data
 
-            if (logData != null && logData.fromLineNum > logData.toLineNum && jobLog.handleCode > 0) {
+            if (logData != null && logData.fromLineNum > logData.toLineNum && taskLog.handleCode > 0) {
                 logData.isEnd = true
             }
             if (logData != null && StringTool.isNotBlank(logData.logContent)) {
@@ -267,6 +271,6 @@ class JobLogController {
     }
 
     companion object {
-        private val logger = LoggerFactory.getLogger(JobLogController::class.java)
+        private val logger = LoggerFactory.getLogger(TaskLogController::class.java)
     }
 }

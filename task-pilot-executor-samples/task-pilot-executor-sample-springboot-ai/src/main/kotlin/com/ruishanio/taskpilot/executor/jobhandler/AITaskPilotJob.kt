@@ -36,7 +36,7 @@ class AITaskPilotJob {
      */
     @TaskPilot("ollamaJobHandler")
     fun ollamaJobHandler() {
-        val param = TaskPilotHelper.getJobParam()
+        val param = TaskPilotHelper.getTaskParam()
         if (param.isNullOrBlank()) {
             TaskPilotHelper.log("param is empty.")
             TaskPilotHelper.handleFail()
@@ -96,7 +96,7 @@ class AITaskPilotJob {
      */
     @TaskPilot("difyWorkflowJobHandler")
     fun difyWorkflowJobHandler() {
-        val param = TaskPilotHelper.getJobParam()
+        val param = TaskPilotHelper.getTaskParam()
         if (param.isNullOrBlank()) {
             TaskPilotHelper.log("param is empty.")
             TaskPilotHelper.handleFail()

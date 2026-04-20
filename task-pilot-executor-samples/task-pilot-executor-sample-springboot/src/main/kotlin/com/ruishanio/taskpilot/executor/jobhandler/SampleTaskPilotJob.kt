@@ -19,8 +19,8 @@ import org.springframework.stereotype.Component
  * TaskPilot 开发示例（Bean 模式）。
  *
  * 开发步骤：
- * 1、任务开发：在 Spring Bean 实例中开发 Job 方法；
- * 2、注解配置：为 Job 方法添加 @TaskPilot 注解，value 对应调度中心中任务的 JobHandler；
+ * 1、任务开发：在 Spring Bean 实例中开发任务方法；
+ * 2、注解配置：为任务方法添加 @TaskPilot 注解，value 对应调度中心中任务的执行器处理器；
  * 3、执行日志：通过 TaskPilotHelper.log 打印执行日志；
  * 4、任务结果：默认任务结果为成功；如需失败，可调用 TaskPilotHelper.handleFail/handleSuccess。
  */
@@ -64,7 +64,7 @@ class SampleTaskPilotJob {
      */
     @TaskPilot("commandJobHandler")
     fun commandJobHandler() {
-        val command = TaskPilotHelper.getJobParam()
+        val command = TaskPilotHelper.getTaskParam()
         if (command.isNullOrBlank()) {
             TaskPilotHelper.handleFail("command empty.")
             return
@@ -109,7 +109,7 @@ class SampleTaskPilotJob {
      */
     @TaskPilot("httpJobHandler")
     fun httpJobHandler() {
-        val param = TaskPilotHelper.getJobParam()
+        val param = TaskPilotHelper.getTaskParam()
         if (param.isNullOrBlank()) {
             TaskPilotHelper.log("param[$param] invalid.")
             TaskPilotHelper.handleFail()

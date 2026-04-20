@@ -54,7 +54,7 @@ class TaskPilotSyncService {
             return Response.ofFail("sync fail, appName empty.")
         }
 
-        val executor = initOrLoadGroup(request)
+        val executor = initOrLoadExecutor(request)
         if (executor == null || executor.id < 1) {
             return Response.ofFail("sync fail, executor group init failed.")
         }
@@ -92,15 +92,15 @@ class TaskPilotSyncService {
                 continue
             }
 
-            val jobInfo = buildTaskInfo(executor.id, task)
-            val addResponse = taskPilotService.add(jobInfo, systemLoginInfo)
+            val taskInfo = buildTaskInfo(executor.id, task)
+            val addResponse = taskPilotService.add(taskInfo, systemLoginInfo)
             if (!Response.isSuccess(addResponse)) {
                 return Response.ofFail("sync task fail, handler=${task.executorHandler}, msg=${addResponse.msg ?: "null"}")
             }
 
             createdTaskCount++
             if (task.autoStart) {
-                val startResponse = taskPilotService.start(jobInfo.id, systemLoginInfo)
+                val startResponse = taskPilotService.start(taskInfo.id, systemLoginInfo)
                 if (!Response.isSuccess(startResponse)) {
                     warnings.add("handler=${task.executorHandler} autoStart skipped: ${startResponse.msg ?: "null"}")
                 }
@@ -108,7 +108,7 @@ class TaskPilotSyncService {
         }
 
         val summary = buildString {
-            append("groupId=").append(executor.id)
+            append("executorId=").append(executor.id)
             append(", createdTaskCount=").append(createdTaskCount)
             append(", updatedTaskCount=").append(updatedTaskCount)
             append(", skippedTaskCount=").append(skippedTaskCount)
@@ -123,40 +123,40 @@ class TaskPilotSyncService {
     /**
      * 分组不存在时创建，已存在时仅对同步托管分组做最小更新。
      */
-    private fun initOrLoadGroup(request: SyncRequest): Executor? {
-        var group = executorMapper.loadByAppname(request.appName!!.trim())
-        if (group == null) {
-            group = Executor().apply {
+    private fun initOrLoadExecutor(request: SyncRequest): Executor? {
+        var executor = executorMapper.loadByAppname(request.appName!!.trim())
+        if (executor == null) {
+            executor = Executor().apply {
                 appname = request.appName!!.trim()
-                title = buildGroupTitle(request)
+                title = buildExecutorTitle(request)
                 addressType = 0
                 addressList = buildRegistryAddressList(request.appName)
                 updateTime = Date()
             }
-            executorMapper.save(group)
-            return group
+            executorMapper.save(executor)
+            return executor
         }
 
-        if (group.addressType == 0) {
+        if (executor.addressType == 0) {
             var changed = false
-            val groupTitle = buildGroupTitle(request)
-            if (!equalsNullable(group.title, groupTitle)) {
-                group.title = groupTitle
+            val executorTitle = buildExecutorTitle(request)
+            if (!equalsNullable(executor.title, executorTitle)) {
+                executor.title = executorTitle
                 changed = true
             }
 
-            val addressList = buildRegistryAddressList(group.appname)
-            if (!equalsNullable(group.addressList, addressList)) {
-                group.addressList = addressList
+            val addressList = buildRegistryAddressList(executor.appname)
+            if (!equalsNullable(executor.addressList, addressList)) {
+                executor.addressList = addressList
                 changed = true
             }
 
             if (changed) {
-                group.updateTime = Date()
-                executorMapper.update(group)
+                executor.updateTime = Date()
+                executorMapper.update(executor)
             }
         }
-        return group
+        return executor
     }
 
     /**
@@ -238,8 +238,8 @@ class TaskPilotSyncService {
     /**
      * 标题为空时回退为截断后的 appName，避免超出数据库字段长度。
      */
-    private fun buildGroupTitle(request: SyncRequest): String {
-        val title = if (StringTool.isNotBlank(request.groupTitle)) request.groupTitle!!.trim() else request.appName!!.trim()
+    private fun buildExecutorTitle(request: SyncRequest): String {
+        val title = if (StringTool.isNotBlank(request.executorTitle)) request.executorTitle!!.trim() else request.appName!!.trim()
         return if (title.length > 12) title.substring(0, 12) else title
     }
 

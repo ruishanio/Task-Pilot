@@ -8,7 +8,7 @@ import com.ruishanio.taskpilot.admin.model.TaskInfo
 import com.ruishanio.taskpilot.admin.scheduler.exception.TaskPilotException
 import com.ruishanio.taskpilot.admin.scheduler.type.toScheduleType
 import com.ruishanio.taskpilot.admin.service.TaskPilotService
-import com.ruishanio.taskpilot.admin.util.JobGroupPermissionUtil
+import com.ruishanio.taskpilot.admin.util.ExecutorPermissionUtil
 import com.ruishanio.taskpilot.admin.web.ManageRoute
 import com.ruishanio.taskpilot.core.enums.ExecutorBlockStrategyEnum
 import com.ruishanio.taskpilot.core.enums.ExecutorRouteStrategyEnum
@@ -35,7 +35,7 @@ import java.util.HashMap
  */
 @Controller
 @RequestMapping(ManageRoute.API_MANAGE_TASK_INFO)
-class JobInfoController {
+class TaskInfoController {
     @Resource
     private lateinit var taskPilotService: TaskPilotService
 
@@ -51,16 +51,16 @@ class JobInfoController {
         request: HttpServletRequest,
         @RequestParam(value = "executorId", required = false, defaultValue = "-1") executorId: Int
     ): Response<Map<String, Any>> {
-        val jobGroupList = JobGroupPermissionUtil.filterJobGroupByPermission(request, executorMapper.findAll())
-        if (CollectionTool.isEmpty(jobGroupList)) {
+        val executorList = ExecutorPermissionUtil.filterExecutorByPermission(request, executorMapper.findAll())
+        if (CollectionTool.isEmpty(executorList)) {
             throw TaskPilotException("不存在有效执行器,请联系管理员")
         }
 
-        val accessibleGroupIds = jobGroupList.map(Executor::id)
-        val selectedExecutorId = if (accessibleGroupIds.contains(executorId)) executorId else jobGroupList[0].id
+        val accessibleExecutorIds = executorList.map(Executor::id)
+        val selectedExecutorId = if (accessibleExecutorIds.contains(executorId)) executorId else executorList[0].id
 
         val data = HashMap<String, Any>()
-        data["groups"] = jobGroupList
+        data["executors"] = executorList
         data["selectedExecutorId"] = selectedExecutorId
         data["triggerStatusOptions"] = listOf(
             option("-1", "全部"),
@@ -94,21 +94,21 @@ class JobInfoController {
         @RequestParam executorHandler: String?,
         @RequestParam author: String?
     ): Response<PageModel<TaskInfo>> {
-        JobGroupPermissionUtil.validJobGroupPermission(request, executorId)
+        ExecutorPermissionUtil.validExecutorPermission(request, executorId)
         return taskPilotService.pageList(offset, pagesize, executorId, triggerStatus, taskName, taskDesc, executorHandler, author)
     }
 
     @RequestMapping("/insert")
     @ResponseBody
     fun add(request: HttpServletRequest, taskInfo: TaskInfo): Response<String> {
-        val loginInfo = JobGroupPermissionUtil.validJobGroupPermission(request, taskInfo.executorId)
+        val loginInfo = ExecutorPermissionUtil.validExecutorPermission(request, taskInfo.executorId)
         return taskPilotService.add(taskInfo, loginInfo)
     }
 
     @RequestMapping("/update")
     @ResponseBody
     fun update(request: HttpServletRequest, taskInfo: TaskInfo): Response<String> {
-        val loginInfo = JobGroupPermissionUtil.validJobGroupPermission(request, taskInfo.executorId)
+        val loginInfo = ExecutorPermissionUtil.validExecutorPermission(request, taskInfo.executorId)
         return taskPilotService.update(taskInfo, loginInfo)
     }
 
@@ -147,7 +147,7 @@ class JobInfoController {
 
     @RequestMapping("/trigger")
     @ResponseBody
-    fun triggerJob(
+    fun triggerTask(
         request: HttpServletRequest,
         @RequestParam("id") id: Int,
         @RequestParam("executorParam") executorParam: String?,
@@ -201,6 +201,6 @@ class JobInfoController {
     }
 
     companion object {
-        private val logger = LoggerFactory.getLogger(JobInfoController::class.java)
+        private val logger = LoggerFactory.getLogger(TaskInfoController::class.java)
     }
 }

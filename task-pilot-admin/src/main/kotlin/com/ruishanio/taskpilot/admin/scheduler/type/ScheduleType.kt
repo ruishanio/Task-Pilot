@@ -11,5 +11,5 @@ abstract class ScheduleType {
      * 基于任务配置和参考时间计算下一次触发时间。
      */
     @Throws(Exception::class)
-    abstract fun generateNextTriggerTime(jobInfo: TaskInfo, fromTime: Date): Date?
+    abstract fun generateNextTriggerTime(taskInfo: TaskInfo, fromTime: Date): Date?
 }

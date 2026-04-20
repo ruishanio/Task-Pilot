@@ -7,8 +7,8 @@ import org.slf4j.LoggerFactory
  * 忽略当前失火窗口，不做补偿触发。
  */
 class MisfireDoNothing : MisfireHandler() {
-    override fun handle(jobId: Int) {
-        logger.warn(">>>>>>>>>>> task-pilot 调度失火策略：忽略本次触发，jobId={}", jobId)
+    override fun handle(taskId: Int) {
+        logger.warn(">>>>>>>>>>> task-pilot 调度失火策略：忽略本次触发，taskId={}", taskId)
     }
 
     companion object {

@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit
 /**
  * 任务日志清理线程。
  */
-class JobLogFileCleanThread private constructor() {
+class TaskLogFileCleanThread private constructor() {
     private var localThread: Thread? = null
 
     @Volatile
@@ -80,7 +80,7 @@ class JobLogFileCleanThread private constructor() {
                 logger.info(">>>>>>>>>>> task-pilot 执行器任务日志清理线程已销毁。")
             }.apply {
                 isDaemon = true
-                name = "task-pilot, executor JobLogFileCleanThread"
+                name = "task-pilot, executor TaskLogFileCleanThread"
                 start()
             }
     }
@@ -97,8 +97,8 @@ class JobLogFileCleanThread private constructor() {
     }
 
     companion object {
-        private val logger = LoggerFactory.getLogger(JobLogFileCleanThread::class.java)
-        private val instance = JobLogFileCleanThread()
-        fun getInstance(): JobLogFileCleanThread = instance
+        private val logger = LoggerFactory.getLogger(TaskLogFileCleanThread::class.java)
+        private val instance = TaskLogFileCleanThread()
+        fun getInstance(): TaskLogFileCleanThread = instance
     }
 }

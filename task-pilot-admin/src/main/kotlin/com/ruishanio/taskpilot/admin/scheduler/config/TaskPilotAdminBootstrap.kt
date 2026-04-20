@@ -6,15 +6,15 @@ import com.ruishanio.taskpilot.admin.mapper.TaskInfoMapper
 import com.ruishanio.taskpilot.admin.mapper.TaskLockMapper
 import com.ruishanio.taskpilot.admin.mapper.TaskLogMapper
 import com.ruishanio.taskpilot.admin.mapper.TaskReportMapper
-import com.ruishanio.taskpilot.admin.scheduler.alarm.JobAlarmer
-import com.ruishanio.taskpilot.admin.scheduler.complete.JobCompleter
-import com.ruishanio.taskpilot.admin.scheduler.thread.JobCompleteHelper
-import com.ruishanio.taskpilot.admin.scheduler.thread.JobFailAlarmMonitorHelper
-import com.ruishanio.taskpilot.admin.scheduler.thread.JobLogReportHelper
-import com.ruishanio.taskpilot.admin.scheduler.thread.JobRegistryHelper
-import com.ruishanio.taskpilot.admin.scheduler.thread.JobScheduleHelper
-import com.ruishanio.taskpilot.admin.scheduler.thread.JobTriggerPoolHelper
-import com.ruishanio.taskpilot.admin.scheduler.trigger.JobTrigger
+import com.ruishanio.taskpilot.admin.scheduler.alarm.TaskAlarmer
+import com.ruishanio.taskpilot.admin.scheduler.complete.TaskCompleter
+import com.ruishanio.taskpilot.admin.scheduler.thread.ExecutorRegistryHelper
+import com.ruishanio.taskpilot.admin.scheduler.thread.TaskCompleteHelper
+import com.ruishanio.taskpilot.admin.scheduler.thread.TaskFailAlarmMonitorHelper
+import com.ruishanio.taskpilot.admin.scheduler.thread.TaskLogReportHelper
+import com.ruishanio.taskpilot.admin.scheduler.thread.TaskScheduleHelper
+import com.ruishanio.taskpilot.admin.scheduler.thread.TaskTriggerPoolHelper
+import com.ruishanio.taskpilot.admin.scheduler.trigger.TaskTrigger
 import com.ruishanio.taskpilot.core.constant.Const
 import com.ruishanio.taskpilot.core.openapi.ExecutorBiz
 import com.ruishanio.taskpilot.tool.core.StringTool
@@ -39,12 +39,12 @@ import java.util.concurrent.ConcurrentMap
  */
 @Component
 class TaskPilotAdminBootstrap : DisposableBean {
-    lateinit var jobTriggerPoolHelper: JobTriggerPoolHelper
-    lateinit var jobRegistryHelper: JobRegistryHelper
-    lateinit var jobFailAlarmMonitorHelper: JobFailAlarmMonitorHelper
-    lateinit var jobCompleteHelper: JobCompleteHelper
-    lateinit var jobLogReportHelper: JobLogReportHelper
-    lateinit var jobScheduleHelper: JobScheduleHelper
+    lateinit var taskTriggerPoolHelper: TaskTriggerPoolHelper
+    lateinit var executorRegistryHelper: ExecutorRegistryHelper
+    lateinit var taskFailAlarmMonitorHelper: TaskFailAlarmMonitorHelper
+    lateinit var taskCompleteHelper: TaskCompleteHelper
+    lateinit var taskLogReportHelper: TaskLogReportHelper
+    lateinit var taskScheduleHelper: TaskScheduleHelper
 
     @Volatile
     private var started: Boolean = false
@@ -92,13 +92,13 @@ class TaskPilotAdminBootstrap : DisposableBean {
     lateinit var transactionManager: PlatformTransactionManager
 
     @Resource
-    lateinit var jobAlarmer: JobAlarmer
+    lateinit var taskAlarmer: TaskAlarmer
 
     @Resource
-    lateinit var jobTrigger: JobTrigger
+    lateinit var taskTrigger: TaskTrigger
 
     @Resource
-    lateinit var jobCompleter: JobCompleter
+    lateinit var taskCompleter: TaskCompleter
 
     /**
      * 统一收敛触发线程池下限，防止配置过低时影响调度吞吐。
@@ -149,12 +149,12 @@ class TaskPilotAdminBootstrap : DisposableBean {
      */
     @Throws(Exception::class)
     private fun doStart() {
-        jobTriggerPoolHelper = JobTriggerPoolHelper().also { it.start() }
-        jobRegistryHelper = JobRegistryHelper().also { it.start() }
-        jobFailAlarmMonitorHelper = JobFailAlarmMonitorHelper().also { it.start() }
-        jobCompleteHelper = JobCompleteHelper().also { it.start() }
-        jobLogReportHelper = JobLogReportHelper().also { it.start() }
-        jobScheduleHelper = JobScheduleHelper().also { it.start() }
+        taskTriggerPoolHelper = TaskTriggerPoolHelper().also { it.start() }
+        executorRegistryHelper = ExecutorRegistryHelper().also { it.start() }
+        taskFailAlarmMonitorHelper = TaskFailAlarmMonitorHelper().also { it.start() }
+        taskCompleteHelper = TaskCompleteHelper().also { it.start() }
+        taskLogReportHelper = TaskLogReportHelper().also { it.start() }
+        taskScheduleHelper = TaskScheduleHelper().also { it.start() }
         logger.info(">>>>>>>>> task-pilot 管理端启动完成。")
     }
 
@@ -163,23 +163,23 @@ class TaskPilotAdminBootstrap : DisposableBean {
      */
     private fun doStop() {
         started = false
-        if (::jobScheduleHelper.isInitialized) {
-            jobScheduleHelper.stop()
+        if (::taskScheduleHelper.isInitialized) {
+            taskScheduleHelper.stop()
         }
-        if (::jobLogReportHelper.isInitialized) {
-            jobLogReportHelper.stop()
+        if (::taskLogReportHelper.isInitialized) {
+            taskLogReportHelper.stop()
         }
-        if (::jobCompleteHelper.isInitialized) {
-            jobCompleteHelper.stop()
+        if (::taskCompleteHelper.isInitialized) {
+            taskCompleteHelper.stop()
         }
-        if (::jobFailAlarmMonitorHelper.isInitialized) {
-            jobFailAlarmMonitorHelper.stop()
+        if (::taskFailAlarmMonitorHelper.isInitialized) {
+            taskFailAlarmMonitorHelper.stop()
         }
-        if (::jobRegistryHelper.isInitialized) {
-            jobRegistryHelper.stop()
+        if (::executorRegistryHelper.isInitialized) {
+            executorRegistryHelper.stop()
         }
-        if (::jobTriggerPoolHelper.isInitialized) {
-            jobTriggerPoolHelper.stop()
+        if (::taskTriggerPoolHelper.isInitialized) {
+            taskTriggerPoolHelper.stop()
         }
         logger.info(">>>>>>>>> task-pilot 管理端已停止。")
     }

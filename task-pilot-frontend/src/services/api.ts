@@ -19,7 +19,7 @@ export const authApi = {
     http.formPost<AppResponse>(`${manageApiPrefix}/auth/update_password`, payload),
 };
 
-export const jobGroupApi = {
+export const executorApi = {
   page: (params?: Record<string, unknown>) =>
     http.get<AppResponse>(`${manageApiPrefix}/executor/page`, { params }),
   create: (payload: FormBodyRecord) =>
@@ -32,7 +32,7 @@ export const jobGroupApi = {
     http.get<AppResponse>(`${manageApiPrefix}/executor/load_by_id`, { params: { id } }),
 };
 
-export const jobInfoApi = {
+export const taskInfoApi = {
   meta: (params?: Record<string, unknown>) =>
     http.get<AppResponse>(`${manageApiPrefix}/task_info/meta`, { params }),
   page: (params?: Record<string, unknown>) =>
@@ -53,7 +53,7 @@ export const jobInfoApi = {
     http.get<AppResponse>(`${manageApiPrefix}/task_info/next_trigger_time`, { params: payload }),
 };
 
-export const jobLogApi = {
+export const taskLogApi = {
   meta: (params?: Record<string, unknown>) =>
     http.get<AppResponse>(`${manageApiPrefix}/task_log/meta`, { params }),
   page: (params?: Record<string, unknown>) =>
@@ -64,6 +64,11 @@ export const jobLogApi = {
     http.formPost<AppResponse>(`${manageApiPrefix}/task_log/clear_log`, payload),
   detailCat: (payload: FormBodyRecord) =>
     http.formPost<AppResponse>(`${manageApiPrefix}/task_log/log_detail_cat`, payload),
+};
+
+export const taskCodeApi = {
+  save: (payload: FormBodyRecord) =>
+    http.formPost<AppResponse>(`${manageApiPrefix}/task_code/save`, payload),
 };
 
 export const userApi = {

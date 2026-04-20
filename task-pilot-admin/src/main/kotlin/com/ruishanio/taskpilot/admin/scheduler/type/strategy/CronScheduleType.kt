@@ -10,6 +10,6 @@ import java.util.Date
  */
 class CronScheduleType : ScheduleType() {
     @Throws(Exception::class)
-    override fun generateNextTriggerTime(jobInfo: TaskInfo, fromTime: Date): Date? =
-        CronExpression(jobInfo.scheduleConf).getNextValidTimeAfter(fromTime)
+    override fun generateNextTriggerTime(taskInfo: TaskInfo, fromTime: Date): Date? =
+        CronExpression(taskInfo.scheduleConf).getNextValidTimeAfter(fromTime)
 }

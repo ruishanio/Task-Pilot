@@ -57,7 +57,7 @@ class TaskPilotProperties {
         /**
          * 自动创建执行器分组时使用的标题，留空时回退为 executor.appname。
          */
-        var groupTitle: String = ""
+        var executorTitle: String = ""
 
         /**
          * 注解未显式声明 author 时使用的默认负责人。

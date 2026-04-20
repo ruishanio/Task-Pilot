@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit
  *
  * 注册/摘除请求走异步线程池，监控线程则周期性回收失活节点并刷新自动注册分组地址。
  */
-class JobRegistryHelper {
+class ExecutorRegistryHelper {
     private lateinit var registryOrRemoveThreadPool: ThreadPoolExecutor
     private lateinit var registryMonitorThread: Thread
 
@@ -101,7 +101,7 @@ class JobRegistryHelper {
             logger.info(">>>>>>>>>>> task-pilot 执行器注册监控线程已停止。")
         }
         registryMonitorThread.isDaemon = true
-        registryMonitorThread.name = "task-pilot, admin JobRegistryMonitorHelper-registryMonitorThread"
+        registryMonitorThread.name = "task-pilot, admin ExecutorRegistryMonitorHelper-registryMonitorThread"
         registryMonitorThread.start()
     }
 
@@ -144,7 +144,7 @@ class JobRegistryHelper {
     /**
      * 注销请求同样异步执行，避免摘除节点阻塞执行器心跳线程。
      */
-    fun registryRemove(registryParam: RegistryRequest): Response<String> {
+    fun unregister(registryParam: RegistryRequest): Response<String> {
         if (StringTool.isBlank(registryParam.registryGroup) ||
             StringTool.isBlank(registryParam.registryKey) ||
             StringTool.isBlank(registryParam.registryValue)
@@ -173,6 +173,6 @@ class JobRegistryHelper {
     }
 
     companion object {
-        private val logger = LoggerFactory.getLogger(JobRegistryHelper::class.java)
+        private val logger = LoggerFactory.getLogger(ExecutorRegistryHelper::class.java)
     }
 }

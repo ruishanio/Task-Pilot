@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit
  *
  * 结果回调和“运行中超时未回调”补偿共用同一完成处理器，确保子任务触发和日志收尾逻辑一致。
  */
-class JobCompleteHelper {
+class TaskCompleteHelper {
     private lateinit var callbackThreadPool: ThreadPoolExecutor
     private lateinit var monitorThread: Thread
 
@@ -34,7 +34,7 @@ class JobCompleteHelper {
             TimeUnit.SECONDS,
             LinkedBlockingQueue(3000),
             ThreadFactory { runnable ->
-                Thread(runnable, "task-pilot, admin JobLosedMonitorHelper-callbackThreadPool-${runnable.hashCode()}")
+                Thread(runnable, "task-pilot, admin TaskLostMonitorHelper-callbackThreadPool-${runnable.hashCode()}")
             },
             RejectedExecutionHandler { runnable, _ ->
                 runnable.run()
@@ -53,17 +53,17 @@ class JobCompleteHelper {
 
             while (!toStop) {
                 try {
-                    val losedTime = DateTool.addMinutes(Date(), -10)
-                    val losedJobIds = TaskPilotAdminBootstrap.instance.taskLogMapper.findLostJobIds(losedTime)
-                    if (losedJobIds.isNotEmpty()) {
-                        for (logId in losedJobIds) {
-                            val jobLog = TaskLog().apply {
+                    val lostTime = DateTool.addMinutes(Date(), -10)
+                    val lostTaskIds = TaskPilotAdminBootstrap.instance.taskLogMapper.findLostTaskIds(lostTime)
+                    if (lostTaskIds.isNotEmpty()) {
+                        for (logId in lostTaskIds) {
+                            val taskLog = TaskLog().apply {
                                 id = logId
                                 handleTime = Date()
                                 handleCode = TaskPilotContext.HANDLE_CODE_FAIL
                                 handleMsg = "任务结果丢失，标记失败"
                             }
-                            TaskPilotAdminBootstrap.instance.jobCompleter.complete(jobLog)
+                            TaskPilotAdminBootstrap.instance.taskCompleter.complete(taskLog)
                         }
                     }
                 } catch (e: Throwable) {
@@ -84,7 +84,7 @@ class JobCompleteHelper {
             logger.info(">>>>>>>>>>> task-pilot 任务结果补偿线程已停止。")
         }
         monitorThread.isDaemon = true
-        monitorThread.name = "task-pilot, admin JobLosedMonitorHelper"
+        monitorThread.name = "task-pilot, admin TaskLostMonitorHelper"
         monitorThread.start()
     }
 
@@ -138,11 +138,11 @@ class JobCompleteHelper {
         log.handleTime = Date()
         log.handleCode = handleCallbackParam.handleCode
         log.handleMsg = handleMsg.toString()
-        TaskPilotAdminBootstrap.instance.jobCompleter.complete(log)
+        TaskPilotAdminBootstrap.instance.taskCompleter.complete(log)
         return Response.ofSuccess()
     }
 
     companion object {
-        private val logger = LoggerFactory.getLogger(JobCompleteHelper::class.java)
+        private val logger = LoggerFactory.getLogger(TaskCompleteHelper::class.java)
     }
 }

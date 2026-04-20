@@ -15,24 +15,24 @@ import java.util.concurrent.atomic.AtomicInteger
  */
 class ExecutorRouteRound : ExecutorRouter() {
     override fun route(triggerParam: TriggerRequest, addressList: List<String>): Response<String> {
-        val address = addressList[count(triggerParam.jobId) % addressList.size]
+        val address = addressList[count(triggerParam.taskId) % addressList.size]
         return Response.ofSuccess(address)
     }
 
     companion object {
-        private val routeCountEachJob: ConcurrentMap<Int, AtomicInteger> = ConcurrentHashMap()
+        private val routeCountEachTask: ConcurrentMap<Int, AtomicInteger> = ConcurrentHashMap()
         private var cacheValidTime: Long = 0
 
         /**
          * 为每个任务维护独立轮询游标，首次访问时先随机打散，减轻冷启动热点。
          */
-        private fun count(jobId: Int): Int {
+        private fun count(taskId: Int): Int {
             if (System.currentTimeMillis() > cacheValidTime) {
-                routeCountEachJob.clear()
+                routeCountEachTask.clear()
                 cacheValidTime = System.currentTimeMillis() + 1000L * 60 * 60 * 24
             }
 
-            val counter = routeCountEachJob.compute(jobId) { _, current ->
+            val counter = routeCountEachTask.compute(taskId) { _, current ->
                 when {
                     current == null || current.get() > 1_000_000 -> AtomicInteger(Random().nextInt(100))
                     else -> {

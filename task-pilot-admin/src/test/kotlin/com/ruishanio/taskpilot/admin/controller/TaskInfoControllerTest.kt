@@ -16,7 +16,7 @@ import org.springframework.util.MultiValueMap
 /**
  * 覆盖任务管理控制器的基础登录态访问与调度时间试算能力。
  */
-class JobInfoControllerTest : AbstractSpringMvcTest() {
+class TaskInfoControllerTest : AbstractSpringMvcTest() {
     private lateinit var cookie: Cookie
     private val objectMapper = ObjectMapper()
 

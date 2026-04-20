@@ -10,12 +10,12 @@ data class TriggerRequest(
     /**
      * 任务基础信息。
      */
-    var jobId: Int = 0,
+    var taskId: Int = 0,
     /**
      * 任务执行信息。
      */
     var executorHandler: String? = null,
-    var executorParams: String? = null,
+    var executorParam: String? = null,
     /**
      * 当同一任务线程已在执行时，执行器如何处理本次触发请求。
      */

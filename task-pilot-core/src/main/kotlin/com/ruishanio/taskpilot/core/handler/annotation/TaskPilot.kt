@@ -10,7 +10,7 @@ import java.lang.annotation.Inherited
 @Inherited
 annotation class TaskPilot(
     /**
-     * 任务处理器名称，对应调度中心中的 JobHandler。
+     * 任务处理器名称，对应调度中心中的执行器处理器字段。
      */
     val value: String,
     /**

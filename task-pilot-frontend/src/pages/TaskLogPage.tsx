@@ -16,19 +16,19 @@ import {
 import { EyeOutlined, StopOutlined } from '@ant-design/icons';
 import dayjs, { type Dayjs } from 'dayjs';
 import { useSearchParams } from 'react-router-dom';
-import { jobLogApi } from '../services/api';
+import { taskLogApi } from '../services/api';
 import { formatDateTime, getErrorMessage, parsePagePayload } from '../utils/format';
 
-interface JobLogMeta {
-  groups: Array<{ id: number; title: string }>;
-  jobs: Array<{ id: number; taskDesc: string }>;
+interface TaskLogMeta {
+  executors: Array<{ id: number; title: string }>;
+  tasks: Array<{ id: number; taskDesc: string }>;
   selectedExecutorId: number;
   selectedTaskId: number;
   logStatusOptions: Array<{ label: string; value: string }>;
   clearLogOptions: Array<{ label: string; value: string }>;
 }
 
-interface JobLogRow {
+interface TaskLogRow {
   id: number;
   taskId: number;
   triggerTime?: string | number;
@@ -50,24 +50,24 @@ interface LiveLogPayload {
 
 interface LiveModalState {
   open: boolean;
-  row: JobLogRow | null;
+  row: TaskLogRow | null;
   html: string;
 }
 
 type DateRange = [Dayjs, Dayjs];
 
-const defaultJobLogMeta: JobLogMeta = {
-  groups: [],
-  jobs: [],
+const defaultTaskLogMeta: TaskLogMeta = {
+  executors: [],
+  tasks: [],
   selectedExecutorId: 0,
   selectedTaskId: 0,
   logStatusOptions: [],
   clearLogOptions: [],
 };
 
-function JobLogPage() {
+function TaskLogPage() {
   const [searchParams] = useSearchParams();
-  const [meta, setMeta] = useState<JobLogMeta>(defaultJobLogMeta);
+  const [meta, setMeta] = useState<TaskLogMeta>(defaultTaskLogMeta);
   const [filters, setFilters] = useState({
     executorId: 0,
     taskId: 0,
@@ -110,7 +110,7 @@ function JobLogPage() {
 
     async function pullLog() {
       try {
-        const response = await jobLogApi.detailCat({
+        const response = await taskLogApi.detailCat({
           logId: liveModal.row.id,
           fromLineNum: lineNumberRef.current,
         });
@@ -175,8 +175,8 @@ function JobLogPage() {
 
   async function loadMeta(params = {}) {
     try {
-      const response = await jobLogApi.meta(params);
-      const payload = (response.data as JobLogMeta) || meta;
+      const response = await taskLogApi.meta(params);
+      const payload = (response.data as TaskLogMeta) || meta;
       metaLoadedRef.current = true;
       setMeta(payload);
       const nextFilters = {
@@ -206,7 +206,7 @@ function JobLogPage() {
 
     try {
       setLoading(true);
-      const response = await jobLogApi.page({
+      const response = await taskLogApi.page({
         offset: (customPagination.current - 1) * customPagination.pageSize,
         pagesize: customPagination.pageSize,
         executorId: customFilters.executorId,
@@ -226,7 +226,7 @@ function JobLogPage() {
 
   async function handleKill(record) {
     try {
-      await jobLogApi.kill(record.id);
+      await taskLogApi.kill(record.id);
       message.success('日志对应执行已终止');
       loadData();
     } catch (error) {
@@ -238,7 +238,7 @@ function JobLogPage() {
     try {
       const values = await clearForm.validateFields();
       setClearSubmitting(true);
-      await jobLogApi.clear({
+      await taskLogApi.clear({
         executorId: filters.executorId,
         taskId: filters.taskId,
         type: values.type,
@@ -256,7 +256,7 @@ function JobLogPage() {
     }
   }
 
-  const jobMap = useMemo(() => new Map(meta.jobs.map((item) => [item.id, item.taskDesc])), [meta.jobs]);
+  const taskMap = useMemo(() => new Map(meta.tasks.map((item) => [item.id, item.taskDesc])), [meta.tasks]);
   const columns = useMemo(
     () => [
       {
@@ -268,7 +268,7 @@ function JobLogPage() {
         title: '任务',
         dataIndex: 'taskId',
         width: 220,
-        render: (value) => jobMap.get(value) || value,
+        render: (value) => taskMap.get(value) || value,
       },
       {
         title: '触发时间',
@@ -300,7 +300,7 @@ function JobLogPage() {
         width: 220,
       },
       {
-        title: 'JobHandler',
+        title: '执行器处理器',
         dataIndex: 'executorHandler',
         width: 180,
       },
@@ -330,7 +330,7 @@ function JobLogPage() {
         ),
       },
     ],
-    [jobMap],
+    [taskMap],
   );
 
   return (
@@ -340,13 +340,13 @@ function JobLogPage() {
           <Select
             className="toolbar-grow"
             value={filters.executorId}
-            options={meta.groups.map((item) => ({ value: item.id, label: item.title }))}
+            options={meta.executors.map((item) => ({ value: item.id, label: item.title }))}
             onChange={(value) => loadMeta({ executorId: value, taskId: 0 })}
           />
           <Select
             className="toolbar-grow"
             value={filters.taskId}
-            options={meta.jobs.map((item) => ({ value: item.id, label: item.taskDesc }))}
+            options={meta.tasks.map((item) => ({ value: item.id, label: item.taskDesc }))}
             onChange={(value) => setFilters((previous) => ({ ...previous, taskId: value }))}
           />
           <Select
@@ -429,11 +429,11 @@ function JobLogPage() {
         destroyOnClose
       >
         <Form form={clearForm} layout="vertical" initialValues={{ type: meta.clearLogOptions[0]?.value }}>
-          <Form.Item label="任务组">
-            <Input value={meta.groups.find((item) => item.id === filters.executorId)?.title} disabled />
+          <Form.Item label="执行器">
+            <Input value={meta.executors.find((item) => item.id === filters.executorId)?.title} disabled />
           </Form.Item>
           <Form.Item label="任务">
-            <Input value={jobMap.get(filters.taskId) || ''} disabled />
+            <Input value={taskMap.get(filters.taskId) || ''} disabled />
           </Form.Item>
           <Form.Item label="清理策略" name="type" rules={[{ required: true, message: '请选择清理策略' }]}>
             <Select options={meta.clearLogOptions} />
@@ -443,7 +443,7 @@ function JobLogPage() {
 
       <Modal
         open={liveModal.open}
-        title={liveModal.row ? `滚动日志：${jobMap.get(liveModal.row.taskId) || liveModal.row.taskId}` : '滚动日志'}
+        title={liveModal.row ? `滚动日志：${taskMap.get(liveModal.row.taskId) || liveModal.row.taskId}` : '滚动日志'}
         footer={null}
         width={960}
         onCancel={() => setLiveModal({ open: false, row: null, html: '' })}
@@ -454,4 +454,4 @@ function JobLogPage() {
   );
 }
 
-export default JobLogPage;
+export default TaskLogPage;

@@ -58,7 +58,7 @@ class TaskPilotSyncServiceTest {
     @Test
     fun shouldUpdateExistingTaskWhenRegisterConfigChanged() {
         val request = buildSyncRequest("任务新描述")
-        val group = buildGroup("旧分组标题", "127.0.0.1:9999")
+        val executor = buildGroup("旧执行器标题", "127.0.0.1:9999")
         val existsTask =
             buildExistingTask().apply {
                 taskDesc = "任务旧描述"
@@ -68,7 +68,7 @@ class TaskPilotSyncServiceTest {
                 executorParam = "old-param"
             }
 
-        `when`(executorMapper.loadByAppname("demo-app")).thenReturn(group)
+        `when`(executorMapper.loadByAppname("demo-app")).thenReturn(executor)
         `when`(registryMapper.findAll(anyInt(), anyObject())).thenReturn(Collections.emptyList())
         `when`(taskInfoMapper.loadByExecutorIdAndTaskName(11, "demoHandler")).thenReturn(existsTask)
         `when`(taskPilotService.update(anyObject(), anyObject())).thenReturn(Response.ofSuccess<String>())
@@ -78,14 +78,14 @@ class TaskPilotSyncServiceTest {
         assertTrue(response.isSuccess)
         assertTrue(response.data.orEmpty().contains("updatedTaskCount=1"))
         verify(taskPilotService).update(
-            argThatObject { jobInfo: TaskInfo ->
-                    jobInfo.id == 22 &&
-                        jobInfo.taskName == "demoHandler" &&
-                    jobInfo.taskDesc == "任务新描述" &&
-                    jobInfo.author == "new-author" &&
-                    jobInfo.alarmEmail == "new@test.com" &&
-                    jobInfo.scheduleConf == "0/10 * * * * ?" &&
-                    jobInfo.executorParam == "new-param"
+            argThatObject { taskInfo: TaskInfo ->
+                    taskInfo.id == 22 &&
+                        taskInfo.taskName == "demoHandler" &&
+                    taskInfo.taskDesc == "任务新描述" &&
+                    taskInfo.author == "new-author" &&
+                    taskInfo.alarmEmail == "new@test.com" &&
+                    taskInfo.scheduleConf == "0/10 * * * * ?" &&
+                    taskInfo.executorParam == "new-param"
             },
             anyObject()
         )
@@ -100,10 +100,10 @@ class TaskPilotSyncServiceTest {
     @Test
     fun shouldSkipExistingTaskWhenRegisterConfigNotChanged() {
         val request = buildSyncRequest("任务描述")
-        val group = buildGroup("DemoGroup", null)
+        val executor = buildGroup("DemoGroup", null)
         val existsTask = buildExistingTask()
 
-        `when`(executorMapper.loadByAppname("demo-app")).thenReturn(group)
+        `when`(executorMapper.loadByAppname("demo-app")).thenReturn(executor)
         `when`(registryMapper.findAll(anyInt(), anyObject())).thenReturn(Collections.emptyList())
         `when`(taskInfoMapper.loadByExecutorIdAndTaskName(11, "demoHandler")).thenReturn(existsTask)
 
@@ -123,7 +123,7 @@ class TaskPilotSyncServiceTest {
     private fun buildSyncRequest(taskDesc: String): SyncRequest =
         SyncRequest().apply {
             appName = "demo-app"
-            groupTitle = "DemoGroup"
+            executorTitle = "DemoGroup"
             val task =
                 SyncRequest.Task().apply {
                     executorHandler = "demoHandler"

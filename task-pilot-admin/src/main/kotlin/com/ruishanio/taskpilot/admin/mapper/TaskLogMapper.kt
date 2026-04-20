@@ -55,7 +55,7 @@ interface TaskLogMapper {
 
     fun clearLog(@Param("logIds") logIds: List<Long>): Int
 
-    fun findFailJobLogIds(@Param("pagesize") pagesize: Int): List<Long>
+    fun findFailTaskLogIds(@Param("pagesize") pagesize: Int): List<Long>
 
     fun updateAlarmStatus(
         @Param("logId") logId: Long,
@@ -63,5 +63,5 @@ interface TaskLogMapper {
         @Param("newAlarmStatus") newAlarmStatus: Int
     ): Int
 
-    fun findLostJobIds(@Param("losedTime") losedTime: Date?): List<Long>
+    fun findLostTaskIds(@Param("losedTime") losedTime: Date?): List<Long>
 }

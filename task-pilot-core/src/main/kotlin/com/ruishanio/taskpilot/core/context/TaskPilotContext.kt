@@ -6,8 +6,8 @@ package com.ruishanio.taskpilot.core.context
  * 通过 InheritableThreadLocal 透传到任务创建的子线程，保持日志、分片和处理结果信息可读。
  */
 class TaskPilotContext(
-    val jobId: Long,
-    val jobParam: String?,
+    val taskId: Long,
+    val taskParam: String?,
     val logId: Long,
     val logDateTime: Long,
     val logFileName: String?,

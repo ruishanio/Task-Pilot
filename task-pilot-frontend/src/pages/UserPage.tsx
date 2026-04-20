@@ -18,7 +18,7 @@ import { userApi } from '../services/api';
 import { getErrorMessage, joinPermissions, parsePagePayload, parsePermissions } from '../utils/format';
 
 interface UserMeta {
-  groups: Array<{ id: number | string; title: string; appname: string }>;
+  executors: Array<{ id: number | string; title: string; appname: string }>;
   roleOptions: Array<{ label: string; value: string }>;
 }
 
@@ -28,7 +28,7 @@ function UserPage() {
   const [loading, setLoading] = useState(false);
   const [rows, setRows] = useState([]);
   const [total, setTotal] = useState(0);
-  const [meta, setMeta] = useState<UserMeta>({ groups: [], roleOptions: [] });
+  const [meta, setMeta] = useState<UserMeta>({ executors: [], roleOptions: [] });
   const [form] = Form.useForm();
   const [modalOpen, setModalOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -45,7 +45,7 @@ function UserPage() {
   async function loadMeta() {
     try {
       const response = await userApi.meta();
-      setMeta((response.data as UserMeta) || { groups: [], roleOptions: [] });
+      setMeta((response.data as UserMeta) || { executors: [], roleOptions: [] });
     } catch (error) {
       message.error(getErrorMessage(error, '加载用户元数据失败'));
     }
@@ -160,7 +160,7 @@ function UserPage() {
           if (!permissions.length) {
             return <Tag>全部受限</Tag>;
           }
-          return `${permissions.length} 个任务组`;
+          return `${permissions.length} 个执行器`;
         },
       },
       {
@@ -304,9 +304,9 @@ function UserPage() {
           <Form.Item label="执行器权限" name="permissionIds">
             <Checkbox.Group style={{ width: '100%' }}>
               <Space direction="vertical" style={{ width: '100%' }}>
-                {meta.groups.map((group) => (
-                  <Checkbox key={group.id} value={String(group.id)}>
-                    {group.title}（{group.appname}）
+                {meta.executors.map((executor) => (
+                  <Checkbox key={executor.id} value={String(executor.id)}>
+                    {executor.title}（{executor.appname}）
                   </Checkbox>
                 ))}
               </Space>

@@ -6,9 +6,9 @@ import com.ruishanio.taskpilot.admin.model.TaskLog
 /**
  * 告警处理器抽象。
  */
-interface JobAlarm {
+interface TaskAlarm {
     /**
      * 对指定任务日志执行告警。
      */
-    fun doAlarm(info: TaskInfo, jobLog: TaskLog): Boolean
+    fun doAlarm(info: TaskInfo, taskLog: TaskLog): Boolean
 }

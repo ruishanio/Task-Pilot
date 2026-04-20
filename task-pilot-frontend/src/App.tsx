@@ -6,9 +6,9 @@ import ProtectedRoute from './components/ProtectedRoute';
 const AppLayout = lazy(() => import('./components/AppLayout'));
 const LoginPage = lazy(() => import('./pages/LoginPage'));
 const DashboardPage = lazy(() => import('./pages/DashboardPage'));
-const JobGroupPage = lazy(() => import('./pages/JobGroupPage'));
-const JobInfoPage = lazy(() => import('./pages/JobInfoPage'));
-const JobLogPage = lazy(() => import('./pages/JobLogPage'));
+const ExecutorPage = lazy(() => import('./pages/ExecutorPage'));
+const TaskInfoPage = lazy(() => import('./pages/TaskInfoPage'));
+const TaskLogPage = lazy(() => import('./pages/TaskLogPage'));
 const UserPage = lazy(() => import('./pages/UserPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
@@ -35,11 +35,11 @@ function App() {
         >
           <Route index element={<Navigate to="/dashboard" replace />} />
           <Route path="dashboard" element={<DashboardPage />} />
-          <Route path="executor" element={<JobGroupPage />} />
-          <Route path="task_info" element={<JobInfoPage />} />
-          <Route path="task_code" element={<JobInfoPage />} />
-          <Route path="task_log" element={<JobLogPage />} />
-          <Route path="task_log/detail" element={<JobLogPage />} />
+          <Route path="executor" element={<ExecutorPage />} />
+          <Route path="task_info" element={<TaskInfoPage />} />
+          <Route path="task_code" element={<TaskInfoPage />} />
+          <Route path="task_log" element={<TaskLogPage />} />
+          <Route path="task_log/detail" element={<TaskLogPage />} />
           <Route path="user" element={<UserPage />} />
         </Route>
         <Route path="*" element={<NotFoundPage />} />

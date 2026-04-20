@@ -18,7 +18,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition
  */
 @SpringBootTest
 @Disabled("手动数据库锁竞争压测，不纳入自动化测试默认链路")
-class JobScheduleTest {
+class TaskScheduleTest {
     @Test
     @Throws(InterruptedException::class)
     fun test() {
@@ -52,6 +52,6 @@ class JobScheduleTest {
     }
 
     companion object {
-        private val logger = LoggerFactory.getLogger(JobScheduleTest::class.java)
+        private val logger = LoggerFactory.getLogger(TaskScheduleTest::class.java)
     }
 }

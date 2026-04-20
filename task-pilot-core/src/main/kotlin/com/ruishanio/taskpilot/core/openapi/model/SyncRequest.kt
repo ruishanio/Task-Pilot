@@ -16,7 +16,7 @@ data class SyncRequest(
     /**
      * 执行器分组标题。
      */
-    var groupTitle: String? = null,
+    var executorTitle: String? = null,
     /**
      * 需要同步到调度中心的任务列表。
      */

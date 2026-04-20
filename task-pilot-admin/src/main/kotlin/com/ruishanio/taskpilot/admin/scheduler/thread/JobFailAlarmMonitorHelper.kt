@@ -29,11 +29,11 @@ class JobFailAlarmMonitorHelper {
                             }
 
                             val log = TaskPilotAdminBootstrap.instance.taskLogMapper.load(failLogId) ?: continue
-                            val info = TaskPilotAdminBootstrap.instance.taskInfoMapper.loadById(log.jobId)
+                            val info = TaskPilotAdminBootstrap.instance.taskInfoMapper.loadById(log.taskId)
 
                             if (log.executorFailRetryCount > 0) {
                                 TaskPilotAdminBootstrap.instance.jobTriggerPoolHelper.trigger(
-                                    log.jobId,
+                                    log.taskId,
                                     TriggerTypeEnum.RETRY,
                                     log.executorFailRetryCount - 1,
                                     log.executorShardingParam,

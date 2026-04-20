@@ -73,7 +73,7 @@ class TaskPilotSyncRunner(
                 val task = SyncRequest.Task()
                 task.taskName = taskName
                 task.executorHandler = taskPilot.value
-                task.jobDesc = if (StringTool.isNotBlank(registerMetadata.jobDesc)) registerMetadata.jobDesc.trim() else taskPilot.value
+                task.taskDesc = if (StringTool.isNotBlank(registerMetadata.taskDesc)) registerMetadata.taskDesc.trim() else taskPilot.value
                 task.author = if (StringTool.isNotBlank(registerMetadata.author)) registerMetadata.author.trim() else resolveDefaultTaskAuthor()
                 task.alarmEmail = if (StringTool.isNotBlank(registerMetadata.alarmEmail)) registerMetadata.alarmEmail.trim() else resolveDefaultTaskAlarmEmail()
                 task.scheduleType = registerMetadata.scheduleType
@@ -84,7 +84,7 @@ class TaskPilotSyncRunner(
                 task.executorBlockStrategy = registerMetadata.executorBlockStrategy
                 task.executorTimeout = registerMetadata.executorTimeout
                 task.executorFailRetryCount = registerMetadata.executorFailRetryCount
-                task.childJobId = registerMetadata.childJobId
+                task.childTaskId = registerMetadata.childTaskId
                 task.autoStart = registerMetadata.autoStart
                 request.tasks.add(task)
             }

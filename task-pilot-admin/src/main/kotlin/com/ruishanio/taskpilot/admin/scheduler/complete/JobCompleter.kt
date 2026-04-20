@@ -43,26 +43,26 @@ class JobCompleter {
     private fun processChildJob(taskLog: TaskLog) {
         var triggerChildMsg: String? = null
         if (TaskPilotContext.HANDLE_CODE_SUCCESS == taskLog.handleCode) {
-            val taskInfo = taskInfoMapper.loadById(taskLog.jobId)
-            if (taskInfo != null && StringTool.isNotBlank(taskInfo.childJobId)) {
+            val taskInfo = taskInfoMapper.loadById(taskLog.taskId)
+            if (taskInfo != null && StringTool.isNotBlank(taskInfo.childTaskId)) {
                 triggerChildMsg =
                     "<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>触发子任务<<<<<<<<<<< </span><br>"
-                val childJobIds = taskInfo.childJobId!!.split(",")
-                for (i in childJobIds.indices) {
-                    val childJobId = if (StringTool.isNotBlank(childJobIds[i]) && StringTool.isNumeric(childJobIds[i])) {
-                        childJobIds[i].toInt()
+                val childTaskIds = taskInfo.childTaskId!!.split(",")
+                for (i in childTaskIds.indices) {
+                    val childTaskId = if (StringTool.isNotBlank(childTaskIds[i]) && StringTool.isNumeric(childTaskIds[i])) {
+                        childTaskIds[i].toInt()
                     } else {
                         -1
                     }
 
-                    if (childJobId > 0) {
-                        if (childJobId == taskLog.jobId) {
-                            logger.debug(">>>>>>>>>>> task-pilot 忽略子任务触发，childJobId={} 与当前任务相同。", childJobId)
+                    if (childTaskId > 0) {
+                        if (childTaskId == taskLog.taskId) {
+                            logger.debug(">>>>>>>>>>> task-pilot 忽略子任务触发，childTaskId={} 与当前任务相同。", childTaskId)
                             continue
                         }
 
                         TaskPilotAdminBootstrap.instance.jobTriggerPoolHelper.trigger(
-                            childJobId,
+                            childTaskId,
                             TriggerTypeEnum.PARENT,
                             -1,
                             null,
@@ -73,8 +73,8 @@ class JobCompleter {
                         triggerChildMsg += MessageFormat.format(
                             "{0}/{1} [任务ID={2}], 触发{3}, 触发备注: {4} <br>",
                             i + 1,
-                            childJobIds.size,
-                            childJobIds[i],
+                            childTaskIds.size,
+                            childTaskIds[i],
                             if (triggerChildResult.isSuccess) "成功" else "失败",
                             triggerChildResult.msg
                         )
@@ -82,8 +82,8 @@ class JobCompleter {
                         triggerChildMsg += MessageFormat.format(
                             "{0}/{1} [任务ID={2}], 触发失败, 触发备注: 任务ID格式错误 <br>",
                             i + 1,
-                            childJobIds.size,
-                            childJobIds[i]
+                            childTaskIds.size,
+                            childTaskIds[i]
                         )
                     }
                 }

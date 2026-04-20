@@ -31,7 +31,7 @@ data class TriggerRequest(
      */
     var glueType: String? = null,
     var glueSource: String? = null,
-    var glueUpdatetime: Long = 0,
+    var glueUpdateTime: Long = 0,
     /**
      * 广播分片信息。
      */

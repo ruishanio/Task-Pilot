@@ -36,29 +36,29 @@ class JobInfoController {
         request: HttpServletRequest,
         @RequestParam(required = false, defaultValue = "0") offset: Int,
         @RequestParam(required = false, defaultValue = "10") pagesize: Int,
-        @RequestParam jobGroup: Int,
+        @RequestParam executorId: Int,
         @RequestParam triggerStatus: Int,
         @RequestParam(required = false) taskName: String?,
-        @RequestParam jobDesc: String?,
+        @RequestParam taskDesc: String?,
         @RequestParam executorHandler: String?,
         @RequestParam author: String?
     ): Response<PageModel<TaskInfo>> {
-        JobGroupPermissionUtil.validJobGroupPermission(request, jobGroup)
-        return taskPilotService.pageList(offset, pagesize, jobGroup, triggerStatus, taskName, jobDesc, executorHandler, author)
+        JobGroupPermissionUtil.validJobGroupPermission(request, executorId)
+        return taskPilotService.pageList(offset, pagesize, executorId, triggerStatus, taskName, taskDesc, executorHandler, author)
     }
 
     @RequestMapping("/insert")
     @ResponseBody
-    fun add(request: HttpServletRequest, jobInfo: TaskInfo): Response<String> {
-        val loginInfo = JobGroupPermissionUtil.validJobGroupPermission(request, jobInfo.jobGroup)
-        return taskPilotService.add(jobInfo, loginInfo)
+    fun add(request: HttpServletRequest, taskInfo: TaskInfo): Response<String> {
+        val loginInfo = JobGroupPermissionUtil.validJobGroupPermission(request, taskInfo.executorId)
+        return taskPilotService.add(taskInfo, loginInfo)
     }
 
     @RequestMapping("/update")
     @ResponseBody
-    fun update(request: HttpServletRequest, jobInfo: TaskInfo): Response<String> {
-        val loginInfo = JobGroupPermissionUtil.validJobGroupPermission(request, jobInfo.jobGroup)
-        return taskPilotService.update(jobInfo, loginInfo)
+    fun update(request: HttpServletRequest, taskInfo: TaskInfo): Response<String> {
+        val loginInfo = JobGroupPermissionUtil.validJobGroupPermission(request, taskInfo.executorId)
+        return taskPilotService.update(taskInfo, loginInfo)
     }
 
     @RequestMapping("/delete")

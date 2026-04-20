@@ -53,16 +53,16 @@ class JobCodeController {
 
         val existsJobInfo = taskInfoMapper.loadById(id)
             ?: return Response.ofFail("任务ID非法")
-        val loginInfo: LoginInfo = JobGroupPermissionUtil.validJobGroupPermission(request, existsJobInfo.jobGroup)
+        val loginInfo: LoginInfo = JobGroupPermissionUtil.validJobGroupPermission(request, existsJobInfo.executorId)
 
         existsJobInfo.glueSource = glueSource
         existsJobInfo.glueRemark = glueRemark
-        existsJobInfo.glueUpdatetime = Date()
+        existsJobInfo.glueUpdateTime = Date()
         existsJobInfo.updateTime = Date()
         taskInfoMapper.update(existsJobInfo)
 
         val glueLog = GlueLog().apply {
-            jobId = existsJobInfo.id
+            taskId = existsJobInfo.id
             glueType = existsJobInfo.glueType
             this.glueSource = glueSource
             this.glueRemark = glueRemark

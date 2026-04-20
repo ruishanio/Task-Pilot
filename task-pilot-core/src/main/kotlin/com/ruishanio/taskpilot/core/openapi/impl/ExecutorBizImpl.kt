@@ -63,7 +63,7 @@ class ExecutorBizImpl : ExecutorBiz {
         } else if (GlueTypeEnum.GLUE_GROOVY == glueTypeEnum) {
             val glueJobHandler = jobThread?.handler as? GlueJobHandler
             if (jobThread != null &&
-                glueJobHandler?.getGlueUpdatetime() != triggerRequest.glueUpdatetime
+                glueJobHandler?.getGlueUpdateTime() != triggerRequest.glueUpdateTime
             ) {
                 removeOldReason = "change job source or glue type, and terminate the old job thread."
                 jobThread = null
@@ -73,7 +73,7 @@ class ExecutorBizImpl : ExecutorBiz {
             if (jobHandler == null) {
                 try {
                     val originJobHandler = GlueFactory.getInstance().loadNewInstance(triggerRequest.glueSource)
-                    jobHandler = GlueJobHandler(originJobHandler, triggerRequest.glueUpdatetime)
+                    jobHandler = GlueJobHandler(originJobHandler, triggerRequest.glueUpdateTime)
                 } catch (e: Exception) {
                     logger.error("加载 GLUE 任务处理器时发生异常。jobId={}", triggerRequest.jobId, e)
                     return Response.of(TaskPilotContext.HANDLE_CODE_FAIL, e.message)
@@ -82,7 +82,7 @@ class ExecutorBizImpl : ExecutorBiz {
         } else if (glueTypeEnum != null && glueTypeEnum.isScript) {
             val scriptJobHandler = jobThread?.handler as? ScriptJobHandler
             if (jobThread != null &&
-                scriptJobHandler?.getGlueUpdatetime() != triggerRequest.glueUpdatetime
+                scriptJobHandler?.getGlueUpdateTime() != triggerRequest.glueUpdateTime
             ) {
                 removeOldReason = "change job source or glue type, and terminate the old job thread."
                 jobThread = null
@@ -93,7 +93,7 @@ class ExecutorBizImpl : ExecutorBiz {
                 jobHandler =
                     ScriptJobHandler(
                         triggerRequest.jobId,
-                        triggerRequest.glueUpdatetime,
+                        triggerRequest.glueUpdateTime,
                         triggerRequest.glueSource,
                         GlueTypeEnum.match(triggerRequest.glueType)
                     )

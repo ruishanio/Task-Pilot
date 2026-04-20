@@ -42,7 +42,7 @@ class TaskPilotSyncRunnerTest {
             val explicitTask = taskMap["explicitHandler"]
             assertNotNull(explicitTask)
             assertEquals("explicit-task", explicitTask!!.taskName)
-            assertEquals("显式任务", explicitTask!!.jobDesc)
+            assertEquals("显式任务", explicitTask!!.taskDesc)
             assertEquals("测试负责人", explicitTask.author)
             assertEquals("alarm@test.com", explicitTask.alarmEmail)
             assertEquals(ScheduleTypeEnum.FIX_RATE, explicitTask.scheduleType)
@@ -53,12 +53,12 @@ class TaskPilotSyncRunnerTest {
             assertEquals(ExecutorBlockStrategyEnum.COVER_EARLY, explicitTask.executorBlockStrategy)
             assertEquals(12, explicitTask.executorTimeout)
             assertEquals(2, explicitTask.executorFailRetryCount)
-            assertEquals("3,4", explicitTask.childJobId)
+            assertEquals("3,4", explicitTask.childTaskId)
 
             val defaultTask = taskMap["defaultHandler"]
             assertNotNull(defaultTask)
             assertEquals("defaultHandler", defaultTask!!.taskName)
-            assertEquals("defaultHandler", defaultTask!!.jobDesc)
+            assertEquals("defaultHandler", defaultTask!!.taskDesc)
             assertEquals("默认负责人", defaultTask.author)
             assertEquals("notice@test.com", defaultTask.alarmEmail)
             assertEquals(ScheduleTypeEnum.CRON, defaultTask.scheduleType)
@@ -69,9 +69,9 @@ class TaskPilotSyncRunnerTest {
 
             val multiTaskMap = request.tasks.filter { it.executorHandler == "multiHandler" }.associateBy { it.taskName }
             assertEquals(2, multiTaskMap.size)
-            assertEquals("多注册任务A", multiTaskMap["multi-task-a"]!!.jobDesc)
+            assertEquals("多注册任务A", multiTaskMap["multi-task-a"]!!.taskDesc)
             assertEquals("5", multiTaskMap["multi-task-a"]!!.scheduleConf)
-            assertEquals("多注册任务B", multiTaskMap["multi-task-b"]!!.jobDesc)
+            assertEquals("多注册任务B", multiTaskMap["multi-task-b"]!!.taskDesc)
             assertEquals("10", multiTaskMap["multi-task-b"]!!.scheduleConf)
         }
     }
@@ -92,7 +92,7 @@ class TaskPilotSyncRunnerTest {
         @TaskPilot("explicitHandler")
         @TaskPilotRegister(
             taskName = "explicit-task",
-            jobDesc = "显式任务",
+            taskDesc = "显式任务",
             author = "测试负责人",
             alarmEmail = "alarm@test.com",
             scheduleType = ScheduleTypeEnum.FIX_RATE,
@@ -103,7 +103,7 @@ class TaskPilotSyncRunnerTest {
             executorBlockStrategy = ExecutorBlockStrategyEnum.COVER_EARLY,
             executorTimeout = 12,
             executorFailRetryCount = 2,
-            childJobId = "3,4"
+            childTaskId = "3,4"
         )
         fun explicitJob() {
         }
@@ -114,8 +114,8 @@ class TaskPilotSyncRunnerTest {
         }
 
         @TaskPilot("multiHandler")
-        @TaskPilotRegister(taskName = "multi-task-a", jobDesc = "多注册任务A", scheduleConf = "5")
-        @TaskPilotRegister(taskName = "multi-task-b", jobDesc = "多注册任务B", scheduleConf = "10")
+        @TaskPilotRegister(taskName = "multi-task-a", taskDesc = "多注册任务A", scheduleConf = "5")
+        @TaskPilotRegister(taskName = "multi-task-b", taskDesc = "多注册任务B", scheduleConf = "10")
         fun multiJob() {
         }
     }

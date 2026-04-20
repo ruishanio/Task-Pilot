@@ -29,14 +29,14 @@ class EmailJobAlarm : JobAlarm {
                 alarmContent += "<br>HandleCode=${jobLog.handleMsg}"
             }
 
-            val group = TaskPilotAdminBootstrap.instance.executorMapper.load(info.jobGroup)
+            val group = TaskPilotAdminBootstrap.instance.executorMapper.load(info.executorId)
             val personal = "Task Pilot｜分布式任务调度平台"
             val title = "Task Pilot 监控报警"
             val content = MessageFormat.format(
                 loadEmailJobAlarmTemplate(),
                 group?.title ?: "null",
                 info.id,
-                info.jobDesc,
+                info.taskDesc,
                 alarmContent
             )
 

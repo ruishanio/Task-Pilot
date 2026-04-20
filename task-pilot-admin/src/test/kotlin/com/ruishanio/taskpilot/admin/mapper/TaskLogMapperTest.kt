@@ -21,8 +21,8 @@ class TaskLogMapperTest {
 
         val log =
             TaskLog().apply {
-                jobGroup = 1
-                jobId = 1
+                executorId = 1
+                taskId = 1
             }
 
         var ret1 = taskLogMapper.save(log)
@@ -44,7 +44,7 @@ class TaskLogMapperTest {
         dto = taskLogMapper.load(log.id)
 
         val ret4 = taskLogMapper.findClearLogIds(1, 1, Date(), 100, 100)
-        val ret2 = taskLogMapper.delete(log.jobId)
+        val ret2 = taskLogMapper.delete(log.taskId)
 
         println("list=$list, listCount=$listCount, ret1=$ret1, dto=$dto, ret4=$ret4, ret2=$ret2")
     }

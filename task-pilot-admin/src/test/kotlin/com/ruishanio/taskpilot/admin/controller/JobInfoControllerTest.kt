@@ -38,7 +38,7 @@ class JobInfoControllerTest : AbstractSpringMvcTest() {
     @Throws(Exception::class)
     fun pageListShouldReturnSuccessUnderLoginContext() {
         val parameters: MultiValueMap<String, String> = LinkedMultiValueMap()
-        parameters.add("jobGroup", "1")
+        parameters.add("executorId", "1")
         parameters.add("triggerStatus", "-1")
 
         val ret: MvcResult =

@@ -21,23 +21,23 @@ import { formatDateTime, getErrorMessage, parsePagePayload } from '../utils/form
 
 interface JobLogMeta {
   groups: Array<{ id: number; title: string }>;
-  jobs: Array<{ id: number; jobDesc: string }>;
-  selectedJobGroup: number;
-  selectedJobId: number;
+  jobs: Array<{ id: number; taskDesc: string }>;
+  selectedExecutorId: number;
+  selectedTaskId: number;
   logStatusOptions: Array<{ label: string; value: string }>;
   clearLogOptions: Array<{ label: string; value: string }>;
 }
 
 interface JobLogRow {
   id: number;
-  jobId: number;
+  taskId: number;
   triggerTime?: string | number;
   triggerCode?: number;
   handleCode?: number;
   executorAddress?: string;
   executorHandler?: string;
   title?: string;
-  jobDesc?: string;
+  taskDesc?: string;
   [key: string]: any;
 }
 
@@ -59,8 +59,8 @@ type DateRange = [Dayjs, Dayjs];
 const defaultJobLogMeta: JobLogMeta = {
   groups: [],
   jobs: [],
-  selectedJobGroup: 0,
-  selectedJobId: 0,
+  selectedExecutorId: 0,
+  selectedTaskId: 0,
   logStatusOptions: [],
   clearLogOptions: [],
 };
@@ -69,8 +69,8 @@ function JobLogPage() {
   const [searchParams] = useSearchParams();
   const [meta, setMeta] = useState<JobLogMeta>(defaultJobLogMeta);
   const [filters, setFilters] = useState({
-    jobGroup: 0,
-    jobId: 0,
+    executorId: 0,
+    taskId: 0,
     logStatus: '-1',
     filterTime: [dayjs().subtract(7, 'day').startOf('day'), dayjs().endOf('day')] as DateRange,
   });
@@ -88,8 +88,8 @@ function JobLogPage() {
 
   useEffect(() => {
     loadMeta({
-      jobGroup: Number(searchParams.get('jobGroup') || 0),
-      jobId: Number(searchParams.get('jobId') || 0),
+      executorId: Number(searchParams.get('executorId') || 0),
+      taskId: Number(searchParams.get('taskId') || 0),
     });
   }, [searchParams]);
 
@@ -180,8 +180,8 @@ function JobLogPage() {
       metaLoadedRef.current = true;
       setMeta(payload);
       const nextFilters = {
-        jobGroup: payload.selectedJobGroup,
-        jobId: payload.selectedJobId,
+        executorId: payload.selectedExecutorId,
+        taskId: payload.selectedTaskId,
         logStatus: '-1',
         filterTime: [
           dayjs().subtract(7, 'day').startOf('day'),
@@ -198,7 +198,7 @@ function JobLogPage() {
   }
 
   async function loadData(customFilters = filters, customPagination = pagination) {
-    if (!customFilters.jobId) {
+    if (!customFilters.taskId) {
       setRows([]);
       setTotal(0);
       return;
@@ -209,8 +209,8 @@ function JobLogPage() {
       const response = await jobLogApi.pageList({
         offset: (customPagination.current - 1) * customPagination.pageSize,
         pagesize: customPagination.pageSize,
-        jobGroup: customFilters.jobGroup,
-        jobId: customFilters.jobId,
+        executorId: customFilters.executorId,
+        taskId: customFilters.taskId,
         logStatus: customFilters.logStatus,
         filterTime: `${customFilters.filterTime[0].format('YYYY-MM-DD HH:mm:ss')} - ${customFilters.filterTime[1].format('YYYY-MM-DD HH:mm:ss')}`,
       });
@@ -239,8 +239,8 @@ function JobLogPage() {
       const values = await clearForm.validateFields();
       setClearSubmitting(true);
       await jobLogApi.clear({
-        jobGroup: filters.jobGroup,
-        jobId: filters.jobId,
+        executorId: filters.executorId,
+        taskId: filters.taskId,
         type: values.type,
       });
       message.success('日志清理任务已提交');
@@ -256,7 +256,7 @@ function JobLogPage() {
     }
   }
 
-  const jobMap = useMemo(() => new Map(meta.jobs.map((item) => [item.id, item.jobDesc])), [meta.jobs]);
+  const jobMap = useMemo(() => new Map(meta.jobs.map((item) => [item.id, item.taskDesc])), [meta.jobs]);
   const columns = useMemo(
     () => [
       {
@@ -266,7 +266,7 @@ function JobLogPage() {
       },
       {
         title: '任务',
-        dataIndex: 'jobId',
+        dataIndex: 'taskId',
         width: 220,
         render: (value) => jobMap.get(value) || value,
       },
@@ -339,15 +339,15 @@ function JobLogPage() {
         <div className="toolbar">
           <Select
             className="toolbar-grow"
-            value={filters.jobGroup}
+            value={filters.executorId}
             options={meta.groups.map((item) => ({ value: item.id, label: item.title }))}
-            onChange={(value) => loadMeta({ jobGroup: value, jobId: 0 })}
+            onChange={(value) => loadMeta({ executorId: value, taskId: 0 })}
           />
           <Select
             className="toolbar-grow"
-            value={filters.jobId}
-            options={meta.jobs.map((item) => ({ value: item.id, label: item.jobDesc }))}
-            onChange={(value) => setFilters((previous) => ({ ...previous, jobId: value }))}
+            value={filters.taskId}
+            options={meta.jobs.map((item) => ({ value: item.id, label: item.taskDesc }))}
+            onChange={(value) => setFilters((previous) => ({ ...previous, taskId: value }))}
           />
           <Select
             style={{ minWidth: 140 }}
@@ -378,8 +378,8 @@ function JobLogPage() {
           <Button
             onClick={() => {
               const nextFilters = {
-                jobGroup: meta.selectedJobGroup,
-                jobId: meta.selectedJobId,
+                executorId: meta.selectedExecutorId,
+                taskId: meta.selectedTaskId,
                 logStatus: '-1',
                 filterTime: [
                   dayjs().subtract(7, 'day').startOf('day'),
@@ -394,7 +394,7 @@ function JobLogPage() {
           >
             重置
           </Button>
-          <Button disabled={!filters.jobId} onClick={() => setClearModalOpen(true)}>
+          <Button disabled={!filters.taskId} onClick={() => setClearModalOpen(true)}>
             清理日志
           </Button>
         </div>
@@ -430,10 +430,10 @@ function JobLogPage() {
       >
         <Form form={clearForm} layout="vertical" initialValues={{ type: meta.clearLogOptions[0]?.value }}>
           <Form.Item label="任务组">
-            <Input value={meta.groups.find((item) => item.id === filters.jobGroup)?.title} disabled />
+            <Input value={meta.groups.find((item) => item.id === filters.executorId)?.title} disabled />
           </Form.Item>
           <Form.Item label="任务">
-            <Input value={jobMap.get(filters.jobId) || ''} disabled />
+            <Input value={jobMap.get(filters.taskId) || ''} disabled />
           </Form.Item>
           <Form.Item label="清理策略" name="type" rules={[{ required: true, message: '请选择清理策略' }]}>
             <Select options={meta.clearLogOptions} />
@@ -443,7 +443,7 @@ function JobLogPage() {
 
       <Modal
         open={liveModal.open}
-        title={liveModal.row ? `滚动日志：${jobMap.get(liveModal.row.jobId) || liveModal.row.jobId}` : '滚动日志'}
+        title={liveModal.row ? `滚动日志：${jobMap.get(liveModal.row.taskId) || liveModal.row.taskId}` : '滚动日志'}
         footer={null}
         width={960}
         onCancel={() => setLiveModal({ open: false, row: null, html: '' })}

@@ -16,12 +16,12 @@ data class TaskInfo(
     /**
      * 执行器分组 ID，决定任务可以路由到哪一组执行器。
      */
-    var jobGroup: Int = 0,
+    var executorId: Int = 0,
     /**
      * 任务唯一名称，主要用于平台侧配置定位与幂等校验。
      */
     var taskName: String? = null,
-    var jobDesc: String? = null,
+    var taskDesc: String? = null,
     var addTime: Date? = null,
     var updateTime: Date? = null,
     var author: String? = null,
@@ -50,11 +50,11 @@ data class TaskInfo(
     var glueType: String? = null,
     var glueSource: String? = null,
     var glueRemark: String? = null,
-    var glueUpdatetime: Date? = null,
+    var glueUpdateTime: Date? = null,
     /**
      * 子任务 ID 列表，按英文逗号分隔并在保存前做归一化。
      */
-    var childJobId: String? = null,
+    var childTaskId: String? = null,
     /**
      * 0 表示停止，1 表示运行。
      */

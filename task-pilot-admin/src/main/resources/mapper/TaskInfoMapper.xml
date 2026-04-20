@@ -6,9 +6,9 @@
 	<resultMap id="TaskInfo" type="com.ruishanio.taskpilot.admin.model.TaskInfo" >
 		<result column="id" property="id" />
 
-		<result column="job_group" property="jobGroup" />
+		<result column="executor_id" property="executorId" />
 		<result column="task_name" property="taskName" />
-	    <result column="job_desc" property="jobDesc" />
+	    <result column="task_desc" property="taskDesc" />
 
 	    <result column="add_time" property="addTime" />
 	    <result column="update_time" property="updateTime" />
@@ -30,9 +30,9 @@
 	    <result column="glue_type" property="glueType" />
 	    <result column="glue_source" property="glueSource" />
 	    <result column="glue_remark" property="glueRemark" />
-		<result column="glue_updatetime" property="glueUpdatetime" />
+		<result column="glue_update_time" property="glueUpdateTime" />
 
-		<result column="child_jobid" property="childJobId" />
+		<result column="child_task_id" property="childTaskId" />
 
 		<result column="trigger_status" property="triggerStatus" />
 		<result column="trigger_last_time" property="triggerLastTime" />
@@ -41,9 +41,9 @@
 
 	<sql id="Base_Column_List">
 		t.id,
-		t.job_group,
+		t.executor_id,
 		t.task_name,
-		t.job_desc,
+		t.task_desc,
 		t.add_time,
 		t.update_time,
 		t.author,
@@ -60,8 +60,8 @@
 		t.glue_type,
 		t.glue_source,
 		t.glue_remark,
-		t.glue_updatetime,
-		t.child_jobid,
+		t.glue_update_time,
+		t.child_task_id,
 		t.trigger_status,
 		t.trigger_last_time,
 		t.trigger_next_time
@@ -71,8 +71,8 @@
 		SELECT <include refid="Base_Column_List" />
 		FROM task_info AS t
 		<trim prefix="WHERE" prefixOverrides="AND | OR" >
-			<if test="jobGroup gt 0">
-				AND t.job_group = #{jobGroup}
+			<if test="executorId gt 0">
+				AND t.executor_id = #{executorId}
 			</if>
 			<if test="triggerStatus gte 0">
                 AND t.trigger_status = #{triggerStatus}
@@ -80,8 +80,8 @@
 			<if test="taskName != null and taskName != ''">
 				AND t.task_name like '%' || #{taskName} || '%'
 			</if>
-			<if test="jobDesc != null and jobDesc != ''">
-				AND t.job_desc like '%' || #{jobDesc} || '%'
+			<if test="taskDesc != null and taskDesc != ''">
+				AND t.task_desc like '%' || #{taskDesc} || '%'
 			</if>
 			<if test="executorHandler != null and executorHandler != ''">
 				AND t.executor_handler like '%' || #{executorHandler} || '%'
@@ -98,8 +98,8 @@
 		SELECT count(1)
 		FROM task_info AS t
 		<trim prefix="WHERE" prefixOverrides="AND | OR" >
-			<if test="jobGroup gt 0">
-				AND t.job_group = #{jobGroup}
+			<if test="executorId gt 0">
+				AND t.executor_id = #{executorId}
 			</if>
 			<if test="triggerStatus gte 0">
                 AND t.trigger_status = #{triggerStatus}
@@ -107,8 +107,8 @@
 			<if test="taskName != null and taskName != ''">
 				AND t.task_name like '%' || #{taskName} || '%'
 			</if>
-			<if test="jobDesc != null and jobDesc != ''">
-				AND t.job_desc like '%' || #{jobDesc} || '%'
+			<if test="taskDesc != null and taskDesc != ''">
+				AND t.task_desc like '%' || #{taskDesc} || '%'
 			</if>
 			<if test="executorHandler != null and executorHandler != ''">
 				AND t.executor_handler like '%' || #{executorHandler} || '%'
@@ -121,9 +121,9 @@
 
 	<insert id="save" parameterType="com.ruishanio.taskpilot.admin.model.TaskInfo" useGeneratedKeys="true" keyProperty="id" >
 		INSERT INTO task_info (
-			job_group,
+			executor_id,
 			task_name,
-			job_desc,
+			task_desc,
 			add_time,
 			update_time,
 			author,
@@ -140,15 +140,15 @@
 			glue_type,
 			glue_source,
 			glue_remark,
-			glue_updatetime,
-			child_jobid,
+			glue_update_time,
+			child_task_id,
 			trigger_status,
 			trigger_last_time,
 			trigger_next_time
 		) VALUES (
-			#{jobGroup},
+			#{executorId},
 			#{taskName},
-			#{jobDesc},
+			#{taskDesc},
 			#{addTime},
 			#{updateTime},
 			#{author},
@@ -165,8 +165,8 @@
 			#{glueType},
 			#{glueSource},
 			#{glueRemark},
-			#{glueUpdatetime},
-			#{childJobId},
+			#{glueUpdateTime},
+			#{childTaskId},
 			#{triggerStatus},
 			#{triggerLastTime},
 			#{triggerNextTime}
@@ -179,19 +179,20 @@
 		WHERE t.id = #{id}
 	</select>
 
-	<select id="loadByTaskName" parameterType="java.util.HashMap" resultMap="TaskInfo">
+	<select id="loadByExecutorIdAndTaskName" parameterType="java.util.HashMap" resultMap="TaskInfo">
 		SELECT <include refid="Base_Column_List" />
 		FROM task_info AS t
-		WHERE t.task_name = #{taskName}
+		WHERE t.executor_id = #{executorId}
+		  AND t.task_name = #{taskName}
 		LIMIT 1
 	</select>
 
 	<update id="update" parameterType="com.ruishanio.taskpilot.admin.model.TaskInfo" >
 		UPDATE task_info
 		SET
-			job_group = #{jobGroup},
+			executor_id = #{executorId},
 			task_name = #{taskName},
-			job_desc = #{jobDesc},
+			task_desc = #{taskDesc},
 			update_time = #{updateTime},
 			author = #{author},
 			alarm_email = #{alarmEmail},
@@ -207,8 +208,8 @@
 			glue_type = #{glueType},
 			glue_source = #{glueSource},
 			glue_remark = #{glueRemark},
-			glue_updatetime = #{glueUpdatetime},
-			child_jobid = #{childJobId},
+			glue_update_time = #{glueUpdateTime},
+			child_task_id = #{childTaskId},
 			trigger_status = #{triggerStatus},
 			trigger_last_time = #{triggerLastTime},
 			trigger_next_time = #{triggerNextTime}
@@ -221,10 +222,10 @@
 		WHERE id = #{id}
 	</delete>
 
-	<select id="getJobsByGroup" parameterType="java.util.HashMap" resultMap="TaskInfo">
+	<select id="getTasksByExecutorId" parameterType="java.util.HashMap" resultMap="TaskInfo">
 		SELECT <include refid="Base_Column_List" />
 		FROM task_info AS t
-		WHERE t.job_group = #{jobGroup}
+		WHERE t.executor_id = #{executorId}
 	</select>
 
 	<select id="findAllCount" resultType="int">

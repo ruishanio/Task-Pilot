@@ -61,7 +61,7 @@ class SampleJob {
     }
 
     // 带自动注册，首次启动即在调度中心登记
-    @TaskPilotRegister(jobDesc = "分片任务", scheduleConf = "0/3 * * * * ?")
+    @TaskPilotRegister(taskDesc = "分片任务", scheduleConf = "0/3 * * * * ?")
     @TaskPilot("shardingJobHandler")
     fun shardingJobHandler() {
         val idx = TaskPilotHelper.getShardIndex()

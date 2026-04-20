@@ -12,10 +12,10 @@ interface TaskInfoMapper {
     fun pageList(
         @Param("offset") offset: Int,
         @Param("pagesize") pagesize: Int,
-        @Param("jobGroup") jobGroup: Int,
+        @Param("executorId") executorId: Int,
         @Param("triggerStatus") triggerStatus: Int,
         @Param("taskName") taskName: String?,
-        @Param("jobDesc") jobDesc: String?,
+        @Param("taskDesc") taskDesc: String?,
         @Param("executorHandler") executorHandler: String?,
         @Param("author") author: String?
     ): List<TaskInfo>
@@ -23,10 +23,10 @@ interface TaskInfoMapper {
     fun pageListCount(
         @Param("offset") offset: Int,
         @Param("pagesize") pagesize: Int,
-        @Param("jobGroup") jobGroup: Int,
+        @Param("executorId") executorId: Int,
         @Param("triggerStatus") triggerStatus: Int,
         @Param("taskName") taskName: String?,
-        @Param("jobDesc") jobDesc: String?,
+        @Param("taskDesc") taskDesc: String?,
         @Param("executorHandler") executorHandler: String?,
         @Param("author") author: String?
     ): Int
@@ -36,17 +36,20 @@ interface TaskInfoMapper {
     fun loadById(@Param("id") id: Int): TaskInfo?
 
     /**
-     * 按任务唯一名称查询任务。
+     * 按执行器和任务名称查询任务。
      *
-     * 管理端新增和编辑都依赖该查询提前返回可读错误，避免直接把唯一约束异常暴露给用户。
+     * 任务名称只要求在同一执行器下唯一，因此新增、编辑和自动同步都需要带上执行器维度查询。
      */
-    fun loadByTaskName(@Param("taskName") taskName: String?): TaskInfo?
+    fun loadByExecutorIdAndTaskName(
+        @Param("executorId") executorId: Int,
+        @Param("taskName") taskName: String?
+    ): TaskInfo?
 
     fun update(taskInfo: TaskInfo): Int
 
     fun delete(@Param("id") id: Long): Int
 
-    fun getJobsByGroup(@Param("jobGroup") jobGroup: Int): List<TaskInfo>
+    fun getTasksByExecutorId(@Param("executorId") executorId: Int): List<TaskInfo>
 
     fun findAllCount(): Int
 

@@ -37,7 +37,7 @@ data class SyncRequest(
         /**
          * 调度中心展示的任务标题，留空时回退为 executorHandler。
          */
-        var jobDesc: String? = null,
+        var taskDesc: String? = null,
         /**
          * 任务负责人，主要用于后台审计和告警展示。
          */
@@ -81,7 +81,7 @@ data class SyncRequest(
         /**
          * 当前任务成功后需要串联触发的子任务 ID 列表。
          */
-        var childJobId: String? = null,
+        var childTaskId: String? = null,
         /**
          * 首次同步创建任务后是否立即启动。
          */

@@ -31,7 +31,7 @@ annotation class TaskPilotRegister(
     /**
      * 自动注册到调度中心时使用的任务描述。
      */
-    val jobDesc: String = "",
+    val taskDesc: String = "",
     /**
      * 自动注册到调度中心时使用的负责人。
      */
@@ -75,7 +75,7 @@ annotation class TaskPilotRegister(
     /**
      * 自动注册到调度中心时使用的子任务 ID 列表，多个逗号分隔。
      */
-    val childJobId: String = "",
+    val childTaskId: String = "",
     /**
      * 自动新增任务后是否立即启动。
      */

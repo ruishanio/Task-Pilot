@@ -85,7 +85,7 @@ class AdminBizTest {
                 tasks.add(
                     SyncRequest.Task().apply {
                         executorHandler = "demoHandler"
-                        jobDesc = "枚举任务"
+                        taskDesc = "枚举任务"
                         scheduleType = ScheduleTypeEnum.CRON
                         scheduleConf = "0/10 * * * * ?"
                         misfireStrategy = MisfireStrategyEnum.FIRE_ONCE_NOW

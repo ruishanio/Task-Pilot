@@ -58,7 +58,7 @@ class JobTrigger {
             jobInfo.executorParam = executorParam
         }
         val finalFailRetryCount = if (failRetryCount >= 0) failRetryCount else jobInfo.executorFailRetryCount
-        val group = executorMapper.load(jobInfo.jobGroup) ?: return
+        val group = executorMapper.load(jobInfo.executorId) ?: return
 
         if (StringTool.isNotBlank(addressList)) {
             group.addressType = 1
@@ -110,8 +110,8 @@ class JobTrigger {
         }
 
         val jobLog = TaskLog().apply {
-            jobGroup = jobInfo.jobGroup
-            jobId = jobInfo.id
+            executorId = jobInfo.executorId
+            taskId = jobInfo.id
             this.triggerTime = triggerTime
         }
         taskLogMapper.save(jobLog)
@@ -127,7 +127,7 @@ class JobTrigger {
             logDateTime = jobLog.triggerTime!!.time
             glueType = jobInfo.glueType
             glueSource = jobInfo.glueSource
-            glueUpdatetime = jobInfo.glueUpdatetime?.time ?: 0L
+            glueUpdateTime = jobInfo.glueUpdateTime?.time ?: 0L
             broadcastIndex = index
             broadcastTotal = total
         }

@@ -18,7 +18,7 @@ class GlueLogMapperTest {
     fun test() {
         val logGlue =
             GlueLog().apply {
-                jobId = 1
+                taskId = 1
                 glueType = "1"
                 glueSource = "1"
                 glueRemark = "1"
@@ -27,9 +27,9 @@ class GlueLogMapperTest {
             }
 
         val ret = glueLogMapper.save(logGlue)
-        val list = glueLogMapper.findByJobId(1)
+        val list = glueLogMapper.findByTaskId(1)
         val ret2 = glueLogMapper.removeOld(1, 1)
-        val ret3 = glueLogMapper.deleteByJobId(1)
+        val ret3 = glueLogMapper.deleteByTaskId(1)
 
         println("ret=$ret, list=$list, ret2=$ret2, ret3=$ret3")
     }

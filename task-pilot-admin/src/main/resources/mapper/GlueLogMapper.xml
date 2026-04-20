@@ -5,7 +5,7 @@
 	
 	<resultMap id="GlueLog" type="com.ruishanio.taskpilot.admin.model.GlueLog" >
 		<result column="id" property="id" />
-	    <result column="job_id" property="jobId" />
+	    <result column="task_id" property="taskId" />
 		<result column="glue_type" property="glueType" />
 	    <result column="glue_source" property="glueSource" />
 	    <result column="glue_remark" property="glueRemark" />
@@ -15,7 +15,7 @@
 
 	<sql id="Base_Column_List">
 		t.id,
-		t.job_id,
+		t.task_id,
 		t.glue_type,
 		t.glue_source,
 		t.glue_remark,
@@ -25,14 +25,14 @@
 	
 	<insert id="save" parameterType="com.ruishanio.taskpilot.admin.model.GlueLog" useGeneratedKeys="true" keyProperty="id" >
 		INSERT INTO glue_log (
-			job_id,
+			task_id,
 			glue_type,
 			glue_source,
 			glue_remark,
 			add_time, 
 			update_time
 		) VALUES (
-			#{jobId},
+			#{taskId},
 			#{glueType},
 			#{glueSource},
 			#{glueRemark},
@@ -41,10 +41,10 @@
 		);
 	</insert>
 	
-	<select id="findByJobId" parameterType="java.lang.Integer" resultMap="GlueLog">
+	<select id="findByTaskId" parameterType="java.lang.Integer" resultMap="GlueLog">
 		SELECT <include refid="Base_Column_List" />
 		FROM glue_log AS t
-		WHERE t.job_id = #{jobId}
+		WHERE t.task_id = #{taskId}
 		ORDER BY id DESC
 	</select>
 	
@@ -53,16 +53,16 @@
 		WHERE id NOT in(
 			SELECT id FROM(
 				SELECT id FROM glue_log
-				WHERE job_id = #{jobId}
+				WHERE task_id = #{taskId}
 				ORDER BY update_time desc
 				LIMIT #{limit}
 			) t1
-		) AND job_id = #{jobId}
+		) AND task_id = #{taskId}
 	</delete>
 
-	<delete id="deleteByJobId" parameterType="java.lang.Integer" >
+	<delete id="deleteByTaskId" parameterType="java.lang.Integer" >
 		DELETE FROM glue_log
-		WHERE job_id = #{jobId}
+		WHERE task_id = #{taskId}
 	</delete>
 	
 </mapper>

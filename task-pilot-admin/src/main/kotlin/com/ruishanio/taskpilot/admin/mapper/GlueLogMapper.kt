@@ -11,9 +11,9 @@ import org.apache.ibatis.annotations.Param
 interface GlueLogMapper {
     fun save(glueLog: GlueLog): Int
 
-    fun findByJobId(@Param("jobId") jobId: Int): List<GlueLog>
+    fun findByTaskId(@Param("taskId") taskId: Int): List<GlueLog>
 
-    fun removeOld(@Param("jobId") jobId: Int, @Param("limit") limit: Int): Int
+    fun removeOld(@Param("taskId") taskId: Int, @Param("limit") limit: Int): Int
 
-    fun deleteByJobId(@Param("jobId") jobId: Int): Int
+    fun deleteByTaskId(@Param("taskId") taskId: Int): Int
 }

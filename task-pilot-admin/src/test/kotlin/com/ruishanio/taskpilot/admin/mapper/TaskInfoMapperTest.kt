@@ -26,7 +26,7 @@ class TaskInfoMapperTest {
         logger.info("list: {}", list)
         logger.info("listCount: {}", listCount)
 
-        val list2 = taskInfoMapper.getJobsByGroup(1)
+        val list2 = taskInfoMapper.getTasksByExecutorId(1)
         logger.info("list2: {}", list2)
     }
 
@@ -34,9 +34,9 @@ class TaskInfoMapperTest {
     fun saveLoad() {
         val info =
             TaskInfo().apply {
-                jobGroup = 1
+                executorId = 1
                 taskName = "setTaskName"
-                jobDesc = "desc"
+                taskDesc = "desc"
                 author = "setAuthor"
                 alarmEmail = "setAlarmEmail"
                 scheduleType = ScheduleTypeEnum.FIX_RATE
@@ -49,10 +49,10 @@ class TaskInfoMapperTest {
                 glueType = "setGlueType"
                 glueSource = "setGlueSource"
                 glueRemark = "setGlueRemark"
-                childJobId = "1"
+                childTaskId = "1"
                 addTime = Date()
                 updateTime = Date()
-                glueUpdatetime = Date()
+                glueUpdateTime = Date()
             }
 
         val count = taskInfoMapper.save(info)
@@ -62,7 +62,7 @@ class TaskInfoMapperTest {
         info.scheduleConf = "44"
         info.misfireStrategy = MisfireStrategyEnum.FIRE_ONCE_NOW
         info2.taskName = "setTaskName2"
-        info2.jobDesc = "desc2"
+        info2.taskDesc = "desc2"
         info2.author = "setAuthor2"
         info2.alarmEmail = "setAlarmEmail2"
         info2.executorRouteStrategy = ExecutorRouteStrategyEnum.FAILOVER
@@ -72,14 +72,14 @@ class TaskInfoMapperTest {
         info2.glueType = "setGlueType2"
         info2.glueSource = "setGlueSource2"
         info2.glueRemark = "setGlueRemark2"
-        info2.glueUpdatetime = Date()
-        info2.childJobId = "1"
+        info2.glueUpdateTime = Date()
+        info2.childTaskId = "1"
         info2.updateTime = Date()
 
         val item2 = taskInfoMapper.update(info2)
         taskInfoMapper.delete(info2.id.toLong())
 
-        val list2 = taskInfoMapper.getJobsByGroup(1)
+        val list2 = taskInfoMapper.getTasksByExecutorId(1)
         val ret3 = taskInfoMapper.findAllCount()
 
         logger.info("count={}, item2={}, list2={}, ret3={}", count, item2, list2, ret3)

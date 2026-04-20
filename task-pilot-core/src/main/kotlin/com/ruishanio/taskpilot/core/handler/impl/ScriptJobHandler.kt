@@ -15,7 +15,7 @@ import java.io.File
  */
 class ScriptJobHandler(
     private val jobId: Int,
-    private val glueUpdatetime: Long,
+    private val glueUpdateTime: Long,
     private val gluesource: String?,
     private val glueType: GlueTypeEnum?
 ) : IJobHandler() {
@@ -33,7 +33,7 @@ class ScriptJobHandler(
         }
     }
 
-    fun getGlueUpdatetime(): Long = glueUpdatetime
+    fun getGlueUpdateTime(): Long = glueUpdateTime
 
     @Throws(Exception::class)
     override fun execute() {
@@ -54,7 +54,7 @@ class ScriptJobHandler(
                 File.separator +
                 jobId +
                 "_" +
-                glueUpdatetime +
+                glueUpdateTime +
                 suffix
         val scriptFile = File(scriptFileName)
         if (!scriptFile.exists()) {

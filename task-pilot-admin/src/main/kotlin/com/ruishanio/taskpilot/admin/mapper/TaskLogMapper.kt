@@ -13,8 +13,8 @@ interface TaskLogMapper {
     fun pageList(
         @Param("offset") offset: Int,
         @Param("pagesize") pagesize: Int,
-        @Param("jobGroup") jobGroup: Int,
-        @Param("jobId") jobId: Int,
+        @Param("executorId") executorId: Int,
+        @Param("taskId") taskId: Int,
         @Param("triggerTimeStart") triggerTimeStart: Date?,
         @Param("triggerTimeEnd") triggerTimeEnd: Date?,
         @Param("logStatus") logStatus: Int
@@ -23,8 +23,8 @@ interface TaskLogMapper {
     fun pageListCount(
         @Param("offset") offset: Int,
         @Param("pagesize") pagesize: Int,
-        @Param("jobGroup") jobGroup: Int,
-        @Param("jobId") jobId: Int,
+        @Param("executorId") executorId: Int,
+        @Param("taskId") taskId: Int,
         @Param("triggerTimeStart") triggerTimeStart: Date?,
         @Param("triggerTimeEnd") triggerTimeEnd: Date?,
         @Param("logStatus") logStatus: Int
@@ -38,7 +38,7 @@ interface TaskLogMapper {
 
     fun updateHandleInfo(taskLog: TaskLog): Int
 
-    fun delete(@Param("jobId") jobId: Int): Int
+    fun delete(@Param("taskId") taskId: Int): Int
 
     fun findLogReport(
         @Param("from") from: Date?,
@@ -46,8 +46,8 @@ interface TaskLogMapper {
     ): Map<String, Any>?
 
     fun findClearLogIds(
-        @Param("jobGroup") jobGroup: Int,
-        @Param("jobId") jobId: Int,
+        @Param("executorId") executorId: Int,
+        @Param("taskId") taskId: Int,
         @Param("clearBeforeTime") clearBeforeTime: Date?,
         @Param("clearBeforeNum") clearBeforeNum: Int,
         @Param("pagesize") pagesize: Int

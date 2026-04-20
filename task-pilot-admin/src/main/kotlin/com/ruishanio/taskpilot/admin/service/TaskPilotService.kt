@@ -13,17 +13,17 @@ interface TaskPilotService {
     fun pageList(
         offset: Int,
         pagesize: Int,
-        jobGroup: Int,
+        executorId: Int,
         triggerStatus: Int,
         taskName: String?,
-        jobDesc: String?,
+        taskDesc: String?,
         executorHandler: String?,
         author: String?
     ): Response<PageModel<TaskInfo>>
 
-    fun add(jobInfo: TaskInfo, loginInfo: LoginInfo): Response<String>
+    fun add(taskInfo: TaskInfo, loginInfo: LoginInfo): Response<String>
 
-    fun update(jobInfo: TaskInfo, loginInfo: LoginInfo): Response<String>
+    fun update(taskInfo: TaskInfo, loginInfo: LoginInfo): Response<String>
 
     fun remove(id: Int, loginInfo: LoginInfo): Response<String>
 
@@ -31,7 +31,7 @@ interface TaskPilotService {
 
     fun stop(id: Int, loginInfo: LoginInfo): Response<String>
 
-    fun trigger(loginInfo: LoginInfo, jobId: Int, executorParam: String?, addressList: String?): Response<String>
+    fun trigger(loginInfo: LoginInfo, taskId: Int, executorParam: String?, addressList: String?): Response<String>
 
     fun dashboardInfo(): Map<String, Any>
 

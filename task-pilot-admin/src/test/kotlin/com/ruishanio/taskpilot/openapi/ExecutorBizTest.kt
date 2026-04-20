@@ -73,7 +73,7 @@ class ExecutorBizTest {
                 executorBlockStrategy = ExecutorBlockStrategyEnum.COVER_EARLY
                 glueType = GlueTypeEnum.BEAN.name
                 glueSource = null
-                glueUpdatetime = System.currentTimeMillis()
+                glueUpdateTime = System.currentTimeMillis()
                 logId = 1
                 logDateTime = System.currentTimeMillis()
             }

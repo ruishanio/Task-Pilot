@@ -9,7 +9,7 @@ import java.util.Date
  */
 data class GlueLog(
     var id: Int = 0,
-    var jobId: Int = 0,
+    var taskId: Int = 0,
     var glueType: String? = null,
     var glueSource: String? = null,
     var glueRemark: String? = null,

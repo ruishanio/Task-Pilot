@@ -60,7 +60,7 @@ interface JobGroupItem {
 
 interface JobInfoMeta {
   groups: JobGroupItem[];
-  selectedJobGroup: number;
+  selectedExecutorId: number;
   triggerStatusOptions: OptionItem[];
   scheduleTypeOptions: OptionItem[];
   glueTypeOptions: OptionItem[];
@@ -90,9 +90,9 @@ type ExecutorBlockStrategy = 'SERIAL_EXECUTION' | 'DISCARD_LATER' | 'COVER_EARLY
 
 interface JobInfoRow {
   id: number;
-  jobGroup: number;
+  executorId: number;
   taskName: string;
-  jobDesc: string;
+  taskDesc: string;
   author?: string;
   alarmEmail?: string;
   scheduleType?: ScheduleType;
@@ -101,7 +101,7 @@ interface JobInfoRow {
   executorHandler?: string;
   executorParam?: string;
   executorRouteStrategy?: ExecutorRouteStrategy;
-  childJobId?: string;
+  childTaskId?: string;
   misfireStrategy?: MisfireStrategy;
   executorBlockStrategy?: ExecutorBlockStrategy;
   executorTimeout?: number;
@@ -115,7 +115,7 @@ interface JobInfoRow {
 
 const defaultJobInfoMeta: JobInfoMeta = {
   groups: [],
-  selectedJobGroup: -1,
+  selectedExecutorId: -1,
   triggerStatusOptions: [],
   scheduleTypeOptions: [],
   glueTypeOptions: [],
@@ -127,10 +127,10 @@ const defaultJobInfoMeta: JobInfoMeta = {
 function JobInfoPage() {
   const [meta, setMeta] = useState<JobInfoMeta>(defaultJobInfoMeta);
   const [filters, setFilters] = useState({
-    jobGroup: -1,
+    executorId: -1,
     triggerStatus: '-1',
     taskName: '',
-    jobDesc: '',
+    taskDesc: '',
     executorHandler: '',
     author: '',
   });
@@ -181,12 +181,12 @@ function JobInfoPage() {
       setMeta(payload);
       setFilters((previous) => ({
         ...previous,
-        jobGroup: payload.selectedJobGroup,
+        executorId: payload.selectedExecutorId,
       }));
       loadData(
         {
           ...filters,
-          jobGroup: payload.selectedJobGroup,
+          executorId: payload.selectedExecutorId,
         },
         { current: 1, pageSize: pagination.pageSize },
       );
@@ -201,10 +201,10 @@ function JobInfoPage() {
       const response = await jobInfoApi.pageList({
         offset: (customPagination.current - 1) * customPagination.pageSize,
         pagesize: customPagination.pageSize,
-        jobGroup: customFilters.jobGroup,
+        executorId: customFilters.executorId,
         triggerStatus: customFilters.triggerStatus,
         taskName: customFilters.taskName,
-        jobDesc: customFilters.jobDesc,
+        taskDesc: customFilters.taskDesc,
         executorHandler: customFilters.executorHandler,
         author: customFilters.author,
       });
@@ -222,7 +222,7 @@ function JobInfoPage() {
     setEditingRecord(null);
     form.resetFields();
     form.setFieldsValue({
-      jobGroup: meta.selectedJobGroup,
+      executorId: meta.selectedExecutorId,
       scheduleType: 'CRON',
       glueType: 'BEAN',
       executorRouteStrategy: meta.executorRouteStrategyOptions[0]?.value,
@@ -239,9 +239,9 @@ function JobInfoPage() {
     setEditingRecord(record);
     form.setFieldsValue({
       id: record.id,
-      jobGroup: record.jobGroup,
+      executorId: record.executorId,
       taskName: record.taskName,
-      jobDesc: record.jobDesc,
+      taskDesc: record.taskDesc,
       author: record.author,
       alarmEmail: record.alarmEmail,
       scheduleType: record.scheduleType,
@@ -250,7 +250,7 @@ function JobInfoPage() {
       executorHandler: record.executorHandler,
       executorParam: record.executorParam,
       executorRouteStrategy: record.executorRouteStrategy,
-      childJobId: record.childJobId,
+      childTaskId: record.childTaskId,
       misfireStrategy: record.misfireStrategy,
       executorBlockStrategy: record.executorBlockStrategy,
       executorTimeout: record.executorTimeout,
@@ -275,7 +275,7 @@ function JobInfoPage() {
             ? values.glueSource || GLUE_SOURCE_TEMPLATES[values.glueType] || ''
             : values.glueSource || '',
         glueRemark: values.glueRemark || 'GLUE代码初始化',
-        childJobId: values.childJobId || '',
+        childTaskId: values.childTaskId || '',
         alarmEmail: values.alarmEmail || '',
         executorParam: values.executorParam || '',
       };
@@ -392,7 +392,7 @@ function JobInfoPage() {
       setNextTimesModal({
         open: true,
         list: (response.data as string[]) || [],
-        title: `${record.jobDesc} 的下次触发时间`,
+        title: `${record.taskDesc} 的下次触发时间`,
       });
     } catch (error) {
       message.error(getErrorMessage(error, '计算下次触发时间失败'));
@@ -401,10 +401,10 @@ function JobInfoPage() {
 
   async function handleShowRegistry(record) {
     try {
-      const response = await jobGroupApi.loadById(record.jobGroup);
+      const response = await jobGroupApi.loadById(record.executorId);
       setRegistryModal({
         open: true,
-        title: `${record.jobDesc} 的注册节点`,
+        title: `${record.taskDesc} 的注册节点`,
         list: ((response.data as { registryList?: string[] } | undefined)?.registryList) || [],
       });
     } catch (error) {
@@ -449,7 +449,7 @@ function JobInfoPage() {
       },
       {
         title: '任务组',
-        dataIndex: 'jobGroup',
+        dataIndex: 'executorId',
         width: 140,
         render: (value) => groupMap.get(value) || value,
       },
@@ -460,7 +460,7 @@ function JobInfoPage() {
       },
       {
         title: '任务描述',
-        dataIndex: 'jobDesc',
+        dataIndex: 'taskDesc',
         width: 220,
       },
       {
@@ -531,9 +531,9 @@ function JobInfoPage() {
           <Select
             className="toolbar-grow"
             placeholder="任务组"
-            value={filters.jobGroup}
+            value={filters.executorId}
             options={meta.groups.map((item) => ({ value: item.id, label: item.title }))}
-            onChange={(value) => setFilters((previous) => ({ ...previous, jobGroup: value }))}
+            onChange={(value) => setFilters((previous) => ({ ...previous, executorId: value }))}
           />
           <Select
             style={{ minWidth: 140 }}
@@ -550,8 +550,8 @@ function JobInfoPage() {
           <Input
             className="toolbar-grow"
             placeholder="按任务描述搜索"
-            value={filters.jobDesc}
-            onChange={(event) => setFilters((previous) => ({ ...previous, jobDesc: event.target.value }))}
+            value={filters.taskDesc}
+            onChange={(event) => setFilters((previous) => ({ ...previous, taskDesc: event.target.value }))}
           />
           <Input
             className="toolbar-grow"
@@ -580,10 +580,10 @@ function JobInfoPage() {
           <Button
             onClick={() => {
               const nextFilters = {
-                jobGroup: meta.selectedJobGroup,
+                executorId: meta.selectedExecutorId,
                 triggerStatus: '-1',
                 taskName: '',
-                jobDesc: '',
+                taskDesc: '',
                 executorHandler: '',
                 author: '',
               };
@@ -637,7 +637,7 @@ function JobInfoPage() {
           <Space style={{ width: '100%' }} size="middle" align="start">
             <Form.Item
               label="任务组"
-              name="jobGroup"
+              name="executorId"
               style={{ width: '100%' }}
               rules={[{ required: true, message: '请选择任务组' }]}
             >
@@ -658,7 +658,7 @@ function JobInfoPage() {
 
           <Form.Item
             label="任务描述"
-            name="jobDesc"
+            name="taskDesc"
             rules={[{ required: true, message: '请输入任务描述' }]}
           >
             <Input placeholder="请输入任务描述" />
@@ -733,7 +733,7 @@ function JobInfoPage() {
             <Form.Item label="路由策略" name="executorRouteStrategy" style={{ width: '100%' }}>
               <Select options={meta.executorRouteStrategyOptions} />
             </Form.Item>
-            <Form.Item label="子任务 ID" name="childJobId" style={{ width: '100%' }}>
+            <Form.Item label="子任务 ID" name="childTaskId" style={{ width: '100%' }}>
               <Input placeholder="多个任务 ID 用英文逗号分隔" />
             </Form.Item>
           </Space>
@@ -771,7 +771,7 @@ function JobInfoPage() {
 
       <Modal
         open={triggerModal.open}
-        title={triggerModal.record ? `执行任务：${triggerModal.record.jobDesc}` : '执行任务'}
+        title={triggerModal.record ? `执行任务：${triggerModal.record.taskDesc}` : '执行任务'}
         confirmLoading={triggerSubmitting}
         onOk={handleTriggerSubmit}
         onCancel={() => setTriggerModal({ open: false, record: null })}

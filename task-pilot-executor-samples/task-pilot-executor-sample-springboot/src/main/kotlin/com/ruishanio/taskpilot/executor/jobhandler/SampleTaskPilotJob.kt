@@ -41,7 +41,7 @@ class SampleTaskPilotJob {
     /**
      * 2、分片广播任务。
      */
-    @TaskPilotRegister(jobDesc = "分片广播任务", scheduleConf = "0/3 * * * * ?")
+    @TaskPilotRegister(taskDesc = "分片广播任务", scheduleConf = "0/3 * * * * ?")
     @TaskPilot("shardingJobHandler")
     fun shardingJobHandler() {
         val shardIndex = TaskPilotHelper.getShardIndex()

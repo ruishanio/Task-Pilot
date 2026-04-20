@@ -72,7 +72,7 @@ class TaskPilotSyncService {
             }
 
             val taskName = if (StringTool.isNotBlank(task.taskName)) task.taskName!!.trim() else task.executorHandler!!.trim()
-            val existsTask = taskInfoMapper.loadByTaskName(taskName)
+            val existsTask = taskInfoMapper.loadByExecutorIdAndTaskName(executor.id, taskName)
             if (existsTask != null) {
                 val expectedTask = buildTaskInfo(executor.id, task).apply {
                     id = existsTask.id
@@ -162,11 +162,11 @@ class TaskPilotSyncService {
     /**
      * 仅填充同步托管字段，避免启动同步越权覆盖人工维护信息。
      */
-    private fun buildTaskInfo(jobGroupId: Int, task: SyncRequest.Task): TaskInfo =
+    private fun buildTaskInfo(executorId: Int, task: SyncRequest.Task): TaskInfo =
         TaskInfo().apply {
-            jobGroup = jobGroupId
+            this.executorId = executorId
             taskName = if (StringTool.isNotBlank(task.taskName)) task.taskName!!.trim() else task.executorHandler!!.trim()
-            jobDesc = if (StringTool.isNotBlank(task.jobDesc)) task.jobDesc!!.trim() else task.executorHandler!!.trim()
+            taskDesc = if (StringTool.isNotBlank(task.taskDesc)) task.taskDesc!!.trim() else task.executorHandler!!.trim()
             author = if (StringTool.isNotBlank(task.author)) task.author!!.trim() else SYSTEM_OPERATOR
             alarmEmail = task.alarmEmail
             scheduleType = defaultEnum(task.scheduleType, ScheduleTypeEnum.CRON)
@@ -181,7 +181,7 @@ class TaskPilotSyncService {
             glueType = GlueTypeEnum.BEAN.name
             glueSource = ""
             glueRemark = "注解同步"
-            childJobId = task.childJobId
+            childTaskId = task.childTaskId
         }
 
     /**
@@ -189,7 +189,7 @@ class TaskPilotSyncService {
      */
     private fun needsTaskUpdate(existsTask: TaskInfo, expectedTask: TaskInfo): Boolean =
         !equalsNullable(existsTask.taskName, expectedTask.taskName) ||
-            !equalsNullable(existsTask.jobDesc, expectedTask.jobDesc) ||
+            !equalsNullable(existsTask.taskDesc, expectedTask.taskDesc) ||
             !equalsNullable(existsTask.author, expectedTask.author) ||
             !equalsNullable(existsTask.alarmEmail, expectedTask.alarmEmail) ||
             !equalsNullable(existsTask.scheduleType, expectedTask.scheduleType) ||
@@ -201,7 +201,7 @@ class TaskPilotSyncService {
             !equalsNullable(existsTask.executorBlockStrategy, expectedTask.executorBlockStrategy) ||
             existsTask.executorTimeout != expectedTask.executorTimeout ||
             existsTask.executorFailRetryCount != expectedTask.executorFailRetryCount ||
-            !equalsNullable(existsTask.childJobId, expectedTask.childJobId)
+            !equalsNullable(existsTask.childTaskId, expectedTask.childTaskId)
 
     /**
      * 启动同步通过系统身份复用现有服务层的校验与审计逻辑。

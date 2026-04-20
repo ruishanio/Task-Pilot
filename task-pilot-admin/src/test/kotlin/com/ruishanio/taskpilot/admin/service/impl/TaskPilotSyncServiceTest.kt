@@ -61,7 +61,7 @@ class TaskPilotSyncServiceTest {
         val group = buildGroup("旧分组标题", "127.0.0.1:9999")
         val existsTask =
             buildExistingTask().apply {
-                jobDesc = "任务旧描述"
+                taskDesc = "任务旧描述"
                 author = "old-author"
                 alarmEmail = "old@test.com"
                 scheduleConf = "0/5 * * * * ?"
@@ -70,7 +70,7 @@ class TaskPilotSyncServiceTest {
 
         `when`(executorMapper.loadByAppname("demo-app")).thenReturn(group)
         `when`(registryMapper.findAll(anyInt(), anyObject())).thenReturn(Collections.emptyList())
-        `when`(taskInfoMapper.loadByTaskName("demoHandler")).thenReturn(existsTask)
+        `when`(taskInfoMapper.loadByExecutorIdAndTaskName(11, "demoHandler")).thenReturn(existsTask)
         `when`(taskPilotService.update(anyObject(), anyObject())).thenReturn(Response.ofSuccess<String>())
 
         val response = taskPilotSyncService.sync(request)
@@ -79,9 +79,9 @@ class TaskPilotSyncServiceTest {
         assertTrue(response.data.orEmpty().contains("updatedTaskCount=1"))
         verify(taskPilotService).update(
             argThatObject { jobInfo: TaskInfo ->
-                jobInfo.id == 22 &&
-                    jobInfo.taskName == "demoHandler" &&
-                    jobInfo.jobDesc == "任务新描述" &&
+                    jobInfo.id == 22 &&
+                        jobInfo.taskName == "demoHandler" &&
+                    jobInfo.taskDesc == "任务新描述" &&
                     jobInfo.author == "new-author" &&
                     jobInfo.alarmEmail == "new@test.com" &&
                     jobInfo.scheduleConf == "0/10 * * * * ?" &&
@@ -105,7 +105,7 @@ class TaskPilotSyncServiceTest {
 
         `when`(executorMapper.loadByAppname("demo-app")).thenReturn(group)
         `when`(registryMapper.findAll(anyInt(), anyObject())).thenReturn(Collections.emptyList())
-        `when`(taskInfoMapper.loadByTaskName("demoHandler")).thenReturn(existsTask)
+        `when`(taskInfoMapper.loadByExecutorIdAndTaskName(11, "demoHandler")).thenReturn(existsTask)
 
         val response = taskPilotSyncService.sync(request)
 
@@ -120,14 +120,14 @@ class TaskPilotSyncServiceTest {
     /**
      * 构造一份最小可用的同步请求，测试只覆盖自己关心的差异字段。
      */
-    private fun buildSyncRequest(jobDesc: String): SyncRequest =
+    private fun buildSyncRequest(taskDesc: String): SyncRequest =
         SyncRequest().apply {
             appName = "demo-app"
             groupTitle = "DemoGroup"
             val task =
                 SyncRequest.Task().apply {
                     executorHandler = "demoHandler"
-                    this.jobDesc = jobDesc
+                    this.taskDesc = taskDesc
                     author = "new-author"
                     alarmEmail = "new@test.com"
                     scheduleType = ScheduleTypeEnum.CRON
@@ -138,7 +138,7 @@ class TaskPilotSyncServiceTest {
                     executorBlockStrategy = ExecutorBlockStrategyEnum.SERIAL_EXECUTION
                     executorTimeout = 30
                     executorFailRetryCount = 2
-                    childJobId = "1,2"
+                    childTaskId = "1,2"
                 }
             tasks.add(task)
         }
@@ -158,9 +158,9 @@ class TaskPilotSyncServiceTest {
     private fun buildExistingTask(): TaskInfo =
         TaskInfo().apply {
             id = 22
-            jobGroup = 11
+            executorId = 11
             taskName = "demoHandler"
-            jobDesc = "任务描述"
+            taskDesc = "任务描述"
             author = "new-author"
             alarmEmail = "new@test.com"
             scheduleType = ScheduleTypeEnum.CRON
@@ -172,7 +172,7 @@ class TaskPilotSyncServiceTest {
             executorBlockStrategy = ExecutorBlockStrategyEnum.SERIAL_EXECUTION
             executorTimeout = 30
             executorFailRetryCount = 2
-            childJobId = "1,2"
+            childTaskId = "1,2"
         }
 
     /**

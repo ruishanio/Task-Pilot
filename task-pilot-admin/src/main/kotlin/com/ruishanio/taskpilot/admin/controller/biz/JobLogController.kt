@@ -44,13 +44,13 @@ class JobLogController {
         request: HttpServletRequest,
         @RequestParam(required = false, defaultValue = "0") offset: Int,
         @RequestParam(required = false, defaultValue = "10") pagesize: Int,
-        @RequestParam jobGroup: Int,
-        @RequestParam jobId: Int,
+        @RequestParam executorId: Int,
+        @RequestParam taskId: Int,
         @RequestParam logStatus: Int,
         @RequestParam filterTime: String?
     ): Response<PageModel<TaskLog>> {
-        JobGroupPermissionUtil.validJobGroupPermission(request, jobGroup)
-        if (jobId < 1) {
+        JobGroupPermissionUtil.validJobGroupPermission(request, executorId)
+        if (taskId < 1) {
             return Response.ofFail("请选择任务")
         }
 
@@ -64,8 +64,8 @@ class JobLogController {
             }
         }
 
-        val list = taskLogMapper.pageList(offset, pagesize, jobGroup, jobId, triggerTimeStart, triggerTimeEnd, logStatus)
-        val listCount = taskLogMapper.pageListCount(offset, pagesize, jobGroup, jobId, triggerTimeStart, triggerTimeEnd, logStatus)
+        val list = taskLogMapper.pageList(offset, pagesize, executorId, taskId, triggerTimeStart, triggerTimeEnd, logStatus)
+        val listCount = taskLogMapper.pageListCount(offset, pagesize, executorId, taskId, triggerTimeStart, triggerTimeEnd, logStatus)
         val pageModel = PageModel<TaskLog>()
         pageModel.data = list
         pageModel.total = listCount
@@ -96,13 +96,13 @@ class JobLogController {
     @ResponseBody
     fun logKill(request: HttpServletRequest, @RequestParam("id") id: Long): Response<String> {
         val log = taskLogMapper.load(id) ?: return Response.ofFail("日志ID非法")
-        val jobInfo = taskInfoMapper.loadById(log.jobId)
+        val jobInfo = taskInfoMapper.loadById(log.taskId)
             ?: return Response.ofFail("任务ID非法")
         if (TaskPilotContext.HANDLE_CODE_SUCCESS != log.triggerCode) {
             return Response.ofFail("调度失败，无法终止日志")
         }
 
-        JobGroupPermissionUtil.validJobGroupPermission(request, jobInfo.jobGroup)
+        JobGroupPermissionUtil.validJobGroupPermission(request, jobInfo.executorId)
 
         val runResult = try {
             val executorBiz: ExecutorBiz = TaskPilotAdminBootstrap.getExecutorBiz(log.executorAddress)!!
@@ -127,12 +127,12 @@ class JobLogController {
     @ResponseBody
     fun clearLog(
         request: HttpServletRequest,
-        @RequestParam("jobGroup") jobGroup: Int,
-        @RequestParam("jobId") jobId: Int,
+        @RequestParam("executorId") executorId: Int,
+        @RequestParam("taskId") taskId: Int,
         @RequestParam("type") type: Int
     ): Response<String> {
-        JobGroupPermissionUtil.validJobGroupPermission(request, jobGroup)
-        if (jobId < 1) {
+        JobGroupPermissionUtil.validJobGroupPermission(request, executorId)
+        if (taskId < 1) {
             return Response.ofFail("请选择任务")
         }
 
@@ -153,7 +153,7 @@ class JobLogController {
 
         var logIds: List<Long>
         do {
-            logIds = taskLogMapper.findClearLogIds(jobGroup, jobId, clearBeforeTime, clearBeforeNum, 1000)
+            logIds = taskLogMapper.findClearLogIds(executorId, taskId, clearBeforeTime, clearBeforeNum, 1000)
             if (logIds.isNotEmpty()) {
                 taskLogMapper.clearLog(logIds)
             }

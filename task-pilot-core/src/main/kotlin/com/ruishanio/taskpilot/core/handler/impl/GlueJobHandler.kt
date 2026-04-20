@@ -10,13 +10,13 @@ import com.ruishanio.taskpilot.core.handler.IJobHandler
  */
 class GlueJobHandler(
     private val jobHandler: IJobHandler,
-    private val glueUpdatetime: Long
+    private val glueUpdateTime: Long
 ) : IJobHandler() {
-    fun getGlueUpdatetime(): Long = glueUpdatetime
+    fun getGlueUpdateTime(): Long = glueUpdateTime
 
     @Throws(Exception::class)
     override fun execute() {
-        TaskPilotHelper.log("----------- GLUE 版本:{} -----------", glueUpdatetime)
+        TaskPilotHelper.log("----------- GLUE 版本:{} -----------", glueUpdateTime)
         jobHandler.execute()
     }
 

@@ -9,8 +9,8 @@ import java.util.Date
  */
 data class TaskLog(
     var id: Long = 0,
-    var jobGroup: Int = 0,
-    var jobId: Int = 0,
+    var executorId: Int = 0,
+    var taskId: Int = 0,
     var executorAddress: String? = null,
     var executorHandler: String? = null,
     var executorParam: String? = null,

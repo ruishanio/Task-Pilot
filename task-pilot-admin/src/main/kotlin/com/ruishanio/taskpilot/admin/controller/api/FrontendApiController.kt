@@ -84,7 +84,7 @@ class FrontendApiController {
     @TaskPilotAuth
     fun jobInfoMeta(
         request: HttpServletRequest,
-        @RequestParam(value = "jobGroup", required = false, defaultValue = "-1") jobGroup: Int
+        @RequestParam(value = "executorId", required = false, defaultValue = "-1") executorId: Int
     ): Response<Map<String, Any>> {
         val jobGroupList = JobGroupPermissionUtil.filterJobGroupByPermission(request, executorMapper.findAll())
         if (CollectionTool.isEmpty(jobGroupList)) {
@@ -92,11 +92,11 @@ class FrontendApiController {
         }
 
         val accessibleGroupIds = jobGroupList.map(Executor::id)
-        val selectedJobGroup = if (accessibleGroupIds.contains(jobGroup)) jobGroup else jobGroupList[0].id
+        val selectedExecutorId = if (accessibleGroupIds.contains(executorId)) executorId else jobGroupList[0].id
 
         val data = HashMap<String, Any>()
         data["groups"] = jobGroupList
-        data["selectedJobGroup"] = selectedJobGroup
+        data["selectedExecutorId"] = selectedExecutorId
         data["triggerStatusOptions"] = listOf(
             option("-1", "全部"),
             option(TriggerStatus.STOPPED.value.toString(), "停止"),
@@ -120,36 +120,36 @@ class FrontendApiController {
     @TaskPilotAuth
     fun jobLogMeta(
         request: HttpServletRequest,
-        @RequestParam(value = "jobGroup", required = false, defaultValue = "0") jobGroup: Int?,
-        @RequestParam(value = "jobId", required = false, defaultValue = "0") jobId: Int?
+        @RequestParam(value = "executorId", required = false, defaultValue = "0") executorId: Int?,
+        @RequestParam(value = "taskId", required = false, defaultValue = "0") taskId: Int?
     ): Response<Map<String, Any>> {
         val jobGroupList = JobGroupPermissionUtil.filterJobGroupByPermission(request, executorMapper.findAll())
         if (CollectionTool.isEmpty(jobGroupList)) {
             throw TaskPilotException("不存在有效执行器,请联系管理员")
         }
 
-        var selectedGroupParam = jobGroup ?: 0
-        if (jobId != null && jobId > 0) {
-            val jobInfo = taskInfoMapper.loadById(jobId)
+        var selectedExecutorParam = executorId ?: 0
+        if (taskId != null && taskId > 0) {
+            val jobInfo = taskInfoMapper.loadById(taskId)
                 ?: throw RuntimeException("任务ID非法")
-            selectedGroupParam = jobInfo.jobGroup
+            selectedExecutorParam = jobInfo.executorId
         }
 
         val accessibleGroupIds = jobGroupList.map(Executor::id)
-        val selectedJobGroup = if (accessibleGroupIds.contains(selectedGroupParam)) selectedGroupParam else jobGroupList[0].id
+        val selectedExecutorId = if (accessibleGroupIds.contains(selectedExecutorParam)) selectedExecutorParam else jobGroupList[0].id
 
-        val jobInfoList = taskInfoMapper.getJobsByGroup(selectedJobGroup)
-        var selectedJobId = 0
+        val jobInfoList = taskInfoMapper.getTasksByExecutorId(selectedExecutorId)
+        var selectedTaskId = 0
         if (CollectionTool.isNotEmpty(jobInfoList)) {
             val accessibleJobIds = jobInfoList.map(TaskInfo::id)
-            selectedJobId = if (jobId != null && accessibleJobIds.contains(jobId)) jobId else jobInfoList[0].id
+            selectedTaskId = if (taskId != null && accessibleJobIds.contains(taskId)) taskId else jobInfoList[0].id
         }
 
         val data = HashMap<String, Any>()
         data["groups"] = jobGroupList
         data["jobs"] = jobInfoList
-        data["selectedJobGroup"] = selectedJobGroup
-        data["selectedJobId"] = selectedJobId
+        data["selectedExecutorId"] = selectedExecutorId
+        data["selectedTaskId"] = selectedTaskId
         data["logStatusOptions"] = listOf(
             option("-1", "全部"),
             option("1", "成功"),

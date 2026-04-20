@@ -6,8 +6,8 @@
 	<resultMap id="TaskLog" type="com.ruishanio.taskpilot.admin.model.TaskLog" >
 		<result column="id" property="id" />
 
-		<result column="job_group" property="jobGroup" />
-		<result column="job_id" property="jobId" />
+		<result column="executor_id" property="executorId" />
+		<result column="task_id" property="taskId" />
 
 		<result column="executor_address" property="executorAddress" />
 		<result column="executor_handler" property="executorHandler" />
@@ -28,8 +28,8 @@
 
 	<sql id="Base_Column_List">
 		t.id,
-		t.job_group,
-		t.job_id,
+		t.executor_id,
+		t.task_id,
 		t.executor_address,
 		t.executor_handler,
 		t.executor_param,
@@ -48,11 +48,11 @@
 		SELECT <include refid="Base_Column_List" />
 		FROM task_log AS t
 		<trim prefix="WHERE" prefixOverrides="AND | OR" >
-			<if test="jobId==0 and jobGroup gt 0">
-				AND t.job_group = #{jobGroup}
+			<if test="taskId==0 and executorId gt 0">
+				AND t.executor_id = #{executorId}
 			</if>
-			<if test="jobId gt 0">
-				AND t.job_id = #{jobId}
+			<if test="taskId gt 0">
+				AND t.task_id = #{taskId}
 			</if>
 			<if test="triggerTimeStart != null">
 				AND t.trigger_time <![CDATA[ >= ]]> #{triggerTimeStart}
@@ -82,11 +82,11 @@
 		SELECT count(1)
 		FROM task_log AS t
 		<trim prefix="WHERE" prefixOverrides="AND | OR" >
-			<if test="jobId==0 and jobGroup gt 0">
-				AND t.job_group = #{jobGroup}
+			<if test="taskId==0 and executorId gt 0">
+				AND t.executor_id = #{executorId}
 			</if>
-			<if test="jobId gt 0">
-				AND t.job_id = #{jobId}
+			<if test="taskId gt 0">
+				AND t.task_id = #{taskId}
 			</if>
 			<if test="triggerTimeStart != null">
 				AND t.trigger_time <![CDATA[ >= ]]> #{triggerTimeStart}
@@ -119,14 +119,14 @@
 	
 	<insert id="save" parameterType="com.ruishanio.taskpilot.admin.model.TaskLog" useGeneratedKeys="true" keyProperty="id" >
 		INSERT INTO task_log (
-			job_group,
-			job_id,
+			executor_id,
+			task_id,
 			trigger_time,
 			trigger_code,
 			handle_code
 		) VALUES (
-			#{jobGroup},
-			#{jobId},
+			#{executorId},
+			#{taskId},
 			#{triggerTime},
 			#{triggerCode},
 			#{handleCode}
@@ -158,7 +158,7 @@
 	
 	<delete id="delete" >
 		delete from task_log
-		WHERE job_id = #{jobId}
+		WHERE task_id = #{taskId}
 	</delete>
 
     <!--<select id="triggerCountByDay" resultType="java.util.Map" >
@@ -185,11 +185,11 @@
 	<select id="findClearLogIds" resultType="long" >
 		SELECT id FROM task_log
 		<trim prefix="WHERE" prefixOverrides="AND | OR" >
-			<if test="jobGroup gt 0">
-				AND job_group = #{jobGroup}
+			<if test="executorId gt 0">
+				AND executor_id = #{executorId}
 			</if>
-			<if test="jobId gt 0">
-				AND job_id = #{jobId}
+			<if test="taskId gt 0">
+				AND task_id = #{taskId}
 			</if>
 			<if test="clearBeforeTime != null">
 				AND trigger_time <![CDATA[ <= ]]> #{clearBeforeTime}
@@ -199,11 +199,11 @@
 				SELECT id FROM(
 				SELECT id FROM task_log AS t
 				<trim prefix="WHERE" prefixOverrides="AND | OR" >
-					<if test="jobGroup gt 0">
-						AND t.job_group = #{jobGroup}
+					<if test="executorId gt 0">
+						AND t.executor_id = #{executorId}
 					</if>
-					<if test="jobId gt 0">
-						AND t.job_id = #{jobId}
+					<if test="taskId gt 0">
+						AND t.task_id = #{taskId}
 					</if>
 				</trim>
 				ORDER BY t.trigger_time desc

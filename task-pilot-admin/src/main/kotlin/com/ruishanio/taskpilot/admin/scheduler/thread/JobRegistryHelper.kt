@@ -1,7 +1,7 @@
 package com.ruishanio.taskpilot.admin.scheduler.thread
 
-import com.ruishanio.taskpilot.admin.model.TaskPilotGroup
-import com.ruishanio.taskpilot.admin.model.TaskPilotRegistry
+import com.ruishanio.taskpilot.admin.model.Executor
+import com.ruishanio.taskpilot.admin.model.Registry
 import com.ruishanio.taskpilot.admin.scheduler.config.TaskPilotAdminBootstrap
 import com.ruishanio.taskpilot.core.constant.Const
 import com.ruishanio.taskpilot.core.constant.RegistType
@@ -50,16 +50,16 @@ class JobRegistryHelper {
         registryMonitorThread = Thread {
             while (!toStop) {
                 try {
-                    val groupList = TaskPilotAdminBootstrap.instance.taskPilotGroupMapper.findByAddressType(0)
+                    val groupList = TaskPilotAdminBootstrap.instance.executorMapper.findByAddressType(0)
                     if (groupList.isNotEmpty()) {
-                        val ids = TaskPilotAdminBootstrap.instance.taskPilotRegistryMapper.findDead(Const.DEAD_TIMEOUT, Date())
+                        val ids = TaskPilotAdminBootstrap.instance.registryMapper.findDead(Const.DEAD_TIMEOUT, Date())
                         if (ids.isNotEmpty()) {
-                            TaskPilotAdminBootstrap.instance.taskPilotRegistryMapper.removeDead(ids)
+                            TaskPilotAdminBootstrap.instance.registryMapper.removeDead(ids)
                         }
 
                         val appAddressMap = HashMap<String, MutableList<String>>()
-                        val list: List<TaskPilotRegistry> =
-                            TaskPilotAdminBootstrap.instance.taskPilotRegistryMapper.findAll(Const.DEAD_TIMEOUT, Date())
+                        val list: List<Registry> =
+                            TaskPilotAdminBootstrap.instance.registryMapper.findAll(Const.DEAD_TIMEOUT, Date())
                         for (item in list) {
                             if (RegistType.EXECUTOR.name == item.registryGroup) {
                                 val appname = item.registryKey ?: continue
@@ -81,7 +81,7 @@ class JobRegistryHelper {
                             }
                             group.addressList = addressListStr
                             group.updateTime = Date()
-                            TaskPilotAdminBootstrap.instance.taskPilotGroupMapper.update(group)
+                            TaskPilotAdminBootstrap.instance.executorMapper.update(group)
                         }
                     }
                 } catch (e: Throwable) {
@@ -128,7 +128,7 @@ class JobRegistryHelper {
         }
 
         registryOrRemoveThreadPool.execute {
-            val ret = TaskPilotAdminBootstrap.instance.taskPilotRegistryMapper.registrySaveOrUpdate(
+            val ret = TaskPilotAdminBootstrap.instance.registryMapper.registrySaveOrUpdate(
                 registryParam.registryGroup,
                 registryParam.registryKey,
                 registryParam.registryValue,
@@ -153,7 +153,7 @@ class JobRegistryHelper {
         }
 
         registryOrRemoveThreadPool.execute {
-            val ret = TaskPilotAdminBootstrap.instance.taskPilotRegistryMapper.registryDelete(
+            val ret = TaskPilotAdminBootstrap.instance.registryMapper.registryDelete(
                 registryParam.registryGroup,
                 registryParam.registryKey,
                 registryParam.registryValue

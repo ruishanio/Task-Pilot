@@ -1,8 +1,8 @@
 package com.ruishanio.taskpilot.admin.scheduler.complete
 
-import com.ruishanio.taskpilot.admin.mapper.TaskPilotInfoMapper
-import com.ruishanio.taskpilot.admin.mapper.TaskPilotLogMapper
-import com.ruishanio.taskpilot.admin.model.TaskPilotLog
+import com.ruishanio.taskpilot.admin.mapper.TaskInfoMapper
+import com.ruishanio.taskpilot.admin.mapper.TaskLogMapper
+import com.ruishanio.taskpilot.admin.model.TaskLog
 import com.ruishanio.taskpilot.admin.scheduler.config.TaskPilotAdminBootstrap
 import com.ruishanio.taskpilot.admin.scheduler.trigger.TriggerTypeEnum
 import com.ruishanio.taskpilot.core.context.TaskPilotContext
@@ -21,33 +21,33 @@ import java.text.MessageFormat
 @Component
 class JobCompleter {
     @Resource
-    private lateinit var taskPilotInfoMapper: TaskPilotInfoMapper
+    private lateinit var taskInfoMapper: TaskInfoMapper
 
     @Resource
-    private lateinit var taskPilotLogMapper: TaskPilotLogMapper
+    private lateinit var taskLogMapper: TaskLogMapper
 
     /**
      * 任务完成只允许处理一次，先补齐子任务触发信息，再写回 handle 结果。
      */
-    fun complete(taskPilotLog: TaskPilotLog): Int {
-        processChildJob(taskPilotLog)
-        if ((taskPilotLog.handleMsg?.length ?: 0) > 15000) {
-            taskPilotLog.handleMsg = taskPilotLog.handleMsg?.substring(0, 15000)
+    fun complete(taskLog: TaskLog): Int {
+        processChildJob(taskLog)
+        if ((taskLog.handleMsg?.length ?: 0) > 15000) {
+            taskLog.handleMsg = taskLog.handleMsg?.substring(0, 15000)
         }
-        return taskPilotLogMapper.updateHandleInfo(taskPilotLog)
+        return taskLogMapper.updateHandleInfo(taskLog)
     }
 
     /**
      * 成功任务会按声明顺序触发子任务，并把每个子任务的处理结果附加到当前日志。
      */
-    private fun processChildJob(taskPilotLog: TaskPilotLog) {
+    private fun processChildJob(taskLog: TaskLog) {
         var triggerChildMsg: String? = null
-        if (TaskPilotContext.HANDLE_CODE_SUCCESS == taskPilotLog.handleCode) {
-            val taskPilotInfo = taskPilotInfoMapper.loadById(taskPilotLog.jobId)
-            if (taskPilotInfo != null && StringTool.isNotBlank(taskPilotInfo.childJobId)) {
+        if (TaskPilotContext.HANDLE_CODE_SUCCESS == taskLog.handleCode) {
+            val taskInfo = taskInfoMapper.loadById(taskLog.jobId)
+            if (taskInfo != null && StringTool.isNotBlank(taskInfo.childJobId)) {
                 triggerChildMsg =
                     "<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>触发子任务<<<<<<<<<<< </span><br>"
-                val childJobIds = taskPilotInfo.childJobId!!.split(",")
+                val childJobIds = taskInfo.childJobId!!.split(",")
                 for (i in childJobIds.indices) {
                     val childJobId = if (StringTool.isNotBlank(childJobIds[i]) && StringTool.isNumeric(childJobIds[i])) {
                         childJobIds[i].toInt()
@@ -56,7 +56,7 @@ class JobCompleter {
                     }
 
                     if (childJobId > 0) {
-                        if (childJobId == taskPilotLog.jobId) {
+                        if (childJobId == taskLog.jobId) {
                             logger.debug(">>>>>>>>>>> task-pilot 忽略子任务触发，childJobId={} 与当前任务相同。", childJobId)
                             continue
                         }
@@ -91,7 +91,7 @@ class JobCompleter {
         }
 
         if (StringTool.isNotBlank(triggerChildMsg)) {
-            taskPilotLog.handleMsg = taskPilotLog.handleMsg + triggerChildMsg
+            taskLog.handleMsg = taskLog.handleMsg + triggerChildMsg
         }
     }
 

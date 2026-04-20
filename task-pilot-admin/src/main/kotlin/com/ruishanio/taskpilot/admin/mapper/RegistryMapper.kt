@@ -1,6 +1,6 @@
 package com.ruishanio.taskpilot.admin.mapper
 
-import com.ruishanio.taskpilot.admin.model.TaskPilotRegistry
+import com.ruishanio.taskpilot.admin.model.Registry
 import org.apache.ibatis.annotations.Mapper
 import org.apache.ibatis.annotations.Param
 import java.util.Date
@@ -9,12 +9,12 @@ import java.util.Date
  * 注册中心 Mapper。
  */
 @Mapper
-interface TaskPilotRegistryMapper {
+interface RegistryMapper {
     fun findDead(@Param("timeout") timeout: Int, @Param("nowTime") nowTime: Date?): List<Int>
 
     fun removeDead(@Param("ids") ids: List<Int>): Int
 
-    fun findAll(@Param("timeout") timeout: Int, @Param("nowTime") nowTime: Date?): List<TaskPilotRegistry>
+    fun findAll(@Param("timeout") timeout: Int, @Param("nowTime") nowTime: Date?): List<Registry>
 
     fun registrySaveOrUpdate(
         @Param("registryGroup") registryGroup: String?,

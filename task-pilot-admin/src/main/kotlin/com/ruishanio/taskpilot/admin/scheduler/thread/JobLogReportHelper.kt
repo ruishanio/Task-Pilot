@@ -1,6 +1,6 @@
 package com.ruishanio.taskpilot.admin.scheduler.thread
 
-import com.ruishanio.taskpilot.admin.model.TaskPilotLogReport
+import com.ruishanio.taskpilot.admin.model.TaskReport
 import com.ruishanio.taskpilot.admin.scheduler.config.TaskPilotAdminBootstrap
 import org.slf4j.LoggerFactory
 import java.util.Calendar
@@ -38,26 +38,26 @@ class JobLogReportHelper {
                         itemDay.set(Calendar.MILLISECOND, 999)
                         val todayTo = itemDay.time
 
-                        val taskPilotLogReport = TaskPilotLogReport().apply {
+                        val taskReport = TaskReport().apply {
                             triggerDay = todayFrom
                             runningCount = 0
                             sucCount = 0
                             failCount = 0
                         }
 
-                        val triggerCountMap = TaskPilotAdminBootstrap.instance.taskPilotLogMapper.findLogReport(todayFrom, todayTo)
+                        val triggerCountMap = TaskPilotAdminBootstrap.instance.taskLogMapper.findLogReport(todayFrom, todayTo)
                         if (!triggerCountMap.isNullOrEmpty()) {
                             val triggerDayCount = (triggerCountMap["triggerDayCount"]?.toString()?.toInt() ?: 0)
                             val triggerDayCountRunning = (triggerCountMap["triggerDayCountRunning"]?.toString()?.toInt() ?: 0)
                             val triggerDayCountSuc = (triggerCountMap["triggerDayCountSuc"]?.toString()?.toInt() ?: 0)
                             val triggerDayCountFail = triggerDayCount - triggerDayCountRunning - triggerDayCountSuc
 
-                            taskPilotLogReport.runningCount = triggerDayCountRunning
-                            taskPilotLogReport.sucCount = triggerDayCountSuc
-                            taskPilotLogReport.failCount = triggerDayCountFail
+                            taskReport.runningCount = triggerDayCountRunning
+                            taskReport.sucCount = triggerDayCountSuc
+                            taskReport.failCount = triggerDayCountFail
                         }
 
-                        TaskPilotAdminBootstrap.instance.taskPilotLogReportMapper.saveOrUpdate(taskPilotLogReport)
+                        TaskPilotAdminBootstrap.instance.taskReportMapper.saveOrUpdate(taskReport)
                     }
                 } catch (e: Throwable) {
                     if (!toStop) {
@@ -79,7 +79,7 @@ class JobLogReportHelper {
 
                         var logIds: List<Long>
                         do {
-                            logIds = TaskPilotAdminBootstrap.instance.taskPilotLogMapper.findClearLogIds(
+                            logIds = TaskPilotAdminBootstrap.instance.taskLogMapper.findClearLogIds(
                                 0,
                                 0,
                                 clearBeforeTime,
@@ -87,7 +87,7 @@ class JobLogReportHelper {
                                 1000
                             )
                             if (logIds.isNotEmpty()) {
-                                TaskPilotAdminBootstrap.instance.taskPilotLogMapper.clearLog(logIds)
+                                TaskPilotAdminBootstrap.instance.taskLogMapper.clearLog(logIds)
                             }
                         } while (logIds.isNotEmpty())
 

@@ -3,7 +3,7 @@ package com.ruishanio.taskpilot.admin.util
 import com.ruishanio.taskpilot.admin.auth.helper.TaskPilotAuthHelper
 import com.ruishanio.taskpilot.admin.auth.model.LoginInfo
 import com.ruishanio.taskpilot.admin.constant.Consts
-import com.ruishanio.taskpilot.admin.model.TaskPilotGroup
+import com.ruishanio.taskpilot.admin.model.Executor
 import com.ruishanio.taskpilot.tool.core.StringTool
 import jakarta.servlet.http.HttpServletRequest
 
@@ -43,7 +43,7 @@ object JobGroupPermissionUtil {
     /**
      * 普通用户只能看到被授予的任务组，管理员保持原列表不变。
      */
-    fun filterJobGroupByPermission(request: HttpServletRequest, jobGroupListTotal: List<TaskPilotGroup>): List<TaskPilotGroup> {
+    fun filterJobGroupByPermission(request: HttpServletRequest, jobGroupListTotal: List<Executor>): List<Executor> {
         val loginInfoResponse = TaskPilotAuthHelper.loginCheckWithAttr(request)
         val loginInfo = loginInfoResponse.data ?: return ArrayList()
         if (TaskPilotAuthHelper.hasRole(loginInfo, Consts.ADMIN_ROLE).isSuccess) {

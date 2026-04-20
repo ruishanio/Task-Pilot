@@ -1,7 +1,7 @@
 package com.ruishanio.taskpilot.admin.service
 
 import com.ruishanio.taskpilot.admin.auth.model.LoginInfo
-import com.ruishanio.taskpilot.admin.model.TaskPilotInfo
+import com.ruishanio.taskpilot.admin.model.TaskInfo
 import com.ruishanio.taskpilot.tool.response.PageModel
 import com.ruishanio.taskpilot.tool.response.Response
 import java.util.Date
@@ -18,11 +18,11 @@ interface TaskPilotService {
         jobDesc: String?,
         executorHandler: String?,
         author: String?
-    ): Response<PageModel<TaskPilotInfo>>
+    ): Response<PageModel<TaskInfo>>
 
-    fun add(jobInfo: TaskPilotInfo, loginInfo: LoginInfo): Response<String>
+    fun add(jobInfo: TaskInfo, loginInfo: LoginInfo): Response<String>
 
-    fun update(jobInfo: TaskPilotInfo, loginInfo: LoginInfo): Response<String>
+    fun update(jobInfo: TaskInfo, loginInfo: LoginInfo): Response<String>
 
     fun remove(id: Int, loginInfo: LoginInfo): Response<String>
 

@@ -4,8 +4,8 @@ import com.ruishanio.taskpilot.admin.auth.annotation.TaskPilotAuth
 import com.ruishanio.taskpilot.admin.auth.helper.TaskPilotAuthHelper
 import com.ruishanio.taskpilot.admin.auth.model.LoginInfo
 import com.ruishanio.taskpilot.admin.constant.Consts
-import com.ruishanio.taskpilot.admin.mapper.TaskPilotUserMapper
-import com.ruishanio.taskpilot.admin.model.TaskPilotUser
+import com.ruishanio.taskpilot.admin.mapper.UserMapper
+import com.ruishanio.taskpilot.admin.model.User
 import com.ruishanio.taskpilot.admin.web.ManageRoute
 import com.ruishanio.taskpilot.tool.core.CollectionTool
 import com.ruishanio.taskpilot.tool.core.StringTool
@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.ResponseBody
 @RequestMapping(ManageRoute.API_MANAGE_USER)
 class JobUserController {
     @Resource
-    private lateinit var taskPilotUserMapper: TaskPilotUserMapper
+    private lateinit var userMapper: UserMapper
 
     @RequestMapping("/pageList")
     @ResponseBody
@@ -36,16 +36,16 @@ class JobUserController {
         @RequestParam(required = false, defaultValue = "10") pagesize: Int,
         @RequestParam username: String?,
         @RequestParam role: Int
-    ): Response<PageModel<TaskPilotUser>> {
-        val list = taskPilotUserMapper.pageList(offset, pagesize, username, role)
-        val listCount = taskPilotUserMapper.pageListCount(offset, pagesize, username, role)
+    ): Response<PageModel<User>> {
+        val list = userMapper.pageList(offset, pagesize, username, role)
+        val listCount = userMapper.pageListCount(offset, pagesize, username, role)
         if (list.isNotEmpty()) {
             for (item in list) {
                 item.password = null
             }
         }
 
-        val pageModel = PageModel<TaskPilotUser>()
+        val pageModel = PageModel<User>()
         pageModel.data = list
         pageModel.total = listCount
         return Response.ofSuccess(pageModel)
@@ -54,30 +54,30 @@ class JobUserController {
     @RequestMapping("/insert")
     @ResponseBody
     @TaskPilotAuth(role = Consts.ADMIN_ROLE)
-    fun insert(taskPilotUser: TaskPilotUser): Response<String> {
-        if (StringTool.isBlank(taskPilotUser.username)) {
+    fun insert(user: User): Response<String> {
+        if (StringTool.isBlank(user.username)) {
             return Response.ofFail("请输入账号")
         }
-        taskPilotUser.username = taskPilotUser.username!!.trim()
-        if (taskPilotUser.username!!.length !in 4..20) {
+        user.username = user.username!!.trim()
+        if (user.username!!.length !in 4..20) {
             return Response.ofFail("长度限制[4-20]")
         }
-        if (StringTool.isBlank(taskPilotUser.password)) {
+        if (StringTool.isBlank(user.password)) {
             return Response.ofFail("请输入密码")
         }
-        taskPilotUser.password = taskPilotUser.password!!.trim()
-        val normalizedPassword = taskPilotUser.password!!
+        user.password = user.password!!.trim()
+        val normalizedPassword = user.password!!
         if (normalizedPassword.length !in 4..20) {
             return Response.ofFail("长度限制[4-20]")
         }
-        taskPilotUser.password = Sha256Tool.sha256(normalizedPassword)
+        user.password = Sha256Tool.sha256(normalizedPassword)
 
-        val existUser = taskPilotUserMapper.loadByUserName(taskPilotUser.username)
+        val existUser = userMapper.loadByUserName(user.username)
         if (existUser != null) {
             return Response.ofFail("账号重复")
         }
 
-        taskPilotUserMapper.save(taskPilotUser)
+        userMapper.save(user)
         return Response.ofSuccess()
     }
 
@@ -87,25 +87,25 @@ class JobUserController {
     @RequestMapping("/update")
     @ResponseBody
     @TaskPilotAuth(role = Consts.ADMIN_ROLE)
-    fun update(request: HttpServletRequest, taskPilotUser: TaskPilotUser): Response<String> {
+    fun update(request: HttpServletRequest, user: User): Response<String> {
         val loginInfoResponse = TaskPilotAuthHelper.loginCheckWithAttr(request)
         val loginInfo = loginInfoResponse.data ?: return Response.ofFail("not login.")
-        if (loginInfo.userName == taskPilotUser.username) {
+        if (loginInfo.userName == user.username) {
             return Response.ofFail("禁止操作当前登录账号")
         }
 
-        if (StringTool.isNotBlank(taskPilotUser.password)) {
-            taskPilotUser.password = taskPilotUser.password!!.trim()
-            val normalizedPassword = taskPilotUser.password!!
+        if (StringTool.isNotBlank(user.password)) {
+            user.password = user.password!!.trim()
+            val normalizedPassword = user.password!!
             if (normalizedPassword.length !in 4..20) {
                 return Response.ofFail("长度限制[4-20]")
             }
-            taskPilotUser.password = Sha256Tool.sha256(normalizedPassword)
+            user.password = Sha256Tool.sha256(normalizedPassword)
         } else {
-            taskPilotUser.password = null
+            user.password = null
         }
 
-        taskPilotUserMapper.update(taskPilotUser)
+        userMapper.update(user)
         return Response.ofSuccess()
     }
 
@@ -123,7 +123,7 @@ class JobUserController {
             return Response.ofFail("禁止操作当前登录账号")
         }
 
-        taskPilotUserMapper.delete(ids[0])
+        userMapper.delete(ids[0])
         return Response.ofSuccess()
     }
 }

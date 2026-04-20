@@ -11,7 +11,7 @@ import java.util.Date
  *
  * 该模型同时承载前端表单、调度计算和 MyBatis 持久化，字段命名尽量与数据库列保持一一对应。
  */
-data class TaskPilotInfo(
+data class TaskInfo(
     var id: Int = 0,
     /**
      * 执行器分组 ID，决定任务可以路由到哪一组执行器。

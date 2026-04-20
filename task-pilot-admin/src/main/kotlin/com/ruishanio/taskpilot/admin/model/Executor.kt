@@ -8,7 +8,7 @@ import java.util.Date
  *
  * 一个分组对应一个执行器 appname，调度任务时会在该分组的地址池里做路由。
  */
-data class TaskPilotGroup(
+data class Executor(
     var id: Int = 0,
     /**
      * 执行器注册时上报的 appname，也是自动建组时的唯一键。

@@ -7,7 +7,7 @@ import java.util.Date
  *
  * 该表按天聚合触发结果，用于 Dashboard 图表而不是明细查询。
  */
-data class TaskPilotLogReport(
+data class TaskReport(
     var id: Int = 0,
     var triggerDay: Date? = null,
     var runningCount: Int = 0,

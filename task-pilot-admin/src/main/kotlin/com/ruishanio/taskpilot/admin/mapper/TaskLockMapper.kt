@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Mapper
  * 调度锁 Mapper。
  */
 @Mapper
-interface TaskPilotLockMapper {
+interface TaskLockMapper {
     /**
      * 获取调度锁标记。
      */

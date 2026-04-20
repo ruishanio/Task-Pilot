@@ -1,6 +1,6 @@
 package com.ruishanio.taskpilot.admin.scheduler.type.strategy
 
-import com.ruishanio.taskpilot.admin.model.TaskPilotInfo
+import com.ruishanio.taskpilot.admin.model.TaskInfo
 import com.ruishanio.taskpilot.admin.scheduler.type.ScheduleType
 import java.util.Date
 
@@ -9,5 +9,5 @@ import java.util.Date
  */
 class NoneScheduleType : ScheduleType() {
     @Throws(Exception::class)
-    override fun generateNextTriggerTime(jobInfo: TaskPilotInfo, fromTime: Date): Date? = null
+    override fun generateNextTriggerTime(jobInfo: TaskInfo, fromTime: Date): Date? = null
 }

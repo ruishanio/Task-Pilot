@@ -5,10 +5,10 @@ import com.ruishanio.taskpilot.admin.auth.helper.TaskPilotAuthHelper
 import com.ruishanio.taskpilot.admin.auth.model.LoginInfo
 import com.ruishanio.taskpilot.admin.constant.Consts
 import com.ruishanio.taskpilot.admin.constant.TriggerStatus
-import com.ruishanio.taskpilot.admin.mapper.TaskPilotGroupMapper
-import com.ruishanio.taskpilot.admin.mapper.TaskPilotInfoMapper
-import com.ruishanio.taskpilot.admin.model.TaskPilotGroup
-import com.ruishanio.taskpilot.admin.model.TaskPilotInfo
+import com.ruishanio.taskpilot.admin.mapper.ExecutorMapper
+import com.ruishanio.taskpilot.admin.mapper.TaskInfoMapper
+import com.ruishanio.taskpilot.admin.model.Executor
+import com.ruishanio.taskpilot.admin.model.TaskInfo
 import com.ruishanio.taskpilot.admin.model.dto.TaskPilotBootResourceDTO
 import com.ruishanio.taskpilot.admin.scheduler.exception.TaskPilotException
 import com.ruishanio.taskpilot.admin.service.TaskPilotService
@@ -46,10 +46,10 @@ class FrontendApiController {
     private lateinit var taskPilotService: TaskPilotService
 
     @Resource
-    private lateinit var taskPilotGroupMapper: TaskPilotGroupMapper
+    private lateinit var executorMapper: ExecutorMapper
 
     @Resource
-    private lateinit var taskPilotInfoMapper: TaskPilotInfoMapper
+    private lateinit var taskInfoMapper: TaskInfoMapper
 
     @RequestMapping("/bootstrap")
     @TaskPilotAuth
@@ -86,12 +86,12 @@ class FrontendApiController {
         request: HttpServletRequest,
         @RequestParam(value = "jobGroup", required = false, defaultValue = "-1") jobGroup: Int
     ): Response<Map<String, Any>> {
-        val jobGroupList = JobGroupPermissionUtil.filterJobGroupByPermission(request, taskPilotGroupMapper.findAll())
+        val jobGroupList = JobGroupPermissionUtil.filterJobGroupByPermission(request, executorMapper.findAll())
         if (CollectionTool.isEmpty(jobGroupList)) {
             throw TaskPilotException("不存在有效执行器,请联系管理员")
         }
 
-        val accessibleGroupIds = jobGroupList.map(TaskPilotGroup::id)
+        val accessibleGroupIds = jobGroupList.map(Executor::id)
         val selectedJobGroup = if (accessibleGroupIds.contains(jobGroup)) jobGroup else jobGroupList[0].id
 
         val data = HashMap<String, Any>()
@@ -123,25 +123,25 @@ class FrontendApiController {
         @RequestParam(value = "jobGroup", required = false, defaultValue = "0") jobGroup: Int?,
         @RequestParam(value = "jobId", required = false, defaultValue = "0") jobId: Int?
     ): Response<Map<String, Any>> {
-        val jobGroupList = JobGroupPermissionUtil.filterJobGroupByPermission(request, taskPilotGroupMapper.findAll())
+        val jobGroupList = JobGroupPermissionUtil.filterJobGroupByPermission(request, executorMapper.findAll())
         if (CollectionTool.isEmpty(jobGroupList)) {
             throw TaskPilotException("不存在有效执行器,请联系管理员")
         }
 
         var selectedGroupParam = jobGroup ?: 0
         if (jobId != null && jobId > 0) {
-            val jobInfo = taskPilotInfoMapper.loadById(jobId)
+            val jobInfo = taskInfoMapper.loadById(jobId)
                 ?: throw RuntimeException("任务ID非法")
             selectedGroupParam = jobInfo.jobGroup
         }
 
-        val accessibleGroupIds = jobGroupList.map(TaskPilotGroup::id)
+        val accessibleGroupIds = jobGroupList.map(Executor::id)
         val selectedJobGroup = if (accessibleGroupIds.contains(selectedGroupParam)) selectedGroupParam else jobGroupList[0].id
 
-        val jobInfoList = taskPilotInfoMapper.getJobsByGroup(selectedJobGroup)
+        val jobInfoList = taskInfoMapper.getJobsByGroup(selectedJobGroup)
         var selectedJobId = 0
         if (CollectionTool.isNotEmpty(jobInfoList)) {
-            val accessibleJobIds = jobInfoList.map(TaskPilotInfo::id)
+            val accessibleJobIds = jobInfoList.map(TaskInfo::id)
             selectedJobId = if (jobId != null && accessibleJobIds.contains(jobId)) jobId else jobInfoList[0].id
         }
 
@@ -174,7 +174,7 @@ class FrontendApiController {
     @TaskPilotAuth(role = Consts.ADMIN_ROLE)
     fun userMeta(): Response<Map<String, Any>> {
         val data = HashMap<String, Any>()
-        data["groups"] = taskPilotGroupMapper.findAll()
+        data["groups"] = executorMapper.findAll()
         data["roleOptions"] = listOf(
             option("1", "管理员"),
             option("0", "普通用户")

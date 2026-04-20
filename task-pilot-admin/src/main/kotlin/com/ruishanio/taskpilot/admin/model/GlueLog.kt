@@ -7,7 +7,7 @@ import java.util.Date
  *
  * 每次修改脚本类任务源码时都会落一条快照，便于回溯与回滚。
  */
-data class TaskPilotLogGlue(
+data class GlueLog(
     var id: Int = 0,
     var jobId: Int = 0,
     var glueType: String? = null,

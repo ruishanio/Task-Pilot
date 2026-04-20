@@ -1,11 +1,11 @@
 package com.ruishanio.taskpilot.admin.scheduler.config
 
-import com.ruishanio.taskpilot.admin.mapper.TaskPilotGroupMapper
-import com.ruishanio.taskpilot.admin.mapper.TaskPilotInfoMapper
-import com.ruishanio.taskpilot.admin.mapper.TaskPilotLockMapper
-import com.ruishanio.taskpilot.admin.mapper.TaskPilotLogMapper
-import com.ruishanio.taskpilot.admin.mapper.TaskPilotLogReportMapper
-import com.ruishanio.taskpilot.admin.mapper.TaskPilotRegistryMapper
+import com.ruishanio.taskpilot.admin.mapper.ExecutorMapper
+import com.ruishanio.taskpilot.admin.mapper.RegistryMapper
+import com.ruishanio.taskpilot.admin.mapper.TaskInfoMapper
+import com.ruishanio.taskpilot.admin.mapper.TaskLockMapper
+import com.ruishanio.taskpilot.admin.mapper.TaskLogMapper
+import com.ruishanio.taskpilot.admin.mapper.TaskReportMapper
 import com.ruishanio.taskpilot.admin.scheduler.alarm.JobAlarmer
 import com.ruishanio.taskpilot.admin.scheduler.complete.JobCompleter
 import com.ruishanio.taskpilot.admin.scheduler.thread.JobCompleteHelper
@@ -68,22 +68,22 @@ class TaskPilotAdminBootstrap : DisposableBean {
     private var logretentiondaysInternal: Int = 0
 
     @Resource
-    lateinit var taskPilotLogMapper: TaskPilotLogMapper
+    lateinit var taskLogMapper: TaskLogMapper
 
     @Resource
-    lateinit var taskPilotInfoMapper: TaskPilotInfoMapper
+    lateinit var taskInfoMapper: TaskInfoMapper
 
     @Resource
-    lateinit var taskPilotRegistryMapper: TaskPilotRegistryMapper
+    lateinit var registryMapper: RegistryMapper
 
     @Resource
-    lateinit var taskPilotGroupMapper: TaskPilotGroupMapper
+    lateinit var executorMapper: ExecutorMapper
 
     @Resource
-    lateinit var taskPilotLogReportMapper: TaskPilotLogReportMapper
+    lateinit var taskReportMapper: TaskReportMapper
 
     @Resource
-    lateinit var taskPilotLockMapper: TaskPilotLockMapper
+    lateinit var taskLockMapper: TaskLockMapper
 
     @Resource
     lateinit var mailSender: JavaMailSender

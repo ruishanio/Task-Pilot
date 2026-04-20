@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruishanio.taskpilot.admin.mapper.TaskPilotLogMapper">
+<mapper namespace="com.ruishanio.taskpilot.admin.mapper.TaskLogMapper">
 	
-	<resultMap id="TaskPilotLog" type="com.ruishanio.taskpilot.admin.model.TaskPilotLog" >
+	<resultMap id="TaskLog" type="com.ruishanio.taskpilot.admin.model.TaskLog" >
 		<result column="id" property="id" />
 
 		<result column="job_group" property="jobGroup" />
@@ -44,9 +44,9 @@
 		t.alarm_status
 	</sql>
 	
-	<select id="pageList" resultMap="TaskPilotLog">
+	<select id="pageList" resultMap="TaskLog">
 		SELECT <include refid="Base_Column_List" />
-		FROM task_pilot_log AS t
+		FROM task_log AS t
 		<trim prefix="WHERE" prefixOverrides="AND | OR" >
 			<if test="jobId==0 and jobGroup gt 0">
 				AND t.job_group = #{jobGroup}
@@ -80,7 +80,7 @@
 	
 	<select id="pageListCount" resultType="int">
 		SELECT count(1)
-		FROM task_pilot_log AS t
+		FROM task_log AS t
 		<trim prefix="WHERE" prefixOverrides="AND | OR" >
 			<if test="jobId==0 and jobGroup gt 0">
 				AND t.job_group = #{jobGroup}
@@ -110,15 +110,15 @@
 		</trim>
 	</select>
 	
-	<select id="load" parameterType="java.lang.Long" resultMap="TaskPilotLog">
+	<select id="load" parameterType="java.lang.Long" resultMap="TaskLog">
 		SELECT <include refid="Base_Column_List" />
-		FROM task_pilot_log AS t
+		FROM task_log AS t
 		WHERE t.id = #{id}
 	</select>
 
 	
-	<insert id="save" parameterType="com.ruishanio.taskpilot.admin.model.TaskPilotLog" useGeneratedKeys="true" keyProperty="id" >
-		INSERT INTO task_pilot_log (
+	<insert id="save" parameterType="com.ruishanio.taskpilot.admin.model.TaskLog" useGeneratedKeys="true" keyProperty="id" >
+		INSERT INTO task_log (
 			job_group,
 			job_id,
 			trigger_time,
@@ -134,7 +134,7 @@
 	</insert>
 
 	<update id="updateTriggerInfo" >
-		UPDATE task_pilot_log
+		UPDATE task_log
 		SET
 			trigger_time = #{triggerTime},
 			trigger_code = #{triggerCode},
@@ -148,7 +148,7 @@
 	</update>
 
 	<update id="updateHandleInfo">
-		UPDATE task_pilot_log
+		UPDATE task_log
 		SET 
 			handle_time = #{handleTime}, 
 			handle_code = #{handleCode},
@@ -157,7 +157,7 @@
 	</update>
 	
 	<delete id="delete" >
-		delete from task_pilot_log
+		delete from task_log
 		WHERE job_id = #{jobId}
 	</delete>
 
@@ -167,7 +167,7 @@
 			COUNT(handle_code) triggerDayCount,
 			SUM(CASE WHEN (trigger_code in (0, 200) and handle_code = 0) then 1 else 0 end) as triggerDayCountRunning,
 			SUM(CASE WHEN handle_code = 200 then 1 else 0 end) as triggerDayCountSuc
-		FROM task_pilot_log
+		FROM task_log
 		WHERE trigger_time BETWEEN #{from} and #{to}
 		GROUP BY triggerDay
 		ORDER BY triggerDay
@@ -178,12 +178,12 @@
 			COALESCE(COUNT(handle_code), 0) triggerDayCount,
 			COALESCE(SUM(CASE WHEN (trigger_code in (0, 200) and handle_code = 0) then 1 else 0 end), 0) as triggerDayCountRunning,
 			COALESCE(SUM(CASE WHEN handle_code = 200 then 1 else 0 end), 0) as triggerDayCountSuc
-		FROM task_pilot_log
+		FROM task_log
 		WHERE trigger_time BETWEEN #{from} and #{to}
     </select>
 
 	<select id="findClearLogIds" resultType="long" >
-		SELECT id FROM task_pilot_log
+		SELECT id FROM task_log
 		<trim prefix="WHERE" prefixOverrides="AND | OR" >
 			<if test="jobGroup gt 0">
 				AND job_group = #{jobGroup}
@@ -197,7 +197,7 @@
 			<if test="clearBeforeNum gt 0">
 				AND id NOT in(
 				SELECT id FROM(
-				SELECT id FROM task_pilot_log AS t
+				SELECT id FROM task_log AS t
 				<trim prefix="WHERE" prefixOverrides="AND | OR" >
 					<if test="jobGroup gt 0">
 						AND t.job_group = #{jobGroup}
@@ -217,7 +217,7 @@
 	</select>
 
 	<delete id="clearLog" >
-		delete from task_pilot_log
+		delete from task_log
 		WHERE id in
 		<foreach collection="logIds" item="item" open="(" close=")" separator="," >
 			#{item}
@@ -225,7 +225,7 @@
 	</delete>
 
 	<select id="findFailJobLogIds" resultType="long" >
-		SELECT id FROM task_pilot_log
+		SELECT id FROM task_log
 		WHERE NOT (
 			(trigger_code in (0, 200) and handle_code = 0)
 			OR
@@ -237,7 +237,7 @@
 	</select>
 
 	<update id="updateAlarmStatus" >
-		UPDATE task_pilot_log
+		UPDATE task_log
 		SET
 			alarm_status = #{newAlarmStatus}
 		WHERE id = #{logId} AND alarm_status = #{oldAlarmStatus}
@@ -247,8 +247,8 @@
 		SELECT
 			t.id
 		FROM
-			task_pilot_log t
-			LEFT JOIN task_pilot_registry t2 ON t.executor_address = t2.registry_value
+			task_log t
+			LEFT JOIN registry t2 ON t.executor_address = t2.registry_value
 		WHERE
 			t.trigger_code = 200
 				AND t.handle_code = 0
@@ -257,13 +257,13 @@
 	</select>
 	<!--
 	SELECT t.id
-	FROM task_pilot_log AS t
+	FROM task_log AS t
 	WHERE t.trigger_code = 200
 		and t.handle_code = 0
 		and t.trigger_time <![CDATA[ <= ]]> #{losedTime}
 		and t.executor_address not in (
 			SELECT t2.registry_value
-			FROM task_pilot_registry AS t2
+			FROM registry AS t2
 		)
 	-->
 

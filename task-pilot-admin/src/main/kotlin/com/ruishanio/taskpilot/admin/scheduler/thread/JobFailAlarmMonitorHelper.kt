@@ -20,16 +20,16 @@ class JobFailAlarmMonitorHelper {
         monitorThread = Thread {
             while (!toStop) {
                 try {
-                    val failLogIds = TaskPilotAdminBootstrap.instance.taskPilotLogMapper.findFailJobLogIds(1000)
+                    val failLogIds = TaskPilotAdminBootstrap.instance.taskLogMapper.findFailJobLogIds(1000)
                     if (failLogIds.isNotEmpty()) {
                         for (failLogId in failLogIds) {
-                            val lockRet = TaskPilotAdminBootstrap.instance.taskPilotLogMapper.updateAlarmStatus(failLogId, 0, -1)
+                            val lockRet = TaskPilotAdminBootstrap.instance.taskLogMapper.updateAlarmStatus(failLogId, 0, -1)
                             if (lockRet < 1) {
                                 continue
                             }
 
-                            val log = TaskPilotAdminBootstrap.instance.taskPilotLogMapper.load(failLogId) ?: continue
-                            val info = TaskPilotAdminBootstrap.instance.taskPilotInfoMapper.loadById(log.jobId)
+                            val log = TaskPilotAdminBootstrap.instance.taskLogMapper.load(failLogId) ?: continue
+                            val info = TaskPilotAdminBootstrap.instance.taskInfoMapper.loadById(log.jobId)
 
                             if (log.executorFailRetryCount > 0) {
                                 TaskPilotAdminBootstrap.instance.jobTriggerPoolHelper.trigger(
@@ -43,7 +43,7 @@ class JobFailAlarmMonitorHelper {
                                 val retryMsg =
                                     "<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>失败重试触发<<<<<<<<<<< </span><br>"
                                 log.triggerMsg = log.triggerMsg + retryMsg
-                                TaskPilotAdminBootstrap.instance.taskPilotLogMapper.updateTriggerInfo(log)
+                                TaskPilotAdminBootstrap.instance.taskLogMapper.updateTriggerInfo(log)
                             }
 
                             val newAlarmStatus = if (info != null) {
@@ -52,7 +52,7 @@ class JobFailAlarmMonitorHelper {
                             } else {
                                 1
                             }
-                            TaskPilotAdminBootstrap.instance.taskPilotLogMapper.updateAlarmStatus(failLogId, -1, newAlarmStatus)
+                            TaskPilotAdminBootstrap.instance.taskLogMapper.updateAlarmStatus(failLogId, -1, newAlarmStatus)
                         }
                     }
                 } catch (e: Throwable) {

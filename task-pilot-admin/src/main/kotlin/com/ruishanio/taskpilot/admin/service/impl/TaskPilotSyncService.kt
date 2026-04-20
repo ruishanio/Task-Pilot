@@ -2,12 +2,12 @@ package com.ruishanio.taskpilot.admin.service.impl
 
 import com.ruishanio.taskpilot.admin.auth.model.LoginInfo
 import com.ruishanio.taskpilot.admin.constant.Consts
-import com.ruishanio.taskpilot.admin.mapper.TaskPilotGroupMapper
-import com.ruishanio.taskpilot.admin.mapper.TaskPilotInfoMapper
-import com.ruishanio.taskpilot.admin.mapper.TaskPilotRegistryMapper
-import com.ruishanio.taskpilot.admin.model.TaskPilotGroup
-import com.ruishanio.taskpilot.admin.model.TaskPilotInfo
-import com.ruishanio.taskpilot.admin.model.TaskPilotRegistry
+import com.ruishanio.taskpilot.admin.mapper.ExecutorMapper
+import com.ruishanio.taskpilot.admin.model.Executor
+import com.ruishanio.taskpilot.admin.mapper.RegistryMapper
+import com.ruishanio.taskpilot.admin.mapper.TaskInfoMapper
+import com.ruishanio.taskpilot.admin.model.Registry
+import com.ruishanio.taskpilot.admin.model.TaskInfo
 import com.ruishanio.taskpilot.admin.service.TaskPilotService
 import com.ruishanio.taskpilot.core.constant.Const
 import com.ruishanio.taskpilot.core.constant.RegistType
@@ -35,13 +35,13 @@ import java.util.Date
 @Service
 class TaskPilotSyncService {
     @Resource
-    private lateinit var taskPilotGroupMapper: TaskPilotGroupMapper
+    private lateinit var executorMapper: ExecutorMapper
 
     @Resource
-    private lateinit var taskPilotInfoMapper: TaskPilotInfoMapper
+    private lateinit var taskInfoMapper: TaskInfoMapper
 
     @Resource
-    private lateinit var taskPilotRegistryMapper: TaskPilotRegistryMapper
+    private lateinit var registryMapper: RegistryMapper
 
     @Resource
     private lateinit var taskPilotService: TaskPilotService
@@ -54,8 +54,8 @@ class TaskPilotSyncService {
             return Response.ofFail("sync fail, appName empty.")
         }
 
-        val taskPilotGroup = initOrLoadGroup(request)
-        if (taskPilotGroup == null || taskPilotGroup.id < 1) {
+        val executor = initOrLoadGroup(request)
+        if (executor == null || executor.id < 1) {
             return Response.ofFail("sync fail, executor group init failed.")
         }
 
@@ -71,9 +71,9 @@ class TaskPilotSyncService {
                 continue
             }
 
-            val existsTask = taskPilotInfoMapper.loadByGroupAndExecutorHandler(taskPilotGroup.id, task.executorHandler!!.trim())
+            val existsTask = taskInfoMapper.loadByGroupAndExecutorHandler(executor.id, task.executorHandler!!.trim())
             if (existsTask != null) {
-                val expectedTask = buildTaskInfo(taskPilotGroup.id, task).apply {
+                val expectedTask = buildTaskInfo(executor.id, task).apply {
                     id = existsTask.id
                 }
                 if (!needsTaskUpdate(existsTask, expectedTask)) {
@@ -91,7 +91,7 @@ class TaskPilotSyncService {
                 continue
             }
 
-            val jobInfo = buildTaskInfo(taskPilotGroup.id, task)
+            val jobInfo = buildTaskInfo(executor.id, task)
             val addResponse = taskPilotService.add(jobInfo, systemLoginInfo)
             if (!Response.isSuccess(addResponse)) {
                 return Response.ofFail("sync task fail, handler=${task.executorHandler}, msg=${addResponse.msg ?: "null"}")
@@ -107,7 +107,7 @@ class TaskPilotSyncService {
         }
 
         val summary = buildString {
-            append("groupId=").append(taskPilotGroup.id)
+            append("groupId=").append(executor.id)
             append(", createdTaskCount=").append(createdTaskCount)
             append(", updatedTaskCount=").append(updatedTaskCount)
             append(", skippedTaskCount=").append(skippedTaskCount)
@@ -122,17 +122,17 @@ class TaskPilotSyncService {
     /**
      * 分组不存在时创建，已存在时仅对同步托管分组做最小更新。
      */
-    private fun initOrLoadGroup(request: SyncRequest): TaskPilotGroup? {
-        var group = taskPilotGroupMapper.loadByAppname(request.appName!!.trim())
+    private fun initOrLoadGroup(request: SyncRequest): Executor? {
+        var group = executorMapper.loadByAppname(request.appName!!.trim())
         if (group == null) {
-            group = TaskPilotGroup().apply {
+            group = Executor().apply {
                 appname = request.appName!!.trim()
                 title = buildGroupTitle(request)
                 addressType = 0
                 addressList = buildRegistryAddressList(request.appName)
                 updateTime = Date()
             }
-            taskPilotGroupMapper.save(group)
+            executorMapper.save(group)
             return group
         }
 
@@ -152,7 +152,7 @@ class TaskPilotSyncService {
 
             if (changed) {
                 group.updateTime = Date()
-                taskPilotGroupMapper.update(group)
+                executorMapper.update(group)
             }
         }
         return group
@@ -161,8 +161,8 @@ class TaskPilotSyncService {
     /**
      * 仅填充同步托管字段，避免启动同步越权覆盖人工维护信息。
      */
-    private fun buildTaskInfo(jobGroupId: Int, task: SyncRequest.Task): TaskPilotInfo =
-        TaskPilotInfo().apply {
+    private fun buildTaskInfo(jobGroupId: Int, task: SyncRequest.Task): TaskInfo =
+        TaskInfo().apply {
             jobGroup = jobGroupId
             jobDesc = if (StringTool.isNotBlank(task.jobDesc)) task.jobDesc!!.trim() else task.executorHandler!!.trim()
             author = if (StringTool.isNotBlank(task.author)) task.author!!.trim() else SYSTEM_OPERATOR
@@ -185,7 +185,7 @@ class TaskPilotSyncService {
     /**
      * 仅比较同步托管字段，避免无差异更新污染操作日志。
      */
-    private fun needsTaskUpdate(existsTask: TaskPilotInfo, expectedTask: TaskPilotInfo): Boolean =
+    private fun needsTaskUpdate(existsTask: TaskInfo, expectedTask: TaskInfo): Boolean =
         !equalsNullable(existsTask.jobDesc, expectedTask.jobDesc) ||
             !equalsNullable(existsTask.author, expectedTask.author) ||
             !equalsNullable(existsTask.alarmEmail, expectedTask.alarmEmail) ||
@@ -217,7 +217,7 @@ class TaskPilotSyncService {
      * 回填当前在线执行器地址，避免新建分组后需要等待监控线程下一轮同步。
      */
     private fun buildRegistryAddressList(appname: String?): String? {
-        val registryList: List<TaskPilotRegistry> = taskPilotRegistryMapper.findAll(Const.DEAD_TIMEOUT, Date())
+        val registryList: List<Registry> = registryMapper.findAll(Const.DEAD_TIMEOUT, Date())
         if (registryList.isEmpty()) {
             return null
         }

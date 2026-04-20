@@ -1,10 +1,10 @@
 package com.ruishanio.taskpilot.admin.service.impl
 
-import com.ruishanio.taskpilot.admin.mapper.TaskPilotGroupMapper
-import com.ruishanio.taskpilot.admin.mapper.TaskPilotInfoMapper
-import com.ruishanio.taskpilot.admin.mapper.TaskPilotRegistryMapper
-import com.ruishanio.taskpilot.admin.model.TaskPilotGroup
-import com.ruishanio.taskpilot.admin.model.TaskPilotInfo
+import com.ruishanio.taskpilot.admin.mapper.ExecutorMapper
+import com.ruishanio.taskpilot.admin.mapper.RegistryMapper
+import com.ruishanio.taskpilot.admin.mapper.TaskInfoMapper
+import com.ruishanio.taskpilot.admin.model.Executor
+import com.ruishanio.taskpilot.admin.model.TaskInfo
 import com.ruishanio.taskpilot.admin.service.TaskPilotService
 import com.ruishanio.taskpilot.core.enums.ExecutorBlockStrategyEnum
 import com.ruishanio.taskpilot.core.enums.ExecutorRouteStrategyEnum
@@ -33,13 +33,13 @@ import java.util.Collections
 @ExtendWith(MockitoExtension::class)
 class TaskPilotSyncServiceTest {
     @Mock
-    private lateinit var taskPilotGroupMapper: TaskPilotGroupMapper
+    private lateinit var executorMapper: ExecutorMapper
 
     @Mock
-    private lateinit var taskPilotInfoMapper: TaskPilotInfoMapper
+    private lateinit var taskInfoMapper: TaskInfoMapper
 
     @Mock
-    private lateinit var taskPilotRegistryMapper: TaskPilotRegistryMapper
+    private lateinit var registryMapper: RegistryMapper
 
     @Mock
     private lateinit var taskPilotService: TaskPilotService
@@ -49,9 +49,9 @@ class TaskPilotSyncServiceTest {
     @BeforeEach
     fun setUp() {
         taskPilotSyncService = TaskPilotSyncService()
-        ReflectionTestUtils.setField(taskPilotSyncService, "taskPilotGroupMapper", taskPilotGroupMapper)
-        ReflectionTestUtils.setField(taskPilotSyncService, "taskPilotInfoMapper", taskPilotInfoMapper)
-        ReflectionTestUtils.setField(taskPilotSyncService, "taskPilotRegistryMapper", taskPilotRegistryMapper)
+        ReflectionTestUtils.setField(taskPilotSyncService, "executorMapper", executorMapper)
+        ReflectionTestUtils.setField(taskPilotSyncService, "taskInfoMapper", taskInfoMapper)
+        ReflectionTestUtils.setField(taskPilotSyncService, "registryMapper", registryMapper)
         ReflectionTestUtils.setField(taskPilotSyncService, "taskPilotService", taskPilotService)
     }
 
@@ -68,9 +68,9 @@ class TaskPilotSyncServiceTest {
                 executorParam = "old-param"
             }
 
-        `when`(taskPilotGroupMapper.loadByAppname("demo-app")).thenReturn(group)
-        `when`(taskPilotRegistryMapper.findAll(anyInt(), anyObject())).thenReturn(Collections.emptyList())
-        `when`(taskPilotInfoMapper.loadByGroupAndExecutorHandler(11, "demoHandler")).thenReturn(existsTask)
+        `when`(executorMapper.loadByAppname("demo-app")).thenReturn(group)
+        `when`(registryMapper.findAll(anyInt(), anyObject())).thenReturn(Collections.emptyList())
+        `when`(taskInfoMapper.loadByGroupAndExecutorHandler(11, "demoHandler")).thenReturn(existsTask)
         `when`(taskPilotService.update(anyObject(), anyObject())).thenReturn(Response.ofSuccess<String>())
 
         val response = taskPilotSyncService.sync(request)
@@ -78,7 +78,7 @@ class TaskPilotSyncServiceTest {
         assertTrue(response.isSuccess)
         assertTrue(response.data.orEmpty().contains("updatedTaskCount=1"))
         verify(taskPilotService).update(
-            argThatObject { jobInfo: TaskPilotInfo ->
+            argThatObject { jobInfo: TaskInfo ->
                 jobInfo.id == 22 &&
                     jobInfo.jobDesc == "任务新描述" &&
                     jobInfo.author == "new-author" &&
@@ -89,9 +89,9 @@ class TaskPilotSyncServiceTest {
             anyObject()
         )
         verify(taskPilotService, never()).add(anyObject(), anyObject())
-        verify(taskPilotGroupMapper).update(
-            argThatObject { taskPilotGroup: TaskPilotGroup ->
-                taskPilotGroup.title == "DemoGroup" && taskPilotGroup.addressList == null
+        verify(executorMapper).update(
+            argThatObject { executor: Executor ->
+                executor.title == "DemoGroup" && executor.addressList == null
             }
         )
     }
@@ -102,9 +102,9 @@ class TaskPilotSyncServiceTest {
         val group = buildGroup("DemoGroup", null)
         val existsTask = buildExistingTask()
 
-        `when`(taskPilotGroupMapper.loadByAppname("demo-app")).thenReturn(group)
-        `when`(taskPilotRegistryMapper.findAll(anyInt(), anyObject())).thenReturn(Collections.emptyList())
-        `when`(taskPilotInfoMapper.loadByGroupAndExecutorHandler(11, "demoHandler")).thenReturn(existsTask)
+        `when`(executorMapper.loadByAppname("demo-app")).thenReturn(group)
+        `when`(registryMapper.findAll(anyInt(), anyObject())).thenReturn(Collections.emptyList())
+        `when`(taskInfoMapper.loadByGroupAndExecutorHandler(11, "demoHandler")).thenReturn(existsTask)
 
         val response = taskPilotSyncService.sync(request)
 
@@ -113,7 +113,7 @@ class TaskPilotSyncServiceTest {
         assertTrue(response.data.orEmpty().contains("skippedTaskCount=1"))
         verify(taskPilotService, never()).update(anyObject(), anyObject())
         verify(taskPilotService, never()).add(anyObject(), anyObject())
-        verify(taskPilotGroupMapper, never()).update(anyObject())
+        verify(executorMapper, never()).update(anyObject())
     }
 
     /**
@@ -142,8 +142,8 @@ class TaskPilotSyncServiceTest {
             tasks.add(task)
         }
 
-    private fun buildGroup(title: String, addressList: String?): TaskPilotGroup =
-        TaskPilotGroup().apply {
+    private fun buildGroup(title: String, addressList: String?): Executor =
+        Executor().apply {
             id = 11
             appname = "demo-app"
             this.title = title
@@ -154,8 +154,8 @@ class TaskPilotSyncServiceTest {
     /**
      * 构造与 buildSyncRequest 默认值一致的任务快照，便于只覆盖本次测试关心的差异字段。
      */
-    private fun buildExistingTask(): TaskPilotInfo =
-        TaskPilotInfo().apply {
+    private fun buildExistingTask(): TaskInfo =
+        TaskInfo().apply {
             id = 22
             jobGroup = 11
             jobDesc = "任务描述"

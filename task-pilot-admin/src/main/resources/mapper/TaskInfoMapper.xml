@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruishanio.taskpilot.admin.mapper.TaskPilotInfoMapper">
+<mapper namespace="com.ruishanio.taskpilot.admin.mapper.TaskInfoMapper">
 
-	<resultMap id="TaskPilotInfo" type="com.ruishanio.taskpilot.admin.model.TaskPilotInfo" >
+	<resultMap id="TaskInfo" type="com.ruishanio.taskpilot.admin.model.TaskInfo" >
 		<result column="id" property="id" />
 
 		<result column="job_group" property="jobGroup" />
@@ -65,9 +65,9 @@
 		t.trigger_next_time
 	</sql>
 
-	<select id="pageList" parameterType="java.util.HashMap" resultMap="TaskPilotInfo">
+	<select id="pageList" parameterType="java.util.HashMap" resultMap="TaskInfo">
 		SELECT <include refid="Base_Column_List" />
-		FROM task_pilot_info AS t
+		FROM task_info AS t
 		<trim prefix="WHERE" prefixOverrides="AND | OR" >
 			<if test="jobGroup gt 0">
 				AND t.job_group = #{jobGroup}
@@ -91,7 +91,7 @@
 
 	<select id="pageListCount" parameterType="java.util.HashMap" resultType="int">
 		SELECT count(1)
-		FROM task_pilot_info AS t
+		FROM task_info AS t
 		<trim prefix="WHERE" prefixOverrides="AND | OR" >
 			<if test="jobGroup gt 0">
 				AND t.job_group = #{jobGroup}
@@ -111,8 +111,8 @@
 		</trim>
 	</select>
 
-	<insert id="save" parameterType="com.ruishanio.taskpilot.admin.model.TaskPilotInfo" useGeneratedKeys="true" keyProperty="id" >
-		INSERT INTO task_pilot_info (
+	<insert id="save" parameterType="com.ruishanio.taskpilot.admin.model.TaskInfo" useGeneratedKeys="true" keyProperty="id" >
+		INSERT INTO task_info (
 			job_group,
 			job_desc,
 			add_time,
@@ -163,23 +163,23 @@
 		);
 	</insert>
 
-	<select id="loadById" parameterType="java.util.HashMap" resultMap="TaskPilotInfo">
+	<select id="loadById" parameterType="java.util.HashMap" resultMap="TaskInfo">
 		SELECT <include refid="Base_Column_List" />
-		FROM task_pilot_info AS t
+		FROM task_info AS t
 		WHERE t.id = #{id}
 	</select>
 
-	<select id="loadByGroupAndExecutorHandler" parameterType="java.util.HashMap" resultMap="TaskPilotInfo">
+	<select id="loadByGroupAndExecutorHandler" parameterType="java.util.HashMap" resultMap="TaskInfo">
 		SELECT <include refid="Base_Column_List" />
-		FROM task_pilot_info AS t
+		FROM task_info AS t
 		WHERE t.job_group = #{jobGroup}
 		  AND t.executor_handler = #{executorHandler}
 		ORDER BY t.id DESC
 		LIMIT 1
 	</select>
 
-	<update id="update" parameterType="com.ruishanio.taskpilot.admin.model.TaskPilotInfo" >
-		UPDATE task_pilot_info
+	<update id="update" parameterType="com.ruishanio.taskpilot.admin.model.TaskInfo" >
+		UPDATE task_info
 		SET
 			job_group = #{jobGroup},
 			job_desc = #{jobDesc},
@@ -208,33 +208,33 @@
 
 	<delete id="delete" parameterType="java.util.HashMap">
 		DELETE
-		FROM task_pilot_info
+		FROM task_info
 		WHERE id = #{id}
 	</delete>
 
-	<select id="getJobsByGroup" parameterType="java.util.HashMap" resultMap="TaskPilotInfo">
+	<select id="getJobsByGroup" parameterType="java.util.HashMap" resultMap="TaskInfo">
 		SELECT <include refid="Base_Column_List" />
-		FROM task_pilot_info AS t
+		FROM task_info AS t
 		WHERE t.job_group = #{jobGroup}
 	</select>
 
 	<select id="findAllCount" resultType="int">
 		SELECT count(1)
-		FROM task_pilot_info
+		FROM task_info
 	</select>
 
 
-	<select id="scheduleJobQuery" parameterType="java.util.HashMap" resultMap="TaskPilotInfo">
+	<select id="scheduleJobQuery" parameterType="java.util.HashMap" resultMap="TaskInfo">
 		SELECT <include refid="Base_Column_List" />
-		FROM task_pilot_info AS t
+		FROM task_info AS t
 		WHERE t.trigger_status = 1
 			and t.trigger_next_time <![CDATA[ <= ]]> #{maxNextTime}
 		ORDER BY id ASC
 		LIMIT #{pagesize}
 	</select>
 
-	<update id="scheduleUpdate" parameterType="com.ruishanio.taskpilot.admin.model.TaskPilotInfo"  >
-		UPDATE task_pilot_info
+	<update id="scheduleUpdate" parameterType="com.ruishanio.taskpilot.admin.model.TaskInfo"  >
+		UPDATE task_info
 		SET
 			trigger_last_time = #{triggerLastTime},
 			trigger_next_time = #{triggerNextTime}
@@ -245,9 +245,9 @@
 		  AND trigger_status = 1
 	</update>
 
-	<!--int scheduleUpdateBatch(@Param("list") List<TaskPilotInfo> jobs);
+	<!--int scheduleUpdateBatch(@Param("list") List<TaskInfo> jobs);
 	<update id="scheduleUpdateBatch" parameterType="java.util.List">
-		UPDATE task_pilot_info
+		UPDATE task_info
 		SET
 			trigger_last_time = CASE id
 			<foreach collection="list" item="item">

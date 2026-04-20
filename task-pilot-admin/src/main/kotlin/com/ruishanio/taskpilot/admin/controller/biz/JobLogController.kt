@@ -1,8 +1,8 @@
 package com.ruishanio.taskpilot.admin.controller.biz
 
-import com.ruishanio.taskpilot.admin.mapper.TaskPilotInfoMapper
-import com.ruishanio.taskpilot.admin.mapper.TaskPilotLogMapper
-import com.ruishanio.taskpilot.admin.model.TaskPilotLog
+import com.ruishanio.taskpilot.admin.mapper.TaskInfoMapper
+import com.ruishanio.taskpilot.admin.mapper.TaskLogMapper
+import com.ruishanio.taskpilot.admin.model.TaskLog
 import com.ruishanio.taskpilot.admin.scheduler.config.TaskPilotAdminBootstrap
 import com.ruishanio.taskpilot.admin.util.JobGroupPermissionUtil
 import com.ruishanio.taskpilot.admin.web.ManageRoute
@@ -33,10 +33,10 @@ import java.util.HashMap
 @RequestMapping(ManageRoute.API_MANAGE_JOBLOG)
 class JobLogController {
     @Resource
-    lateinit var taskPilotInfoMapper: TaskPilotInfoMapper
+    lateinit var taskInfoMapper: TaskInfoMapper
 
     @Resource
-    lateinit var taskPilotLogMapper: TaskPilotLogMapper
+    lateinit var taskLogMapper: TaskLogMapper
 
     @RequestMapping("/pageList")
     @ResponseBody
@@ -48,7 +48,7 @@ class JobLogController {
         @RequestParam jobId: Int,
         @RequestParam logStatus: Int,
         @RequestParam filterTime: String?
-    ): Response<PageModel<TaskPilotLog>> {
+    ): Response<PageModel<TaskLog>> {
         JobGroupPermissionUtil.validJobGroupPermission(request, jobGroup)
         if (jobId < 1) {
             return Response.ofFail("请选择任务")
@@ -64,9 +64,9 @@ class JobLogController {
             }
         }
 
-        val list = taskPilotLogMapper.pageList(offset, pagesize, jobGroup, jobId, triggerTimeStart, triggerTimeEnd, logStatus)
-        val listCount = taskPilotLogMapper.pageListCount(offset, pagesize, jobGroup, jobId, triggerTimeStart, triggerTimeEnd, logStatus)
-        val pageModel = PageModel<TaskPilotLog>()
+        val list = taskLogMapper.pageList(offset, pagesize, jobGroup, jobId, triggerTimeStart, triggerTimeEnd, logStatus)
+        val listCount = taskLogMapper.pageListCount(offset, pagesize, jobGroup, jobId, triggerTimeStart, triggerTimeEnd, logStatus)
+        val pageModel = PageModel<TaskLog>()
         pageModel.data = list
         pageModel.total = listCount
         return Response.ofSuccess(pageModel)
@@ -95,8 +95,8 @@ class JobLogController {
     @RequestMapping("/logKill")
     @ResponseBody
     fun logKill(request: HttpServletRequest, @RequestParam("id") id: Long): Response<String> {
-        val log = taskPilotLogMapper.load(id) ?: return Response.ofFail("日志ID非法")
-        val jobInfo = taskPilotInfoMapper.loadById(log.jobId)
+        val log = taskLogMapper.load(id) ?: return Response.ofFail("日志ID非法")
+        val jobInfo = taskInfoMapper.loadById(log.jobId)
             ?: return Response.ofFail("任务ID非法")
         if (TaskPilotContext.HANDLE_CODE_SUCCESS != log.triggerCode) {
             return Response.ofFail("调度失败，无法终止日志")
@@ -153,9 +153,9 @@ class JobLogController {
 
         var logIds: List<Long>
         do {
-            logIds = taskPilotLogMapper.findClearLogIds(jobGroup, jobId, clearBeforeTime, clearBeforeNum, 1000)
+            logIds = taskLogMapper.findClearLogIds(jobGroup, jobId, clearBeforeTime, clearBeforeNum, 1000)
             if (logIds.isNotEmpty()) {
-                taskPilotLogMapper.clearLog(logIds)
+                taskLogMapper.clearLog(logIds)
             }
         } while (logIds.isNotEmpty())
 
@@ -172,7 +172,7 @@ class JobLogController {
         @RequestParam("fromLineNum") fromLineNum: Int
     ): Response<LogResult> {
         return try {
-            val jobLog = taskPilotLogMapper.load(logId)
+            val jobLog = taskLogMapper.load(logId)
                 ?: return Response.ofFail("日志ID非法")
             val executorBiz: ExecutorBiz = TaskPilotAdminBootstrap.getExecutorBiz(jobLog.executorAddress)!!
             val logResult = executorBiz.log(LogRequest(jobLog.triggerTime!!.time, logId, fromLineNum))

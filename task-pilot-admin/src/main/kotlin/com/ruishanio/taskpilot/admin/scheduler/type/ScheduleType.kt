@@ -1,6 +1,6 @@
 package com.ruishanio.taskpilot.admin.scheduler.type
 
-import com.ruishanio.taskpilot.admin.model.TaskPilotInfo
+import com.ruishanio.taskpilot.admin.model.TaskInfo
 import java.util.Date
 
 /**
@@ -11,5 +11,5 @@ abstract class ScheduleType {
      * 基于任务配置和参考时间计算下一次触发时间。
      */
     @Throws(Exception::class)
-    abstract fun generateNextTriggerTime(jobInfo: TaskPilotInfo, fromTime: Date): Date?
+    abstract fun generateNextTriggerTime(jobInfo: TaskInfo, fromTime: Date): Date?
 }

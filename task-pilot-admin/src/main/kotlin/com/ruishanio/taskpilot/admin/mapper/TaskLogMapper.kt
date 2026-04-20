@@ -1,6 +1,6 @@
 package com.ruishanio.taskpilot.admin.mapper
 
-import com.ruishanio.taskpilot.admin.model.TaskPilotLog
+import com.ruishanio.taskpilot.admin.model.TaskLog
 import org.apache.ibatis.annotations.Mapper
 import org.apache.ibatis.annotations.Param
 import java.util.Date
@@ -9,7 +9,7 @@ import java.util.Date
  * 执行日志 Mapper。
  */
 @Mapper
-interface TaskPilotLogMapper {
+interface TaskLogMapper {
     fun pageList(
         @Param("offset") offset: Int,
         @Param("pagesize") pagesize: Int,
@@ -18,7 +18,7 @@ interface TaskPilotLogMapper {
         @Param("triggerTimeStart") triggerTimeStart: Date?,
         @Param("triggerTimeEnd") triggerTimeEnd: Date?,
         @Param("logStatus") logStatus: Int
-    ): List<TaskPilotLog>
+    ): List<TaskLog>
 
     fun pageListCount(
         @Param("offset") offset: Int,
@@ -30,13 +30,13 @@ interface TaskPilotLogMapper {
         @Param("logStatus") logStatus: Int
     ): Int
 
-    fun load(@Param("id") id: Long): TaskPilotLog?
+    fun load(@Param("id") id: Long): TaskLog?
 
-    fun save(taskPilotLog: TaskPilotLog): Long
+    fun save(taskLog: TaskLog): Long
 
-    fun updateTriggerInfo(taskPilotLog: TaskPilotLog): Int
+    fun updateTriggerInfo(taskLog: TaskLog): Int
 
-    fun updateHandleInfo(taskPilotLog: TaskPilotLog): Int
+    fun updateHandleInfo(taskLog: TaskLog): Int
 
     fun delete(@Param("jobId") jobId: Int): Int
 

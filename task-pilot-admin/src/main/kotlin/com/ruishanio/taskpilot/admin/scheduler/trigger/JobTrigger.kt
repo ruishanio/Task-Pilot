@@ -1,11 +1,11 @@
 package com.ruishanio.taskpilot.admin.scheduler.trigger
 
-import com.ruishanio.taskpilot.admin.mapper.TaskPilotGroupMapper
-import com.ruishanio.taskpilot.admin.mapper.TaskPilotInfoMapper
-import com.ruishanio.taskpilot.admin.mapper.TaskPilotLogMapper
-import com.ruishanio.taskpilot.admin.model.TaskPilotGroup
-import com.ruishanio.taskpilot.admin.model.TaskPilotInfo
-import com.ruishanio.taskpilot.admin.model.TaskPilotLog
+import com.ruishanio.taskpilot.admin.mapper.ExecutorMapper
+import com.ruishanio.taskpilot.admin.mapper.TaskInfoMapper
+import com.ruishanio.taskpilot.admin.mapper.TaskLogMapper
+import com.ruishanio.taskpilot.admin.model.Executor
+import com.ruishanio.taskpilot.admin.model.TaskInfo
+import com.ruishanio.taskpilot.admin.model.TaskLog
 import com.ruishanio.taskpilot.admin.scheduler.config.TaskPilotAdminBootstrap
 import com.ruishanio.taskpilot.admin.scheduler.route.toRouter
 import com.ruishanio.taskpilot.core.enums.ExecutorBlockStrategyEnum
@@ -30,13 +30,13 @@ import java.util.Date
 @Component
 class JobTrigger {
     @Resource
-    private lateinit var taskPilotInfoMapper: TaskPilotInfoMapper
+    private lateinit var taskInfoMapper: TaskInfoMapper
 
     @Resource
-    private lateinit var taskPilotGroupMapper: TaskPilotGroupMapper
+    private lateinit var executorMapper: ExecutorMapper
 
     @Resource
-    private lateinit var taskPilotLogMapper: TaskPilotLogMapper
+    private lateinit var taskLogMapper: TaskLogMapper
 
     /**
      * 统一处理手动触发、Cron 触发、失火补偿和失败重试等入口。
@@ -49,7 +49,7 @@ class JobTrigger {
         executorParam: String?,
         addressList: String?
     ) {
-        val jobInfo = taskPilotInfoMapper.loadById(jobId)
+        val jobInfo = taskInfoMapper.loadById(jobId)
         if (jobInfo == null) {
             logger.warn(">>>>>>>>>>>> 触发任务失败，jobId 无效，jobId={}", jobId)
             return
@@ -58,7 +58,7 @@ class JobTrigger {
             jobInfo.executorParam = executorParam
         }
         val finalFailRetryCount = if (failRetryCount >= 0) failRetryCount else jobInfo.executorFailRetryCount
-        val group = taskPilotGroupMapper.load(jobInfo.jobGroup) ?: return
+        val group = executorMapper.load(jobInfo.jobGroup) ?: return
 
         if (StringTool.isNotBlank(addressList)) {
             group.addressType = 1
@@ -93,8 +93,8 @@ class JobTrigger {
      * 单次触发过程中会生成独立日志记录，并把路由与执行结果汇总到 triggerMsg。
      */
     private fun processTrigger(
-        group: TaskPilotGroup,
-        jobInfo: TaskPilotInfo,
+        group: Executor,
+        jobInfo: TaskInfo,
         finalFailRetryCount: Int,
         triggerType: TriggerTypeEnum,
         triggerTime: Date,
@@ -109,12 +109,12 @@ class JobTrigger {
             null
         }
 
-        val jobLog = TaskPilotLog().apply {
+        val jobLog = TaskLog().apply {
             jobGroup = jobInfo.jobGroup
             jobId = jobInfo.id
             this.triggerTime = triggerTime
         }
-        taskPilotLogMapper.save(jobLog)
+        taskLogMapper.save(jobLog)
         logger.debug(">>>>>>>>>>> task-pilot 任务触发开始，logId={}", jobLog.id)
 
         val triggerParam = TriggerRequest().apply {
@@ -202,7 +202,7 @@ class JobTrigger {
         jobLog.executorFailRetryCount = finalFailRetryCount
         jobLog.triggerCode = triggerResult.code
         jobLog.triggerMsg = triggerMsgSb.toString()
-        taskPilotLogMapper.updateTriggerInfo(jobLog)
+        taskLogMapper.updateTriggerInfo(jobLog)
 
         logger.debug(">>>>>>>>>>> task-pilot 任务触发结束，logId={}", jobLog.id)
     }

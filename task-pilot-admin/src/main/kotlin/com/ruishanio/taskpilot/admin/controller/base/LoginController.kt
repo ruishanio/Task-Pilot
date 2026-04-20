@@ -3,8 +3,8 @@ package com.ruishanio.taskpilot.admin.controller.base
 import com.ruishanio.taskpilot.admin.auth.annotation.TaskPilotAuth
 import com.ruishanio.taskpilot.admin.auth.helper.TaskPilotAuthHelper
 import com.ruishanio.taskpilot.admin.auth.model.LoginInfo
-import com.ruishanio.taskpilot.admin.mapper.TaskPilotUserMapper
-import com.ruishanio.taskpilot.admin.model.TaskPilotUser
+import com.ruishanio.taskpilot.admin.mapper.UserMapper
+import com.ruishanio.taskpilot.admin.model.User
 import com.ruishanio.taskpilot.admin.web.ManageRoute
 import com.ruishanio.taskpilot.tool.core.StringTool
 import com.ruishanio.taskpilot.tool.crypto.Sha256Tool
@@ -27,7 +27,7 @@ import jakarta.servlet.http.HttpServletResponse
 @RequestMapping(ManageRoute.API_MANAGE_AUTH)
 class LoginController {
     @Resource
-    private lateinit var taskPilotUserMapper: TaskPilotUserMapper
+    private lateinit var userMapper: UserMapper
 
     /**
      * 管理端仍然走本地用户表校验，校验通过后再创建本地登录态。
@@ -48,16 +48,16 @@ class LoginController {
         }
         val normalizedPassword = password!!.trim()
 
-        val taskPilotUser = taskPilotUserMapper.loadByUserName(userName)
+        val user = userMapper.loadByUserName(userName)
             ?: return Response.ofFail("账号或密码错误")
         val passwordHash = Sha256Tool.sha256(normalizedPassword)
-        if (passwordHash != taskPilotUser.password) {
+        if (passwordHash != user.password) {
             return Response.ofFail("账号或密码错误")
         }
 
         val loginInfo = LoginInfo(
-            userId = taskPilotUser.id.toString(),
-            userName = taskPilotUser.username,
+            userId = user.id.toString(),
+            userName = user.username,
             signature = UUIDTool.getSimpleUUID()
         )
         val result = TaskPilotAuthHelper.loginWithCookie(loginInfo, response, ifRem)
@@ -99,13 +99,13 @@ class LoginController {
 
         val loginInfoResponse = TaskPilotAuthHelper.loginCheckWithAttr(request)
         val loginInfo = loginInfoResponse.data ?: return Response.ofFail("not login.")
-        val existUser = taskPilotUserMapper.loadByUserName(loginInfo.userName) as TaskPilotUser
+        val existUser = userMapper.loadByUserName(loginInfo.userName) as User
         if (oldPasswordHash != existUser.password) {
             return Response.ofFail("旧密码非法")
         }
 
         existUser.password = passwordHash
-        taskPilotUserMapper.update(existUser)
+        userMapper.update(existUser)
         return Response.ofSuccess()
     }
 }

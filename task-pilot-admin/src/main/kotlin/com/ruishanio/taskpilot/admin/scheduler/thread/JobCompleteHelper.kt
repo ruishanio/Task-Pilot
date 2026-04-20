@@ -1,6 +1,6 @@
 package com.ruishanio.taskpilot.admin.scheduler.thread
 
-import com.ruishanio.taskpilot.admin.model.TaskPilotLog
+import com.ruishanio.taskpilot.admin.model.TaskLog
 import com.ruishanio.taskpilot.admin.scheduler.config.TaskPilotAdminBootstrap
 import com.ruishanio.taskpilot.core.context.TaskPilotContext
 import com.ruishanio.taskpilot.core.openapi.model.CallbackRequest
@@ -54,10 +54,10 @@ class JobCompleteHelper {
             while (!toStop) {
                 try {
                     val losedTime = DateTool.addMinutes(Date(), -10)
-                    val losedJobIds = TaskPilotAdminBootstrap.instance.taskPilotLogMapper.findLostJobIds(losedTime)
+                    val losedJobIds = TaskPilotAdminBootstrap.instance.taskLogMapper.findLostJobIds(losedTime)
                     if (losedJobIds.isNotEmpty()) {
                         for (logId in losedJobIds) {
-                            val jobLog = TaskPilotLog().apply {
+                            val jobLog = TaskLog().apply {
                                 id = logId
                                 handleTime = Date()
                                 handleCode = TaskPilotContext.HANDLE_CODE_FAIL
@@ -121,7 +121,7 @@ class JobCompleteHelper {
      * 回调只允许成功写入一次，避免重复回调重复触发子任务。
      */
     private fun doCallback(handleCallbackParam: CallbackRequest): Response<String> {
-        val log = TaskPilotAdminBootstrap.instance.taskPilotLogMapper.load(handleCallbackParam.logId)
+        val log = TaskPilotAdminBootstrap.instance.taskLogMapper.load(handleCallbackParam.logId)
             ?: return Response.ofFail("未找到对应的日志记录。")
         if (log.handleCode > 0) {
             return Response.ofFail("日志回调重复。")

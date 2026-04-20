@@ -3,20 +3,20 @@ package com.ruishanio.taskpilot.admin.auth.store.impl
 import com.ruishanio.taskpilot.admin.auth.model.LoginInfo
 import com.ruishanio.taskpilot.admin.auth.store.LoginStore
 import com.ruishanio.taskpilot.admin.constant.Consts
-import com.ruishanio.taskpilot.admin.mapper.TaskPilotUserMapper
+import com.ruishanio.taskpilot.admin.mapper.UserMapper
 import com.ruishanio.taskpilot.tool.response.Response
 import jakarta.annotation.Resource
 import org.springframework.stereotype.Component
 
 /**
- * 基于 `task_pilot_user.token` 的本地登录态存储。
+ * 基于 `"user".token` 的本地登录态存储。
  *
  * 管理端只需要单系统 Cookie 会话，这里直接复用现有用户表，避免再维护独立认证存储。
  */
 @Component
 class DbLoginStore : LoginStore {
     @Resource
-    private lateinit var taskPilotUserMapper: TaskPilotUserMapper
+    private lateinit var userMapper: UserMapper
 
     override fun set(loginInfo: LoginInfo?): Response<String> = persistToken(loginInfo)
 
@@ -24,7 +24,7 @@ class DbLoginStore : LoginStore {
 
     override fun remove(userId: String?): Response<String> {
         val normalizedUserId = userId ?: return Response.ofFail("userId is blank")
-        val ret = taskPilotUserMapper.updateToken(normalizedUserId.toInt(), "")
+        val ret = userMapper.updateToken(normalizedUserId.toInt(), "")
         return if (ret > 0) Response.ofSuccess() else Response.ofFail("token remove fail")
     }
 
@@ -33,7 +33,7 @@ class DbLoginStore : LoginStore {
      */
     override fun get(userId: String?): Response<LoginInfo> {
         val normalizedUserId = userId ?: return Response.ofFail("userId is blank")
-        val user = taskPilotUserMapper.loadById(normalizedUserId.toInt())
+        val user = userMapper.loadById(normalizedUserId.toInt())
         if (user == null) {
             return Response.ofFail("userId invalid.")
         }
@@ -57,7 +57,7 @@ class DbLoginStore : LoginStore {
         val currentLoginInfo = loginInfo ?: return Response.ofFail("loginInfo is null")
         val userId = currentLoginInfo.userId ?: return Response.ofFail("userId is blank")
         val tokenSign = currentLoginInfo.signature ?: return Response.ofFail("signature is blank")
-        val ret = taskPilotUserMapper.updateToken(userId.toInt(), tokenSign)
+        val ret = userMapper.updateToken(userId.toInt(), tokenSign)
         return if (ret > 0) Response.ofSuccess() else Response.ofFail("token set fail")
     }
 }

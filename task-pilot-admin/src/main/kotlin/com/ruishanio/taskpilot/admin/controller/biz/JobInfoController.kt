@@ -1,7 +1,7 @@
 package com.ruishanio.taskpilot.admin.controller.biz
 
 import com.ruishanio.taskpilot.admin.auth.helper.TaskPilotAuthHelper
-import com.ruishanio.taskpilot.admin.model.TaskPilotInfo
+import com.ruishanio.taskpilot.admin.model.TaskInfo
 import com.ruishanio.taskpilot.admin.scheduler.type.toScheduleType
 import com.ruishanio.taskpilot.admin.service.TaskPilotService
 import com.ruishanio.taskpilot.admin.util.JobGroupPermissionUtil
@@ -41,21 +41,21 @@ class JobInfoController {
         @RequestParam jobDesc: String?,
         @RequestParam executorHandler: String?,
         @RequestParam author: String?
-    ): Response<PageModel<TaskPilotInfo>> {
+    ): Response<PageModel<TaskInfo>> {
         JobGroupPermissionUtil.validJobGroupPermission(request, jobGroup)
         return taskPilotService.pageList(offset, pagesize, jobGroup, triggerStatus, jobDesc, executorHandler, author)
     }
 
     @RequestMapping("/insert")
     @ResponseBody
-    fun add(request: HttpServletRequest, jobInfo: TaskPilotInfo): Response<String> {
+    fun add(request: HttpServletRequest, jobInfo: TaskInfo): Response<String> {
         val loginInfo = JobGroupPermissionUtil.validJobGroupPermission(request, jobInfo.jobGroup)
         return taskPilotService.add(jobInfo, loginInfo)
     }
 
     @RequestMapping("/update")
     @ResponseBody
-    fun update(request: HttpServletRequest, jobInfo: TaskPilotInfo): Response<String> {
+    fun update(request: HttpServletRequest, jobInfo: TaskInfo): Response<String> {
         val loginInfo = JobGroupPermissionUtil.validJobGroupPermission(request, jobInfo.jobGroup)
         return taskPilotService.update(jobInfo, loginInfo)
     }
@@ -119,7 +119,7 @@ class JobInfoController {
             return Response.ofSuccess(ArrayList())
         }
 
-        val paramTaskPilotInfo = TaskPilotInfo().apply {
+        val paramTaskInfo = TaskInfo().apply {
             this.scheduleType = scheduleType
             this.scheduleConf = scheduleConf
         }
@@ -128,7 +128,7 @@ class JobInfoController {
         try {
             var lastTime = Date()
             for (i in 0 until 5) {
-                lastTime = scheduleType.toScheduleType().generateNextTriggerTime(paramTaskPilotInfo, lastTime) ?: break
+                lastTime = scheduleType.toScheduleType().generateNextTriggerTime(paramTaskInfo, lastTime) ?: break
                 result.add(DateTool.formatDateTime(lastTime))
             }
         } catch (e: Exception) {

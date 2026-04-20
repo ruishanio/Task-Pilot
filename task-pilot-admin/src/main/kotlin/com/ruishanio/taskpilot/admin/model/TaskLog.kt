@@ -7,7 +7,7 @@ import java.util.Date
  *
  * 一次调度对应一条日志主记录，触发阶段与执行阶段的结果都会回填到这里。
  */
-data class TaskPilotLog(
+data class TaskLog(
     var id: Long = 0,
     var jobGroup: Int = 0,
     var jobId: Int = 0,

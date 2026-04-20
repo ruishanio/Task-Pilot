@@ -1,6 +1,6 @@
 package com.ruishanio.taskpilot.admin.mapper
 
-import com.ruishanio.taskpilot.admin.model.TaskPilotInfo
+import com.ruishanio.taskpilot.admin.model.TaskInfo
 import com.ruishanio.taskpilot.core.enums.ExecutorBlockStrategyEnum
 import com.ruishanio.taskpilot.core.enums.ExecutorRouteStrategyEnum
 import com.ruishanio.taskpilot.core.enums.MisfireStrategyEnum
@@ -15,25 +15,25 @@ import org.springframework.boot.test.context.SpringBootTest
  * 覆盖任务定义 Mapper 的分页与 CRUD 场景。
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class TaskPilotInfoMapperTest {
+class TaskInfoMapperTest {
     @field:Resource
-    private lateinit var taskPilotInfoMapper: TaskPilotInfoMapper
+    private lateinit var taskInfoMapper: TaskInfoMapper
 
     @Test
     fun pageList() {
-        val list = taskPilotInfoMapper.pageList(0, 20, 0, -1, null, null, null)
-        val listCount = taskPilotInfoMapper.pageListCount(0, 20, 0, -1, null, null, null)
+        val list = taskInfoMapper.pageList(0, 20, 0, -1, null, null, null)
+        val listCount = taskInfoMapper.pageListCount(0, 20, 0, -1, null, null, null)
         logger.info("list: {}", list)
         logger.info("listCount: {}", listCount)
 
-        val list2 = taskPilotInfoMapper.getJobsByGroup(1)
+        val list2 = taskInfoMapper.getJobsByGroup(1)
         logger.info("list2: {}", list2)
     }
 
     @Test
     fun saveLoad() {
         val info =
-            TaskPilotInfo().apply {
+            TaskInfo().apply {
                 jobGroup = 1
                 jobDesc = "desc"
                 author = "setAuthor"
@@ -54,9 +54,9 @@ class TaskPilotInfoMapperTest {
                 glueUpdatetime = Date()
             }
 
-        val count = taskPilotInfoMapper.save(info)
+        val count = taskInfoMapper.save(info)
 
-        val info2 = taskPilotInfoMapper.loadById(info.id)!!
+        val info2 = taskInfoMapper.loadById(info.id)!!
         info.scheduleType = ScheduleTypeEnum.FIX_RATE
         info.scheduleConf = "44"
         info.misfireStrategy = MisfireStrategyEnum.FIRE_ONCE_NOW
@@ -74,16 +74,16 @@ class TaskPilotInfoMapperTest {
         info2.childJobId = "1"
         info2.updateTime = Date()
 
-        val item2 = taskPilotInfoMapper.update(info2)
-        taskPilotInfoMapper.delete(info2.id.toLong())
+        val item2 = taskInfoMapper.update(info2)
+        taskInfoMapper.delete(info2.id.toLong())
 
-        val list2 = taskPilotInfoMapper.getJobsByGroup(1)
-        val ret3 = taskPilotInfoMapper.findAllCount()
+        val list2 = taskInfoMapper.getJobsByGroup(1)
+        val ret3 = taskInfoMapper.findAllCount()
 
         logger.info("count={}, item2={}, list2={}, ret3={}", count, item2, list2, ret3)
     }
 
     companion object {
-        private val logger = LoggerFactory.getLogger(TaskPilotInfoMapperTest::class.java)
+        private val logger = LoggerFactory.getLogger(TaskInfoMapperTest::class.java)
     }
 }

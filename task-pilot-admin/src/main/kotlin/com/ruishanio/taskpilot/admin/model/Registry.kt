@@ -7,7 +7,7 @@ import java.util.Date
  *
  * 注册中心依赖该表维护执行器在线地址，调度前会按心跳超时窗口过滤失活节点。
  */
-data class TaskPilotRegistry(
+data class Registry(
     var id: Int = 0,
     /**
      * 注册分组，当前主要使用 EXECUTOR。

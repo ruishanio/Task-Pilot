@@ -1,7 +1,7 @@
 package com.ruishanio.taskpilot.admin.scheduler.alarm.impl
 
-import com.ruishanio.taskpilot.admin.model.TaskPilotInfo
-import com.ruishanio.taskpilot.admin.model.TaskPilotLog
+import com.ruishanio.taskpilot.admin.model.TaskInfo
+import com.ruishanio.taskpilot.admin.model.TaskLog
 import com.ruishanio.taskpilot.admin.scheduler.alarm.JobAlarm
 import com.ruishanio.taskpilot.admin.scheduler.config.TaskPilotAdminBootstrap
 import com.ruishanio.taskpilot.core.context.TaskPilotContext
@@ -18,7 +18,7 @@ import java.text.MessageFormat
  */
 @Component
 class EmailJobAlarm : JobAlarm {
-    override fun doAlarm(info: TaskPilotInfo, jobLog: TaskPilotLog): Boolean {
+    override fun doAlarm(info: TaskInfo, jobLog: TaskLog): Boolean {
         var alarmResult = true
         if (info.alarmEmail != null && info.alarmEmail!!.trim().isNotEmpty()) {
             var alarmContent = "Alarm Job LogId=${jobLog.id}"
@@ -29,7 +29,7 @@ class EmailJobAlarm : JobAlarm {
                 alarmContent += "<br>HandleCode=${jobLog.handleMsg}"
             }
 
-            val group = TaskPilotAdminBootstrap.instance.taskPilotGroupMapper.load(info.jobGroup)
+            val group = TaskPilotAdminBootstrap.instance.executorMapper.load(info.jobGroup)
             val personal = "Task Pilot｜分布式任务调度平台"
             val title = "Task Pilot 监控报警"
             val content = MessageFormat.format(

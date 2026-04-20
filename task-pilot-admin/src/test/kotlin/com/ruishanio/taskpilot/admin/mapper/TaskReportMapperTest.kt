@@ -1,6 +1,6 @@
 package com.ruishanio.taskpilot.admin.mapper
 
-import com.ruishanio.taskpilot.admin.model.TaskPilotLogReport
+import com.ruishanio.taskpilot.admin.model.TaskReport
 import com.ruishanio.taskpilot.tool.core.DateTool
 import jakarta.annotation.Resource
 import org.junit.jupiter.api.Test
@@ -11,26 +11,26 @@ import org.springframework.boot.test.context.SpringBootTest
  * 覆盖日志汇总 Mapper 的写入入口。
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class TaskPilotLogReportMapperTest {
+class TaskReportMapperTest {
     @field:Resource
-    private lateinit var taskPilotLogReportMapper: TaskPilotLogReportMapper
+    private lateinit var taskReportMapper: TaskReportMapper
 
     @Test
     fun test() {
         val date = DateTool.parseDate("2025-10-01")
-        val taskPilotLogReport =
-            TaskPilotLogReport().apply {
+        val taskReport =
+            TaskReport().apply {
                 triggerDay = date
                 runningCount = 444
                 sucCount = 555
                 failCount = 666
             }
 
-        val ret = taskPilotLogReportMapper.saveOrUpdate(taskPilotLogReport)
+        val ret = taskReportMapper.saveOrUpdate(taskReport)
         logger.info("ret:{}", ret)
     }
 
     companion object {
-        private val logger = LoggerFactory.getLogger(TaskPilotLogReportMapperTest::class.java)
+        private val logger = LoggerFactory.getLogger(TaskReportMapperTest::class.java)
     }
 }

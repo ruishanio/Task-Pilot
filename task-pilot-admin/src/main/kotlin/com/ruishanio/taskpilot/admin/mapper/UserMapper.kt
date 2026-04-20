@@ -1,6 +1,6 @@
 package com.ruishanio.taskpilot.admin.mapper
 
-import com.ruishanio.taskpilot.admin.model.TaskPilotUser
+import com.ruishanio.taskpilot.admin.model.User
 import org.apache.ibatis.annotations.Mapper
 import org.apache.ibatis.annotations.Param
 
@@ -8,13 +8,13 @@ import org.apache.ibatis.annotations.Param
  * 管理端用户 Mapper。
  */
 @Mapper
-interface TaskPilotUserMapper {
+interface UserMapper {
     fun pageList(
         @Param("offset") offset: Int,
         @Param("pagesize") pagesize: Int,
         @Param("username") username: String?,
         @Param("role") role: Int
-    ): List<TaskPilotUser>
+    ): List<User>
 
     fun pageListCount(
         @Param("offset") offset: Int,
@@ -23,13 +23,13 @@ interface TaskPilotUserMapper {
         @Param("role") role: Int
     ): Int
 
-    fun loadByUserName(@Param("username") username: String?): TaskPilotUser?
+    fun loadByUserName(@Param("username") username: String?): User?
 
-    fun loadById(@Param("id") id: Int): TaskPilotUser?
+    fun loadById(@Param("id") id: Int): User?
 
-    fun save(taskPilotUser: TaskPilotUser): Int
+    fun save(user: User): Int
 
-    fun update(taskPilotUser: TaskPilotUser): Int
+    fun update(user: User): Int
 
     fun delete(@Param("id") id: Int): Int
 

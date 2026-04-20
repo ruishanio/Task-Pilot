@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruishanio.taskpilot.admin.mapper.TaskPilotLogReportMapper">
+<mapper namespace="com.ruishanio.taskpilot.admin.mapper.TaskReportMapper">
 	
-	<resultMap id="TaskPilotLogReport" type="com.ruishanio.taskpilot.admin.model.TaskPilotLogReport" >
+	<resultMap id="TaskReport" type="com.ruishanio.taskpilot.admin.model.TaskReport" >
 		<result column="id" property="id" />
 	    <result column="trigger_day" property="triggerDay" />
 		<result column="running_count" property="runningCount" />
@@ -19,8 +19,8 @@
 		t.fail_count
 	</sql>
 	
-	<insert id="saveOrUpdate" parameterType="com.ruishanio.taskpilot.admin.model.TaskPilotLogReport" useGeneratedKeys="true" keyProperty="id" >
-		INSERT INTO task_pilot_log_report (
+	<insert id="saveOrUpdate" parameterType="com.ruishanio.taskpilot.admin.model.TaskReport" useGeneratedKeys="true" keyProperty="id" >
+		INSERT INTO task_report (
 			trigger_day,
 			running_count,
 			suc_count,
@@ -38,19 +38,19 @@
 			fail_count = EXCLUDED.fail_count
 	</insert>
 
-	<select id="queryLogReport" resultMap="TaskPilotLogReport">
+	<select id="queryLogReport" resultMap="TaskReport">
 		SELECT <include refid="Base_Column_List" />
-		FROM task_pilot_log_report AS t
+		FROM task_report AS t
 		WHERE t.trigger_day between #{triggerDayFrom} and #{triggerDayTo}
 		ORDER BY t.trigger_day ASC
 	</select>
 
-	<select id="queryLogReportTotal" resultMap="TaskPilotLogReport">
+	<select id="queryLogReportTotal" resultMap="TaskReport">
 		SELECT
 			SUM(running_count) running_count,
 			SUM(suc_count) suc_count,
 			SUM(fail_count) fail_count
-		FROM task_pilot_log_report AS t
+		FROM task_report AS t
 	</select>
 
 </mapper>

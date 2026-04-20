@@ -1,6 +1,6 @@
 package com.ruishanio.taskpilot.admin.mapper
 
-import com.ruishanio.taskpilot.admin.model.TaskPilotInfo
+import com.ruishanio.taskpilot.admin.model.TaskInfo
 import org.apache.ibatis.annotations.Mapper
 import org.apache.ibatis.annotations.Param
 
@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Param
  * 任务定义 Mapper。
  */
 @Mapper
-interface TaskPilotInfoMapper {
+interface TaskInfoMapper {
     fun pageList(
         @Param("offset") offset: Int,
         @Param("pagesize") pagesize: Int,
@@ -17,7 +17,7 @@ interface TaskPilotInfoMapper {
         @Param("jobDesc") jobDesc: String?,
         @Param("executorHandler") executorHandler: String?,
         @Param("author") author: String?
-    ): List<TaskPilotInfo>
+    ): List<TaskInfo>
 
     fun pageListCount(
         @Param("offset") offset: Int,
@@ -29,9 +29,9 @@ interface TaskPilotInfoMapper {
         @Param("author") author: String?
     ): Int
 
-    fun save(info: TaskPilotInfo): Int
+    fun save(info: TaskInfo): Int
 
-    fun loadById(@Param("id") id: Int): TaskPilotInfo?
+    fun loadById(@Param("id") id: Int): TaskInfo?
 
     /**
      * 按执行器分组与 handler 名称查询任务。
@@ -41,13 +41,13 @@ interface TaskPilotInfoMapper {
     fun loadByGroupAndExecutorHandler(
         @Param("jobGroup") jobGroup: Int,
         @Param("executorHandler") executorHandler: String?
-    ): TaskPilotInfo?
+    ): TaskInfo?
 
-    fun update(taskPilotInfo: TaskPilotInfo): Int
+    fun update(taskInfo: TaskInfo): Int
 
     fun delete(@Param("id") id: Long): Int
 
-    fun getJobsByGroup(@Param("jobGroup") jobGroup: Int): List<TaskPilotInfo>
+    fun getJobsByGroup(@Param("jobGroup") jobGroup: Int): List<TaskInfo>
 
     fun findAllCount(): Int
 
@@ -57,10 +57,10 @@ interface TaskPilotInfoMapper {
     fun scheduleJobQuery(
         @Param("maxNextTime") maxNextTime: Long,
         @Param("pagesize") pagesize: Int
-    ): List<TaskPilotInfo>
+    ): List<TaskInfo>
 
     /**
      * 更新调度时间窗口，仅允许修改启用中的任务。
      */
-    fun scheduleUpdate(taskPilotInfo: TaskPilotInfo): Int
+    fun scheduleUpdate(taskInfo: TaskInfo): Int
 }

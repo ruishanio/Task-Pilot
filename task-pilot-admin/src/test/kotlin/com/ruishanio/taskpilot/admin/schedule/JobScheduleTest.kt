@@ -38,7 +38,7 @@ class JobScheduleTest {
         val transactionStatus: TransactionStatus =
             TaskPilotAdminBootstrap.instance.transactionManager.getTransaction(DefaultTransactionDefinition())
         try {
-            val lockedRecord = TaskPilotAdminBootstrap.instance.taskPilotLockMapper.scheduleLock()
+            val lockedRecord = TaskPilotAdminBootstrap.instance.taskLockMapper.scheduleLock()
             logger.info("{} : lockedRecord={}", threadName, lockedRecord)
             logger.info("{} : start at {}", threadName, DateTool.format(Date(), "yyyy-MM-dd HH:mm:ss SSS"))
             TimeUnit.MILLISECONDS.sleep(500)

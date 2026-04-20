@@ -1,6 +1,6 @@
 package com.ruishanio.taskpilot.admin.mapper
 
-import com.ruishanio.taskpilot.admin.model.TaskPilotLogReport
+import com.ruishanio.taskpilot.admin.model.TaskReport
 import org.apache.ibatis.annotations.Mapper
 import org.apache.ibatis.annotations.Param
 import java.util.Date
@@ -9,13 +9,13 @@ import java.util.Date
  * 日志汇总 Mapper。
  */
 @Mapper
-interface TaskPilotLogReportMapper {
-    fun saveOrUpdate(taskPilotLogReport: TaskPilotLogReport): Int
+interface TaskReportMapper {
+    fun saveOrUpdate(taskReport: TaskReport): Int
 
     fun queryLogReport(
         @Param("triggerDayFrom") triggerDayFrom: Date?,
         @Param("triggerDayTo") triggerDayTo: Date?
-    ): List<TaskPilotLogReport>
+    ): List<TaskReport>
 
-    fun queryLogReportTotal(): TaskPilotLogReport?
+    fun queryLogReportTotal(): TaskReport?
 }

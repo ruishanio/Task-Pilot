@@ -1,7 +1,7 @@
 package com.ruishanio.taskpilot.admin.scheduler.alarm
 
-import com.ruishanio.taskpilot.admin.model.TaskPilotInfo
-import com.ruishanio.taskpilot.admin.model.TaskPilotLog
+import com.ruishanio.taskpilot.admin.model.TaskInfo
+import com.ruishanio.taskpilot.admin.model.TaskLog
 import com.ruishanio.taskpilot.tool.core.CollectionTool
 import com.ruishanio.taskpilot.tool.core.MapTool
 import org.slf4j.LoggerFactory
@@ -37,7 +37,7 @@ class JobAlarmer : ApplicationContextAware, InitializingBean {
     /**
      * 依次执行全部告警处理器，任何一个失败都会把最终结果标记为失败。
      */
-    fun alarm(info: TaskPilotInfo, jobLog: TaskPilotLog): Boolean {
+    fun alarm(info: TaskInfo, jobLog: TaskLog): Boolean {
         var result = false
         if (CollectionTool.isNotEmpty(jobAlarmList)) {
             result = true

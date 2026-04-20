@@ -1,7 +1,7 @@
 package com.ruishanio.taskpilot.admin.scheduler.thread
 
 import com.ruishanio.taskpilot.admin.constant.TriggerStatus
-import com.ruishanio.taskpilot.admin.model.TaskPilotInfo
+import com.ruishanio.taskpilot.admin.model.TaskInfo
 import com.ruishanio.taskpilot.admin.scheduler.config.TaskPilotAdminBootstrap
 import com.ruishanio.taskpilot.admin.scheduler.misfire.toMisfireHandler
 import com.ruishanio.taskpilot.admin.scheduler.trigger.TriggerTypeEnum
@@ -59,9 +59,9 @@ class JobScheduleHelper {
                         .getTransaction(DefaultTransactionDefinition())
 
                     // 通过查询锁表记录拿到数据库级锁，避免多实例重复调度。
-                    TaskPilotAdminBootstrap.instance.taskPilotLockMapper.scheduleLock()
+                    TaskPilotAdminBootstrap.instance.taskLockMapper.scheduleLock()
                     val nowTime = System.currentTimeMillis()
-                    val scheduleList = TaskPilotAdminBootstrap.instance.taskPilotInfoMapper.scheduleJobQuery(
+                    val scheduleList = TaskPilotAdminBootstrap.instance.taskInfoMapper.scheduleJobQuery(
                         nowTime + PRE_READ_MS,
                         preReadCount
                     )
@@ -101,7 +101,7 @@ class JobScheduleHelper {
                         }
 
                         for (jobInfo in scheduleList) {
-                            TaskPilotAdminBootstrap.instance.taskPilotInfoMapper.scheduleUpdate(jobInfo)
+                            TaskPilotAdminBootstrap.instance.taskInfoMapper.scheduleUpdate(jobInfo)
                         }
                     } else {
                         preReadSuc = false
@@ -193,7 +193,7 @@ class JobScheduleHelper {
     /**
      * 生成下次触发时间失败时直接停掉任务，防止非法配置反复进入调度循环。
      */
-    private fun refreshNextTriggerTime(jobInfo: TaskPilotInfo, fromTime: Date) {
+    private fun refreshNextTriggerTime(jobInfo: TaskInfo, fromTime: Date) {
         try {
             val scheduleTypeEnum = jobInfo.scheduleType ?: ScheduleTypeEnum.NONE
             val nextTriggerTime = scheduleTypeEnum.toScheduleType().generateNextTriggerTime(jobInfo, fromTime)

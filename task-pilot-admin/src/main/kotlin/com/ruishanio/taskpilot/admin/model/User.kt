@@ -5,7 +5,7 @@ package com.ruishanio.taskpilot.admin.model
  *
  * 当前仍是较轻量的本地认证模型，权限数据直接保存在用户表中。
  */
-class TaskPilotUser {
+class User {
     var id: Int = 0
     var username: String? = null
     var password: String? = null

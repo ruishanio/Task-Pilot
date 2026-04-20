@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruishanio.taskpilot.admin.mapper.TaskPilotGroupMapper">
+<mapper namespace="com.ruishanio.taskpilot.admin.mapper.ExecutorMapper">
 	
-	<resultMap id="TaskPilotGroup" type="com.ruishanio.taskpilot.admin.model.TaskPilotGroup" >
+	<resultMap id="Executor" type="com.ruishanio.taskpilot.admin.model.Executor" >
 		<result column="id" property="id" />
 	    <result column="app_name" property="appname" />
 	    <result column="title" property="title" />
@@ -21,26 +21,26 @@
 		t.update_time
 	</sql>
 
-	<select id="findAll" resultMap="TaskPilotGroup">
+	<select id="findAll" resultMap="Executor">
 		SELECT <include refid="Base_Column_List" />
-		FROM task_pilot_group AS t
+		FROM executor AS t
 		ORDER BY t.app_name, t.title, t.id ASC
 	</select>
 
-	<select id="findByAddressType" parameterType="java.lang.Integer" resultMap="TaskPilotGroup">
+	<select id="findByAddressType" parameterType="java.lang.Integer" resultMap="Executor">
 		SELECT <include refid="Base_Column_List" />
-		FROM task_pilot_group AS t
+		FROM executor AS t
 		WHERE t.address_type = #{addressType}
 		ORDER BY t.app_name, t.title, t.id ASC
 	</select>
 
-	<insert id="save" parameterType="com.ruishanio.taskpilot.admin.model.TaskPilotGroup" useGeneratedKeys="true" keyProperty="id" >
-		INSERT INTO task_pilot_group (app_name, title, address_type, address_list, update_time)
+	<insert id="save" parameterType="com.ruishanio.taskpilot.admin.model.Executor" useGeneratedKeys="true" keyProperty="id" >
+		INSERT INTO executor (app_name, title, address_type, address_list, update_time)
 		values ( #{appname}, #{title}, #{addressType}, #{addressList}, #{updateTime} );
 	</insert>
 
-	<update id="update" parameterType="com.ruishanio.taskpilot.admin.model.TaskPilotGroup" >
-		UPDATE task_pilot_group
+	<update id="update" parameterType="com.ruishanio.taskpilot.admin.model.Executor" >
+		UPDATE executor
 		SET app_name = #{appname},
 			title = #{title},
 			address_type = #{addressType},
@@ -50,26 +50,26 @@
 	</update>
 
 	<delete id="remove" parameterType="java.lang.Integer" >
-		DELETE FROM task_pilot_group
+		DELETE FROM executor
 		WHERE id = #{id}
 	</delete>
 
-	<select id="load" parameterType="java.lang.Integer" resultMap="TaskPilotGroup">
+	<select id="load" parameterType="java.lang.Integer" resultMap="Executor">
 		SELECT <include refid="Base_Column_List" />
-		FROM task_pilot_group AS t
+		FROM executor AS t
 		WHERE t.id = #{id}
 	</select>
 
-	<select id="loadByAppname" parameterType="java.lang.String" resultMap="TaskPilotGroup">
+	<select id="loadByAppname" parameterType="java.lang.String" resultMap="Executor">
 		SELECT <include refid="Base_Column_List" />
-		FROM task_pilot_group AS t
+		FROM executor AS t
 		WHERE t.app_name = #{appname}
 		LIMIT 1
 	</select>
 
-	<select id="pageList" parameterType="java.util.HashMap" resultMap="TaskPilotGroup">
+	<select id="pageList" parameterType="java.util.HashMap" resultMap="Executor">
 		SELECT <include refid="Base_Column_List" />
-		FROM task_pilot_group AS t
+		FROM executor AS t
 		<trim prefix="WHERE" prefixOverrides="AND | OR" >
 			<if test="appname != null and appname != ''">
 				AND t.app_name like '%' || #{appname} || '%'
@@ -84,7 +84,7 @@
 
 	<select id="pageListCount" parameterType="java.util.HashMap" resultType="int">
 		SELECT count(1)
-		FROM task_pilot_group AS t
+		FROM executor AS t
 		<trim prefix="WHERE" prefixOverrides="AND | OR" >
 			<if test="appname != null and appname != ''">
 				AND t.app_name like '%' || #{appname} || '%'

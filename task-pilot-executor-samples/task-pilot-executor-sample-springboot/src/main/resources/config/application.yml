@@ -22,5 +22,5 @@ task-pilot:
     logpath: ${user.home}/logs/task-pilot/jobhandler
     logretentiondays: 30
     excludedpackage: ""
-  auto-register:
+  sync:
     enabled: true

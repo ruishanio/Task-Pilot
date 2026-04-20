@@ -4,9 +4,9 @@ import com.ruishanio.taskpilot.admin.auth.annotation.TaskPilotAuth
 import com.ruishanio.taskpilot.admin.scheduler.config.TaskPilotAdminBootstrap
 import com.ruishanio.taskpilot.core.constant.Const
 import com.ruishanio.taskpilot.core.openapi.AdminBiz
-import com.ruishanio.taskpilot.core.openapi.model.AutoRegisterRequest
 import com.ruishanio.taskpilot.core.openapi.model.CallbackRequest
 import com.ruishanio.taskpilot.core.openapi.model.RegistryRequest
+import com.ruishanio.taskpilot.core.openapi.model.SyncRequest
 import com.ruishanio.taskpilot.tool.core.StringTool
 import com.ruishanio.taskpilot.tool.json.GsonTool
 import com.ruishanio.taskpilot.tool.response.Response
@@ -71,9 +71,9 @@ class OpenApiController {
                     val registryParam: RegistryRequest = GsonTool.fromJson(requestBody, RegistryRequest::class.java)
                     adminBiz.registryRemove(registryParam)
                 }
-                "autoRegister" -> {
-                    val autoRegisterRequest: AutoRegisterRequest = GsonTool.fromJson(requestBody, AutoRegisterRequest::class.java)
-                    adminBiz.autoRegister(autoRegisterRequest)
+                "sync" -> {
+                    val syncRequest: SyncRequest = GsonTool.fromJson(requestBody, SyncRequest::class.java)
+                    adminBiz.sync(syncRequest)
                 }
                 else -> Response.ofFail<String>("invalid request, uri-mapping($uri) not found.")
             }

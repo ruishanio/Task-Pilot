@@ -90,7 +90,7 @@ task-pilot:
     port: 9999
     logpath: ${user.home}/logs/task-pilot/jobhandler
     logretentiondays: 30
-  auto-register:
+  sync:
     enabled: true
 ```
 

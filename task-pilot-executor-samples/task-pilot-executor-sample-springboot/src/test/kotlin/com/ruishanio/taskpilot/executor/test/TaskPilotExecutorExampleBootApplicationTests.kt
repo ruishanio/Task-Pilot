@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest
 @SpringBootTest(
     properties = [
         "task-pilot.executor.enabled=false",
-        "task-pilot.auto-register.enabled=false"
+        "task-pilot.sync.enabled=false"
     ]
 )
 class TaskPilotExecutorExampleBootApplicationTests {

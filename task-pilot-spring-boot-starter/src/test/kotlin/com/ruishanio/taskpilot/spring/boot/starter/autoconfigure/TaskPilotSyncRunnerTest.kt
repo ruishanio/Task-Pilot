@@ -6,7 +6,7 @@ import com.ruishanio.taskpilot.core.enums.MisfireStrategyEnum
 import com.ruishanio.taskpilot.core.enums.ScheduleTypeEnum
 import com.ruishanio.taskpilot.core.handler.annotation.TaskPilot
 import com.ruishanio.taskpilot.core.handler.annotation.TaskPilotRegister
-import com.ruishanio.taskpilot.core.openapi.model.AutoRegisterRequest
+import com.ruishanio.taskpilot.core.openapi.model.SyncRequest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
@@ -16,26 +16,26 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.test.util.ReflectionTestUtils
 
 /**
- * 覆盖 Starter 从注解扫描到自动注册请求组装的链路，确保枚举配置会按协议值透传。
+ * 覆盖 Starter 从注解扫描到同步请求组装的链路，确保枚举配置会按协议值透传。
  */
-class TaskPilotAutoRegisterRunnerTest {
+class TaskPilotSyncRunnerTest {
     @Test
-    fun shouldBuildAutoRegisterRequestWithEnumStrategiesAndDefaults() {
+    fun shouldBuildSyncRequestWithEnumStrategiesAndDefaults() {
         AnnotationConfigApplicationContext(TestConfiguration::class.java).use { applicationContext ->
             val properties = TaskPilotProperties().apply {
                 executor.appname = "demo-executor"
-                autoRegister.groupTitle = "示例执行器"
-                autoRegister.defaultTaskAuthor = "默认负责人"
-                autoRegister.defaultTaskAlarmEmail = "notice@test.com"
+                sync.groupTitle = "示例执行器"
+                sync.defaultTaskAuthor = "默认负责人"
+                sync.defaultTaskAlarmEmail = "notice@test.com"
             }
-            val runner = TaskPilotAutoRegisterRunner(properties, applicationContext)
+            val runner = TaskPilotSyncRunner(properties, applicationContext)
 
             val request =
-                (ReflectionTestUtils.invokeMethod(runner, "buildRequest") as AutoRegisterRequest?)
-                    ?: error("buildRequest should not return null")
+                (ReflectionTestUtils.invokeMethod(runner, "buildSyncRequest") as SyncRequest?)
+                    ?: error("buildSyncRequest should not return null")
 
-            assertEquals("demo-executor", request.appname)
-            assertEquals("示例执行器", request.title)
+            assertEquals("demo-executor", request.appName)
+            assertEquals("示例执行器", request.groupTitle)
             assertEquals(2, request.tasks.size)
 
             val taskMap = request.tasks.associateBy { it.executorHandler }

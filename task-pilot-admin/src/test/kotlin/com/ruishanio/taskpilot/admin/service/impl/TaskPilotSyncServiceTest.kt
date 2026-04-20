@@ -10,7 +10,7 @@ import com.ruishanio.taskpilot.core.enums.ExecutorBlockStrategyEnum
 import com.ruishanio.taskpilot.core.enums.ExecutorRouteStrategyEnum
 import com.ruishanio.taskpilot.core.enums.MisfireStrategyEnum
 import com.ruishanio.taskpilot.core.enums.ScheduleTypeEnum
-import com.ruishanio.taskpilot.core.openapi.model.AutoRegisterRequest
+import com.ruishanio.taskpilot.core.openapi.model.SyncRequest
 import com.ruishanio.taskpilot.tool.response.Response
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
@@ -28,10 +28,10 @@ import org.springframework.test.util.ReflectionTestUtils
 import java.util.Collections
 
 /**
- * 覆盖自动注册服务在“更新已有任务”和“跳过无差异任务”两条分支上的行为。
+ * 覆盖同步服务在“更新已有任务”和“跳过无差异任务”两条分支上的行为。
  */
 @ExtendWith(MockitoExtension::class)
-class TaskPilotAutoRegisterServiceTest {
+class TaskPilotSyncServiceTest {
     @Mock
     private lateinit var taskPilotGroupMapper: TaskPilotGroupMapper
 
@@ -44,20 +44,20 @@ class TaskPilotAutoRegisterServiceTest {
     @Mock
     private lateinit var taskPilotService: TaskPilotService
 
-    private lateinit var taskPilotAutoRegisterService: TaskPilotAutoRegisterService
+    private lateinit var taskPilotSyncService: TaskPilotSyncService
 
     @BeforeEach
     fun setUp() {
-        taskPilotAutoRegisterService = TaskPilotAutoRegisterService()
-        ReflectionTestUtils.setField(taskPilotAutoRegisterService, "taskPilotGroupMapper", taskPilotGroupMapper)
-        ReflectionTestUtils.setField(taskPilotAutoRegisterService, "taskPilotInfoMapper", taskPilotInfoMapper)
-        ReflectionTestUtils.setField(taskPilotAutoRegisterService, "taskPilotRegistryMapper", taskPilotRegistryMapper)
-        ReflectionTestUtils.setField(taskPilotAutoRegisterService, "taskPilotService", taskPilotService)
+        taskPilotSyncService = TaskPilotSyncService()
+        ReflectionTestUtils.setField(taskPilotSyncService, "taskPilotGroupMapper", taskPilotGroupMapper)
+        ReflectionTestUtils.setField(taskPilotSyncService, "taskPilotInfoMapper", taskPilotInfoMapper)
+        ReflectionTestUtils.setField(taskPilotSyncService, "taskPilotRegistryMapper", taskPilotRegistryMapper)
+        ReflectionTestUtils.setField(taskPilotSyncService, "taskPilotService", taskPilotService)
     }
 
     @Test
     fun shouldUpdateExistingTaskWhenRegisterConfigChanged() {
-        val request = buildRequest("任务新描述")
+        val request = buildSyncRequest("任务新描述")
         val group = buildGroup("旧分组标题", "127.0.0.1:9999")
         val existsTask =
             buildExistingTask().apply {
@@ -73,7 +73,7 @@ class TaskPilotAutoRegisterServiceTest {
         `when`(taskPilotInfoMapper.loadByGroupAndExecutorHandler(11, "demoHandler")).thenReturn(existsTask)
         `when`(taskPilotService.update(anyObject(), anyObject())).thenReturn(Response.ofSuccess<String>())
 
-        val response = taskPilotAutoRegisterService.autoRegister(request)
+        val response = taskPilotSyncService.sync(request)
 
         assertTrue(response.isSuccess)
         assertTrue(response.data.orEmpty().contains("updatedTaskCount=1"))
@@ -98,7 +98,7 @@ class TaskPilotAutoRegisterServiceTest {
 
     @Test
     fun shouldSkipExistingTaskWhenRegisterConfigNotChanged() {
-        val request = buildRequest("任务描述")
+        val request = buildSyncRequest("任务描述")
         val group = buildGroup("DemoGroup", null)
         val existsTask = buildExistingTask()
 
@@ -106,7 +106,7 @@ class TaskPilotAutoRegisterServiceTest {
         `when`(taskPilotRegistryMapper.findAll(anyInt(), anyObject())).thenReturn(Collections.emptyList())
         `when`(taskPilotInfoMapper.loadByGroupAndExecutorHandler(11, "demoHandler")).thenReturn(existsTask)
 
-        val response = taskPilotAutoRegisterService.autoRegister(request)
+        val response = taskPilotSyncService.sync(request)
 
         assertTrue(response.isSuccess)
         assertTrue(response.data.orEmpty().contains("updatedTaskCount=0"))
@@ -116,12 +116,15 @@ class TaskPilotAutoRegisterServiceTest {
         verify(taskPilotGroupMapper, never()).update(anyObject())
     }
 
-    private fun buildRequest(jobDesc: String): AutoRegisterRequest =
-        AutoRegisterRequest().apply {
-            appname = "demo-app"
-            title = "DemoGroup"
+    /**
+     * 构造一份最小可用的同步请求，测试只覆盖自己关心的差异字段。
+     */
+    private fun buildSyncRequest(jobDesc: String): SyncRequest =
+        SyncRequest().apply {
+            appName = "demo-app"
+            groupTitle = "DemoGroup"
             val task =
-                AutoRegisterRequest.Task().apply {
+                SyncRequest.Task().apply {
                     executorHandler = "demoHandler"
                     this.jobDesc = jobDesc
                     author = "new-author"
@@ -149,7 +152,7 @@ class TaskPilotAutoRegisterServiceTest {
         }
 
     /**
-     * 构造与 buildRequest 默认值一致的任务快照，便于只覆盖本次测试关心的差异字段。
+     * 构造与 buildSyncRequest 默认值一致的任务快照，便于只覆盖本次测试关心的差异字段。
      */
     private fun buildExistingTask(): TaskPilotInfo =
         TaskPilotInfo().apply {

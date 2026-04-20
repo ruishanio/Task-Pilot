@@ -8,9 +8,9 @@ import com.ruishanio.taskpilot.core.constant.Const
 import com.ruishanio.taskpilot.core.constant.RegistType
 import com.ruishanio.taskpilot.core.context.TaskPilotContext
 import com.ruishanio.taskpilot.core.openapi.AdminBiz
-import com.ruishanio.taskpilot.core.openapi.model.AutoRegisterRequest
 import com.ruishanio.taskpilot.core.openapi.model.CallbackRequest
 import com.ruishanio.taskpilot.core.openapi.model.RegistryRequest
+import com.ruishanio.taskpilot.core.openapi.model.SyncRequest
 import com.ruishanio.taskpilot.tool.json.GsonTool
 import com.ruishanio.taskpilot.tool.http.HttpTool
 import com.ruishanio.taskpilot.tool.response.Response
@@ -76,14 +76,14 @@ class AdminBizTest {
 
     @Test
     @Throws(Exception::class)
-    fun autoRegisterShouldSendEnumNamesInRequestBody() {
+    fun syncShouldSendEnumNamesInRequestBody() {
         val adminBiz = buildClient()
         val request =
-            AutoRegisterRequest().apply {
-                appname = "demo-app"
-                title = "示例执行器"
+            SyncRequest().apply {
+                appName = "demo-app"
+                groupTitle = "示例执行器"
                 tasks.add(
-                    AutoRegisterRequest.Task().apply {
+                    SyncRequest.Task().apply {
                         executorHandler = "demoHandler"
                         jobDesc = "枚举任务"
                         scheduleType = ScheduleTypeEnum.CRON
@@ -95,7 +95,7 @@ class AdminBizTest {
                 )
             }
 
-        val returnT: Response<String> = adminBiz.autoRegister(request)
+        val returnT: Response<String> = adminBiz.sync(request)
         assertTrue(returnT.isSuccess)
         val requestBody = lastRequestBody.get()
         assertTrue(requestBody.contains("\"scheduleType\":\"CRON\""))
@@ -130,7 +130,7 @@ class AdminBizTest {
                 createContext("/task-pilot-admin/api/executor/registryRemove") { exchange ->
                     replyWithSuccess(exchange)
                 }
-                createContext("/task-pilot-admin/api/executor/autoRegister") { exchange ->
+                createContext("/task-pilot-admin/api/executor/sync") { exchange ->
                     replyWithSuccess(exchange)
                 }
                 start()

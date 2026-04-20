@@ -8,8 +8,8 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty
  * TaskPilot Spring Boot Starter 配置项。
  *
  * 说明：
- * 1、统一使用 task-pilot.admin.* / task-pilot.executor.* / task-pilot.auto-register.* 配置结构；
- * 2、执行器负责对外暴露运行能力，auto-register 负责把注解声明同步到调度中心。
+ * 1、统一使用 task-pilot.admin.* / task-pilot.executor.* / task-pilot.sync.* 配置结构；
+ * 2、执行器负责对外暴露运行能力，sync 负责把注解声明同步到调度中心。
  */
 @ConfigurationProperties(prefix = "task-pilot")
 class TaskPilotProperties {
@@ -20,7 +20,7 @@ class TaskPilotProperties {
     val executor: Executor = Executor()
 
     @field:NestedConfigurationProperty
-    val autoRegister: AutoRegister = AutoRegister()
+    val sync: Sync = Sync()
 
     /**
      * 管理端连接配置。
@@ -46,16 +46,16 @@ class TaskPilotProperties {
     }
 
     /**
-     * 启动时自动注册执行器与任务的配置。
+     * 启动时同步执行器与任务定义的配置。
      */
-    class AutoRegister {
+    class Sync {
         /**
-         * 是否开启自动注册。
+         * 是否开启启动同步。
          */
         var enabled: Boolean = false
 
         /**
-         * 自动创建执行器分组时使用的标题，留空时回退为 appname。
+         * 自动创建执行器分组时使用的标题，留空时回退为 executor.appname。
          */
         var groupTitle: String = ""
 

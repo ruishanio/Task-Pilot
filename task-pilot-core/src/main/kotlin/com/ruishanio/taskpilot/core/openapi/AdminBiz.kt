@@ -1,9 +1,9 @@
 package com.ruishanio.taskpilot.core.openapi
 
 import com.ruishanio.taskpilot.core.constant.Const
-import com.ruishanio.taskpilot.core.openapi.model.AutoRegisterRequest
 import com.ruishanio.taskpilot.core.openapi.model.CallbackRequest
 import com.ruishanio.taskpilot.core.openapi.model.RegistryRequest
+import com.ruishanio.taskpilot.core.openapi.model.SyncRequest
 import com.ruishanio.taskpilot.tool.response.Response
 import com.ruishanio.taskpilot.tool.http.client.HttpClientService
 
@@ -28,7 +28,7 @@ interface AdminBiz {
     fun registryRemove(registryRequest: RegistryRequest): Response<String>
 
     /**
-     * 自动注册执行器分组与任务定义。
+     * 同步执行器分组与任务定义。
      */
-    fun autoRegister(autoRegisterRequest: AutoRegisterRequest): Response<String>
+    fun sync(syncRequest: SyncRequest): Response<String>
 }

@@ -58,11 +58,11 @@ class TaskPilotAutoConfiguration {
      */
     @Bean
     @ConditionalOnBean(TaskPilotSpringExecutor::class)
-    @ConditionalOnProperty(prefix = "task-pilot.auto-register", name = ["enabled"], havingValue = "true")
-    fun taskPilotAutoRegisterRunner(
+    @ConditionalOnProperty(prefix = "task-pilot.sync", name = ["enabled"], havingValue = "true")
+    fun taskPilotSyncRunner(
         properties: TaskPilotProperties,
         applicationContext: ApplicationContext
-    ): ApplicationRunner = TaskPilotAutoRegisterRunner(properties, applicationContext)
+    ): ApplicationRunner = TaskPilotSyncRunner(properties, applicationContext)
 
     /**
      * 对启用场景做必要的配置校验，避免执行器启动后才输出模糊告警。

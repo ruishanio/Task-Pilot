@@ -16,7 +16,7 @@ import com.ruishanio.taskpilot.core.enums.ExecutorRouteStrategyEnum
 import com.ruishanio.taskpilot.core.enums.MisfireStrategyEnum
 import com.ruishanio.taskpilot.core.enums.ScheduleTypeEnum
 import com.ruishanio.taskpilot.core.glue.GlueTypeEnum
-import com.ruishanio.taskpilot.core.openapi.model.AutoRegisterRequest
+import com.ruishanio.taskpilot.core.openapi.model.SyncRequest
 import com.ruishanio.taskpilot.tool.core.StringTool
 import com.ruishanio.taskpilot.tool.response.Response
 import jakarta.annotation.Resource
@@ -25,15 +25,15 @@ import org.springframework.stereotype.Service
 import java.util.Date
 
 /**
- * 处理 Starter 发起的执行器与任务自动注册。
+ * 处理 Starter 发起的执行器与任务定义同步。
  *
  * 设计取舍：
- * 1、对声明了自动注册的任务，注解配置视为事实来源，已存在任务也会按声明值同步；
+ * 1、对声明了同步元数据的任务，注解配置视为事实来源，已存在任务也会按声明值同步；
  * 2、执行器分组创建后会主动回填当前存活注册地址，避免首次自动建组时地址列表为空；
  * 3、只在检测到字段差异时才触发更新，避免应用每次重启都刷写任务更新时间与操作日志。
  */
 @Service
-class TaskPilotAutoRegisterService {
+class TaskPilotSyncService {
     @Resource
     private lateinit var taskPilotGroupMapper: TaskPilotGroupMapper
 
@@ -47,16 +47,16 @@ class TaskPilotAutoRegisterService {
     private lateinit var taskPilotService: TaskPilotService
 
     /**
-     * 自动补齐执行器分组和任务定义，并返回汇总信息供执行器启动日志记录。
+     * 补齐执行器分组和任务定义，并返回汇总信息供执行器启动日志记录。
      */
-    fun autoRegister(request: AutoRegisterRequest?): Response<String> {
-        if (request == null || StringTool.isBlank(request.appname)) {
-            return Response.ofFail("auto register fail, appname empty.")
+    fun sync(request: SyncRequest?): Response<String> {
+        if (request == null || StringTool.isBlank(request.appName)) {
+            return Response.ofFail("sync fail, appName empty.")
         }
 
         val taskPilotGroup = initOrLoadGroup(request)
         if (taskPilotGroup == null || taskPilotGroup.id < 1) {
-            return Response.ofFail("auto register fail, executor group init failed.")
+            return Response.ofFail("sync fail, executor group init failed.")
         }
 
         val systemLoginInfo = buildSystemLoginInfo()
@@ -84,7 +84,7 @@ class TaskPilotAutoRegisterService {
                 val updateResponse = taskPilotService.update(expectedTask, systemLoginInfo)
                 if (!Response.isSuccess(updateResponse)) {
                     return Response.ofFail(
-                        "auto register task update fail, handler=${task.executorHandler}, msg=${updateResponse.msg ?: "null"}"
+                        "sync task update fail, handler=${task.executorHandler}, msg=${updateResponse.msg ?: "null"}"
                     )
                 }
                 updatedTaskCount++
@@ -94,7 +94,7 @@ class TaskPilotAutoRegisterService {
             val jobInfo = buildTaskInfo(taskPilotGroup.id, task)
             val addResponse = taskPilotService.add(jobInfo, systemLoginInfo)
             if (!Response.isSuccess(addResponse)) {
-                return Response.ofFail("auto register task fail, handler=${task.executorHandler}, msg=${addResponse.msg ?: "null"}")
+                return Response.ofFail("sync task fail, handler=${task.executorHandler}, msg=${addResponse.msg ?: "null"}")
             }
 
             createdTaskCount++
@@ -115,21 +115,21 @@ class TaskPilotAutoRegisterService {
                 append(", warnings=").append(warnings)
             }
         }
-        logger.info(">>>>>>>>>>> task-pilot 自动注册完成，appname={}, summary={}", request.appname, summary)
+        logger.info(">>>>>>>>>>> task-pilot 同步完成，appName={}, summary={}", request.appName, summary)
         return Response.ofSuccess(summary)
     }
 
     /**
-     * 分组不存在时创建，已存在时仅对自动注册分组做最小更新。
+     * 分组不存在时创建，已存在时仅对同步托管分组做最小更新。
      */
-    private fun initOrLoadGroup(request: AutoRegisterRequest): TaskPilotGroup? {
-        var group = taskPilotGroupMapper.loadByAppname(request.appname!!.trim())
+    private fun initOrLoadGroup(request: SyncRequest): TaskPilotGroup? {
+        var group = taskPilotGroupMapper.loadByAppname(request.appName!!.trim())
         if (group == null) {
             group = TaskPilotGroup().apply {
-                appname = request.appname!!.trim()
+                appname = request.appName!!.trim()
                 title = buildGroupTitle(request)
                 addressType = 0
-                addressList = buildRegistryAddressList(request.appname)
+                addressList = buildRegistryAddressList(request.appName)
                 updateTime = Date()
             }
             taskPilotGroupMapper.save(group)
@@ -159,9 +159,9 @@ class TaskPilotAutoRegisterService {
     }
 
     /**
-     * 仅填充注解负责维护的字段，避免自动注册越权覆盖人工维护信息。
+     * 仅填充同步托管字段，避免启动同步越权覆盖人工维护信息。
      */
-    private fun buildTaskInfo(jobGroupId: Int, task: AutoRegisterRequest.Task): TaskPilotInfo =
+    private fun buildTaskInfo(jobGroupId: Int, task: SyncRequest.Task): TaskPilotInfo =
         TaskPilotInfo().apply {
             jobGroup = jobGroupId
             jobDesc = if (StringTool.isNotBlank(task.jobDesc)) task.jobDesc!!.trim() else task.executorHandler!!.trim()
@@ -178,12 +178,12 @@ class TaskPilotAutoRegisterService {
             executorFailRetryCount = task.executorFailRetryCount
             glueType = GlueTypeEnum.BEAN.name
             glueSource = ""
-            glueRemark = "注解自动注册"
+            glueRemark = "注解同步"
             childJobId = task.childJobId
         }
 
     /**
-     * 仅比较自动注册托管字段，避免无差异更新污染操作日志。
+     * 仅比较同步托管字段，避免无差异更新污染操作日志。
      */
     private fun needsTaskUpdate(existsTask: TaskPilotInfo, expectedTask: TaskPilotInfo): Boolean =
         !equalsNullable(existsTask.jobDesc, expectedTask.jobDesc) ||
@@ -201,13 +201,13 @@ class TaskPilotAutoRegisterService {
             !equalsNullable(existsTask.childJobId, expectedTask.childJobId)
 
     /**
-     * 自动注册通过系统身份复用现有服务层的校验与审计逻辑。
+     * 启动同步通过系统身份复用现有服务层的校验与审计逻辑。
      */
     private fun buildSystemLoginInfo(): LoginInfo =
         LoginInfo().apply {
             userId = "0"
             userName = SYSTEM_OPERATOR
-            realName = "TaskPilot Auto Register"
+            realName = "TaskPilot Sync"
             roleList = listOf(Consts.ADMIN_ROLE)
             expireTime = Long.MAX_VALUE
             signature = SYSTEM_OPERATOR
@@ -233,20 +233,20 @@ class TaskPilotAutoRegisterService {
     }
 
     /**
-     * 标题为空时回退为截断后的 appname，避免超出数据库字段长度。
+     * 标题为空时回退为截断后的 appName，避免超出数据库字段长度。
      */
-    private fun buildGroupTitle(request: AutoRegisterRequest): String {
-        val title = if (StringTool.isNotBlank(request.title)) request.title!!.trim() else request.appname!!.trim()
+    private fun buildGroupTitle(request: SyncRequest): String {
+        val title = if (StringTool.isNotBlank(request.groupTitle)) request.groupTitle!!.trim() else request.appName!!.trim()
         return if (title.length > 12) title.substring(0, 12) else title
     }
 
     /**
      * 空任务列表统一转为空集合，避免调用方额外判空。
      */
-    private fun safeTasks(tasks: List<AutoRegisterRequest.Task>?): List<AutoRegisterRequest.Task> = tasks ?: emptyList()
+    private fun safeTasks(tasks: List<SyncRequest.Task>?): List<SyncRequest.Task> = tasks ?: emptyList()
 
     /**
-     * 自动注册里的枚举字段允许缺省，统一在这里回退到平台默认值。
+     * 同步请求里的枚举字段允许缺省，统一在这里回退到平台默认值。
      */
     private fun <T : Enum<T>> defaultEnum(value: T?, defaultValue: T): T = value ?: defaultValue
 
@@ -256,7 +256,7 @@ class TaskPilotAutoRegisterService {
     private fun equalsNullable(left: Any?, right: Any?): Boolean = left == right
 
     companion object {
-        private val logger = LoggerFactory.getLogger(TaskPilotAutoRegisterService::class.java)
-        private const val SYSTEM_OPERATOR = "task-pilot-auto-register"
+        private val logger = LoggerFactory.getLogger(TaskPilotSyncService::class.java)
+        private const val SYSTEM_OPERATOR = "task-pilot-sync"
     }
 }

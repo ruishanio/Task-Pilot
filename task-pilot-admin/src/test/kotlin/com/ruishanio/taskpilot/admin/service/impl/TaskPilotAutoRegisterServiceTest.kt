@@ -6,6 +6,10 @@ import com.ruishanio.taskpilot.admin.mapper.TaskPilotRegistryMapper
 import com.ruishanio.taskpilot.admin.model.TaskPilotGroup
 import com.ruishanio.taskpilot.admin.model.TaskPilotInfo
 import com.ruishanio.taskpilot.admin.service.TaskPilotService
+import com.ruishanio.taskpilot.core.enums.ExecutorBlockStrategyEnum
+import com.ruishanio.taskpilot.core.enums.ExecutorRouteStrategyEnum
+import com.ruishanio.taskpilot.core.enums.MisfireStrategyEnum
+import com.ruishanio.taskpilot.core.enums.ScheduleTypeEnum
 import com.ruishanio.taskpilot.core.openapi.model.AutoRegisterRequest
 import com.ruishanio.taskpilot.tool.response.Response
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -65,16 +69,16 @@ class TaskPilotAutoRegisterServiceTest {
             }
 
         `when`(taskPilotGroupMapper.loadByAppname("demo-app")).thenReturn(group)
-        `when`(taskPilotRegistryMapper.findAll(anyInt(), any())).thenReturn(Collections.emptyList())
+        `when`(taskPilotRegistryMapper.findAll(anyInt(), anyObject())).thenReturn(Collections.emptyList())
         `when`(taskPilotInfoMapper.loadByGroupAndExecutorHandler(11, "demoHandler")).thenReturn(existsTask)
-        `when`(taskPilotService.update(any(TaskPilotInfo::class.java), any())).thenReturn(Response.ofSuccess<String>())
+        `when`(taskPilotService.update(anyObject(), anyObject())).thenReturn(Response.ofSuccess<String>())
 
         val response = taskPilotAutoRegisterService.autoRegister(request)
 
         assertTrue(response.isSuccess)
         assertTrue(response.data.orEmpty().contains("updatedTaskCount=1"))
         verify(taskPilotService).update(
-            argThat { jobInfo: TaskPilotInfo ->
+            argThatObject { jobInfo: TaskPilotInfo ->
                 jobInfo.id == 22 &&
                     jobInfo.jobDesc == "任务新描述" &&
                     jobInfo.author == "new-author" &&
@@ -82,11 +86,11 @@ class TaskPilotAutoRegisterServiceTest {
                     jobInfo.scheduleConf == "0/10 * * * * ?" &&
                     jobInfo.executorParam == "new-param"
             },
-            any()
+            anyObject()
         )
-        verify(taskPilotService, never()).add(any(TaskPilotInfo::class.java), any())
+        verify(taskPilotService, never()).add(anyObject(), anyObject())
         verify(taskPilotGroupMapper).update(
-            argThat { taskPilotGroup: TaskPilotGroup ->
+            argThatObject { taskPilotGroup: TaskPilotGroup ->
                 taskPilotGroup.title == "DemoGroup" && taskPilotGroup.addressList == null
             }
         )
@@ -99,7 +103,7 @@ class TaskPilotAutoRegisterServiceTest {
         val existsTask = buildExistingTask()
 
         `when`(taskPilotGroupMapper.loadByAppname("demo-app")).thenReturn(group)
-        `when`(taskPilotRegistryMapper.findAll(anyInt(), any())).thenReturn(Collections.emptyList())
+        `when`(taskPilotRegistryMapper.findAll(anyInt(), anyObject())).thenReturn(Collections.emptyList())
         `when`(taskPilotInfoMapper.loadByGroupAndExecutorHandler(11, "demoHandler")).thenReturn(existsTask)
 
         val response = taskPilotAutoRegisterService.autoRegister(request)
@@ -107,9 +111,9 @@ class TaskPilotAutoRegisterServiceTest {
         assertTrue(response.isSuccess)
         assertTrue(response.data.orEmpty().contains("updatedTaskCount=0"))
         assertTrue(response.data.orEmpty().contains("skippedTaskCount=1"))
-        verify(taskPilotService, never()).update(any(TaskPilotInfo::class.java), any())
-        verify(taskPilotService, never()).add(any(TaskPilotInfo::class.java), any())
-        verify(taskPilotGroupMapper, never()).update(any(TaskPilotGroup::class.java))
+        verify(taskPilotService, never()).update(anyObject(), anyObject())
+        verify(taskPilotService, never()).add(anyObject(), anyObject())
+        verify(taskPilotGroupMapper, never()).update(anyObject())
     }
 
     private fun buildRequest(jobDesc: String): AutoRegisterRequest =
@@ -122,12 +126,12 @@ class TaskPilotAutoRegisterServiceTest {
                     this.jobDesc = jobDesc
                     author = "new-author"
                     alarmEmail = "new@test.com"
-                    scheduleType = "CRON"
+                    scheduleType = ScheduleTypeEnum.CRON
                     scheduleConf = "0/10 * * * * ?"
-                    misfireStrategy = "DO_NOTHING"
-                    executorRouteStrategy = "FIRST"
+                    misfireStrategy = MisfireStrategyEnum.DO_NOTHING
+                    executorRouteStrategy = ExecutorRouteStrategyEnum.FIRST
                     executorParam = "new-param"
-                    executorBlockStrategy = "SERIAL_EXECUTION"
+                    executorBlockStrategy = ExecutorBlockStrategyEnum.SERIAL_EXECUTION
                     executorTimeout = 30
                     executorFailRetryCount = 2
                     childJobId = "1,2"
@@ -154,15 +158,33 @@ class TaskPilotAutoRegisterServiceTest {
             jobDesc = "任务描述"
             author = "new-author"
             alarmEmail = "new@test.com"
-            scheduleType = "CRON"
+            scheduleType = ScheduleTypeEnum.CRON
             scheduleConf = "0/10 * * * * ?"
-            misfireStrategy = "DO_NOTHING"
-            executorRouteStrategy = "FIRST"
+            misfireStrategy = MisfireStrategyEnum.DO_NOTHING
+            executorRouteStrategy = ExecutorRouteStrategyEnum.FIRST
             executorHandler = "demoHandler"
             executorParam = "new-param"
-            executorBlockStrategy = "SERIAL_EXECUTION"
+            executorBlockStrategy = ExecutorBlockStrategyEnum.SERIAL_EXECUTION
             executorTimeout = 30
             executorFailRetryCount = 2
             childJobId = "1,2"
         }
+
+    /**
+     * 兼容 Kotlin 非空参数与 Mockito `any()` 的配合写法，避免 matcher 返回 null 直接触发 NPE。
+     */
+    @Suppress("UNCHECKED_CAST")
+    private fun <T> anyObject(): T {
+        any<T>()
+        return null as T
+    }
+
+    /**
+     * 兼容 Kotlin 非空参数与 Mockito `argThat()` 的配合写法，避免 matcher 返回 null 直接触发 NPE。
+     */
+    @Suppress("UNCHECKED_CAST")
+    private fun <T> argThatObject(predicate: (T) -> Boolean): T {
+        argThat<T> { candidate -> predicate(candidate) }
+        return null as T
+    }
 }

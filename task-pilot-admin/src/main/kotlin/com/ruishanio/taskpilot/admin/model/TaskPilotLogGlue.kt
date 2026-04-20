@@ -4,6 +4,8 @@ import java.util.Date
 
 /**
  * GLUE 代码变更日志模型。
+ *
+ * 每次修改脚本类任务源码时都会落一条快照，便于回溯与回滚。
  */
 data class TaskPilotLogGlue(
     var id: Int = 0,

@@ -7,6 +7,7 @@ import io.github.imfangs.dify.client.enums.ResponseMode
 import io.github.imfangs.dify.client.model.workflow.WorkflowRunRequest
 import io.github.imfangs.dify.client.model.workflow.WorkflowRunResponse
 import kotlin.collections.Map
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
 import org.springframework.boot.test.context.SpringBootTest
@@ -14,8 +15,10 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean
 
 /**
  * Dify 集成样例测试，仅验证调用脚手架能在 Kotlin 下继续编译。
+ * 该测试依赖外部 Dify 地址和有效凭证，默认自动化执行会受到网络与环境配置影响。
  */
 @SpringBootTest
+@Disabled("依赖外部 Dify 服务与真实凭证，保留为手动联调样例，不纳入默认自动化回归链路")
 class DifyTest {
     @field:MockitoBean
     private lateinit var taskPilotSpringExecutor: TaskPilotSpringExecutor

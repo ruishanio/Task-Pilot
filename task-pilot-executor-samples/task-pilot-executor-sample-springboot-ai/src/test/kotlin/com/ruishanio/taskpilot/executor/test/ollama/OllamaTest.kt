@@ -3,6 +3,7 @@ package com.ruishanio.taskpilot.executor.test.ollama
 import com.ruishanio.taskpilot.core.executor.impl.TaskPilotSpringExecutor
 import jakarta.annotation.Resource
 import java.util.concurrent.TimeUnit
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
 import org.springframework.ai.chat.client.ChatClient
@@ -17,8 +18,10 @@ import reactor.core.publisher.Flux
 
 /**
  * Ollama 样例测试，覆盖同步和流式调用两个入口。
+ * 该测试依赖开发机提前启动本地 Ollama 服务，不适合作为默认自动化回归的一部分。
  */
 @SpringBootTest
+@Disabled("依赖本地 Ollama 服务，保留为手动联调样例，不纳入默认自动化回归链路")
 class OllamaTest {
     @field:MockitoBean
     private lateinit var taskPilotSpringExecutor: TaskPilotSpringExecutor

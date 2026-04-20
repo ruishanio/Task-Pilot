@@ -1,6 +1,6 @@
 package com.ruishanio.taskpilot.core.openapi.impl
 
-import com.ruishanio.taskpilot.core.constant.ExecutorBlockStrategyEnum
+import com.ruishanio.taskpilot.core.enums.ExecutorBlockStrategyEnum
 import com.ruishanio.taskpilot.core.context.TaskPilotContext
 import com.ruishanio.taskpilot.core.executor.TaskPilotExecutor
 import com.ruishanio.taskpilot.core.glue.GlueFactory
@@ -103,7 +103,7 @@ class ExecutorBizImpl : ExecutorBiz {
         }
 
         if (jobThread != null) {
-            val blockStrategy = ExecutorBlockStrategyEnum.match(triggerRequest.executorBlockStrategy, null)
+            val blockStrategy = triggerRequest.executorBlockStrategy
             if (ExecutorBlockStrategyEnum.DISCARD_LATER == blockStrategy) {
                 if (jobThread.isRunningOrHasQueue()) {
                     return Response.of(

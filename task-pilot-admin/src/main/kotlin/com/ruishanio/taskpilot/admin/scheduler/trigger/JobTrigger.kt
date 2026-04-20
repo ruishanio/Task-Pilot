@@ -7,8 +7,9 @@ import com.ruishanio.taskpilot.admin.model.TaskPilotGroup
 import com.ruishanio.taskpilot.admin.model.TaskPilotInfo
 import com.ruishanio.taskpilot.admin.model.TaskPilotLog
 import com.ruishanio.taskpilot.admin.scheduler.config.TaskPilotAdminBootstrap
-import com.ruishanio.taskpilot.admin.scheduler.route.ExecutorRouteStrategyEnum
-import com.ruishanio.taskpilot.core.constant.ExecutorBlockStrategyEnum
+import com.ruishanio.taskpilot.admin.scheduler.route.toRouter
+import com.ruishanio.taskpilot.core.enums.ExecutorBlockStrategyEnum
+import com.ruishanio.taskpilot.core.enums.ExecutorRouteStrategyEnum
 import com.ruishanio.taskpilot.core.context.TaskPilotContext
 import com.ruishanio.taskpilot.core.openapi.ExecutorBiz
 import com.ruishanio.taskpilot.core.openapi.model.TriggerRequest
@@ -73,7 +74,7 @@ class JobTrigger {
             }
         }
 
-        if (ExecutorRouteStrategyEnum.SHARDING_BROADCAST == ExecutorRouteStrategyEnum.match(jobInfo.executorRouteStrategy, null) &&
+        if (ExecutorRouteStrategyEnum.SHARDING_BROADCAST == jobInfo.executorRouteStrategy &&
             !group.registryList.isNullOrEmpty() &&
             shardingParam == null
         ) {
@@ -100,12 +101,8 @@ class JobTrigger {
         index: Int,
         total: Int
     ) {
-        val blockStrategy = ExecutorBlockStrategyEnum.match(
-            jobInfo.executorBlockStrategy,
-            ExecutorBlockStrategyEnum.SERIAL_EXECUTION
-        ) ?: ExecutorBlockStrategyEnum.SERIAL_EXECUTION
-        val executorRouteStrategyEnum = ExecutorRouteStrategyEnum.match(jobInfo.executorRouteStrategy, null)
-            ?: ExecutorRouteStrategyEnum.FIRST
+        val blockStrategy = jobInfo.executorBlockStrategy ?: ExecutorBlockStrategyEnum.SERIAL_EXECUTION
+        val executorRouteStrategyEnum = jobInfo.executorRouteStrategy ?: ExecutorRouteStrategyEnum.FIRST
         val shardingParam = if (ExecutorRouteStrategyEnum.SHARDING_BROADCAST == executorRouteStrategyEnum) {
             "$index/$total"
         } else {
@@ -141,7 +138,7 @@ class JobTrigger {
             if (ExecutorRouteStrategyEnum.SHARDING_BROADCAST == executorRouteStrategyEnum) {
                 address = if (index < group.registryList!!.size) group.registryList!![index] else group.registryList!![0]
             } else {
-                routeAddressResult = executorRouteStrategyEnum.router?.route(triggerParam, group.registryList!!)
+                routeAddressResult = executorRouteStrategyEnum.toRouter()?.route(triggerParam, group.registryList!!)
                 if (routeAddressResult?.isSuccess == true) {
                     address = routeAddressResult.data
                 }

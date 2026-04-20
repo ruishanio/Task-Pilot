@@ -5,12 +5,23 @@ import java.util.Date
 
 /**
  * 执行器分组模型。
+ *
+ * 一个分组对应一个执行器 appname，调度任务时会在该分组的地址池里做路由。
  */
 data class TaskPilotGroup(
     var id: Int = 0,
+    /**
+     * 执行器注册时上报的 appname，也是自动建组时的唯一键。
+     */
     var appname: String? = null,
     var title: String? = null,
+    /**
+     * 地址类型：0=自动注册，1=手动录入。
+     */
     var addressType: Int = 0,
+    /**
+     * 当前可用地址列表，多个地址以英文逗号拼接。
+     */
     var addressList: String? = null,
     var updateTime: Date? = null
 ) {

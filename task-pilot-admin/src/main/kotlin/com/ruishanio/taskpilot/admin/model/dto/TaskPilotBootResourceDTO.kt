@@ -12,14 +12,26 @@ class TaskPilotBootResourceDTO() : Serializable {
     var id: Int = 0
     var parentId: Int = 0
     var name: String? = null
+    /**
+     * 资源类型，当前启动菜单主要使用目录/页面两类轻量标识。
+     */
     var type: Int = 0
+    /**
+     * 访问该资源所需的权限标识，为空表示所有登录用户可见。
+     */
     var permission: String? = null
     var url: String? = null
     var icon: String? = null
     var order: Int = 0
+    /**
+     * 菜单状态，当前前端引导阶段主要保留字段兼容性。
+     */
     var status: Int = 0
     var addTime: Date? = null
     var updateTime: Date? = null
+    /**
+     * 子资源列表，前端据此构建菜单树。
+     */
     var children: List<TaskPilotBootResourceDTO>? = null
 
     constructor(

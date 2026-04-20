@@ -1,8 +1,10 @@
 package com.ruishanio.taskpilot.admin.mapper
 
 import com.ruishanio.taskpilot.admin.model.TaskPilotInfo
-import com.ruishanio.taskpilot.admin.scheduler.misfire.MisfireStrategyEnum
-import com.ruishanio.taskpilot.admin.scheduler.type.ScheduleTypeEnum
+import com.ruishanio.taskpilot.core.enums.ExecutorBlockStrategyEnum
+import com.ruishanio.taskpilot.core.enums.ExecutorRouteStrategyEnum
+import com.ruishanio.taskpilot.core.enums.MisfireStrategyEnum
+import com.ruishanio.taskpilot.core.enums.ScheduleTypeEnum
 import jakarta.annotation.Resource
 import java.util.Date
 import org.junit.jupiter.api.Test
@@ -36,13 +38,13 @@ class TaskPilotInfoMapperTest {
                 jobDesc = "desc"
                 author = "setAuthor"
                 alarmEmail = "setAlarmEmail"
-                scheduleType = ScheduleTypeEnum.FIX_RATE.name
+                scheduleType = ScheduleTypeEnum.FIX_RATE
                 scheduleConf = "33"
-                misfireStrategy = MisfireStrategyEnum.DO_NOTHING.name
-                executorRouteStrategy = "setExecutorRouteStrategy"
+                misfireStrategy = MisfireStrategyEnum.DO_NOTHING
+                executorRouteStrategy = ExecutorRouteStrategyEnum.FIRST
                 executorHandler = "setExecutorHandler"
                 executorParam = "setExecutorParam"
-                executorBlockStrategy = "setExecutorBlockStrategy"
+                executorBlockStrategy = ExecutorBlockStrategyEnum.SERIAL_EXECUTION
                 glueType = "setGlueType"
                 glueSource = "setGlueSource"
                 glueRemark = "setGlueRemark"
@@ -55,16 +57,16 @@ class TaskPilotInfoMapperTest {
         val count = taskPilotInfoMapper.save(info)
 
         val info2 = taskPilotInfoMapper.loadById(info.id)!!
-        info.scheduleType = ScheduleTypeEnum.FIX_RATE.name
+        info.scheduleType = ScheduleTypeEnum.FIX_RATE
         info.scheduleConf = "44"
-        info.misfireStrategy = MisfireStrategyEnum.FIRE_ONCE_NOW.name
+        info.misfireStrategy = MisfireStrategyEnum.FIRE_ONCE_NOW
         info2.jobDesc = "desc2"
         info2.author = "setAuthor2"
         info2.alarmEmail = "setAlarmEmail2"
-        info2.executorRouteStrategy = "setExecutorRouteStrategy2"
+        info2.executorRouteStrategy = ExecutorRouteStrategyEnum.FAILOVER
         info2.executorHandler = "setExecutorHandler2"
         info2.executorParam = "setExecutorParam2"
-        info2.executorBlockStrategy = "setExecutorBlockStrategy2"
+        info2.executorBlockStrategy = ExecutorBlockStrategyEnum.COVER_EARLY
         info2.glueType = "setGlueType2"
         info2.glueSource = "setGlueSource2"
         info2.glueRemark = "setGlueRemark2"

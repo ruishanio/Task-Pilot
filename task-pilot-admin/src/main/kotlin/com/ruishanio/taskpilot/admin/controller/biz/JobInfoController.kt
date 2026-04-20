@@ -2,13 +2,13 @@ package com.ruishanio.taskpilot.admin.controller.biz
 
 import com.ruishanio.taskpilot.admin.auth.helper.TaskPilotAuthHelper
 import com.ruishanio.taskpilot.admin.model.TaskPilotInfo
-import com.ruishanio.taskpilot.admin.scheduler.type.ScheduleTypeEnum
+import com.ruishanio.taskpilot.admin.scheduler.type.toScheduleType
 import com.ruishanio.taskpilot.admin.service.TaskPilotService
 import com.ruishanio.taskpilot.admin.util.JobGroupPermissionUtil
 import com.ruishanio.taskpilot.admin.web.ManageRoute
+import com.ruishanio.taskpilot.core.enums.ScheduleTypeEnum
 import com.ruishanio.taskpilot.tool.core.CollectionTool
 import com.ruishanio.taskpilot.tool.core.DateTool
-import com.ruishanio.taskpilot.tool.core.StringTool
 import com.ruishanio.taskpilot.tool.response.PageModel
 import com.ruishanio.taskpilot.tool.response.Response
 import jakarta.annotation.Resource
@@ -112,10 +112,10 @@ class JobInfoController {
     @RequestMapping("/nextTriggerTime")
     @ResponseBody
     fun nextTriggerTime(
-        @RequestParam("scheduleType") scheduleType: String?,
+        @RequestParam("scheduleType") scheduleType: ScheduleTypeEnum?,
         @RequestParam("scheduleConf") scheduleConf: String?
     ): Response<List<String>> {
-        if (StringTool.isBlank(scheduleType) || StringTool.isBlank(scheduleConf)) {
+        if (scheduleType == null || scheduleConf.isNullOrBlank()) {
             return Response.ofSuccess(ArrayList())
         }
 
@@ -128,9 +128,7 @@ class JobInfoController {
         try {
             var lastTime = Date()
             for (i in 0 until 5) {
-                val scheduleTypeEnum = ScheduleTypeEnum.match(paramTaskPilotInfo.scheduleType, ScheduleTypeEnum.NONE)
-                    ?: ScheduleTypeEnum.NONE
-                lastTime = scheduleTypeEnum.scheduleType.generateNextTriggerTime(paramTaskPilotInfo, lastTime) ?: break
+                lastTime = scheduleType.toScheduleType().generateNextTriggerTime(paramTaskPilotInfo, lastTime) ?: break
                 result.add(DateTool.formatDateTime(lastTime))
             }
         } catch (e: Exception) {

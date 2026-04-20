@@ -11,6 +11,10 @@ import com.ruishanio.taskpilot.admin.model.TaskPilotRegistry
 import com.ruishanio.taskpilot.admin.service.TaskPilotService
 import com.ruishanio.taskpilot.core.constant.Const
 import com.ruishanio.taskpilot.core.constant.RegistType
+import com.ruishanio.taskpilot.core.enums.ExecutorBlockStrategyEnum
+import com.ruishanio.taskpilot.core.enums.ExecutorRouteStrategyEnum
+import com.ruishanio.taskpilot.core.enums.MisfireStrategyEnum
+import com.ruishanio.taskpilot.core.enums.ScheduleTypeEnum
 import com.ruishanio.taskpilot.core.glue.GlueTypeEnum
 import com.ruishanio.taskpilot.core.openapi.model.AutoRegisterRequest
 import com.ruishanio.taskpilot.tool.core.StringTool
@@ -163,13 +167,13 @@ class TaskPilotAutoRegisterService {
             jobDesc = if (StringTool.isNotBlank(task.jobDesc)) task.jobDesc!!.trim() else task.executorHandler!!.trim()
             author = if (StringTool.isNotBlank(task.author)) task.author!!.trim() else SYSTEM_OPERATOR
             alarmEmail = task.alarmEmail
-            scheduleType = defaultIfBlank(task.scheduleType, "CRON")
+            scheduleType = defaultEnum(task.scheduleType, ScheduleTypeEnum.CRON)
             scheduleConf = if (StringTool.isNotBlank(task.scheduleConf)) task.scheduleConf!!.trim() else ""
-            misfireStrategy = defaultIfBlank(task.misfireStrategy, "DO_NOTHING")
-            executorRouteStrategy = defaultIfBlank(task.executorRouteStrategy, "FIRST")
+            misfireStrategy = defaultEnum(task.misfireStrategy, MisfireStrategyEnum.DO_NOTHING)
+            executorRouteStrategy = defaultEnum(task.executorRouteStrategy, ExecutorRouteStrategyEnum.FIRST)
             executorHandler = task.executorHandler!!.trim()
             executorParam = task.executorParam
-            executorBlockStrategy = defaultIfBlank(task.executorBlockStrategy, "SERIAL_EXECUTION")
+            executorBlockStrategy = defaultEnum(task.executorBlockStrategy, ExecutorBlockStrategyEnum.SERIAL_EXECUTION)
             executorTimeout = task.executorTimeout
             executorFailRetryCount = task.executorFailRetryCount
             glueType = GlueTypeEnum.BEAN.name
@@ -242,15 +246,14 @@ class TaskPilotAutoRegisterService {
     private fun safeTasks(tasks: List<AutoRegisterRequest.Task>?): List<AutoRegisterRequest.Task> = tasks ?: emptyList()
 
     /**
-     * 统一处理可为空字符串的默认值回退。
+     * 自动注册里的枚举字段允许缺省，统一在这里回退到平台默认值。
      */
-    private fun defaultIfBlank(value: String?, defaultValue: String): String =
-        if (StringTool.isNotBlank(value)) value!!.trim() else defaultValue
+    private fun <T : Enum<T>> defaultEnum(value: T?, defaultValue: T): T = value ?: defaultValue
 
     /**
-     * 简单字符串对比同时兼容 null 场景。
+     * 简单值对比同时兼容 null 场景，便于统一比较字符串与枚举字段。
      */
-    private fun equalsNullable(left: String?, right: String?): Boolean = left == right
+    private fun equalsNullable(left: Any?, right: Any?): Boolean = left == right
 
     companion object {
         private val logger = LoggerFactory.getLogger(TaskPilotAutoRegisterService::class.java)

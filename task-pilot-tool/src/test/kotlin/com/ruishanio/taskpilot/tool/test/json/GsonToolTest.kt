@@ -85,7 +85,13 @@ class GsonToolTest {
         val data2 = GsonTool.fromJsonElement(data1, Response::class.java, List::class.java) as Response<List<Demo>>
         logger.info("data2 = {}", data2)
 
-        assertEquals(json, GsonTool.toJson(data2))
+        // 这里故意只传原始 `List` 类型，Gson 会把内部对象退化成 Map，并把数字按 Double 读取。
+        @Suppress("UNCHECKED_CAST")
+        val itemList = data2.data as List<Map<String, Any>>
+        assertEquals("abc", itemList[0]["arg1"])
+        assertEquals(100.0, itemList[0]["arg2"])
+        assertEquals("def", itemList[1]["arg1"])
+        assertEquals(200.0, itemList[1]["arg2"])
     }
 
     /**

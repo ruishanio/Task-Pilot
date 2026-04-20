@@ -1,11 +1,12 @@
 package com.ruishanio.taskpilot.tool.test.captcha
 
 import com.ruishanio.taskpilot.tool.captcha.CaptchaTool
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
 import java.awt.Color
 import java.awt.Font
-import java.io.FileOutputStream
+import java.io.ByteArrayOutputStream
 import javax.imageio.ImageIO
 
 /**
@@ -20,7 +21,7 @@ class CaptchaToolTest {
         logger.info("text: {}", textResult.getText())
 
         val image = captchaTool.createImage(textResult)
-        ImageIO.write(image, "png", FileOutputStream("/Users/admin/Downloads/captcha/captcha-1.png"))
+        assertFalse(renderPng(image).isEmpty())
     }
 
     @Test
@@ -64,7 +65,7 @@ class CaptchaToolTest {
         logger.info("result: {}", textResult.getResult())
 
         val image = captchaTool.createImage(textResult)
-        ImageIO.write(image, "png", FileOutputStream("/Users/admin/Downloads/captcha/captcha-2.png"))
+        assertFalse(renderPng(image).isEmpty())
     }
 
     @Test
@@ -76,7 +77,7 @@ class CaptchaToolTest {
         logger.info("result: {}", textResult.getResult())
 
         val image = captchaTool.createImage(textResult)
-        ImageIO.write(image, "png", FileOutputStream("/Users/admin/Downloads/captcha/captcha-3.png"))
+        assertFalse(renderPng(image).isEmpty())
     }
 
     @Test
@@ -84,11 +85,7 @@ class CaptchaToolTest {
         repeat(10) { index ->
             val captchaTool = CaptchaTool.build().setTextCreator(CaptchaTool.ArithmeticTextCreator())
             val textResult = captchaTool.createText()
-            ImageIO.write(
-                captchaTool.createImage(textResult),
-                "png",
-                FileOutputStream("/Users/admin/Downloads/captcha/captcha-4-$index.png"),
-            )
+            assertFalse(renderPng(captchaTool.createImage(textResult)).isEmpty(), "captcha-4-$index should be writable")
         }
     }
 
@@ -101,7 +98,7 @@ class CaptchaToolTest {
         logger.info("result: {}", textResult.getResult())
 
         val image = captchaTool.createImage(textResult)
-        ImageIO.write(image, "png", FileOutputStream("/Users/admin/Downloads/captcha/captcha-5.png"))
+        assertFalse(renderPng(image).isEmpty())
     }
 
     @Test
@@ -114,7 +111,16 @@ class CaptchaToolTest {
         logger.info("result: {}", textResult.getResult())
 
         val image = captchaTool.createImage(textResult)
-        ImageIO.write(image, "png", FileOutputStream("/Users/admin/Downloads/captcha/captcha-6.png"))
+        assertFalse(renderPng(image).isEmpty())
+    }
+
+    /**
+     * 改为写入内存字节流，避免测试依赖开发机的固定目录结构。
+     */
+    private fun renderPng(image: java.awt.image.BufferedImage): ByteArray {
+        val outputStream = ByteArrayOutputStream()
+        ImageIO.write(image, "png", outputStream)
+        return outputStream.toByteArray()
     }
 
     companion object {

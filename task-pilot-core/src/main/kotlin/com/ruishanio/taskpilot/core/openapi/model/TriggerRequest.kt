@@ -1,5 +1,6 @@
 package com.ruishanio.taskpilot.core.openapi.model
 
+import com.ruishanio.taskpilot.core.enums.ExecutorBlockStrategyEnum
 import java.io.Serializable
 
 /**
@@ -15,7 +16,10 @@ data class TriggerRequest(
      */
     var executorHandler: String? = null,
     var executorParams: String? = null,
-    var executorBlockStrategy: String? = null,
+    /**
+     * 当同一任务线程已在执行时，执行器如何处理本次触发请求。
+     */
+    var executorBlockStrategy: ExecutorBlockStrategyEnum? = null,
     var executorTimeout: Int = 0,
     /**
      * 执行日志定位信息。

@@ -21,6 +21,16 @@ class HexToolTest {
         Assertions.assertEquals(input, input2)
     }
 
+    @Test
+    fun shouldSupportUppercaseAndLowercaseHexInput() {
+        // 回归测试：十六进制字符解码需要同时兼容大小写输入。
+        val lowercaseHex = "7461736b2d70696c6f742d746f6f6c"
+        val uppercaseHex = lowercaseHex.uppercase()
+
+        Assertions.assertEquals("task-pilot-tool", HexTool.fromHex(lowercaseHex))
+        Assertions.assertEquals("task-pilot-tool", HexTool.fromHex(uppercaseHex))
+    }
+
     companion object {
         private val logger = LoggerFactory.getLogger(HexToolTest::class.java)
     }

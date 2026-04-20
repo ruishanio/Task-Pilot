@@ -12,14 +12,12 @@ import com.ruishanio.taskpilot.admin.model.TaskPilotInfo
 import com.ruishanio.taskpilot.admin.model.TaskPilotLogReport
 import com.ruishanio.taskpilot.admin.scheduler.config.TaskPilotAdminBootstrap
 import com.ruishanio.taskpilot.admin.scheduler.cron.CronExpression
-import com.ruishanio.taskpilot.admin.scheduler.misfire.MisfireStrategyEnum
-import com.ruishanio.taskpilot.admin.scheduler.route.ExecutorRouteStrategyEnum
 import com.ruishanio.taskpilot.admin.scheduler.thread.JobScheduleHelper
 import com.ruishanio.taskpilot.admin.scheduler.trigger.TriggerTypeEnum
-import com.ruishanio.taskpilot.admin.scheduler.type.ScheduleTypeEnum
+import com.ruishanio.taskpilot.admin.scheduler.type.toScheduleType
 import com.ruishanio.taskpilot.admin.service.TaskPilotService
 import com.ruishanio.taskpilot.admin.util.JobGroupPermissionUtil
-import com.ruishanio.taskpilot.core.constant.ExecutorBlockStrategyEnum
+import com.ruishanio.taskpilot.core.enums.ScheduleTypeEnum
 import com.ruishanio.taskpilot.core.glue.GlueTypeEnum
 import com.ruishanio.taskpilot.tool.core.DateTool
 import com.ruishanio.taskpilot.tool.core.StringTool
@@ -123,8 +121,7 @@ class TaskPilotServiceImpl : TaskPilotService {
             return Response.ofFail("请输入负责人")
         }
 
-        val scheduleTypeEnum = ScheduleTypeEnum.match(jobInfo.scheduleType, null)
-            ?: return Response.ofFail("调度类型非法")
+        val scheduleTypeEnum = jobInfo.scheduleType ?: return Response.ofFail("调度类型非法")
         val triggerValidResult = validSchedule(jobInfo, scheduleTypeEnum)
         if (!triggerValidResult.isSuccess) {
             return triggerValidResult
@@ -151,7 +148,7 @@ class TaskPilotServiceImpl : TaskPilotService {
             jobInfo.scheduleConf == existsJobInfo.scheduleConf
         if (existsJobInfo.triggerStatus == TriggerStatus.RUNNING.value && !scheduleDataNotChanged) {
             try {
-                val nextValidTime = scheduleTypeEnum.scheduleType.generateNextTriggerTime(
+                val nextValidTime = scheduleTypeEnum.toScheduleType().generateNextTriggerTime(
                     jobInfo,
                     Date(System.currentTimeMillis() + JobScheduleHelper.PRE_READ_MS)
                 ) ?: return Response.ofFail("调度类型非法")
@@ -215,14 +212,13 @@ class TaskPilotServiceImpl : TaskPilotService {
             return Response.ofFail("权限拦截")
         }
 
-        val scheduleTypeEnum = ScheduleTypeEnum.match(taskPilotInfo.scheduleType, ScheduleTypeEnum.NONE)
-            ?: ScheduleTypeEnum.NONE
+        val scheduleTypeEnum = taskPilotInfo.scheduleType ?: ScheduleTypeEnum.NONE
         if (scheduleTypeEnum == ScheduleTypeEnum.NONE) {
             return Response.ofFail("当前调度类型禁止启动")
         }
 
         val nextTriggerTime = try {
-            val nextValidTime = scheduleTypeEnum.scheduleType.generateNextTriggerTime(
+            val nextValidTime = scheduleTypeEnum.toScheduleType().generateNextTriggerTime(
                 taskPilotInfo,
                 Date(System.currentTimeMillis() + JobScheduleHelper.PRE_READ_MS)
             ) ?: return Response.ofFail("调度类型非法")
@@ -383,8 +379,7 @@ class TaskPilotServiceImpl : TaskPilotService {
             return Response.ofFail("请输入负责人")
         }
 
-        val scheduleTypeEnum = ScheduleTypeEnum.match(jobInfo.scheduleType, null)
-            ?: return Response.ofFail("调度类型非法")
+        val scheduleTypeEnum = jobInfo.scheduleType ?: return Response.ofFail("调度类型非法")
         return validSchedule(jobInfo, scheduleTypeEnum)
     }
 
@@ -439,13 +434,13 @@ class TaskPilotServiceImpl : TaskPilotService {
      * 高级配置项按枚举名做校验，保证数据库中只落已知策略值。
      */
     private fun validAdvanced(jobInfo: TaskPilotInfo): Response<String> {
-        if (ExecutorRouteStrategyEnum.match(jobInfo.executorRouteStrategy, null) == null) {
+        if (jobInfo.executorRouteStrategy == null) {
             return Response.ofFail("路由策略非法")
         }
-        if (MisfireStrategyEnum.match(jobInfo.misfireStrategy, null) == null) {
+        if (jobInfo.misfireStrategy == null) {
             return Response.ofFail("调度过期策略非法")
         }
-        if (ExecutorBlockStrategyEnum.match(jobInfo.executorBlockStrategy, null) == null) {
+        if (jobInfo.executorBlockStrategy == null) {
             return Response.ofFail("阻塞处理策略非法")
         }
         return Response.ofSuccess()

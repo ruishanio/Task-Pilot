@@ -4,6 +4,7 @@ import com.ruishanio.taskpilot.admin.scheduler.config.TaskPilotAdminBootstrap
 import com.ruishanio.taskpilot.tool.core.DateTool
 import java.util.Date
 import java.util.concurrent.TimeUnit
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
 import org.springframework.boot.test.context.SpringBootTest
@@ -12,8 +13,11 @@ import org.springframework.transaction.support.DefaultTransactionDefinition
 
 /**
  * 覆盖调度锁的并发竞争场景。
+ *
+ * 该用例本质上是人工压测脚本，不适合作为自动化回归测试默认执行。
  */
 @SpringBootTest
+@Disabled("手动数据库锁竞争压测，不纳入自动化测试默认链路")
 class JobScheduleTest {
     @Test
     @Throws(InterruptedException::class)

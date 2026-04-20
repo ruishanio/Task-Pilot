@@ -1,19 +1,23 @@
-package com.ruishanio.taskpilot.admin.scheduler.misfire
-
-import com.ruishanio.taskpilot.admin.scheduler.misfire.strategy.MisfireDoNothing
-import com.ruishanio.taskpilot.admin.scheduler.misfire.strategy.MisfireFireOnceNow
+package com.ruishanio.taskpilot.core.enums
 
 /**
  * 调度失火策略枚举。
- *
- * 通过枚举本身收口策略名称与处理器实例，避免调度层散落字符串分支。
+ * 统一收口到 core/enums 下，避免不同模块出现同义但不同名的策略类型。
  */
 enum class MisfireStrategyEnum(
-    val title: String,
-    val misfireHandler: MisfireHandler
+    /**
+     * 前端展示文案。
+     */
+    val title: String
 ) {
-    DO_NOTHING("忽略", MisfireDoNothing()),
-    FIRE_ONCE_NOW("立即执行一次", MisfireFireOnceNow());
+    /**
+     * 跳过当前失火窗口，不做额外补偿。
+     */
+    DO_NOTHING("忽略"),
+    /**
+     * 发现失火后立即补触发一次。
+     */
+    FIRE_ONCE_NOW("立即执行一次");
 
     companion object {
         /**

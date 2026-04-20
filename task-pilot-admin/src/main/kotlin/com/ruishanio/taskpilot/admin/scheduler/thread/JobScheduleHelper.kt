@@ -3,9 +3,11 @@ package com.ruishanio.taskpilot.admin.scheduler.thread
 import com.ruishanio.taskpilot.admin.constant.TriggerStatus
 import com.ruishanio.taskpilot.admin.model.TaskPilotInfo
 import com.ruishanio.taskpilot.admin.scheduler.config.TaskPilotAdminBootstrap
-import com.ruishanio.taskpilot.admin.scheduler.misfire.MisfireStrategyEnum
+import com.ruishanio.taskpilot.admin.scheduler.misfire.toMisfireHandler
 import com.ruishanio.taskpilot.admin.scheduler.trigger.TriggerTypeEnum
-import com.ruishanio.taskpilot.admin.scheduler.type.ScheduleTypeEnum
+import com.ruishanio.taskpilot.admin.scheduler.type.toScheduleType
+import com.ruishanio.taskpilot.core.enums.MisfireStrategyEnum
+import com.ruishanio.taskpilot.core.enums.ScheduleTypeEnum
 import com.ruishanio.taskpilot.tool.core.CollectionTool
 import com.ruishanio.taskpilot.tool.core.MapTool
 import org.slf4j.LoggerFactory
@@ -67,11 +69,8 @@ class JobScheduleHelper {
                     if (CollectionTool.isNotEmpty(scheduleList)) {
                         for (jobInfo in scheduleList) {
                             if (nowTime > jobInfo.triggerNextTime + PRE_READ_MS) {
-                                val misfireStrategyEnum = MisfireStrategyEnum.match(
-                                    jobInfo.misfireStrategy,
-                                    MisfireStrategyEnum.DO_NOTHING
-                                ) ?: MisfireStrategyEnum.DO_NOTHING
-                                misfireStrategyEnum.misfireHandler.handle(jobInfo.id)
+                                val misfireStrategyEnum = jobInfo.misfireStrategy ?: MisfireStrategyEnum.DO_NOTHING
+                                misfireStrategyEnum.toMisfireHandler().handle(jobInfo.id)
                                 refreshNextTriggerTime(jobInfo, Date())
                             } else if (nowTime > jobInfo.triggerNextTime) {
                                 TaskPilotAdminBootstrap.instance.jobTriggerPoolHelper.trigger(
@@ -196,9 +195,8 @@ class JobScheduleHelper {
      */
     private fun refreshNextTriggerTime(jobInfo: TaskPilotInfo, fromTime: Date) {
         try {
-            val scheduleTypeEnum = ScheduleTypeEnum.match(jobInfo.scheduleType, ScheduleTypeEnum.NONE)
-                ?: ScheduleTypeEnum.NONE
-            val nextTriggerTime = scheduleTypeEnum.scheduleType.generateNextTriggerTime(jobInfo, fromTime)
+            val scheduleTypeEnum = jobInfo.scheduleType ?: ScheduleTypeEnum.NONE
+            val nextTriggerTime = scheduleTypeEnum.toScheduleType().generateNextTriggerTime(jobInfo, fromTime)
 
             if (nextTriggerTime != null) {
                 jobInfo.triggerStatus = -1

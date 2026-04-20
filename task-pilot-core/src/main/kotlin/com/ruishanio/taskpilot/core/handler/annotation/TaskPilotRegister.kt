@@ -1,5 +1,9 @@
 package com.ruishanio.taskpilot.core.handler.annotation
 
+import com.ruishanio.taskpilot.core.enums.ExecutorBlockStrategyEnum
+import com.ruishanio.taskpilot.core.enums.ExecutorRouteStrategyEnum
+import com.ruishanio.taskpilot.core.enums.MisfireStrategyEnum
+import com.ruishanio.taskpilot.core.enums.ScheduleTypeEnum
 import java.lang.annotation.Inherited
 
 /**
@@ -29,7 +33,7 @@ annotation class TaskPilotRegister(
     /**
      * 自动注册到调度中心时使用的调度类型。
      */
-    val scheduleType: String = "CRON",
+    val scheduleType: ScheduleTypeEnum = ScheduleTypeEnum.CRON,
     /**
      * 自动注册到调度中心时使用的调度配置。
      */
@@ -37,11 +41,11 @@ annotation class TaskPilotRegister(
     /**
      * 自动注册到调度中心时使用的调度过期策略。
      */
-    val misfireStrategy: String = "DO_NOTHING",
+    val misfireStrategy: MisfireStrategyEnum = MisfireStrategyEnum.DO_NOTHING,
     /**
      * 自动注册到调度中心时使用的路由策略。
      */
-    val executorRouteStrategy: String = "FIRST",
+    val executorRouteStrategy: ExecutorRouteStrategyEnum = ExecutorRouteStrategyEnum.FIRST,
     /**
      * 自动注册到调度中心时使用的默认任务参数。
      */
@@ -49,7 +53,7 @@ annotation class TaskPilotRegister(
     /**
      * 自动注册到调度中心时使用的阻塞策略。
      */
-    val executorBlockStrategy: String = "SERIAL_EXECUTION",
+    val executorBlockStrategy: ExecutorBlockStrategyEnum = ExecutorBlockStrategyEnum.SERIAL_EXECUTION,
     /**
      * 自动注册到调度中心时使用的执行超时时间，单位秒。
      */

@@ -1,7 +1,8 @@
-package com.ruishanio.taskpilot.core.constant
+package com.ruishanio.taskpilot.core.enums
 
 /**
  * 执行器阻塞策略枚举。
+ * 统一收口到 core/enums 下，便于与 admin 模块中的执行策略实现区分。
  */
 enum class ExecutorBlockStrategyEnum(
     /**

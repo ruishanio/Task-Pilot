@@ -1,10 +1,12 @@
 package com.ruishanio.taskpilot.admin.controller
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.ruishanio.taskpilot.admin.auth.constant.AuthConst
 import jakarta.servlet.http.Cookie
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.slf4j.LoggerFactory
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MvcResult
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
@@ -12,10 +14,11 @@ import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 
 /**
- * 验证任务分页接口在登录态下可访问。
+ * 覆盖任务管理控制器的基础登录态访问与调度时间试算能力。
  */
 class JobInfoControllerTest : AbstractSpringMvcTest() {
     private lateinit var cookie: Cookie
+    private val objectMapper = ObjectMapper()
 
     @BeforeEach
     @Throws(Exception::class)
@@ -33,7 +36,7 @@ class JobInfoControllerTest : AbstractSpringMvcTest() {
 
     @Test
     @Throws(Exception::class)
-    fun testAdd() {
+    fun pageListShouldReturnSuccessUnderLoginContext() {
         val parameters: MultiValueMap<String, String> = LinkedMultiValueMap()
         parameters.add("jobGroup", "1")
         parameters.add("triggerStatus", "-1")
@@ -47,10 +50,28 @@ class JobInfoControllerTest : AbstractSpringMvcTest() {
                         .cookie(cookie)
                 ).andReturn()
 
-        logger.info(ret.response.contentAsString)
+        val body = objectMapper.readTree(ret.response.contentAsString)
+        assertEquals(200, body["code"].asInt())
+        assertTrue(body["data"].has("data"))
+        assertTrue(body["data"].has("total"))
     }
 
-    companion object {
-        private val logger = LoggerFactory.getLogger(JobInfoControllerTest::class.java)
+    @Test
+    @Throws(Exception::class)
+    fun nextTriggerTimeShouldAcceptEnumParameterAndReturnFiveSchedulePoints() {
+        val ret =
+            mockMvc
+                .perform(
+                    post("/api/manage/jobinfo/nextTriggerTime")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .param("scheduleType", "FIX_RATE")
+                        .param("scheduleConf", "5")
+                        .cookie(cookie)
+                ).andReturn()
+
+        val body = objectMapper.readTree(ret.response.contentAsString)
+        assertEquals(200, body["code"].asInt())
+        assertTrue(body["data"].isArray)
+        assertEquals(5, body["data"].size())
     }
 }

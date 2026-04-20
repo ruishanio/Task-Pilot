@@ -15,14 +15,14 @@
 	    <result column="author" property="author" />
 	    <result column="alarm_email" property="alarmEmail" />
 
-		<result column="schedule_type" property="scheduleType" />
+		<result column="schedule_type" property="scheduleType" javaType="com.ruishanio.taskpilot.core.enums.ScheduleTypeEnum" />
 		<result column="schedule_conf" property="scheduleConf" />
-		<result column="misfire_strategy" property="misfireStrategy" />
+		<result column="misfire_strategy" property="misfireStrategy" javaType="com.ruishanio.taskpilot.core.enums.MisfireStrategyEnum" />
 
-		<result column="executor_route_strategy" property="executorRouteStrategy" />
+		<result column="executor_route_strategy" property="executorRouteStrategy" javaType="com.ruishanio.taskpilot.core.enums.ExecutorRouteStrategyEnum" />
 		<result column="executor_handler" property="executorHandler" />
 	    <result column="executor_param" property="executorParam" />
-		<result column="executor_block_strategy" property="executorBlockStrategy" />
+		<result column="executor_block_strategy" property="executorBlockStrategy" javaType="com.ruishanio.taskpilot.core.enums.ExecutorBlockStrategyEnum" />
 		<result column="executor_timeout" property="executorTimeout" />
 		<result column="executor_fail_retry_count" property="executorFailRetryCount" />
 

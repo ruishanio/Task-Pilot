@@ -69,21 +69,40 @@ interface JobInfoMeta {
   misfireStrategyOptions: OptionItem[];
 }
 
+// 与后端 `ScheduleTypeEnum` 对齐，避免页面继续把任意字符串当成合法调度类型。
+type ScheduleType = 'NONE' | 'CRON' | 'FIX_RATE';
+// 与后端 `ExecutorRouteStrategyEnum` 对齐，限制表单与表格里的策略值范围。
+type ExecutorRouteStrategy =
+  | 'FIRST'
+  | 'LAST'
+  | 'ROUND'
+  | 'RANDOM'
+  | 'CONSISTENT_HASH'
+  | 'LEAST_FREQUENTLY_USED'
+  | 'LEAST_RECENTLY_USED'
+  | 'FAILOVER'
+  | 'BUSYOVER'
+  | 'SHARDING_BROADCAST';
+// 与后端 `MisfireStrategyEnum` 对齐，避免前端误传不存在的失火策略。
+type MisfireStrategy = 'DO_NOTHING' | 'FIRE_ONCE_NOW';
+// 与后端 `ExecutorBlockStrategyEnum` 对齐，约束执行器阻塞策略的可选值。
+type ExecutorBlockStrategy = 'SERIAL_EXECUTION' | 'DISCARD_LATER' | 'COVER_EARLY';
+
 interface JobInfoRow {
   id: number;
   jobGroup: number;
   jobDesc: string;
   author?: string;
   alarmEmail?: string;
-  scheduleType?: string;
+  scheduleType?: ScheduleType;
   scheduleConf?: string;
   glueType?: string;
   executorHandler?: string;
   executorParam?: string;
-  executorRouteStrategy?: string;
+  executorRouteStrategy?: ExecutorRouteStrategy;
   childJobId?: string;
-  misfireStrategy?: string;
-  executorBlockStrategy?: string;
+  misfireStrategy?: MisfireStrategy;
+  executorBlockStrategy?: ExecutorBlockStrategy;
   executorTimeout?: number;
   executorFailRetryCount?: number;
   glueRemark?: string;

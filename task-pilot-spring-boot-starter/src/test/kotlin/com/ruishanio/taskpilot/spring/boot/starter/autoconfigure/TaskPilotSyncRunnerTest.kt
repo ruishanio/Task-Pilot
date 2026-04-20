@@ -95,13 +95,13 @@ class TaskPilotSyncRunnerTest {
             taskDesc = "显式任务",
             author = "测试负责人",
             alarmEmail = "alarm@test.com",
-            scheduleType = ScheduleTypeEnum.FIX_RATE,
-            scheduleConf = "15",
-            misfireStrategy = MisfireStrategyEnum.FIRE_ONCE_NOW,
-            executorRouteStrategy = ExecutorRouteStrategyEnum.SHARDING_BROADCAST,
-            executorParam = "payload",
-            executorBlockStrategy = ExecutorBlockStrategyEnum.COVER_EARLY,
-            executorTimeout = 12,
+            type = ScheduleTypeEnum.FIX_RATE,
+            conf = "15",
+            misfire = MisfireStrategyEnum.FIRE_ONCE_NOW,
+            route = ExecutorRouteStrategyEnum.SHARDING_BROADCAST,
+            param = "payload",
+            block = ExecutorBlockStrategyEnum.COVER_EARLY,
+            timeout = 12,
             executorFailRetryCount = 2,
             childTaskId = "3,4"
         )
@@ -109,13 +109,13 @@ class TaskPilotSyncRunnerTest {
         }
 
         @TaskPilot("defaultHandler")
-        @TaskPilotRegister(scheduleConf = "0/10 * * * * ?")
+        @TaskPilotRegister(conf = "0/10 * * * * ?")
         fun defaultJob() {
         }
 
         @TaskPilot("multiHandler")
-        @TaskPilotRegister(taskName = "multi-task-a", taskDesc = "多注册任务A", scheduleConf = "5")
-        @TaskPilotRegister(taskName = "multi-task-b", taskDesc = "多注册任务B", scheduleConf = "10")
+        @TaskPilotRegister(taskName = "multi-task-a", taskDesc = "多注册任务A", conf = "5")
+        @TaskPilotRegister(taskName = "multi-task-b", taskDesc = "多注册任务B", conf = "10")
         fun multiJob() {
         }
     }

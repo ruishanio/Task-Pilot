@@ -19,7 +19,7 @@ import kotlin.jvm.JvmRepeatable
 @Target(AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.RUNTIME)
 @Inherited
-@JvmRepeatable(TaskPilotRegisters::class)
+@Repeatable
 annotation class TaskPilotRegister(
     /**
      * 自动注册到调度中心时使用的任务名称。
@@ -43,31 +43,31 @@ annotation class TaskPilotRegister(
     /**
      * 自动注册到调度中心时使用的调度类型。
      */
-    val scheduleType: ScheduleTypeEnum = ScheduleTypeEnum.CRON,
+    val type: ScheduleTypeEnum = ScheduleTypeEnum.CRON,
     /**
      * 自动注册到调度中心时使用的调度配置。
      */
-    val scheduleConf: String = "",
+    val conf: String = "",
     /**
      * 自动注册到调度中心时使用的调度过期策略。
      */
-    val misfireStrategy: MisfireStrategyEnum = MisfireStrategyEnum.DO_NOTHING,
+    val misfire: MisfireStrategyEnum = MisfireStrategyEnum.DO_NOTHING,
     /**
      * 自动注册到调度中心时使用的路由策略。
      */
-    val executorRouteStrategy: ExecutorRouteStrategyEnum = ExecutorRouteStrategyEnum.FIRST,
+    val route: ExecutorRouteStrategyEnum = ExecutorRouteStrategyEnum.FIRST,
     /**
      * 自动注册到调度中心时使用的默认任务参数。
      */
-    val executorParam: String = "",
+    val param: String = "",
     /**
      * 自动注册到调度中心时使用的阻塞策略。
      */
-    val executorBlockStrategy: ExecutorBlockStrategyEnum = ExecutorBlockStrategyEnum.SERIAL_EXECUTION,
+    val block: ExecutorBlockStrategyEnum = ExecutorBlockStrategyEnum.SERIAL_EXECUTION,
     /**
      * 自动注册到调度中心时使用的执行超时时间，单位秒。
      */
-    val executorTimeout: Int = 0,
+    val timeout: Int = 0,
     /**
      * 自动注册到调度中心时使用的失败重试次数。
      */

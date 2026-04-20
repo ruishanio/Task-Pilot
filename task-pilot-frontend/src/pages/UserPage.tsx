@@ -54,7 +54,7 @@ function UserPage() {
   async function loadData(customFilters = filters, customPagination = pagination) {
     try {
       setLoading(true);
-      const response = await userApi.pageList({
+      const response = await userApi.page({
         offset: (customPagination.current - 1) * customPagination.pageSize,
         pagesize: customPagination.pageSize,
         username: customFilters.username,

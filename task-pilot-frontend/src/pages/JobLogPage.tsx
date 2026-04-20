@@ -206,7 +206,7 @@ function JobLogPage() {
 
     try {
       setLoading(true);
-      const response = await jobLogApi.pageList({
+      const response = await jobLogApi.page({
         offset: (customPagination.current - 1) * customPagination.pageSize,
         pagesize: customPagination.pageSize,
         executorId: customFilters.executorId,

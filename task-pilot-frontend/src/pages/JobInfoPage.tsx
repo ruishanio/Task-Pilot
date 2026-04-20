@@ -198,7 +198,7 @@ function JobInfoPage() {
   async function loadData(customFilters = filters, customPagination = pagination) {
     try {
       setLoading(true);
-      const response = await jobInfoApi.pageList({
+      const response = await jobInfoApi.page({
         offset: (customPagination.current - 1) * customPagination.pageSize,
         pagesize: customPagination.pageSize,
         executorId: customFilters.executorId,

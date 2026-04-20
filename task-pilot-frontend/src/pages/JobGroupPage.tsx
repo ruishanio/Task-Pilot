@@ -36,7 +36,7 @@ function JobGroupPage() {
   async function loadData(customFilters = filters, customPagination = pagination) {
     try {
       setLoading(true);
-      const response = await jobGroupApi.pageList({
+      const response = await jobGroupApi.page({
         offset: (customPagination.current - 1) * customPagination.pageSize,
         pagesize: customPagination.pageSize,
         appname: customFilters.appname,

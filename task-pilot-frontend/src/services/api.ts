@@ -20,7 +20,7 @@ export const authApi = {
 };
 
 export const jobGroupApi = {
-  pageList: (params?: Record<string, unknown>) =>
+  page: (params?: Record<string, unknown>) =>
     http.get<AppResponse>(`${manageApiPrefix}/executor/page`, { params }),
   create: (payload: FormBodyRecord) =>
     http.formPost<AppResponse>(`${manageApiPrefix}/executor/insert`, payload),
@@ -35,7 +35,7 @@ export const jobGroupApi = {
 export const jobInfoApi = {
   meta: (params?: Record<string, unknown>) =>
     http.get<AppResponse>(`${manageApiPrefix}/task_info/meta`, { params }),
-  pageList: (params?: Record<string, unknown>) =>
+  page: (params?: Record<string, unknown>) =>
     http.get<AppResponse>(`${manageApiPrefix}/task_info/page`, { params }),
   create: (payload: FormBodyRecord) =>
     http.formPost<AppResponse>(`${manageApiPrefix}/task_info/insert`, payload),
@@ -56,7 +56,7 @@ export const jobInfoApi = {
 export const jobLogApi = {
   meta: (params?: Record<string, unknown>) =>
     http.get<AppResponse>(`${manageApiPrefix}/task_log/meta`, { params }),
-  pageList: (params?: Record<string, unknown>) =>
+  page: (params?: Record<string, unknown>) =>
     http.get<AppResponse>(`${manageApiPrefix}/task_log/page`, { params }),
   kill: (id: number | string) =>
     http.formPost<AppResponse>(`${manageApiPrefix}/task_log/log_kill`, { id }),
@@ -68,7 +68,7 @@ export const jobLogApi = {
 
 export const userApi = {
   meta: () => http.get<AppResponse>(`${manageApiPrefix}/user/meta`),
-  pageList: (params?: Record<string, unknown>) =>
+  page: (params?: Record<string, unknown>) =>
     http.get<AppResponse>(`${manageApiPrefix}/user/page`, { params }),
   create: (payload: FormBodyRecord) =>
     http.formPost<AppResponse>(`${manageApiPrefix}/user/insert`, payload),

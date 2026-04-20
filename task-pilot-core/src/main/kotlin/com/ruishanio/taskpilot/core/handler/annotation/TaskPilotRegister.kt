@@ -5,6 +5,7 @@ import com.ruishanio.taskpilot.core.enums.ExecutorRouteStrategyEnum
 import com.ruishanio.taskpilot.core.enums.MisfireStrategyEnum
 import com.ruishanio.taskpilot.core.enums.ScheduleTypeEnum
 import java.lang.annotation.Inherited
+import kotlin.jvm.JvmRepeatable
 
 /**
  * TaskPilot 自动注册注解。
@@ -12,12 +13,21 @@ import java.lang.annotation.Inherited
  * 设计意图：
  * 1、把调度中心注册元数据与执行方法定义解耦；
  * 2、只有同时声明 `@TaskPilot` 与本注解的方法，才会参与自动同步；
- * 3、重启时以代码中的注解配置为准，保证任务定义可随代码演进。
+ * 3、同一个方法可以声明多份注册配置，以同一份执行逻辑派生多个任务；
+ * 4、重启时以代码中的注解配置为准，保证任务定义可随代码演进。
  */
 @Target(AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.RUNTIME)
 @Inherited
+@JvmRepeatable(TaskPilotRegisters::class)
 annotation class TaskPilotRegister(
+    /**
+     * 自动注册到调度中心时使用的任务名称。
+     *
+     * 该字段是同步匹配的幂等键，留空时回退为 `@TaskPilot.value`。
+     * 当同一个方法声明多个 `@TaskPilotRegister` 时，必须显式指定该值。
+     */
+    val taskName: String = "",
     /**
      * 自动注册到调度中心时使用的任务描述。
      */

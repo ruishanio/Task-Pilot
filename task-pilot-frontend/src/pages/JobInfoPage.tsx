@@ -91,6 +91,7 @@ type ExecutorBlockStrategy = 'SERIAL_EXECUTION' | 'DISCARD_LATER' | 'COVER_EARLY
 interface JobInfoRow {
   id: number;
   jobGroup: number;
+  taskName: string;
   jobDesc: string;
   author?: string;
   alarmEmail?: string;
@@ -128,6 +129,7 @@ function JobInfoPage() {
   const [filters, setFilters] = useState({
     jobGroup: -1,
     triggerStatus: '-1',
+    taskName: '',
     jobDesc: '',
     executorHandler: '',
     author: '',
@@ -201,6 +203,7 @@ function JobInfoPage() {
         pagesize: customPagination.pageSize,
         jobGroup: customFilters.jobGroup,
         triggerStatus: customFilters.triggerStatus,
+        taskName: customFilters.taskName,
         jobDesc: customFilters.jobDesc,
         executorHandler: customFilters.executorHandler,
         author: customFilters.author,
@@ -237,6 +240,7 @@ function JobInfoPage() {
     form.setFieldsValue({
       id: record.id,
       jobGroup: record.jobGroup,
+      taskName: record.taskName,
       jobDesc: record.jobDesc,
       author: record.author,
       alarmEmail: record.alarmEmail,
@@ -450,6 +454,11 @@ function JobInfoPage() {
         render: (value) => groupMap.get(value) || value,
       },
       {
+        title: '任务名称',
+        dataIndex: 'taskName',
+        width: 180,
+      },
+      {
         title: '任务描述',
         dataIndex: 'jobDesc',
         width: 220,
@@ -534,6 +543,12 @@ function JobInfoPage() {
           />
           <Input
             className="toolbar-grow"
+            placeholder="按任务名称搜索"
+            value={filters.taskName}
+            onChange={(event) => setFilters((previous) => ({ ...previous, taskName: event.target.value }))}
+          />
+          <Input
+            className="toolbar-grow"
             placeholder="按任务描述搜索"
             value={filters.jobDesc}
             onChange={(event) => setFilters((previous) => ({ ...previous, jobDesc: event.target.value }))}
@@ -567,6 +582,7 @@ function JobInfoPage() {
               const nextFilters = {
                 jobGroup: meta.selectedJobGroup,
                 triggerStatus: '-1',
+                taskName: '',
                 jobDesc: '',
                 executorHandler: '',
                 author: '',
@@ -628,14 +644,25 @@ function JobInfoPage() {
               <Select options={meta.groups.map((item) => ({ value: item.id, label: item.title }))} />
             </Form.Item>
             <Form.Item
-              label="任务描述"
-              name="jobDesc"
+              label="任务名称"
+              name="taskName"
               style={{ width: '100%' }}
-              rules={[{ required: true, message: '请输入任务描述' }]}
+              rules={[
+                { required: true, message: '请输入任务名称' },
+                { max: 128, message: '任务名称长度不能超过 128 位' },
+              ]}
             >
-              <Input placeholder="请输入任务描述" />
+              <Input placeholder="请输入任务唯一名称" />
             </Form.Item>
           </Space>
+
+          <Form.Item
+            label="任务描述"
+            name="jobDesc"
+            rules={[{ required: true, message: '请输入任务描述' }]}
+          >
+            <Input placeholder="请输入任务描述" />
+          </Form.Item>
 
           <Space style={{ width: '100%' }} size="middle" align="start">
             <Form.Item

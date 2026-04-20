@@ -71,7 +71,8 @@ class TaskPilotSyncService {
                 continue
             }
 
-            val existsTask = taskInfoMapper.loadByGroupAndExecutorHandler(executor.id, task.executorHandler!!.trim())
+            val taskName = if (StringTool.isNotBlank(task.taskName)) task.taskName!!.trim() else task.executorHandler!!.trim()
+            val existsTask = taskInfoMapper.loadByTaskName(taskName)
             if (existsTask != null) {
                 val expectedTask = buildTaskInfo(executor.id, task).apply {
                     id = existsTask.id
@@ -164,6 +165,7 @@ class TaskPilotSyncService {
     private fun buildTaskInfo(jobGroupId: Int, task: SyncRequest.Task): TaskInfo =
         TaskInfo().apply {
             jobGroup = jobGroupId
+            taskName = if (StringTool.isNotBlank(task.taskName)) task.taskName!!.trim() else task.executorHandler!!.trim()
             jobDesc = if (StringTool.isNotBlank(task.jobDesc)) task.jobDesc!!.trim() else task.executorHandler!!.trim()
             author = if (StringTool.isNotBlank(task.author)) task.author!!.trim() else SYSTEM_OPERATOR
             alarmEmail = task.alarmEmail
@@ -186,7 +188,8 @@ class TaskPilotSyncService {
      * 仅比较同步托管字段，避免无差异更新污染操作日志。
      */
     private fun needsTaskUpdate(existsTask: TaskInfo, expectedTask: TaskInfo): Boolean =
-        !equalsNullable(existsTask.jobDesc, expectedTask.jobDesc) ||
+        !equalsNullable(existsTask.taskName, expectedTask.taskName) ||
+            !equalsNullable(existsTask.jobDesc, expectedTask.jobDesc) ||
             !equalsNullable(existsTask.author, expectedTask.author) ||
             !equalsNullable(existsTask.alarmEmail, expectedTask.alarmEmail) ||
             !equalsNullable(existsTask.scheduleType, expectedTask.scheduleType) ||

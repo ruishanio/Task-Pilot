@@ -70,7 +70,7 @@ class TaskPilotSyncServiceTest {
 
         `when`(executorMapper.loadByAppname("demo-app")).thenReturn(group)
         `when`(registryMapper.findAll(anyInt(), anyObject())).thenReturn(Collections.emptyList())
-        `when`(taskInfoMapper.loadByGroupAndExecutorHandler(11, "demoHandler")).thenReturn(existsTask)
+        `when`(taskInfoMapper.loadByTaskName("demoHandler")).thenReturn(existsTask)
         `when`(taskPilotService.update(anyObject(), anyObject())).thenReturn(Response.ofSuccess<String>())
 
         val response = taskPilotSyncService.sync(request)
@@ -80,6 +80,7 @@ class TaskPilotSyncServiceTest {
         verify(taskPilotService).update(
             argThatObject { jobInfo: TaskInfo ->
                 jobInfo.id == 22 &&
+                    jobInfo.taskName == "demoHandler" &&
                     jobInfo.jobDesc == "任务新描述" &&
                     jobInfo.author == "new-author" &&
                     jobInfo.alarmEmail == "new@test.com" &&
@@ -104,7 +105,7 @@ class TaskPilotSyncServiceTest {
 
         `when`(executorMapper.loadByAppname("demo-app")).thenReturn(group)
         `when`(registryMapper.findAll(anyInt(), anyObject())).thenReturn(Collections.emptyList())
-        `when`(taskInfoMapper.loadByGroupAndExecutorHandler(11, "demoHandler")).thenReturn(existsTask)
+        `when`(taskInfoMapper.loadByTaskName("demoHandler")).thenReturn(existsTask)
 
         val response = taskPilotSyncService.sync(request)
 
@@ -158,6 +159,7 @@ class TaskPilotSyncServiceTest {
         TaskInfo().apply {
             id = 22
             jobGroup = 11
+            taskName = "demoHandler"
             jobDesc = "任务描述"
             author = "new-author"
             alarmEmail = "new@test.com"

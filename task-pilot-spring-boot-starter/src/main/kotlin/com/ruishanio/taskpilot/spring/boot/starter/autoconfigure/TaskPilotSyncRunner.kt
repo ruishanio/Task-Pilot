@@ -59,29 +59,59 @@ class TaskPilotSyncRunner(
         for (definition in TaskPilotMethodScanner.scan(applicationContext, properties.executor.excludedpackage)) {
             val taskPilot = definition.taskPilot()
             // 同步元数据改为独立注解，未声明时不参与同步，避免执行定义与调度元数据耦合。
-            val registerMetadata = AnnotatedElementUtils.findMergedAnnotation(
+            val registerMetadataSet = AnnotatedElementUtils.findMergedRepeatableAnnotations(
                 definition.method(),
                 TaskPilotRegister::class.java
-            ) ?: continue
+            )
+            if (registerMetadataSet.isEmpty()) {
+                continue
+            }
 
-            val task = SyncRequest.Task()
-            task.executorHandler = taskPilot.value
-            task.jobDesc = if (StringTool.isNotBlank(registerMetadata.jobDesc)) registerMetadata.jobDesc.trim() else taskPilot.value
-            task.author = if (StringTool.isNotBlank(registerMetadata.author)) registerMetadata.author.trim() else resolveDefaultTaskAuthor()
-            task.alarmEmail = if (StringTool.isNotBlank(registerMetadata.alarmEmail)) registerMetadata.alarmEmail.trim() else resolveDefaultTaskAlarmEmail()
-            task.scheduleType = registerMetadata.scheduleType
-            task.scheduleConf = registerMetadata.scheduleConf
-            task.misfireStrategy = registerMetadata.misfireStrategy
-            task.executorRouteStrategy = registerMetadata.executorRouteStrategy
-            task.executorParam = registerMetadata.executorParam
-            task.executorBlockStrategy = registerMetadata.executorBlockStrategy
-            task.executorTimeout = registerMetadata.executorTimeout
-            task.executorFailRetryCount = registerMetadata.executorFailRetryCount
-            task.childJobId = registerMetadata.childJobId
-            task.autoStart = registerMetadata.autoStart
-            request.tasks.add(task)
+            val hasMultipleRegisters = registerMetadataSet.size > 1
+            for (registerMetadata in registerMetadataSet) {
+                val taskName = resolveTaskName(registerMetadata, taskPilot.value, hasMultipleRegisters) ?: continue
+                val task = SyncRequest.Task()
+                task.taskName = taskName
+                task.executorHandler = taskPilot.value
+                task.jobDesc = if (StringTool.isNotBlank(registerMetadata.jobDesc)) registerMetadata.jobDesc.trim() else taskPilot.value
+                task.author = if (StringTool.isNotBlank(registerMetadata.author)) registerMetadata.author.trim() else resolveDefaultTaskAuthor()
+                task.alarmEmail = if (StringTool.isNotBlank(registerMetadata.alarmEmail)) registerMetadata.alarmEmail.trim() else resolveDefaultTaskAlarmEmail()
+                task.scheduleType = registerMetadata.scheduleType
+                task.scheduleConf = registerMetadata.scheduleConf
+                task.misfireStrategy = registerMetadata.misfireStrategy
+                task.executorRouteStrategy = registerMetadata.executorRouteStrategy
+                task.executorParam = registerMetadata.executorParam
+                task.executorBlockStrategy = registerMetadata.executorBlockStrategy
+                task.executorTimeout = registerMetadata.executorTimeout
+                task.executorFailRetryCount = registerMetadata.executorFailRetryCount
+                task.childJobId = registerMetadata.childJobId
+                task.autoStart = registerMetadata.autoStart
+                request.tasks.add(task)
+            }
         }
         return request
+    }
+
+    /**
+     * 单个注册声明允许默认回退到 handler；同一方法声明多份注册时必须显式给出 taskName。
+     */
+    private fun resolveTaskName(
+        registerMetadata: TaskPilotRegister,
+        handlerName: String,
+        hasMultipleRegisters: Boolean
+    ): String? {
+        if (StringTool.isNotBlank(registerMetadata.taskName)) {
+            return registerMetadata.taskName.trim()
+        }
+        if (!hasMultipleRegisters) {
+            return handlerName
+        }
+
+        logger.warn(
+            ">>>>>>>>>>> task-pilot 跳过同步，方法声明了多个 @TaskPilotRegister 但缺少 taskName。handler={}",
+            handlerName
+        )
+        return null
     }
 
     /**

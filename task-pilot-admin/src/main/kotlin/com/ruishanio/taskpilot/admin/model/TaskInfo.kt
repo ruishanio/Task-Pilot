@@ -17,6 +17,10 @@ data class TaskInfo(
      * 执行器分组 ID，决定任务可以路由到哪一组执行器。
      */
     var jobGroup: Int = 0,
+    /**
+     * 任务唯一名称，主要用于平台侧配置定位与幂等校验。
+     */
+    var taskName: String? = null,
     var jobDesc: String? = null,
     var addTime: Date? = null,
     var updateTime: Date? = null,

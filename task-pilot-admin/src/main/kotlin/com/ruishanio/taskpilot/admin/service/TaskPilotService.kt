@@ -15,6 +15,7 @@ interface TaskPilotService {
         pagesize: Int,
         jobGroup: Int,
         triggerStatus: Int,
+        taskName: String?,
         jobDesc: String?,
         executorHandler: String?,
         author: String?

@@ -97,7 +97,7 @@ class JobGroupController {
         val id = ids[0]
 
         val executor = executorMapper.load(id) ?: return Response.ofSuccess()
-        val count = taskInfoMapper.pageListCount(0, 10, id, -1, null, null, null)
+        val count = taskInfoMapper.pageListCount(0, 10, id, -1, null, null, null, null)
         if (count > 0) {
             return Response.ofFail("拒绝删除，该执行器使用中")
         }
@@ -123,6 +123,8 @@ class JobGroupController {
      * 手动录入地址要校验 URL 形式，自动注册则直接按注册表回填。
      */
     private fun validGroup(executor: Executor, isUpdate: Boolean): Response<String> {
+        executor.appname = executor.appname?.trim()
+        executor.title = executor.title?.trim()
         if (StringTool.isBlank(executor.appname)) {
             return Response.ofFail("请输入AppName")
         }
@@ -137,6 +139,11 @@ class JobGroupController {
         }
         if (executor.title!!.contains(">") || executor.title!!.contains("<")) {
             return Response.ofFail("名称非法")
+        }
+
+        val existsExecutor = executorMapper.loadByAppname(executor.appname)
+        if (existsExecutor != null && (!isUpdate || existsExecutor.id != executor.id)) {
+            return Response.ofFail("AppName重复")
         }
 
         if (isUpdate && executor.addressType == 0) {

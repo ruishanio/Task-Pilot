@@ -27,7 +27,11 @@ data class SyncRequest(
      */
     data class Task(
         /**
-         * 与 `@TaskPilot` 注解中的 handler 对应，是同步查重和更新的稳定主键。
+         * 平台内唯一的任务名称，留空时回退为 executorHandler。
+         */
+        var taskName: String? = null,
+        /**
+         * 与 `@TaskPilot` 注解中的 handler 对应，决定调度中心最终调用哪个执行逻辑。
          */
         var executorHandler: String? = null,
         /**

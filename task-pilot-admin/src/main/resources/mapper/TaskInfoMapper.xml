@@ -7,6 +7,7 @@
 		<result column="id" property="id" />
 
 		<result column="job_group" property="jobGroup" />
+		<result column="task_name" property="taskName" />
 	    <result column="job_desc" property="jobDesc" />
 
 	    <result column="add_time" property="addTime" />
@@ -41,6 +42,7 @@
 	<sql id="Base_Column_List">
 		t.id,
 		t.job_group,
+		t.task_name,
 		t.job_desc,
 		t.add_time,
 		t.update_time,
@@ -72,9 +74,12 @@
 			<if test="jobGroup gt 0">
 				AND t.job_group = #{jobGroup}
 			</if>
-            <if test="triggerStatus gte 0">
+			<if test="triggerStatus gte 0">
                 AND t.trigger_status = #{triggerStatus}
             </if>
+			<if test="taskName != null and taskName != ''">
+				AND t.task_name like '%' || #{taskName} || '%'
+			</if>
 			<if test="jobDesc != null and jobDesc != ''">
 				AND t.job_desc like '%' || #{jobDesc} || '%'
 			</if>
@@ -96,9 +101,12 @@
 			<if test="jobGroup gt 0">
 				AND t.job_group = #{jobGroup}
 			</if>
-            <if test="triggerStatus gte 0">
+			<if test="triggerStatus gte 0">
                 AND t.trigger_status = #{triggerStatus}
             </if>
+			<if test="taskName != null and taskName != ''">
+				AND t.task_name like '%' || #{taskName} || '%'
+			</if>
 			<if test="jobDesc != null and jobDesc != ''">
 				AND t.job_desc like '%' || #{jobDesc} || '%'
 			</if>
@@ -114,6 +122,7 @@
 	<insert id="save" parameterType="com.ruishanio.taskpilot.admin.model.TaskInfo" useGeneratedKeys="true" keyProperty="id" >
 		INSERT INTO task_info (
 			job_group,
+			task_name,
 			job_desc,
 			add_time,
 			update_time,
@@ -138,6 +147,7 @@
 			trigger_next_time
 		) VALUES (
 			#{jobGroup},
+			#{taskName},
 			#{jobDesc},
 			#{addTime},
 			#{updateTime},
@@ -169,12 +179,10 @@
 		WHERE t.id = #{id}
 	</select>
 
-	<select id="loadByGroupAndExecutorHandler" parameterType="java.util.HashMap" resultMap="TaskInfo">
+	<select id="loadByTaskName" parameterType="java.util.HashMap" resultMap="TaskInfo">
 		SELECT <include refid="Base_Column_List" />
 		FROM task_info AS t
-		WHERE t.job_group = #{jobGroup}
-		  AND t.executor_handler = #{executorHandler}
-		ORDER BY t.id DESC
+		WHERE t.task_name = #{taskName}
 		LIMIT 1
 	</select>
 
@@ -182,6 +190,7 @@
 		UPDATE task_info
 		SET
 			job_group = #{jobGroup},
+			task_name = #{taskName},
 			job_desc = #{jobDesc},
 			update_time = #{updateTime},
 			author = #{author},

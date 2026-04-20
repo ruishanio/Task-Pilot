@@ -21,8 +21,8 @@ class TaskInfoMapperTest {
 
     @Test
     fun pageList() {
-        val list = taskInfoMapper.pageList(0, 20, 0, -1, null, null, null)
-        val listCount = taskInfoMapper.pageListCount(0, 20, 0, -1, null, null, null)
+        val list = taskInfoMapper.pageList(0, 20, 0, -1, null, null, null, null)
+        val listCount = taskInfoMapper.pageListCount(0, 20, 0, -1, null, null, null, null)
         logger.info("list: {}", list)
         logger.info("listCount: {}", listCount)
 
@@ -35,6 +35,7 @@ class TaskInfoMapperTest {
         val info =
             TaskInfo().apply {
                 jobGroup = 1
+                taskName = "setTaskName"
                 jobDesc = "desc"
                 author = "setAuthor"
                 alarmEmail = "setAlarmEmail"
@@ -60,6 +61,7 @@ class TaskInfoMapperTest {
         info.scheduleType = ScheduleTypeEnum.FIX_RATE
         info.scheduleConf = "44"
         info.misfireStrategy = MisfireStrategyEnum.FIRE_ONCE_NOW
+        info2.taskName = "setTaskName2"
         info2.jobDesc = "desc2"
         info2.author = "setAuthor2"
         info2.alarmEmail = "setAlarmEmail2"

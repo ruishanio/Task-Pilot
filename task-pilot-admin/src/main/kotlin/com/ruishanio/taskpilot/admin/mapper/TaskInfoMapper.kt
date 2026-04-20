@@ -14,6 +14,7 @@ interface TaskInfoMapper {
         @Param("pagesize") pagesize: Int,
         @Param("jobGroup") jobGroup: Int,
         @Param("triggerStatus") triggerStatus: Int,
+        @Param("taskName") taskName: String?,
         @Param("jobDesc") jobDesc: String?,
         @Param("executorHandler") executorHandler: String?,
         @Param("author") author: String?
@@ -24,6 +25,7 @@ interface TaskInfoMapper {
         @Param("pagesize") pagesize: Int,
         @Param("jobGroup") jobGroup: Int,
         @Param("triggerStatus") triggerStatus: Int,
+        @Param("taskName") taskName: String?,
         @Param("jobDesc") jobDesc: String?,
         @Param("executorHandler") executorHandler: String?,
         @Param("author") author: String?
@@ -34,14 +36,11 @@ interface TaskInfoMapper {
     fun loadById(@Param("id") id: Int): TaskInfo?
 
     /**
-     * 按执行器分组与 handler 名称查询任务。
+     * 按任务唯一名称查询任务。
      *
-     * 自动注册会基于该结果判断是新增任务还是同步更新已有任务。
+     * 管理端新增和编辑都依赖该查询提前返回可读错误，避免直接把唯一约束异常暴露给用户。
      */
-    fun loadByGroupAndExecutorHandler(
-        @Param("jobGroup") jobGroup: Int,
-        @Param("executorHandler") executorHandler: String?
-    ): TaskInfo?
+    fun loadByTaskName(@Param("taskName") taskName: String?): TaskInfo?
 
     fun update(taskInfo: TaskInfo): Int
 

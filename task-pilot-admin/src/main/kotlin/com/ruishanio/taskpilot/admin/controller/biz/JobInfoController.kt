@@ -38,12 +38,13 @@ class JobInfoController {
         @RequestParam(required = false, defaultValue = "10") pagesize: Int,
         @RequestParam jobGroup: Int,
         @RequestParam triggerStatus: Int,
+        @RequestParam(required = false) taskName: String?,
         @RequestParam jobDesc: String?,
         @RequestParam executorHandler: String?,
         @RequestParam author: String?
     ): Response<PageModel<TaskInfo>> {
         JobGroupPermissionUtil.validJobGroupPermission(request, jobGroup)
-        return taskPilotService.pageList(offset, pagesize, jobGroup, triggerStatus, jobDesc, executorHandler, author)
+        return taskPilotService.pageList(offset, pagesize, jobGroup, triggerStatus, taskName, jobDesc, executorHandler, author)
     }
 
     @RequestMapping("/insert")

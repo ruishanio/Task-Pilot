@@ -59,12 +59,13 @@ class TaskPilotServiceImpl : TaskPilotService {
         pagesize: Int,
         jobGroup: Int,
         triggerStatus: Int,
+        taskName: String?,
         jobDesc: String?,
         executorHandler: String?,
         author: String?
     ): Response<PageModel<TaskInfo>> {
-        val list = taskInfoMapper.pageList(offset, pagesize, jobGroup, triggerStatus, jobDesc, executorHandler, author)
-        val listCount = taskInfoMapper.pageListCount(offset, pagesize, jobGroup, triggerStatus, jobDesc, executorHandler, author)
+        val list = taskInfoMapper.pageList(offset, pagesize, jobGroup, triggerStatus, taskName, jobDesc, executorHandler, author)
+        val listCount = taskInfoMapper.pageListCount(offset, pagesize, jobGroup, triggerStatus, taskName, jobDesc, executorHandler, author)
 
         val pageModel = PageModel<TaskInfo>()
         pageModel.data = list
@@ -73,6 +74,7 @@ class TaskPilotServiceImpl : TaskPilotService {
     }
 
     override fun add(jobInfo: TaskInfo, loginInfo: LoginInfo): Response<String> {
+        normalizeTaskInfoKeyFields(jobInfo)
         val baseValidResult = validBaseAndTrigger(jobInfo)
         if (!baseValidResult.isSuccess) {
             return baseValidResult
@@ -88,6 +90,11 @@ class TaskPilotServiceImpl : TaskPilotService {
             return advancedValidResult
         }
 
+        val uniqueValidResult = validUniqueFields(jobInfo, null)
+        if (!uniqueValidResult.isSuccess) {
+            return uniqueValidResult
+        }
+
         val childJobValidResult = validAndNormalizeChildJob(jobInfo, loginInfo, false)
         if (!childJobValidResult.isSuccess) {
             return childJobValidResult
@@ -96,9 +103,6 @@ class TaskPilotServiceImpl : TaskPilotService {
         jobInfo.addTime = Date()
         jobInfo.updateTime = Date()
         jobInfo.glueUpdatetime = Date()
-        if (jobInfo.executorHandler != null) {
-            jobInfo.executorHandler = jobInfo.executorHandler!!.trim()
-        }
         taskInfoMapper.save(jobInfo)
         if (jobInfo.id < 1) {
             return Response.ofFail("新增失败")
@@ -114,6 +118,13 @@ class TaskPilotServiceImpl : TaskPilotService {
     }
 
     override fun update(jobInfo: TaskInfo, loginInfo: LoginInfo): Response<String> {
+        normalizeTaskInfoKeyFields(jobInfo)
+        if (StringTool.isBlank(jobInfo.taskName)) {
+            return Response.ofFail("请输入任务名称")
+        }
+        if (jobInfo.taskName!!.length > 128) {
+            return Response.ofFail("任务名称长度不能超过128")
+        }
         if (StringTool.isBlank(jobInfo.jobDesc)) {
             return Response.ofFail("请输入任务描述")
         }
@@ -130,6 +141,11 @@ class TaskPilotServiceImpl : TaskPilotService {
         val advancedValidResult = validAdvanced(jobInfo)
         if (!advancedValidResult.isSuccess) {
             return advancedValidResult
+        }
+
+        val uniqueValidResult = validUniqueFields(jobInfo, jobInfo.id)
+        if (!uniqueValidResult.isSuccess) {
+            return uniqueValidResult
         }
 
         val childJobValidResult = validAndNormalizeChildJob(jobInfo, loginInfo, true)
@@ -160,6 +176,7 @@ class TaskPilotServiceImpl : TaskPilotService {
         }
 
         existsJobInfo.jobGroup = jobGroup.id
+        existsJobInfo.taskName = jobInfo.taskName
         existsJobInfo.jobDesc = jobInfo.jobDesc
         existsJobInfo.author = jobInfo.author
         existsJobInfo.alarmEmail = jobInfo.alarmEmail
@@ -370,8 +387,14 @@ class TaskPilotServiceImpl : TaskPilotService {
      * 基础字段和调度配置校验分离出来，避免新增与更新逻辑重复展开。
      */
     private fun validBaseAndTrigger(jobInfo: TaskInfo): Response<String> {
-        val group = executorMapper.load(jobInfo.jobGroup)
+        executorMapper.load(jobInfo.jobGroup)
             ?: return Response.ofFail("请选择执行器")
+        if (StringTool.isBlank(jobInfo.taskName)) {
+            return Response.ofFail("请输入任务名称")
+        }
+        if (jobInfo.taskName!!.length > 128) {
+            return Response.ofFail("任务名称长度不能超过128")
+        }
         if (StringTool.isBlank(jobInfo.jobDesc)) {
             return Response.ofFail("请输入任务描述")
         }
@@ -426,6 +449,27 @@ class TaskPilotServiceImpl : TaskPilotService {
         }
         if (glueType == GlueTypeEnum.GLUE_SHELL && jobInfo.glueSource != null) {
             jobInfo.glueSource = jobInfo.glueSource!!.replace("\r", "")
+        }
+        return Response.ofSuccess()
+    }
+
+    /**
+     * 唯一键校验前先统一裁剪并归一化空字符串，避免“空白字符不同”绕过唯一规则。
+     */
+    private fun normalizeTaskInfoKeyFields(jobInfo: TaskInfo) {
+        jobInfo.taskName = jobInfo.taskName?.trim()
+        jobInfo.jobDesc = jobInfo.jobDesc?.trim()
+        jobInfo.author = jobInfo.author?.trim()
+        jobInfo.executorHandler = jobInfo.executorHandler?.trim()?.takeIf { it.isNotEmpty() }
+    }
+
+    /**
+     * 任务名称是平台级唯一键，管理端的新增、编辑和自动同步都以它作为幂等标识。
+     */
+    private fun validUniqueFields(jobInfo: TaskInfo, currentId: Int?): Response<String> {
+        val existsTaskByName = taskInfoMapper.loadByTaskName(jobInfo.taskName)
+        if (existsTaskByName != null && existsTaskByName.id != currentId) {
+            return Response.ofFail("任务名称重复")
         }
         return Response.ofSuccess()
     }

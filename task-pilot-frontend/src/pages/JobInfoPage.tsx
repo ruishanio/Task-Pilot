@@ -24,7 +24,7 @@ import {
   PlusOutlined,
   ThunderboltOutlined,
 } from '@ant-design/icons';
-import { frontendApi, jobGroupApi, jobInfoApi } from '../services/api';
+import { jobGroupApi, jobInfoApi } from '../services/api';
 import { formatDateTime, getErrorMessage, parsePagePayload } from '../utils/format';
 
 const GLUE_SOURCE_TEMPLATES = {
@@ -175,7 +175,7 @@ function JobInfoPage() {
 
   async function loadMeta() {
     try {
-      const response = await frontendApi.jobInfoMeta();
+      const response = await jobInfoApi.meta();
       const payload = (response.data as JobInfoMeta) || meta;
       metaLoadedRef.current = true;
       setMeta(payload);

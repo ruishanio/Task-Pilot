@@ -162,8 +162,8 @@ class EmbedServer {
             return try {
                 when (normalizedUri) {
                     "/beat" -> executorBiz.beat()
-                    "/idleBeat" ->
-                        executorBiz.idleBeat(GsonTool.fromJson(requestData, IdleBeatRequest::class.java))
+                    "/idle" ->
+                        executorBiz.idle(GsonTool.fromJson(requestData, IdleBeatRequest::class.java))
                     "/run" ->
                         executorBiz.run(GsonTool.fromJson(requestData, TriggerRequest::class.java))
                     "/kill" ->

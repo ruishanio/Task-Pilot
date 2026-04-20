@@ -21,7 +21,7 @@ interface ExecutorBiz {
     /**
      * 空闲检查。
      */
-    fun idleBeat(idleBeatRequest: IdleBeatRequest): Response<String>
+    fun idle(idleBeatRequest: IdleBeatRequest): Response<String>
 
     /**
      * 触发任务执行。

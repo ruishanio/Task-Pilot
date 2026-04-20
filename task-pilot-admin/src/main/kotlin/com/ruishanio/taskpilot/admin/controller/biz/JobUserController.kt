@@ -4,6 +4,7 @@ import com.ruishanio.taskpilot.admin.auth.annotation.TaskPilotAuth
 import com.ruishanio.taskpilot.admin.auth.helper.TaskPilotAuthHelper
 import com.ruishanio.taskpilot.admin.auth.model.LoginInfo
 import com.ruishanio.taskpilot.admin.constant.Consts
+import com.ruishanio.taskpilot.admin.mapper.ExecutorMapper
 import com.ruishanio.taskpilot.admin.mapper.UserMapper
 import com.ruishanio.taskpilot.admin.model.User
 import com.ruishanio.taskpilot.admin.web.ManageRoute
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseBody
+import java.util.HashMap
 
 /**
  * 管理端用户控制器。
@@ -26,7 +28,26 @@ import org.springframework.web.bind.annotation.ResponseBody
 @RequestMapping(ManageRoute.API_MANAGE_USER)
 class JobUserController {
     @Resource
+    private lateinit var executorMapper: ExecutorMapper
+
+    @Resource
     private lateinit var userMapper: UserMapper
+
+    /**
+     * 用户管理页需要的角色与执行器权限选项直接跟随用户资源输出，便于前端按资源域加载。
+     */
+    @RequestMapping("/meta")
+    @ResponseBody
+    @TaskPilotAuth(role = Consts.ADMIN_ROLE)
+    fun meta(): Response<Map<String, Any>> {
+        val data = HashMap<String, Any>()
+        data["groups"] = executorMapper.findAll()
+        data["roleOptions"] = listOf(
+            option("1", "管理员"),
+            option("0", "普通用户")
+        )
+        return Response.ofSuccess(data)
+    }
 
     @RequestMapping("/pageList")
     @ResponseBody
@@ -125,5 +146,15 @@ class JobUserController {
 
         userMapper.delete(ids[0])
         return Response.ofSuccess()
+    }
+
+    /**
+     * 统一复用列表筛选用的轻量枚举结构，避免角色选项再单独定义 DTO。
+     */
+    private fun option(value: String, label: String): MutableMap<String, Any?> {
+        val payload = HashMap<String, Any?>()
+        payload["value"] = value
+        payload["label"] = label
+        return payload
     }
 }

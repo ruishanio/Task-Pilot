@@ -35,11 +35,11 @@ function App() {
         >
           <Route index element={<Navigate to="/dashboard" replace />} />
           <Route path="dashboard" element={<DashboardPage />} />
-          <Route path="jobgroup" element={<JobGroupPage />} />
-          <Route path="jobinfo" element={<JobInfoPage />} />
-          <Route path="jobcode" element={<JobInfoPage />} />
-          <Route path="joblog" element={<JobLogPage />} />
-          <Route path="joblog/detail" element={<JobLogPage />} />
+          <Route path="executor" element={<JobGroupPage />} />
+          <Route path="task_info" element={<JobInfoPage />} />
+          <Route path="task_code" element={<JobInfoPage />} />
+          <Route path="task_log" element={<JobLogPage />} />
+          <Route path="task_log/detail" element={<JobLogPage />} />
           <Route path="user" element={<UserPage />} />
         </Route>
         <Route path="*" element={<NotFoundPage />} />

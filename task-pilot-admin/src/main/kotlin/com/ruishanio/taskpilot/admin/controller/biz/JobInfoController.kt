@@ -1,12 +1,20 @@
 package com.ruishanio.taskpilot.admin.controller.biz
 
 import com.ruishanio.taskpilot.admin.auth.helper.TaskPilotAuthHelper
+import com.ruishanio.taskpilot.admin.constant.TriggerStatus
+import com.ruishanio.taskpilot.admin.mapper.ExecutorMapper
+import com.ruishanio.taskpilot.admin.model.Executor
 import com.ruishanio.taskpilot.admin.model.TaskInfo
+import com.ruishanio.taskpilot.admin.scheduler.exception.TaskPilotException
 import com.ruishanio.taskpilot.admin.scheduler.type.toScheduleType
 import com.ruishanio.taskpilot.admin.service.TaskPilotService
 import com.ruishanio.taskpilot.admin.util.JobGroupPermissionUtil
 import com.ruishanio.taskpilot.admin.web.ManageRoute
+import com.ruishanio.taskpilot.core.enums.ExecutorBlockStrategyEnum
+import com.ruishanio.taskpilot.core.enums.ExecutorRouteStrategyEnum
+import com.ruishanio.taskpilot.core.enums.MisfireStrategyEnum
 import com.ruishanio.taskpilot.core.enums.ScheduleTypeEnum
+import com.ruishanio.taskpilot.core.glue.GlueTypeEnum
 import com.ruishanio.taskpilot.tool.core.CollectionTool
 import com.ruishanio.taskpilot.tool.core.DateTool
 import com.ruishanio.taskpilot.tool.response.PageModel
@@ -20,15 +28,58 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseBody
 import java.util.ArrayList
 import java.util.Date
+import java.util.HashMap
 
 /**
  * 任务配置管理控制器。
  */
 @Controller
-@RequestMapping(ManageRoute.API_MANAGE_JOBINFO)
+@RequestMapping(ManageRoute.API_MANAGE_TASK_INFO)
 class JobInfoController {
     @Resource
     private lateinit var taskPilotService: TaskPilotService
+
+    @Resource
+    private lateinit var executorMapper: ExecutorMapper
+
+    /**
+     * 任务管理页依赖的筛选项与枚举元数据直接挂在资源控制器下，避免继续分散到独立 frontend 前缀。
+     */
+    @RequestMapping("/meta")
+    @ResponseBody
+    fun meta(
+        request: HttpServletRequest,
+        @RequestParam(value = "executorId", required = false, defaultValue = "-1") executorId: Int
+    ): Response<Map<String, Any>> {
+        val jobGroupList = JobGroupPermissionUtil.filterJobGroupByPermission(request, executorMapper.findAll())
+        if (CollectionTool.isEmpty(jobGroupList)) {
+            throw TaskPilotException("不存在有效执行器,请联系管理员")
+        }
+
+        val accessibleGroupIds = jobGroupList.map(Executor::id)
+        val selectedExecutorId = if (accessibleGroupIds.contains(executorId)) executorId else jobGroupList[0].id
+
+        val data = HashMap<String, Any>()
+        data["groups"] = jobGroupList
+        data["selectedExecutorId"] = selectedExecutorId
+        data["triggerStatusOptions"] = listOf(
+            option("-1", "全部"),
+            option(TriggerStatus.STOPPED.value.toString(), "停止"),
+            option(TriggerStatus.RUNNING.value.toString(), "启动")
+        )
+        data["scheduleTypeOptions"] = ScheduleTypeEnum.entries.map { option(it.name, it.title) }
+        data["glueTypeOptions"] = GlueTypeEnum.entries.map {
+            option(it.name, it.desc).also { payload ->
+                payload["isScript"] = it.isScript
+                payload["cmd"] = it.cmd
+                payload["suffix"] = it.suffix
+            }
+        }
+        data["executorRouteStrategyOptions"] = ExecutorRouteStrategyEnum.entries.map { option(it.name, it.title) }
+        data["executorBlockStrategyOptions"] = ExecutorBlockStrategyEnum.entries.map { option(it.name, it.title) }
+        data["misfireStrategyOptions"] = MisfireStrategyEnum.entries.map { option(it.name, it.title) }
+        return Response.ofSuccess(data)
+    }
 
     @RequestMapping("/pageList")
     @ResponseBody
@@ -137,6 +188,16 @@ class JobInfoController {
             return Response.ofFail("调度类型非法${e.message}")
         }
         return Response.ofSuccess(result)
+    }
+
+    /**
+     * 简单的 `value/label` 结构沿用历史返回格式，降低前端切路由时的联动成本。
+     */
+    private fun option(value: String, label: String): MutableMap<String, Any?> {
+        val payload = HashMap<String, Any?>()
+        payload["value"] = value
+        payload["label"] = label
+        return payload
     }
 
     companion object {

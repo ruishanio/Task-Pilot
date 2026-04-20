@@ -22,7 +22,7 @@ class AuthWebMvcTest : AbstractSpringMvcTest() {
     @Test
     @Throws(Exception::class)
     fun bootstrapReturns401WhenAnonymous() {
-        mockMvc.perform(get("/api/manage/frontend/bootstrap"))
+        mockMvc.perform(get("/api/manage/system/bootstrap"))
             .andExpect(status().isOk)
             .andExpect(content().string(containsString("\"code\":401")))
     }

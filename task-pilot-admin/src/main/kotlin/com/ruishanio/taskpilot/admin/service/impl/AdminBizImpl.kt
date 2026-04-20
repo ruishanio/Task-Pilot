@@ -25,7 +25,7 @@ class AdminBizImpl : AdminBiz {
     override fun registry(registryRequest: RegistryRequest): Response<String> =
         TaskPilotAdminBootstrap.instance.jobRegistryHelper.registry(registryRequest)
 
-    override fun registryRemove(registryRequest: RegistryRequest): Response<String> =
+    override fun unregister(registryRequest: RegistryRequest): Response<String> =
         TaskPilotAdminBootstrap.instance.jobRegistryHelper.registryRemove(registryRequest)
 
     override fun sync(syncRequest: SyncRequest): Response<String> =

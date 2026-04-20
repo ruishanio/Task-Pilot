@@ -14,7 +14,7 @@ import {
   message,
 } from 'antd';
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
-import { frontendApi, userApi } from '../services/api';
+import { userApi } from '../services/api';
 import { getErrorMessage, joinPermissions, parsePagePayload, parsePermissions } from '../utils/format';
 
 interface UserMeta {
@@ -44,7 +44,7 @@ function UserPage() {
 
   async function loadMeta() {
     try {
-      const response = await frontendApi.userMeta();
+      const response = await userApi.meta();
       setMeta((response.data as UserMeta) || { groups: [], roleOptions: [] });
     } catch (error) {
       message.error(getErrorMessage(error, '加载用户元数据失败'));

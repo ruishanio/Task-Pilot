@@ -1,9 +1,13 @@
 package com.ruishanio.taskpilot.admin.controller.biz
 
+import com.ruishanio.taskpilot.admin.mapper.ExecutorMapper
 import com.ruishanio.taskpilot.admin.mapper.TaskInfoMapper
 import com.ruishanio.taskpilot.admin.mapper.TaskLogMapper
+import com.ruishanio.taskpilot.admin.model.Executor
+import com.ruishanio.taskpilot.admin.model.TaskInfo
 import com.ruishanio.taskpilot.admin.model.TaskLog
 import com.ruishanio.taskpilot.admin.scheduler.config.TaskPilotAdminBootstrap
+import com.ruishanio.taskpilot.admin.scheduler.exception.TaskPilotException
 import com.ruishanio.taskpilot.admin.util.JobGroupPermissionUtil
 import com.ruishanio.taskpilot.admin.web.ManageRoute
 import com.ruishanio.taskpilot.core.context.TaskPilotContext
@@ -11,6 +15,7 @@ import com.ruishanio.taskpilot.core.openapi.ExecutorBiz
 import com.ruishanio.taskpilot.core.openapi.model.KillRequest
 import com.ruishanio.taskpilot.core.openapi.model.LogRequest
 import com.ruishanio.taskpilot.core.openapi.model.LogResult
+import com.ruishanio.taskpilot.tool.core.CollectionTool
 import com.ruishanio.taskpilot.tool.core.DateTool
 import com.ruishanio.taskpilot.tool.core.StringTool
 import com.ruishanio.taskpilot.tool.response.PageModel
@@ -30,13 +35,73 @@ import java.util.HashMap
  * 任务日志控制器。
  */
 @Controller
-@RequestMapping(ManageRoute.API_MANAGE_JOBLOG)
+@RequestMapping(ManageRoute.API_MANAGE_TASK_LOG)
 class JobLogController {
+    @Resource
+    lateinit var executorMapper: ExecutorMapper
+
     @Resource
     lateinit var taskInfoMapper: TaskInfoMapper
 
     @Resource
     lateinit var taskLogMapper: TaskLogMapper
+
+    /**
+     * 日志页的执行器、任务与筛选项配置收口到日志资源控制器，和页面主查询路径保持同一前缀。
+     */
+    @RequestMapping("/meta")
+    @ResponseBody
+    fun meta(
+        request: HttpServletRequest,
+        @RequestParam(value = "executorId", required = false, defaultValue = "0") executorId: Int?,
+        @RequestParam(value = "taskId", required = false, defaultValue = "0") taskId: Int?
+    ): Response<Map<String, Any>> {
+        val jobGroupList = JobGroupPermissionUtil.filterJobGroupByPermission(request, executorMapper.findAll())
+        if (CollectionTool.isEmpty(jobGroupList)) {
+            throw TaskPilotException("不存在有效执行器,请联系管理员")
+        }
+
+        var selectedExecutorParam = executorId ?: 0
+        if (taskId != null && taskId > 0) {
+            val jobInfo = taskInfoMapper.loadById(taskId)
+                ?: throw RuntimeException("任务ID非法")
+            selectedExecutorParam = jobInfo.executorId
+        }
+
+        val accessibleGroupIds = jobGroupList.map(Executor::id)
+        val selectedExecutorId = if (accessibleGroupIds.contains(selectedExecutorParam)) selectedExecutorParam else jobGroupList[0].id
+
+        val jobInfoList = taskInfoMapper.getTasksByExecutorId(selectedExecutorId)
+        var selectedTaskId = 0
+        if (CollectionTool.isNotEmpty(jobInfoList)) {
+            val accessibleJobIds = jobInfoList.map(TaskInfo::id)
+            selectedTaskId = if (taskId != null && accessibleJobIds.contains(taskId)) taskId else jobInfoList[0].id
+        }
+
+        val data = HashMap<String, Any>()
+        data["groups"] = jobGroupList
+        data["jobs"] = jobInfoList
+        data["selectedExecutorId"] = selectedExecutorId
+        data["selectedTaskId"] = selectedTaskId
+        data["logStatusOptions"] = listOf(
+            option("-1", "全部"),
+            option("1", "成功"),
+            option("2", "失败"),
+            option("3", "进行中")
+        )
+        data["clearLogOptions"] = listOf(
+            option("1", "清理一个月之前日志数据"),
+            option("2", "清理三个月之前日志数据"),
+            option("3", "清理六个月之前日志数据"),
+            option("4", "清理一年之前日志数据"),
+            option("5", "清理一千条以前日志数据"),
+            option("6", "清理一万条以前日志数据"),
+            option("7", "清理三万条以前日志数据"),
+            option("8", "清理十万条以前日志数据"),
+            option("9", "清理所有日志数据")
+        )
+        return Response.ofSuccess(data)
+    }
 
     @RequestMapping("/pageList")
     @ResponseBody
@@ -189,6 +254,16 @@ class JobLogController {
             logger.error("读取任务日志详情时发生异常。logId={}", logId, e)
             Response.ofFail(e.message)
         }
+    }
+
+    /**
+     * 继续复用轻量 `value/label` 结构，避免日志页筛选器额外引入 DTO。
+     */
+    private fun option(value: String, label: String): MutableMap<String, Any?> {
+        val payload = HashMap<String, Any?>()
+        payload["value"] = value
+        payload["label"] = label
+        return payload
     }
 
     companion object {

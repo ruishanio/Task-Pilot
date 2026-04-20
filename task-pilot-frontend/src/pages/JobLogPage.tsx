@@ -16,7 +16,7 @@ import {
 import { EyeOutlined, StopOutlined } from '@ant-design/icons';
 import dayjs, { type Dayjs } from 'dayjs';
 import { useSearchParams } from 'react-router-dom';
-import { frontendApi, jobLogApi } from '../services/api';
+import { jobLogApi } from '../services/api';
 import { formatDateTime, getErrorMessage, parsePagePayload } from '../utils/format';
 
 interface JobLogMeta {
@@ -175,7 +175,7 @@ function JobLogPage() {
 
   async function loadMeta(params = {}) {
     try {
-      const response = await frontendApi.jobLogMeta(params);
+      const response = await jobLogApi.meta(params);
       const payload = (response.data as JobLogMeta) || meta;
       metaLoadedRef.current = true;
       setMeta(payload);

@@ -25,7 +25,7 @@ interface AdminBiz {
     /**
      * 注销执行器节点。
      */
-    fun registryRemove(registryRequest: RegistryRequest): Response<String>
+    fun unregister(registryRequest: RegistryRequest): Response<String>
 
     /**
      * 同步执行器分组与任务定义。

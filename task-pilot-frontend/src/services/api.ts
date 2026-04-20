@@ -5,13 +5,8 @@ import type { AppResponse, FormBodyRecord } from '../types/http';
 const manageApiPrefix = '/api/manage';
 
 export const frontendApi = {
-  bootstrap: () => http.get<AppResponse<BootstrapPayload>>(`${manageApiPrefix}/frontend/bootstrap`),
-  dashboard: () => http.get<AppResponse>(`${manageApiPrefix}/frontend/dashboard`),
-  jobInfoMeta: (params?: Record<string, unknown>) =>
-    http.get<AppResponse>(`${manageApiPrefix}/frontend/jobinfo/meta`, { params }),
-  jobLogMeta: (params?: Record<string, unknown>) =>
-    http.get<AppResponse>(`${manageApiPrefix}/frontend/joblog/meta`, { params }),
-  userMeta: () => http.get<AppResponse>(`${manageApiPrefix}/frontend/user/meta`),
+  bootstrap: () => http.get<AppResponse<BootstrapPayload>>(`${manageApiPrefix}/system/bootstrap`),
+  dashboard: () => http.get<AppResponse>(`${manageApiPrefix}/stat/dashboard`),
   chartInfo: (params?: FormBodyRecord) =>
     http.formPost<AppResponse>(`${manageApiPrefix}/chartInfo`, params),
 };
@@ -26,48 +21,53 @@ export const authApi = {
 
 export const jobGroupApi = {
   pageList: (params?: Record<string, unknown>) =>
-    http.get<AppResponse>(`${manageApiPrefix}/jobgroup/pageList`, { params }),
+    http.get<AppResponse>(`${manageApiPrefix}/executor/pageList`, { params }),
   create: (payload: FormBodyRecord) =>
-    http.formPost<AppResponse>(`${manageApiPrefix}/jobgroup/insert`, payload),
+    http.formPost<AppResponse>(`${manageApiPrefix}/executor/insert`, payload),
   update: (payload: FormBodyRecord) =>
-    http.formPost<AppResponse>(`${manageApiPrefix}/jobgroup/update`, payload),
+    http.formPost<AppResponse>(`${manageApiPrefix}/executor/update`, payload),
   remove: (id: number | string) =>
-    http.formPost<AppResponse>(`${manageApiPrefix}/jobgroup/delete`, { 'ids[]': [id] }),
+    http.formPost<AppResponse>(`${manageApiPrefix}/executor/delete`, { 'ids[]': [id] }),
   loadById: (id: number | string) =>
-    http.get<AppResponse>(`${manageApiPrefix}/jobgroup/loadById`, { params: { id } }),
+    http.get<AppResponse>(`${manageApiPrefix}/executor/loadById`, { params: { id } }),
 };
 
 export const jobInfoApi = {
+  meta: (params?: Record<string, unknown>) =>
+    http.get<AppResponse>(`${manageApiPrefix}/task_info/meta`, { params }),
   pageList: (params?: Record<string, unknown>) =>
-    http.get<AppResponse>(`${manageApiPrefix}/jobinfo/pageList`, { params }),
+    http.get<AppResponse>(`${manageApiPrefix}/task_info/pageList`, { params }),
   create: (payload: FormBodyRecord) =>
-    http.formPost<AppResponse>(`${manageApiPrefix}/jobinfo/insert`, payload),
+    http.formPost<AppResponse>(`${manageApiPrefix}/task_info/insert`, payload),
   update: (payload: FormBodyRecord) =>
-    http.formPost<AppResponse>(`${manageApiPrefix}/jobinfo/update`, payload),
+    http.formPost<AppResponse>(`${manageApiPrefix}/task_info/update`, payload),
   remove: (id: number | string) =>
-    http.formPost<AppResponse>(`${manageApiPrefix}/jobinfo/delete`, { 'ids[]': [id] }),
+    http.formPost<AppResponse>(`${manageApiPrefix}/task_info/delete`, { 'ids[]': [id] }),
   start: (id: number | string) =>
-    http.formPost<AppResponse>(`${manageApiPrefix}/jobinfo/start`, { 'ids[]': [id] }),
+    http.formPost<AppResponse>(`${manageApiPrefix}/task_info/start`, { 'ids[]': [id] }),
   stop: (id: number | string) =>
-    http.formPost<AppResponse>(`${manageApiPrefix}/jobinfo/stop`, { 'ids[]': [id] }),
+    http.formPost<AppResponse>(`${manageApiPrefix}/task_info/stop`, { 'ids[]': [id] }),
   trigger: (payload: FormBodyRecord) =>
-    http.formPost<AppResponse>(`${manageApiPrefix}/jobinfo/trigger`, payload),
+    http.formPost<AppResponse>(`${manageApiPrefix}/task_info/trigger`, payload),
   nextTriggerTime: (payload?: Record<string, unknown>) =>
-    http.get<AppResponse>(`${manageApiPrefix}/jobinfo/nextTriggerTime`, { params: payload }),
+    http.get<AppResponse>(`${manageApiPrefix}/task_info/nextTriggerTime`, { params: payload }),
 };
 
 export const jobLogApi = {
+  meta: (params?: Record<string, unknown>) =>
+    http.get<AppResponse>(`${manageApiPrefix}/task_log/meta`, { params }),
   pageList: (params?: Record<string, unknown>) =>
-    http.get<AppResponse>(`${manageApiPrefix}/joblog/pageList`, { params }),
+    http.get<AppResponse>(`${manageApiPrefix}/task_log/pageList`, { params }),
   kill: (id: number | string) =>
-    http.formPost<AppResponse>(`${manageApiPrefix}/joblog/logKill`, { id }),
+    http.formPost<AppResponse>(`${manageApiPrefix}/task_log/logKill`, { id }),
   clear: (payload: FormBodyRecord) =>
-    http.formPost<AppResponse>(`${manageApiPrefix}/joblog/clearLog`, payload),
+    http.formPost<AppResponse>(`${manageApiPrefix}/task_log/clearLog`, payload),
   detailCat: (payload: FormBodyRecord) =>
-    http.formPost<AppResponse>(`${manageApiPrefix}/joblog/logDetailCat`, payload),
+    http.formPost<AppResponse>(`${manageApiPrefix}/task_log/logDetailCat`, payload),
 };
 
 export const userApi = {
+  meta: () => http.get<AppResponse>(`${manageApiPrefix}/user/meta`),
   pageList: (params?: Record<string, unknown>) =>
     http.get<AppResponse>(`${manageApiPrefix}/user/pageList`, { params }),
   create: (payload: FormBodyRecord) =>

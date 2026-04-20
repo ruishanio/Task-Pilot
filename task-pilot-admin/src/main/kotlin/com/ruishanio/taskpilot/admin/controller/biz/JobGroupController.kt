@@ -28,7 +28,7 @@ import java.util.HashMap
  * 执行器分组管理控制器。
  */
 @Controller
-@RequestMapping(ManageRoute.API_MANAGE_JOBGROUP)
+@RequestMapping(ManageRoute.API_MANAGE_EXECUTOR)
 class JobGroupController {
     @Resource
     lateinit var taskInfoMapper: TaskInfoMapper

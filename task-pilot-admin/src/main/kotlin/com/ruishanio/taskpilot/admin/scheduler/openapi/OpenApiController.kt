@@ -67,9 +67,9 @@ class OpenApiController {
                     val registryParam: RegistryRequest = GsonTool.fromJson(requestBody, RegistryRequest::class.java)
                     adminBiz.registry(registryParam)
                 }
-                "registryRemove" -> {
+                "unregister" -> {
                     val registryParam: RegistryRequest = GsonTool.fromJson(requestBody, RegistryRequest::class.java)
-                    adminBiz.registryRemove(registryParam)
+                    adminBiz.unregister(registryParam)
                 }
                 "sync" -> {
                     val syncRequest: SyncRequest = GsonTool.fromJson(requestBody, SyncRequest::class.java)

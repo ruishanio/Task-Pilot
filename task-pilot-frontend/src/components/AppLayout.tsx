@@ -54,14 +54,14 @@ function AppLayout() {
   const [passwordForm] = Form.useForm<PasswordFormValues>();
 
   /**
-   * 兼容 `/jobcode`、`/joblog/detail` 这类历史页面别名，确保侧边栏高亮仍落在主功能页上。
+   * 任务代码页与日志详情页仍归属于主业务菜单，这里统一把深层路由折算回一级菜单。
    */
   function normalizeMenuPath(pathname: string): string {
-    if (pathname.startsWith('/jobcode')) {
-      return '/jobinfo';
+    if (pathname.startsWith('/task_code')) {
+      return '/task_info';
     }
-    if (pathname.startsWith('/joblog/detail')) {
-      return '/joblog';
+    if (pathname.startsWith('/task_log/detail')) {
+      return '/task_log';
     }
     return pathname;
   }

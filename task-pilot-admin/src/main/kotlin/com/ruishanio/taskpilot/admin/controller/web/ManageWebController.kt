@@ -36,28 +36,28 @@ class ManageWebController {
     @TaskPilotAuth
     fun dashboard(): String = FrontendEntry.index()
 
-    @RequestMapping(ManageRoute.WEB_JOBGROUP)
+    @RequestMapping(ManageRoute.WEB_EXECUTOR)
     @TaskPilotAuth(role = Consts.ADMIN_ROLE)
-    fun jobGroup(): String = FrontendEntry.index()
+    fun executor(): String = FrontendEntry.index()
 
-    @RequestMapping(ManageRoute.WEB_JOBINFO)
+    @RequestMapping(ManageRoute.WEB_TASK_INFO)
     @TaskPilotAuth
-    fun jobInfo(): String = FrontendEntry.index()
+    fun taskInfo(): String = FrontendEntry.index()
 
-    @RequestMapping(ManageRoute.WEB_JOBLOG)
+    @RequestMapping(ManageRoute.WEB_TASK_LOG)
     @TaskPilotAuth
-    fun jobLog(): String = FrontendEntry.index()
+    fun taskLog(): String = FrontendEntry.index()
 
     /**
      * 日志详情入口交给前端页面自行读取查询参数，后端只负责兜底到 SPA。
      */
-    @RequestMapping(ManageRoute.WEB_JOBLOG_DETAIL)
+    @RequestMapping(ManageRoute.WEB_TASK_LOG_DETAIL)
     @TaskPilotAuth
-    fun jobLogDetail(): String = FrontendEntry.index()
+    fun taskLogDetail(): String = FrontendEntry.index()
 
-    @RequestMapping(ManageRoute.WEB_JOBCODE)
+    @RequestMapping(ManageRoute.WEB_TASK_CODE)
     @TaskPilotAuth
-    fun jobCode(): String = FrontendEntry.index()
+    fun taskCode(): String = FrontendEntry.index()
 
     @RequestMapping(ManageRoute.WEB_USER)
     @TaskPilotAuth(role = Consts.ADMIN_ROLE)

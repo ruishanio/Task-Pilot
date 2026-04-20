@@ -26,7 +26,7 @@ import java.util.Date
 class ExecutorBizImpl : ExecutorBiz {
     override fun beat(): Response<String> = Response.ofSuccess()
 
-    override fun idleBeat(idleBeatRequest: IdleBeatRequest): Response<String> {
+    override fun idle(idleBeatRequest: IdleBeatRequest): Response<String> {
         val jobThread = TaskPilotExecutor.loadJobThread(idleBeatRequest.jobId)
         val isRunningOrHasQueue = jobThread != null && jobThread.isRunningOrHasQueue()
         return if (isRunningOrHasQueue) {

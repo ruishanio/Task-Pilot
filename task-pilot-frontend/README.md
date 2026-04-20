@@ -10,7 +10,7 @@ npm install
 npm run dev
 ```
 
-开发环境默认不会直连后端，而是通过 Vite 代理把 `/api`、`/auth`、`/jobinfo`、`/jobgroup`、`/joblog`、`/user`、`/chartInfo` 转发到 `http://localhost:8080`。
+开发环境默认不会直连后端，而是通过 Vite 代理把 `/api/manage` 转发到 `http://localhost:8080`。
 
 如需修改后端地址，可设置环境变量：
 
@@ -33,11 +33,11 @@ task-pilot-admin/src/main/resources/static
 由于生产环境是静态文件回挂到后端访问，前端路由使用 `BrowserRouter`，并统一挂在 `/web/*` 下，访问形态类似：
 
 ```text
-/web/dashboard
+/web/task_info
 ```
 
 如果你把构建产物放到子目录，例如 `static/task-pilot-frontend/`，也可以直接访问：
 
 ```text
-/static/task-pilot-frontend/index.html#/dashboard
+/static/task-pilot-frontend/index.html#/task_info
 ```

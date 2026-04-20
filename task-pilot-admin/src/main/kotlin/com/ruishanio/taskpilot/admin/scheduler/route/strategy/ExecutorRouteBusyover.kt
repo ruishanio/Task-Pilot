@@ -17,7 +17,7 @@ class ExecutorRouteBusyover : ExecutorRouter() {
         for (address in addressList) {
             val idleBeatResult = try {
                 val executorBiz = TaskPilotAdminBootstrap.getExecutorBiz(address)
-                executorBiz?.idleBeat(IdleBeatRequest(triggerParam.jobId)) ?: Response.ofFail("executorBiz is null")
+                executorBiz?.idle(IdleBeatRequest(triggerParam.jobId)) ?: Response.ofFail("executorBiz is null")
             } catch (e: Exception) {
                 logger.error("忙碌转移路由空闲检测时发生异常，address={}", address, e)
                 Response.ofFail("$e")

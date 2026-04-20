@@ -75,7 +75,7 @@ class ExecutorRegistryThread private constructor() {
                     val registryParam = RegistryRequest(RegistType.EXECUTOR.name, appname, address)
                     for (adminBiz in TaskPilotExecutor.getAdminBizList().orEmpty()) {
                         try {
-                            val registryResult = adminBiz.registryRemove(registryParam)
+                            val registryResult = adminBiz.unregister(registryParam)
                             if (registryResult.isSuccess) {
                                 logger.info(
                                     ">>>>>>>>>>> task-pilot 执行器摘除注册成功，registryParam:{}, registryResult:{}",

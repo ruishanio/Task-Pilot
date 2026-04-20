@@ -66,10 +66,10 @@ class AdminBizTest {
 
     @Test
     @Throws(Exception::class)
-    fun registryRemove() {
+    fun unregister() {
         val adminBiz = buildClient()
         val registryParam = RegistryRequest(RegistType.EXECUTOR.name, "task-pilot-executor-example", "127.0.0.1:9999")
-        val returnT: Response<String> = adminBiz.registryRemove(registryParam)
+        val returnT: Response<String> = adminBiz.unregister(registryParam)
         assertTrue(returnT.isSuccess)
         assertTrue(lastRequestBody.get().contains("\"registryKey\":\"task-pilot-executor-example\""))
     }
@@ -127,7 +127,7 @@ class AdminBizTest {
                 createContext("/task-pilot-admin/api/executor/registry") { exchange ->
                     replyWithSuccess(exchange)
                 }
-                createContext("/task-pilot-admin/api/executor/registryRemove") { exchange ->
+                createContext("/task-pilot-admin/api/executor/unregister") { exchange ->
                     replyWithSuccess(exchange)
                 }
                 createContext("/task-pilot-admin/api/executor/sync") { exchange ->

@@ -52,9 +52,9 @@ class ExecutorBizTest {
     }
 
     @Test
-    fun idleBeat() {
+    fun idle() {
         val executorBiz = buildClient()
-        val retval: Response<String> = executorBiz.idleBeat(IdleBeatRequest(0))
+        val retval: Response<String> = executorBiz.idle(IdleBeatRequest(0))
 
         assertNotNull(retval)
         assertEquals("busy", retval.data)
@@ -119,7 +119,7 @@ class ExecutorBizTest {
                 createContext("/beat") { exchange ->
                     reply(exchange, Response(200, null, "ok"))
                 }
-                createContext("/idleBeat") { exchange ->
+                createContext("/idle") { exchange ->
                     reply(exchange, Response(200, null, "busy"))
                 }
                 createContext("/run") { exchange ->

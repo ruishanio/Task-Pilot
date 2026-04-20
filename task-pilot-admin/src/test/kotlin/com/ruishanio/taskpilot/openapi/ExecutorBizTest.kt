@@ -68,7 +68,7 @@ class ExecutorBizTest {
         val triggerParam =
             TriggerRequest().apply {
                 taskId = 1
-                executorHandler = "demoJobHandler"
+                executorHandler = "demoTaskHandler"
                 executorParam = null
                 executorBlockStrategy = ExecutorBlockStrategyEnum.COVER_EARLY
                 glueType = GlueTypeEnum.BEAN.name

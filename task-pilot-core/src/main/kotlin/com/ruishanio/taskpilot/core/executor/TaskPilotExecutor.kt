@@ -169,10 +169,10 @@ open class TaskPilotExecutor {
         val clazz = bean.javaClass
         val methodName = executeMethod.name
         if (name.trim().isEmpty()) {
-            throw RuntimeException("task-pilot method-jobhandler name invalid, for[$clazz#$methodName] .")
+            throw RuntimeException("task-pilot method-taskhandler name invalid, for[$clazz#$methodName] .")
         }
         if (loadTaskHandler(name) != null) {
-            throw RuntimeException("task-pilot jobhandler[$name] naming conflicts.")
+            throw RuntimeException("task-pilot taskhandler[$name] naming conflicts.")
         }
 
         executeMethod.isAccessible = true
@@ -185,7 +185,7 @@ open class TaskPilotExecutor {
                 initMethod = clazz.getDeclaredMethod(taskPilot.init)
                 initMethod.isAccessible = true
             } catch (_: NoSuchMethodException) {
-                throw RuntimeException("task-pilot method-jobhandler initMethod invalid, for[$clazz#$methodName] .")
+                throw RuntimeException("task-pilot method-taskhandler initMethod invalid, for[$clazz#$methodName] .")
             }
         }
         if (taskPilot.destroy.trim().isNotEmpty()) {
@@ -193,7 +193,7 @@ open class TaskPilotExecutor {
                 destroyMethod = clazz.getDeclaredMethod(taskPilot.destroy)
                 destroyMethod.isAccessible = true
             } catch (_: NoSuchMethodException) {
-                throw RuntimeException("task-pilot method-jobhandler destroyMethod invalid, for[$clazz#$methodName] .")
+                throw RuntimeException("task-pilot method-taskhandler destroyMethod invalid, for[$clazz#$methodName] .")
             }
         }
 

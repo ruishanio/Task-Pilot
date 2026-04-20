@@ -82,13 +82,13 @@ class TaskPilotSyncRunnerTest {
     @Configuration
     class TestConfiguration {
         @Bean
-        fun sampleJobs(): SampleJobs = SampleJobs()
+        fun sampleTasks(): SampleTasks = SampleTasks()
     }
 
     /**
      * 通过真实注解声明驱动扫描逻辑，避免测试绕开方法发现与合并注解行为。
      */
-    class SampleJobs {
+    class SampleTasks {
         @TaskPilot("explicitHandler")
         @TaskPilotRegister(
             taskName = "explicit-task",
@@ -105,18 +105,18 @@ class TaskPilotSyncRunnerTest {
             executorFailRetryCount = 2,
             childTaskId = "3,4"
         )
-        fun explicitJob() {
+        fun explicitTask() {
         }
 
         @TaskPilot("defaultHandler")
         @TaskPilotRegister(conf = "0/10 * * * * ?")
-        fun defaultJob() {
+        fun defaultTask() {
         }
 
         @TaskPilot("multiHandler")
         @TaskPilotRegister(taskName = "multi-task-a", taskDesc = "多注册任务A", conf = "5")
         @TaskPilotRegister(taskName = "multi-task-b", taskDesc = "多注册任务B", conf = "10")
-        fun multiJob() {
+        fun multiTask() {
         }
     }
 }

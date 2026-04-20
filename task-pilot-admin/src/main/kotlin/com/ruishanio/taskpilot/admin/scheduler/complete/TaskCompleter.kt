@@ -30,7 +30,7 @@ class TaskCompleter {
      * 任务完成只允许处理一次，先补齐子任务触发信息，再写回 handle 结果。
      */
     fun complete(taskLog: TaskLog): Int {
-        processChildJob(taskLog)
+        processChildTask(taskLog)
         if ((taskLog.handleMsg?.length ?: 0) > 15000) {
             taskLog.handleMsg = taskLog.handleMsg?.substring(0, 15000)
         }
@@ -40,7 +40,7 @@ class TaskCompleter {
     /**
      * 成功任务会按声明顺序触发子任务，并把每个子任务的处理结果附加到当前日志。
      */
-    private fun processChildJob(taskLog: TaskLog) {
+    private fun processChildTask(taskLog: TaskLog) {
         var triggerChildMsg: String? = null
         if (TaskPilotContext.HANDLE_CODE_SUCCESS == taskLog.handleCode) {
             val taskInfo = taskInfoMapper.loadById(taskLog.taskId)

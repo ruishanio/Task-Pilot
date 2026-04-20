@@ -54,20 +54,20 @@ docker-compose up --build
 
 ```kotlin
 @Component
-class SampleJob {
-    @TaskPilot("demoJobHandler")
-    fun demoJobHandler() {
-        TaskPilotHelper.log("hello task-pilot")
-    }
+class SampleTask {
+   @TaskPilot("demoTaskHandler")
+   fun demoTaskHandler() {
+      TaskPilotHelper.log("hello task-pilot")
+   }
 
-    // 带自动注册，首次启动即在调度中心登记
-    @TaskPilotRegister(taskDesc = "分片任务", conf = "0/3 * * * * ?")
-    @TaskPilot("shardingJobHandler")
-    fun shardingJobHandler() {
-        val idx = TaskPilotHelper.getShardIndex()
-        val total = TaskPilotHelper.getShardTotal()
-        TaskPilotHelper.log("shard {}/{}", idx, total)
-    }
+   // 带自动注册，首次启动即在调度中心登记
+   @TaskPilotRegister(taskDesc = "分片任务", conf = "0/3 * * * * ?")
+   @TaskPilot("shardingTaskHandler")
+   fun shardingTaskHandler() {
+      val idx = TaskPilotHelper.getShardIndex()
+      val total = TaskPilotHelper.getShardTotal()
+      TaskPilotHelper.log("shard {}/{}", idx, total)
+   }
 }
 ```
 
@@ -88,7 +88,7 @@ task-pilot:
     appname: task-pilot-executor-sample
     ip: ""                 # 留空自动识别
     port: 9999
-    logpath: ${user.home}/logs/task-pilot/jobhandler
+    logpath: ${user.home}/logs/task-pilot/taskhandler
     logretentiondays: 30
   sync:
     enabled: true

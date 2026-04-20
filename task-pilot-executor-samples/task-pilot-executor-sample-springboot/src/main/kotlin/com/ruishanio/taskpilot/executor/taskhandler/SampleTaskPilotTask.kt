@@ -1,4 +1,4 @@
-package com.ruishanio.taskpilot.executor.jobhandler
+package com.ruishanio.taskpilot.executor.taskhandler
 
 import com.ruishanio.taskpilot.core.context.TaskPilotHelper
 import com.ruishanio.taskpilot.core.handler.annotation.TaskPilot
@@ -25,12 +25,12 @@ import org.springframework.stereotype.Component
  * 4、任务结果：默认任务结果为成功；如需失败，可调用 TaskPilotHelper.handleFail/handleSuccess。
  */
 @Component
-class SampleTaskPilotJob {
+class SampleTaskPilotTask {
     /**
      * 1、简单任务示例（Bean 模式）。
      */
-    @TaskPilot("demoJobHandler")
-    fun demoJobHandler() {
+    @TaskPilot("demoTaskHandler")
+    fun demoTaskHandler() {
         TaskPilotHelper.log("TASK-PILOT, Hello World.")
         repeat(5) {
             TaskPilotHelper.log("beat at:$it")
@@ -42,8 +42,8 @@ class SampleTaskPilotJob {
      * 2、分片广播任务。
      */
     @TaskPilotRegister(taskDesc = "分片广播任务", conf = "0/3 * * * * ?")
-    @TaskPilot("shardingJobHandler")
-    fun shardingJobHandler() {
+    @TaskPilot("shardingTaskHandler")
+    fun shardingTaskHandler() {
         val shardIndex = TaskPilotHelper.getShardIndex()
         val shardTotal = TaskPilotHelper.getShardTotal()
         TaskPilotHelper.log("分片参数：当前分片序号 = {}, 总分片数 = {}", shardIndex, shardTotal)
@@ -62,8 +62,8 @@ class SampleTaskPilotJob {
      *
      * 参数示例："ls -a" 或者 "pwd"。
      */
-    @TaskPilot("commandJobHandler")
-    fun commandJobHandler() {
+    @TaskPilot("commandTaskHandler")
+    fun commandTaskHandler() {
         val command = TaskPilotHelper.getTaskParam()
         if (command.isNullOrBlank()) {
             TaskPilotHelper.handleFail("command empty.")
@@ -107,8 +107,8 @@ class SampleTaskPilotJob {
      * }
      * </pre>
      */
-    @TaskPilot("httpJobHandler")
-    fun httpJobHandler() {
+    @TaskPilot("httpTaskHandler")
+    fun httpTaskHandler() {
         val param = TaskPilotHelper.getTaskParam()
         if (param.isNullOrBlank()) {
             TaskPilotHelper.log("param[$param] invalid.")
@@ -116,52 +116,52 @@ class SampleTaskPilotJob {
             return
         }
 
-        val httpJobParam: HttpJobParam? = try {
-            GsonTool.fromJson(param, HttpJobParam::class.java)
+        val httpTaskParam: HttpTaskParam? = try {
+            GsonTool.fromJson(param, HttpTaskParam::class.java)
         } catch (e: Exception) {
-            TaskPilotHelper.log(RuntimeException("HttpJobParam parse error", e))
+            TaskPilotHelper.log(RuntimeException("HttpTaskParam parse error", e))
             TaskPilotHelper.handleFail()
             return
         }
 
-        if (httpJobParam == null) {
+        if (httpTaskParam == null) {
             TaskPilotHelper.log("param parse fail.")
             TaskPilotHelper.handleFail()
             return
         }
-        if (StringTool.isBlank(httpJobParam.url)) {
-            TaskPilotHelper.log("url[${httpJobParam.url}] invalid.")
+        if (StringTool.isBlank(httpTaskParam.url)) {
+            TaskPilotHelper.log("url[${httpTaskParam.url}] invalid.")
             TaskPilotHelper.handleFail()
             return
         }
-        if (!isValidDomain(httpJobParam.url)) {
-            TaskPilotHelper.log("url[${httpJobParam.url}] not allowed.")
+        if (!isValidDomain(httpTaskParam.url)) {
+            TaskPilotHelper.log("url[${httpTaskParam.url}] not allowed.")
             TaskPilotHelper.handleFail()
             return
         }
 
-        val method = resolveMethod(httpJobParam.method)
+        val method = resolveMethod(httpTaskParam.method)
         if (method == null) {
-            TaskPilotHelper.log("method[${httpJobParam.method}] invalid.")
+            TaskPilotHelper.log("method[${httpTaskParam.method}] invalid.")
             TaskPilotHelper.handleFail()
             return
         }
 
-        val contentType = resolveContentType(httpJobParam.contentType)
-        if (httpJobParam.timeout <= 0) {
-            httpJobParam.timeout = 3000
+        val contentType = resolveContentType(httpTaskParam.contentType)
+        if (httpTaskParam.timeout <= 0) {
+            httpTaskParam.timeout = 3000
         }
 
         try {
             val httpResponse = HttpTool.createRequest()
-                .url(httpJobParam.url)
+                .url(httpTaskParam.url)
                 .method(method)
                 .contentType(contentType)
-                .header(httpJobParam.headers)
-                .cookie(httpJobParam.cookies)
-                .body(httpJobParam.data)
-                .form(httpJobParam.form)
-                .auth(httpJobParam.auth)
+                .header(httpTaskParam.headers)
+                .cookie(httpTaskParam.cookies)
+                .body(httpTaskParam.data)
+                .form(httpTaskParam.form)
+                .auth(httpTaskParam.auth)
                 .execute()
 
             TaskPilotHelper.log("StatusCode: ${httpResponse.statusCode()}")
@@ -200,13 +200,13 @@ class SampleTaskPilotJob {
      * Content-Type 使用白名单匹配；未命中时回退为 JSON，保持与原示例一致。
      */
     private fun resolveContentType(contentType: String?): ContentType =
-        ContentType.values().firstOrNull { it.value == contentType } ?: ContentType.JSON
+        ContentType.entries.firstOrNull { it.value == contentType } ?: ContentType.JSON
 
     /**
      * 5、生命周期任务示例：任务初始化与销毁时，支持自定义相关逻辑。
      */
-    @TaskPilot(value = "demoJobHandler2", init = "init", destroy = "destroy")
-    fun demoJobHandler2() {
+    @TaskPilot(value = "demoTaskHandler2", init = "init", destroy = "destroy")
+    fun demoTaskHandler2() {
         TaskPilotHelper.log("TASK-PILOT, Hello World.")
     }
 
@@ -219,9 +219,9 @@ class SampleTaskPilotJob {
     }
 
     /**
-     * http job param。
+     * http task param。
      */
-    private class HttpJobParam {
+    private class HttpTaskParam {
         var url: String? = null
         var method: String? = null
         var contentType: String? = null
@@ -234,7 +234,7 @@ class SampleTaskPilotJob {
     }
 
     companion object {
-        private val logger = LoggerFactory.getLogger(SampleTaskPilotJob::class.java)
+        private val logger = LoggerFactory.getLogger(SampleTaskPilotTask::class.java)
 
         private val DOMAIN_WHITE_LIST = setOf(
             "http://www.baidu.com",

@@ -1,6 +1,5 @@
 package com.ruishanio.taskpilot.admin.scheduler.thread
 
-import com.ruishanio.taskpilot.admin.model.Executor
 import com.ruishanio.taskpilot.admin.model.Registry
 import com.ruishanio.taskpilot.admin.scheduler.config.TaskPilotAdminBootstrap
 import com.ruishanio.taskpilot.core.constant.Const
@@ -14,8 +13,6 @@ import java.util.Collections
 import java.util.Date
 import java.util.HashMap
 import java.util.concurrent.LinkedBlockingQueue
-import java.util.concurrent.RejectedExecutionHandler
-import java.util.concurrent.ThreadFactory
 import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
 
@@ -38,10 +35,10 @@ class ExecutorRegistryHelper {
             30L,
             TimeUnit.SECONDS,
             LinkedBlockingQueue(2000),
-            ThreadFactory { runnable ->
-                Thread(runnable, "task-pilot, admin JobRegistryMonitorHelper-registryOrRemoveThreadPool-${runnable.hashCode()}")
+            { runnable ->
+                Thread(runnable, "task-pilot, admin TaskRegistryMonitorHelper-registryOrRemoveThreadPool-${runnable.hashCode()}")
             },
-            RejectedExecutionHandler { runnable, _ ->
+            { runnable, _ ->
                 runnable.run()
                 logger.warn(">>>>>>>>>>> task-pilot 注册或摘除请求过于频繁，线程池已触发拒绝策略，改为调用线程直接执行。")
             }

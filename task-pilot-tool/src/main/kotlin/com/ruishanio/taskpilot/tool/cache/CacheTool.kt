@@ -26,7 +26,7 @@ class CacheTool<K, V> {
     protected var loader: CacheLoader<K, V>? = null
     protected var listener: CacheListener<K, V>? = null
     protected var pruneInterval: Long = 0
-    protected var pruneJobFuture: ScheduledFuture<*>? = null
+    protected var pruneTaskFuture: ScheduledFuture<*>? = null
     protected var cache: Cache<K, V>? = null
 
     fun expireAfterWrite(timeout: Long): CacheTool<K, V> {
@@ -92,7 +92,7 @@ class CacheTool<K, V> {
         }
 
         if (pruneInterval > 0) {
-            pruneJobFuture = schedule(
+            pruneTaskFuture = schedule(
                 Runnable {
                     try {
                         cacheInstance.prune()
@@ -112,7 +112,7 @@ class CacheTool<K, V> {
      * 主动停止定时清理任务，不回收缓存内容本身。
      */
     fun stop() {
-        pruneJobFuture?.cancel(true)
+        pruneTaskFuture?.cancel(true)
     }
 
     private fun schedule(task: Runnable, delay: Long): ScheduledFuture<*> =

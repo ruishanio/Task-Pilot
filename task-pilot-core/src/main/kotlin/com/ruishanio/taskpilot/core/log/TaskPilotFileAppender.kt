@@ -23,7 +23,7 @@ object TaskPilotFileAppender {
     /**
      * 默认日志目录落到用户主目录下，避免示例工程误写只读目录。
      */
-    private fun defaultLogBasePath(): String = File(System.getProperty("user.home"), "logs/task-pilot/jobhandler").path
+    private fun defaultLogBasePath(): String = File(System.getProperty("user.home"), "logs/task-pilot/taskhandler").path
 
     /**
      * 初始化日志、脚本和失败回调目录。

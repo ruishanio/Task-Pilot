@@ -19,7 +19,7 @@ task-pilot:
     address: ""
     ip: "127.0.0.1"
     port: 9999
-    logpath: ${user.home}/logs/task-pilot/jobhandler
+    logpath: ${user.home}/logs/task-pilot/taskhandler
     logretentiondays: 30
     excludedpackage: ""
   sync:

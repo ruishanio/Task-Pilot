@@ -40,7 +40,7 @@ class TaskPilotProperties {
         var address: String = ""
         var ip: String = ""
         var port: Int = 9999
-        var logpath: String = File(System.getProperty("user.home"), "logs/task-pilot/jobhandler").path
+        var logpath: String = File(System.getProperty("user.home"), "logs/task-pilot/taskhandler").path
         var logretentiondays: Int = 30
         var excludedpackage: String = ""
     }

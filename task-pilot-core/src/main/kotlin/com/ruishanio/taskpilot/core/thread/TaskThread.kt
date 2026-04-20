@@ -48,7 +48,7 @@ class TaskThread(
     fun pushTriggerQueue(triggerParam: TriggerRequest): Response<String> {
         if (!triggerLogIdSet.add(triggerParam.logId)) {
             logger.info(">>>>>>>>>>> 检测到重复触发任务，logId:{}", triggerParam.logId)
-            return Response.of(TaskPilotContext.HANDLE_CODE_FAIL, "repeate trigger job, logId:${triggerParam.logId}")
+            return Response.of(TaskPilotContext.HANDLE_CODE_FAIL, "repeate trigger task, logId:${triggerParam.logId}")
         }
 
         triggerQueue.add(triggerParam)
@@ -177,7 +177,7 @@ class TaskThread(
                                 triggerParam.logId,
                                 triggerParam.logDateTime,
                                 TaskPilotContext.HANDLE_CODE_FAIL,
-                                "$stopReason [job running, killed]"
+                                "$stopReason [task running, killed]"
                             )
                         )
                     }
@@ -192,7 +192,7 @@ class TaskThread(
                     triggerParam.logId,
                     triggerParam.logDateTime,
                     TaskPilotContext.HANDLE_CODE_FAIL,
-                    "$stopReason [job not executed, in the job queue, killed.]"
+                    "$stopReason [task not executed, in the task queue, killed.]"
                 )
             )
         }

@@ -1,4 +1,4 @@
-package com.ruishanio.taskpilot.executor.jobhandler
+package com.ruishanio.taskpilot.executor.taskhandler
 
 import com.ruishanio.taskpilot.core.context.TaskPilotHelper
 import com.ruishanio.taskpilot.core.handler.annotation.TaskPilot
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component
  * AI 任务开发示例。
  */
 @Component
-class AITaskPilotJob {
+class AITaskPilotTask {
     @field:Resource
     private lateinit var ollamaChatModel: OllamaChatModel
 
@@ -34,8 +34,8 @@ class AITaskPilotJob {
      * }
      * </pre>
      */
-    @TaskPilot("ollamaJobHandler")
-    fun ollamaJobHandler() {
+    @TaskPilot("ollamaTaskHandler")
+    fun ollamaTaskHandler() {
         val param = TaskPilotHelper.getTaskParam()
         if (param.isNullOrBlank()) {
             TaskPilotHelper.log("param is empty.")
@@ -94,8 +94,8 @@ class AITaskPilotJob {
      * }
      * </pre>
      */
-    @TaskPilot("difyWorkflowJobHandler")
-    fun difyWorkflowJobHandler() {
+    @TaskPilot("difyWorkflowTaskHandler")
+    fun difyWorkflowTaskHandler() {
         val param = TaskPilotHelper.getTaskParam()
         if (param.isNullOrBlank()) {
             TaskPilotHelper.log("param is empty.")

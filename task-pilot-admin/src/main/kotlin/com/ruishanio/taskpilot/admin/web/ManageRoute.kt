@@ -28,6 +28,6 @@ object ManageRoute {
     const val API_MANAGE_TASK_LOG = "$API_MANAGE_PREFIX/task_log"
     const val API_MANAGE_JOBCODE = "$API_MANAGE_PREFIX/jobcode"
     const val API_MANAGE_USER = "$API_MANAGE_PREFIX/user"
-    const val API_MANAGE_CHART_INFO = "$API_MANAGE_PREFIX/chartInfo"
+    const val API_MANAGE_CHART_INFO = "$API_MANAGE_PREFIX/chart_info"
     const val API_MANAGE_ERROR_PAGE = "$API_MANAGE_PREFIX/errorpage"
 }

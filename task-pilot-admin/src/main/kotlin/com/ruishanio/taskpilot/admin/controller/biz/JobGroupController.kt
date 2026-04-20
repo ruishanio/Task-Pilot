@@ -39,10 +39,10 @@ class JobGroupController {
     @Resource
     private lateinit var registryMapper: RegistryMapper
 
-    @RequestMapping("/pageList")
+    @RequestMapping("/page")
     @ResponseBody
     @TaskPilotAuth(role = Consts.ADMIN_ROLE)
-    fun pageList(
+    fun page(
         @RequestParam(required = false, defaultValue = "0") offset: Int,
         @RequestParam(required = false, defaultValue = "10") pagesize: Int,
         appname: String?,
@@ -112,7 +112,7 @@ class JobGroupController {
         return if (ret > 0) Response.ofSuccess() else Response.ofFail()
     }
 
-    @RequestMapping("/loadById")
+    @RequestMapping("/load_by_id")
     @ResponseBody
     fun loadById(@RequestParam("id") id: Int): Response<Executor> {
         val jobGroup = executorMapper.load(id)

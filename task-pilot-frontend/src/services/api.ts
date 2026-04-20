@@ -8,20 +8,20 @@ export const frontendApi = {
   bootstrap: () => http.get<AppResponse<BootstrapPayload>>(`${manageApiPrefix}/system/bootstrap`),
   dashboard: () => http.get<AppResponse>(`${manageApiPrefix}/stat/dashboard`),
   chartInfo: (params?: FormBodyRecord) =>
-    http.formPost<AppResponse>(`${manageApiPrefix}/chartInfo`, params),
+    http.formPost<AppResponse>(`${manageApiPrefix}/chart_info`, params),
 };
 
 export const authApi = {
   login: (payload: FormBodyRecord) =>
-    http.formPost<AppResponse>(`${manageApiPrefix}/auth/doLogin`, payload),
+    http.formPost<AppResponse>(`${manageApiPrefix}/auth/login`, payload),
   logout: () => http.formPost<AppResponse>(`${manageApiPrefix}/auth/logout`),
   updatePassword: (payload: FormBodyRecord) =>
-    http.formPost<AppResponse>(`${manageApiPrefix}/auth/updatePwd`, payload),
+    http.formPost<AppResponse>(`${manageApiPrefix}/auth/update_password`, payload),
 };
 
 export const jobGroupApi = {
   pageList: (params?: Record<string, unknown>) =>
-    http.get<AppResponse>(`${manageApiPrefix}/executor/pageList`, { params }),
+    http.get<AppResponse>(`${manageApiPrefix}/executor/page`, { params }),
   create: (payload: FormBodyRecord) =>
     http.formPost<AppResponse>(`${manageApiPrefix}/executor/insert`, payload),
   update: (payload: FormBodyRecord) =>
@@ -29,14 +29,14 @@ export const jobGroupApi = {
   remove: (id: number | string) =>
     http.formPost<AppResponse>(`${manageApiPrefix}/executor/delete`, { 'ids[]': [id] }),
   loadById: (id: number | string) =>
-    http.get<AppResponse>(`${manageApiPrefix}/executor/loadById`, { params: { id } }),
+    http.get<AppResponse>(`${manageApiPrefix}/executor/load_by_id`, { params: { id } }),
 };
 
 export const jobInfoApi = {
   meta: (params?: Record<string, unknown>) =>
     http.get<AppResponse>(`${manageApiPrefix}/task_info/meta`, { params }),
   pageList: (params?: Record<string, unknown>) =>
-    http.get<AppResponse>(`${manageApiPrefix}/task_info/pageList`, { params }),
+    http.get<AppResponse>(`${manageApiPrefix}/task_info/page`, { params }),
   create: (payload: FormBodyRecord) =>
     http.formPost<AppResponse>(`${manageApiPrefix}/task_info/insert`, payload),
   update: (payload: FormBodyRecord) =>
@@ -50,26 +50,26 @@ export const jobInfoApi = {
   trigger: (payload: FormBodyRecord) =>
     http.formPost<AppResponse>(`${manageApiPrefix}/task_info/trigger`, payload),
   nextTriggerTime: (payload?: Record<string, unknown>) =>
-    http.get<AppResponse>(`${manageApiPrefix}/task_info/nextTriggerTime`, { params: payload }),
+    http.get<AppResponse>(`${manageApiPrefix}/task_info/next_trigger_time`, { params: payload }),
 };
 
 export const jobLogApi = {
   meta: (params?: Record<string, unknown>) =>
     http.get<AppResponse>(`${manageApiPrefix}/task_log/meta`, { params }),
   pageList: (params?: Record<string, unknown>) =>
-    http.get<AppResponse>(`${manageApiPrefix}/task_log/pageList`, { params }),
+    http.get<AppResponse>(`${manageApiPrefix}/task_log/page`, { params }),
   kill: (id: number | string) =>
-    http.formPost<AppResponse>(`${manageApiPrefix}/task_log/logKill`, { id }),
+    http.formPost<AppResponse>(`${manageApiPrefix}/task_log/log_kill`, { id }),
   clear: (payload: FormBodyRecord) =>
-    http.formPost<AppResponse>(`${manageApiPrefix}/task_log/clearLog`, payload),
+    http.formPost<AppResponse>(`${manageApiPrefix}/task_log/clear_log`, payload),
   detailCat: (payload: FormBodyRecord) =>
-    http.formPost<AppResponse>(`${manageApiPrefix}/task_log/logDetailCat`, payload),
+    http.formPost<AppResponse>(`${manageApiPrefix}/task_log/log_detail_cat`, payload),
 };
 
 export const userApi = {
   meta: () => http.get<AppResponse>(`${manageApiPrefix}/user/meta`),
   pageList: (params?: Record<string, unknown>) =>
-    http.get<AppResponse>(`${manageApiPrefix}/user/pageList`, { params }),
+    http.get<AppResponse>(`${manageApiPrefix}/user/page`, { params }),
   create: (payload: FormBodyRecord) =>
     http.formPost<AppResponse>(`${manageApiPrefix}/user/insert`, payload),
   update: (payload: FormBodyRecord) =>

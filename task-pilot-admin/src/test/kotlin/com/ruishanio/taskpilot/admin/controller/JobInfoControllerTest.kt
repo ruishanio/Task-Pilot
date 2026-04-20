@@ -26,7 +26,7 @@ class JobInfoControllerTest : AbstractSpringMvcTest() {
         val ret =
             mockMvc
                 .perform(
-                    post("/api/manage/auth/doLogin")
+                    post("/api/manage/auth/login")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .param("userName", "admin")
                         .param("password", "123456")
@@ -44,7 +44,7 @@ class JobInfoControllerTest : AbstractSpringMvcTest() {
         val ret: MvcResult =
             mockMvc
                 .perform(
-                    post("/api/manage/task_info/pageList")
+                    post("/api/manage/task_info/page")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .params(parameters)
                         .cookie(cookie)
@@ -62,7 +62,7 @@ class JobInfoControllerTest : AbstractSpringMvcTest() {
         val ret =
             mockMvc
                 .perform(
-                    post("/api/manage/task_info/nextTriggerTime")
+                    post("/api/manage/task_info/next_trigger_time")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .param("scheduleType", "FIX_RATE")
                         .param("scheduleConf", "5")

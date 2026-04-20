@@ -23,7 +23,7 @@ class ManageWebControllerTest : AbstractSpringMvcTest() {
         val ret =
             mockMvc
                 .perform(
-                    post("/api/manage/auth/doLogin")
+                    post("/api/manage/auth/login")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .param("userName", "admin")
                         .param("password", "123456")

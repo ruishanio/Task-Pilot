@@ -49,10 +49,10 @@ class JobUserController {
         return Response.ofSuccess(data)
     }
 
-    @RequestMapping("/pageList")
+    @RequestMapping("/page")
     @ResponseBody
     @TaskPilotAuth(role = Consts.ADMIN_ROLE)
-    fun pageList(
+    fun page(
         @RequestParam(required = false, defaultValue = "0") offset: Int,
         @RequestParam(required = false, defaultValue = "10") pagesize: Int,
         @RequestParam username: String?,

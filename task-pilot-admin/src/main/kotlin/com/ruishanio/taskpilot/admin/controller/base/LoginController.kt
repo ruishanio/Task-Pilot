@@ -32,10 +32,10 @@ class LoginController {
     /**
      * 管理端仍然走本地用户表校验，校验通过后再创建本地登录态。
      */
-    @RequestMapping(value = ["/doLogin"], method = [RequestMethod.POST])
+    @RequestMapping(value = ["/login"], method = [RequestMethod.POST])
     @ResponseBody
     @TaskPilotAuth(login = false)
-    fun doLogin(
+    fun login(
         request: HttpServletRequest,
         response: HttpServletResponse,
         userName: String?,
@@ -75,10 +75,10 @@ class LoginController {
     /**
      * 只允许当前登录用户修改自己的密码，并要求校验旧密码。
      */
-    @RequestMapping("/updatePwd")
+    @RequestMapping("/update_password")
     @ResponseBody
     @TaskPilotAuth
-    fun updatePwd(
+    fun updatePassword(
         request: HttpServletRequest,
         oldPassword: String?,
         password: String?

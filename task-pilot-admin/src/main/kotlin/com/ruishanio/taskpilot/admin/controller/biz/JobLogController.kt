@@ -103,9 +103,9 @@ class JobLogController {
         return Response.ofSuccess(data)
     }
 
-    @RequestMapping("/pageList")
+    @RequestMapping("/page")
     @ResponseBody
-    fun pageList(
+    fun page(
         request: HttpServletRequest,
         @RequestParam(required = false, defaultValue = "0") offset: Int,
         @RequestParam(required = false, defaultValue = "10") pagesize: Int,
@@ -157,7 +157,7 @@ class JobLogController {
         return normalized
     }
 
-    @RequestMapping("/logKill")
+    @RequestMapping("/log_kill")
     @ResponseBody
     fun logKill(request: HttpServletRequest, @RequestParam("id") id: Long): Response<String> {
         val log = taskLogMapper.load(id) ?: return Response.ofFail("日志ID非法")
@@ -188,7 +188,7 @@ class JobLogController {
         }
     }
 
-    @RequestMapping("/clearLog")
+    @RequestMapping("/clear_log")
     @ResponseBody
     fun clearLog(
         request: HttpServletRequest,
@@ -230,7 +230,7 @@ class JobLogController {
     /**
      * 读取执行器日志时在管理端做一层 XSS 过滤，并在任务已结束后补齐 end 标记。
      */
-    @RequestMapping("/logDetailCat")
+    @RequestMapping("/log_detail_cat")
     @ResponseBody
     fun logDetailCat(
         @RequestParam("logId") logId: Long,

@@ -81,9 +81,9 @@ class JobInfoController {
         return Response.ofSuccess(data)
     }
 
-    @RequestMapping("/pageList")
+    @RequestMapping("/page")
     @ResponseBody
-    fun pageList(
+    fun page(
         request: HttpServletRequest,
         @RequestParam(required = false, defaultValue = "0") offset: Int,
         @RequestParam(required = false, defaultValue = "10") pagesize: Int,
@@ -161,7 +161,7 @@ class JobInfoController {
     /**
      * 预计算未来 5 次触发时间，供前端保存前验证调度表达式。
      */
-    @RequestMapping("/nextTriggerTime")
+    @RequestMapping("/next_trigger_time")
     @ResponseBody
     fun nextTriggerTime(
         @RequestParam("scheduleType") scheduleType: ScheduleTypeEnum?,

@@ -1,6 +1,5 @@
 package com.ruishanio.taskpilot.admin.controller
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.ruishanio.taskpilot.admin.auth.constant.AuthConst
 import jakarta.servlet.http.Cookie
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -12,13 +11,15 @@ import org.springframework.test.web.servlet.MvcResult
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
+import tools.jackson.databind.json.JsonMapper
 
 /**
  * 覆盖任务管理控制器的基础登录态访问与调度时间试算能力。
  */
 class TaskInfoControllerTest : AbstractSpringMvcTest() {
     private lateinit var cookie: Cookie
-    private val objectMapper = ObjectMapper()
+    // 测试侧也显式走 Jackson 3，避免被 classpath 上并存的 Jackson 2 旧包误导。
+    private val jsonMapper = JsonMapper.builder().build()
 
     @BeforeEach
     @Throws(Exception::class)
@@ -50,7 +51,7 @@ class TaskInfoControllerTest : AbstractSpringMvcTest() {
                         .cookie(cookie)
                 ).andReturn()
 
-        val body = objectMapper.readTree(ret.response.contentAsString)
+        val body = jsonMapper.readTree(ret.response.contentAsString)
         assertEquals(200, body["code"].asInt())
         assertTrue(body["data"].has("data"))
         assertTrue(body["data"].has("total"))
@@ -69,7 +70,7 @@ class TaskInfoControllerTest : AbstractSpringMvcTest() {
                         .cookie(cookie)
                 ).andReturn()
 
-        val body = objectMapper.readTree(ret.response.contentAsString)
+        val body = jsonMapper.readTree(ret.response.contentAsString)
         assertEquals(200, body["code"].asInt())
         assertTrue(body["data"].isArray)
         assertEquals(5, body["data"].size())

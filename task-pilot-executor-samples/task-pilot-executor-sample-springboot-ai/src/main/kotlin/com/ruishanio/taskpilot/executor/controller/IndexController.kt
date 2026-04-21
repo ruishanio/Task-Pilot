@@ -1,7 +1,5 @@
 package com.ruishanio.taskpilot.executor.controller
 
-import com.fasterxml.jackson.core.JsonProcessingException
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.imfangs.dify.client.DifyClientFactory
 import io.github.imfangs.dify.client.callback.WorkflowStreamCallback
 import io.github.imfangs.dify.client.enums.ResponseMode
@@ -27,6 +25,8 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseBody
 import reactor.core.publisher.Flux
+import tools.jackson.core.JacksonException
+import tools.jackson.databind.json.JsonMapper
 
 @Controller
 @EnableAutoConfiguration
@@ -38,7 +38,8 @@ class IndexController {
     private val model = "qwen3:0.6b"
     private val apiKey = "app-46gHBiqUb5jqAHl9TDWwnRZ8"
     private val baseUrl = "http://localhost/v1"
-    private val objectMapper = ObjectMapper()
+    // Jackson 3 的 ObjectMapper 已转向不可变模型，这里统一使用 JsonMapper.Builder 构造 JSON 专用实例。
+    private val jsonMapper = JsonMapper.builder().build()
 
     @RequestMapping("/")
     @ResponseBody
@@ -160,8 +161,8 @@ class IndexController {
             return "null"
         }
         return try {
-            objectMapper.writeValueAsString(obj)
-        } catch (_: JsonProcessingException) {
+            jsonMapper.writeValueAsString(obj)
+        } catch (_: JacksonException) {
             obj.toString()
         }
     }

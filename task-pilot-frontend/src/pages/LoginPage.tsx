@@ -3,7 +3,14 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Button, Checkbox, Form, Input, Typography, message } from 'antd';
 import { authApi } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
+import { storeAccessToken } from '../services/authToken';
 import { getErrorMessage } from '../utils/format';
+
+interface LoginFormValues {
+  userName: string;
+  password: string;
+  ifRemember?: boolean;
+}
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -17,15 +24,22 @@ function LoginPage() {
     }
   }, [navigate, user]);
 
-  // 登录继续复用原后台表单接口，保持 Cookie 鉴权和开发代理链路一致。
-  async function handleSubmit(values) {
+  /**
+   * 登录成功后先持久化 JWT，再用 bootstrap 拉起当前登录用户与菜单。
+   */
+  async function handleSubmit(values: LoginFormValues) {
     try {
       setSubmitting(true);
-      await authApi.login({
+      const response = await authApi.login({
         userName: values.userName,
         password: values.password,
         ifRemember: values.ifRemember ? 'on' : '',
       });
+      const accessToken = response.data?.accessToken;
+      if (!accessToken) {
+        throw new Error('登录响应缺少 accessToken');
+      }
+      storeAccessToken(accessToken, Boolean(values.ifRemember));
       await refreshBootstrap();
       message.success('登录成功');
       const targetPath = location.state?.from?.pathname || '/dashboard';

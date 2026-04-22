@@ -3,135 +3,99 @@ package com.ruishanio.taskpilot.admin.auth.helper
 import com.ruishanio.taskpilot.admin.auth.constant.AuthConst
 import com.ruishanio.taskpilot.admin.auth.exception.TaskPilotAuthException
 import com.ruishanio.taskpilot.admin.auth.model.LoginInfo
-import com.ruishanio.taskpilot.admin.auth.store.LoginStore
-import com.ruishanio.taskpilot.admin.auth.token.TokenHelper
+import com.ruishanio.taskpilot.admin.auth.model.LoginTokenPayload
+import com.ruishanio.taskpilot.tool.auth.JwtTool
 import com.ruishanio.taskpilot.tool.core.CollectionTool
 import com.ruishanio.taskpilot.tool.core.StringTool
-import com.ruishanio.taskpilot.tool.http.CookieTool
+import com.ruishanio.taskpilot.tool.http.http.enums.Header
 import com.ruishanio.taskpilot.tool.response.Response
 import jakarta.servlet.http.HttpServletRequest
-import jakarta.servlet.http.HttpServletResponse
 
 /**
  * 管理端本地认证辅助对象。
  *
- * 统一管理 cookie 会话和 request 里的已解析登录态，避免控制器重复处理认证细节。
+ * 统一管理 JWT 登录签发、请求头解析与 request 里的已解析登录态，避免控制器重复处理认证细节。
  */
 object TaskPilotAuthHelper {
-    private lateinit var loginStore: LoginStore
-    private var tokenKey: String = AuthConst.TASK_PILOT_LOGIN_TOKEN
+    private lateinit var jwtTool: JwtTool
     private var tokenTimeout: Long = AuthConst.EXPIRE_TIME_FOR_10_YEAR
 
-    fun init(loginStore: LoginStore, tokenKey: String?, tokenTimeout: Long) {
-        this.loginStore = loginStore
-        this.tokenKey = if (StringTool.isBlank(tokenKey)) AuthConst.TASK_PILOT_LOGIN_TOKEN else tokenKey!!.trim()
+    fun init(jwtSecret: String?, tokenTimeout: Long) {
+        if (StringTool.isBlank(jwtSecret)) {
+            throw TaskPilotAuthException("task-pilot jwt secret is blank.")
+        }
+        this.jwtTool = JwtTool(jwtSecret!!.trim())
         this.tokenTimeout = if (tokenTimeout <= 0) AuthConst.EXPIRE_TIME_FOR_10_YEAR else tokenTimeout
     }
 
     /**
-     * 所有对外能力都依赖初始化后的登录存储，未初始化直接报错，避免静默放大认证问题。
+     * 所有对外能力都依赖初始化后的 JWT 工具，未初始化直接报错，避免静默放大认证问题。
      */
     private fun ensureInitialized() {
-        if (!::loginStore.isInitialized) {
+        if (!::jwtTool.isInitialized) {
             throw TaskPilotAuthException("task-pilot auth helper not initialized.")
         }
     }
 
-    fun login(loginInfo: LoginInfo?): Response<String> {
+    fun login(loginInfo: LoginInfo?): Response<LoginTokenPayload> {
         ensureInitialized()
         val currentLoginInfo = loginInfo ?: return Response.ofFail("loginInfo is null")
+        if (StringTool.isBlank(currentLoginInfo.userId) || StringTool.isBlank(currentLoginInfo.userName)) {
+            return Response.ofFail("loginInfo is invalid")
+        }
+
         currentLoginInfo.expireTime = System.currentTimeMillis() + tokenTimeout
-        val tokenResponse = TokenHelper.generateToken(currentLoginInfo)
-        if (!tokenResponse.isSuccess) {
-            return tokenResponse
+        val claims = hashMapOf(
+            CLAIM_USER_ID to currentLoginInfo.userId!!,
+            CLAIM_USER_NAME to currentLoginInfo.userName!!,
+            CLAIM_ROLE_LIST to (currentLoginInfo.roleList ?: emptyList()),
+            CLAIM_EXTRA_INFO to (currentLoginInfo.extraInfo ?: emptyMap())
+        )
+        return try {
+            val accessToken = jwtTool.createToken(currentLoginInfo.userId!!, claims, tokenTimeout)
+            Response.ofSuccess(
+                LoginTokenPayload(
+                    accessToken = accessToken,
+                    expiresAt = currentLoginInfo.expireTime
+                )
+            )
+        } catch (ex: Exception) {
+            throw TaskPilotAuthException("create jwt token fail", ex)
         }
-
-        val setResponse = loginStore.set(currentLoginInfo)
-        if (!setResponse.isSuccess) {
-            return setResponse
-        }
-        return Response.ofSuccess(tokenResponse.data)
     }
 
-    fun loginWithCookie(
-        loginInfo: LoginInfo?,
-        response: HttpServletResponse,
-        ifRemember: Boolean
-    ): Response<String> {
-        val loginResult = login(loginInfo)
-        if (loginResult.isSuccess) {
-            CookieTool.set(response, tokenKey, loginResult.data!!, ifRemember)
-        }
-        return loginResult
-    }
-
-    fun loginUpdate(loginInfo: LoginInfo?): Response<String> {
-        ensureInitialized()
-        if (loginInfo != null) {
-            loginInfo.expireTime = System.currentTimeMillis() + tokenTimeout
-        }
-        return loginStore.update(loginInfo)
-    }
-
-    fun logout(token: String?): Response<String> {
-        ensureInitialized()
-        val loginInfoForToken = TokenHelper.parseToken(token)
-        if (loginInfoForToken == null) {
-            return Response.ofFail("token is invalid")
-        }
-        return loginStore.remove(loginInfoForToken.userId)
-    }
-
-    fun logoutWithCookie(request: HttpServletRequest, response: HttpServletResponse): Response<String> {
-        ensureInitialized()
-        val token = CookieTool.getValue(request, tokenKey)
-        if (StringTool.isBlank(token)) {
-            return Response.ofSuccess()
-        }
-
-        val logoutResult = logout(token)
-        CookieTool.remove(request, response, tokenKey)
-        return logoutResult
-    }
+    fun logout(): Response<String> = Response.ofSuccess()
 
     fun loginCheck(token: String?): Response<LoginInfo> {
         ensureInitialized()
-        val loginInfoForToken = TokenHelper.parseToken(token)
-        if (loginInfoForToken == null || StringTool.isBlank(loginInfoForToken.signature)) {
+        val rawToken = resolveBearerToken(token)
+        if (rawToken == null || !jwtTool.validateToken(rawToken)) {
             return Response.ofFail("token is invalid")
         }
 
-        val loginInfoResponse = loginStore.get(loginInfoForToken.userId)
-        if (!loginInfoResponse.isSuccess) {
-            return loginInfoResponse
-        }
-
-        val loginInfo = loginInfoResponse.data ?: return Response.ofFail("token is invalid")
-        return if (loginInfoForToken.signature == loginInfo.signature) {
-            Response.ofSuccess(loginInfo)
-        } else {
-            Response.ofFail("token signature is invalid")
+        return try {
+            val userId = resolveStringClaim(jwtTool.getClaim(rawToken, CLAIM_USER_ID))
+            val userName = resolveStringClaim(jwtTool.getClaim(rawToken, CLAIM_USER_NAME))
+            if (StringTool.isBlank(userId) || StringTool.isBlank(userName)) {
+                Response.ofFail("token is invalid")
+            } else {
+                Response.ofSuccess(
+                    LoginInfo(
+                        userId = userId,
+                        userName = userName,
+                        roleList = resolveRoleList(jwtTool.getClaim(rawToken, CLAIM_ROLE_LIST)),
+                        extraInfo = resolveExtraInfo(jwtTool.getClaim(rawToken, CLAIM_EXTRA_INFO)),
+                        expireTime = jwtTool.getExpirationTime(rawToken)?.time ?: 0
+                    )
+                )
+            }
+        } catch (_: Exception) {
+            Response.ofFail("token is invalid")
         }
     }
 
     fun loginCheckWithHeader(request: HttpServletRequest): Response<LoginInfo> =
-        loginCheck(request.getHeader(tokenKey))
-
-    /**
-     * Cookie 登录校验失败时主动清理浏览器里的脏 token，避免前端持续携带无效会话。
-     */
-    fun loginCheckWithCookie(
-        request: HttpServletRequest,
-        response: HttpServletResponse
-    ): Response<LoginInfo> {
-        ensureInitialized()
-        val token = CookieTool.getValue(request, tokenKey)
-        val result = loginCheck(token)
-        if (!result.isSuccess) {
-            CookieTool.remove(request, response, tokenKey)
-        }
-        return result
-    }
+        loginCheck(request.getHeader(Header.AUTHORIZATION.value))
 
     fun loginCheckWithAttr(request: HttpServletRequest): Response<LoginInfo> {
         val loginInfo = request.getAttribute(AuthConst.TASK_PILOT_LOGIN_USER) as? LoginInfo
@@ -161,4 +125,60 @@ object TaskPilotAuthHelper {
             Response.ofFail("has no permission.")
         }
     }
+
+    /**
+     * Header 必须严格符合 `Bearer <token>`，避免兼容过多非标准写法后把鉴权边界做模糊。
+     */
+    private fun resolveBearerToken(authorizationHeader: String?): String? {
+        if (StringTool.isBlank(authorizationHeader)) {
+            return null
+        }
+        val normalizedHeader = authorizationHeader!!.trim()
+        if (!normalizedHeader.startsWith(AuthConst.BEARER_TOKEN_PREFIX, ignoreCase = true)) {
+            return null
+        }
+        val rawToken = normalizedHeader.substring(AuthConst.BEARER_TOKEN_PREFIX.length).trim()
+        return if (StringTool.isBlank(rawToken)) null else rawToken
+    }
+
+    /**
+     * 角色列表写入 JWT 时保持 JSON 数组，回读时只保留非空字符串，避免脏 claim 混进授权判断。
+     */
+    private fun resolveRoleList(rawRoleList: Any?): List<String>? {
+        val roleList = (rawRoleList as? List<*>)
+            ?.mapNotNull { role ->
+                role?.toString()?.trim()?.takeIf(StringTool::isNotBlank)
+            }
+            ?: emptyList()
+        return roleList.ifEmpty { null }
+    }
+
+    /**
+     * 标量 claim 统一按字符串读取，避免不同 JSON 解析器把同一字段还原成非字符串实现细节。
+     */
+    private fun resolveStringClaim(rawValue: Any?): String? =
+        rawValue?.toString()?.trim()?.takeIf(StringTool::isNotBlank)
+
+    /**
+     * 扩展信息当前只依赖 `executorIds`，但这里仍按通用字符串 Map 回填，便于后续扩展 claim。
+     */
+    private fun resolveExtraInfo(rawExtraInfo: Any?): Map<String, String>? {
+        val extraInfo = (rawExtraInfo as? Map<*, *>)
+            ?.mapNotNull { entry ->
+                val key = entry.key?.toString()?.trim()
+                if (StringTool.isBlank(key)) {
+                    null
+                } else {
+                    key!! to (entry.value?.toString() ?: "")
+                }
+            }
+            ?.toMap()
+            ?: emptyMap()
+        return extraInfo.ifEmpty { null }
+    }
+
+    private const val CLAIM_USER_ID = "userId"
+    private const val CLAIM_USER_NAME = "userName"
+    private const val CLAIM_ROLE_LIST = "roleList"
+    private const val CLAIM_EXTRA_INFO = "extraInfo"
 }

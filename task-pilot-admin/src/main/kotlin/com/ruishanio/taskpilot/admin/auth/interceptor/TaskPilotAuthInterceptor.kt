@@ -15,7 +15,7 @@ import org.springframework.web.servlet.HandlerInterceptor
 /**
  * 管理端本地认证拦截器。
  *
- * 页面请求统一跳默认登录页，JSON 请求则统一抛业务码，兼容后台模板和前端 SPA 两种入口。
+ * API 请求统一读取 Bearer token，页面请求仅在仍保留后端鉴权的场景下回退到登录页。
  */
 class TaskPilotAuthInterceptor : HandlerInterceptor {
     init {
@@ -23,7 +23,7 @@ class TaskPilotAuthInterceptor : HandlerInterceptor {
     }
 
     override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
-        // 预检请求不带登录 Cookie，直接交给 CORS 处理。
+        // 预检请求通常不会带 Authorization，直接交给 CORS 处理。
         if ("OPTIONS".equals(request.method, ignoreCase = true)) {
             return true
         }
@@ -40,7 +40,7 @@ class TaskPilotAuthInterceptor : HandlerInterceptor {
             return true
         }
 
-        val loginCheckResult = TaskPilotAuthHelper.loginCheckWithCookie(request, response)
+        val loginCheckResult = TaskPilotAuthHelper.loginCheckWithHeader(request)
         val loginInfo = if (loginCheckResult.isSuccess) loginCheckResult.data else null
         if (loginInfo == null) {
             if (isJsonHandler(handler)) {

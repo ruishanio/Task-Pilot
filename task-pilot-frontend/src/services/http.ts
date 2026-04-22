@@ -1,11 +1,11 @@
-import axios, { type AxiosRequestConfig } from 'axios';
+import axios, { AxiosHeaders, type AxiosRequestConfig } from 'axios';
+import { clearAccessToken, getAccessToken } from './authToken';
 import type { AppError, AppResponse, FormBodyRecord } from '../types/http';
 
 const http = axios.create({
   // 开发环境通过 Vite 代理转发到后端，生产环境则与后端同域部署，因此统一使用相对接口地址。
   baseURL: '',
   timeout: 20000,
-  withCredentials: true,
 });
 
 type AuthFailureHandler = ((payload?: AppResponse<any>) => void) | null;
@@ -23,6 +23,16 @@ function createAppError(payload?: AppResponse<any>): AppError {
   return error;
 }
 
+http.interceptors.request.use((config) => {
+  const accessToken = getAccessToken();
+  if (accessToken) {
+    const headers = AxiosHeaders.from(config.headers);
+    headers.set('Authorization', `Bearer ${accessToken}`);
+    config.headers = headers;
+  }
+  return config;
+});
+
 http.interceptors.response.use(
   (response) => {
     const payload = response.data as AppResponse<any>;
@@ -32,6 +42,7 @@ http.interceptors.response.use(
       }
 
       if (payload.code === 401) {
+        clearAccessToken();
         authFailureHandler?.(payload);
       }
       return Promise.reject(createAppError(payload));

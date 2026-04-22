@@ -1,8 +1,9 @@
 package com.ruishanio.taskpilot.admin.controller
 
 import com.ruishanio.taskpilot.admin.auth.constant.AuthConst
-import jakarta.servlet.http.Cookie
+import com.ruishanio.taskpilot.tool.http.http.enums.Header
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -17,7 +18,7 @@ import tools.jackson.databind.json.JsonMapper
  * 覆盖任务管理控制器的基础登录态访问与调度时间试算能力。
  */
 class TaskInfoControllerTest : AbstractSpringMvcTest() {
-    private lateinit var cookie: Cookie
+    private lateinit var authorizationHeader: String
     // 测试侧也显式走 Jackson 3，避免被 classpath 上并存的 Jackson 2 旧包误导。
     private val jsonMapper = JsonMapper.builder().build()
 
@@ -32,7 +33,10 @@ class TaskInfoControllerTest : AbstractSpringMvcTest() {
                         .param("userName", "admin")
                         .param("password", "123456")
                 ).andReturn()
-        cookie = ret.response.getCookie(AuthConst.TASK_PILOT_LOGIN_TOKEN)!!
+        val body = jsonMapper.readTree(ret.response.contentAsString)
+        val accessToken = body["data"]?.get("accessToken")?.asText()
+        assertNotNull(accessToken)
+        authorizationHeader = "${AuthConst.BEARER_TOKEN_PREFIX}${accessToken}"
     }
 
     @Test
@@ -48,7 +52,7 @@ class TaskInfoControllerTest : AbstractSpringMvcTest() {
                     post("/api/manage/task_info/page")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .params(parameters)
-                        .cookie(cookie)
+                        .header(Header.AUTHORIZATION.value, authorizationHeader)
                 ).andReturn()
 
         val body = jsonMapper.readTree(ret.response.contentAsString)
@@ -67,7 +71,7 @@ class TaskInfoControllerTest : AbstractSpringMvcTest() {
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .param("scheduleType", "FIX_RATE")
                         .param("scheduleConf", "5")
-                        .cookie(cookie)
+                        .header(Header.AUTHORIZATION.value, authorizationHeader)
                 ).andReturn()
 
         val body = jsonMapper.readTree(ret.response.contentAsString)

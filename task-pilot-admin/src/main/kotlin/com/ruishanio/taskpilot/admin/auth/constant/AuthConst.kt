@@ -10,9 +10,10 @@ object AuthConst {
     const val LOGIN_URL: String = "/web/login"
 
     /**
-     * 登录令牌在 Cookie/Header 中使用的键名。
+     * Bearer token 类型与前缀，统一收口避免前后端各自拼接。
      */
-    const val TASK_PILOT_LOGIN_TOKEN: String = "task_pilot_login_token"
+    const val BEARER_TOKEN_TYPE: String = "Bearer"
+    const val BEARER_TOKEN_PREFIX: String = "$BEARER_TOKEN_TYPE "
 
     /**
      * 已解析登录用户在 request attribute 中的键名。

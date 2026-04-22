@@ -1,6 +1,7 @@
 import { Suspense, lazy } from 'react';
 import { Spin } from 'antd';
 import { Navigate, Route, Routes } from 'react-router-dom';
+import AdminRoute from './components/AdminRoute';
 import ProtectedRoute from './components/ProtectedRoute';
 
 const AppLayout = lazy(() => import('./components/AppLayout'));
@@ -35,12 +36,26 @@ function App() {
         >
           <Route index element={<Navigate to="/dashboard" replace />} />
           <Route path="dashboard" element={<DashboardPage />} />
-          <Route path="executor" element={<ExecutorPage />} />
+          <Route
+            path="executor"
+            element={
+              <AdminRoute>
+                <ExecutorPage />
+              </AdminRoute>
+            }
+          />
           <Route path="task_info" element={<TaskInfoPage />} />
           <Route path="task_code" element={<TaskInfoPage />} />
           <Route path="task_log" element={<TaskLogPage />} />
           <Route path="task_log/detail" element={<TaskLogPage />} />
-          <Route path="user" element={<UserPage />} />
+          <Route
+            path="user"
+            element={
+              <AdminRoute>
+                <UserPage />
+              </AdminRoute>
+            }
+          />
         </Route>
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

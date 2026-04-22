@@ -92,6 +92,11 @@
 			<artifactId>bcprov-jdk18on</artifactId>
 			<version>${bcprov-jdk18on.version}</version>
 		</dependency>
+		<!-- 管理端运行期直接使用 JwtTool，需要显式带上 Nimbus 的 JOSE/JWT 实现。 -->
+		<dependency>
+			<groupId>com.nimbusds</groupId>
+			<artifactId>nimbus-jose-jwt</artifactId>
+		</dependency>
 
 	</dependencies>
 

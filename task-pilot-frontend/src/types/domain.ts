@@ -1,7 +1,10 @@
 export interface AuthUser {
-  id?: number | string;
+  userId?: number | string;
   userName?: string;
-  permission?: string;
+  roleList?: string[];
+  permissionList?: string[];
+  extraInfo?: Record<string, string>;
+  isAdmin?: boolean;
   [key: string]: unknown;
 }
 
@@ -18,6 +21,13 @@ export interface BootstrapPayload {
   appNameFull?: string;
   user?: AuthUser | null;
   menus?: MenuItem[];
+  [key: string]: unknown;
+}
+
+export interface LoginTokenPayload {
+  accessToken?: string;
+  tokenType?: string;
+  expiresAt?: number;
   [key: string]: unknown;
 }
 

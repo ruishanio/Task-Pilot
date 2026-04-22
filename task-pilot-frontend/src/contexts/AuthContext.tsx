@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { authApi, frontendApi } from '../services/api';
+import { clearAccessToken, getAccessToken } from '../services/authToken';
 import { registerAuthFailureHandler } from '../services/http';
 import type { AuthUser, BootstrapPayload, MenuItem } from '../types/domain';
 
@@ -86,16 +87,22 @@ export function AuthProvider({ children }: AuthProviderProps) {
     try {
       await authApi.logout();
     } finally {
+      clearAccessToken();
       clearAuthState();
     }
   }
 
   useEffect(() => {
     registerAuthFailureHandler(() => {
+      clearAccessToken();
       clearAuthState();
     });
 
-    refreshBootstrap({ silent: true });
+    if (getAccessToken()) {
+      refreshBootstrap({ silent: true });
+    } else {
+      clearAuthState();
+    }
     return () => {
       registerAuthFailureHandler(null);
     };

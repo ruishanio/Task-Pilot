@@ -72,5 +72,7 @@ task-pilot:
   logretentiondays: 30
   auth:
     token:
-      key: task_pilot_login_token
       timeout: 604800000
+    jwt:
+      # 示例环境提供一把满足 HS256 长度要求的默认密钥，生产环境请务必改成外部注入的高强度密钥。
+      secret: task-pilot-admin-jwt-secret-key-please-change-me-2026

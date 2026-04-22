@@ -1,5 +1,5 @@
 import http from './http';
-import type { BootstrapPayload } from '../types/domain';
+import type { BootstrapPayload, LoginTokenPayload } from '../types/domain';
 import type { AppResponse, FormBodyRecord } from '../types/http';
 
 const manageApiPrefix = '/api/manage';
@@ -13,7 +13,7 @@ export const frontendApi = {
 
 export const authApi = {
   login: (payload: FormBodyRecord) =>
-    http.formPost<AppResponse>(`${manageApiPrefix}/auth/login`, payload),
+    http.formPost<AppResponse<LoginTokenPayload>>(`${manageApiPrefix}/auth/login`, payload),
   logout: () => http.formPost<AppResponse>(`${manageApiPrefix}/auth/logout`),
   updatePassword: (payload: FormBodyRecord) =>
     http.formPost<AppResponse>(`${manageApiPrefix}/auth/update_password`, payload),

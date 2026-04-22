@@ -79,7 +79,18 @@
 		<dependency>
 			<groupId>org.quartz-scheduler</groupId>
 			<artifactId>quartz</artifactId>
-			<version>2.5.0</version>
+			<version>${quartz.version}</version>
+		</dependency>
+		<!-- 管理端账号口令统一切到 Argon2，同时保留历史 SHA-256 兼容校验能力。 -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-crypto</artifactId>
+		</dependency>
+		<!-- Argon2PasswordEncoder 依赖 BouncyCastle 的 Argon2 实现。 -->
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcprov-jdk18on</artifactId>
+			<version>${bcprov-jdk18on.version}</version>
 		</dependency>
 
 	</dependencies>

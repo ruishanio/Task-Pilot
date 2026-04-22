@@ -98,4 +98,10 @@
 		WHERE id = #{id}
 	</update>
 
+	<update id="updatePassword" parameterType="java.util.HashMap" >
+		UPDATE "user"
+		SET password = #{password}
+		WHERE id = #{id}
+	</update>
+
 </mapper>

@@ -3,11 +3,10 @@ package com.ruishanio.taskpilot.admin.controller.base
 import com.ruishanio.taskpilot.admin.auth.annotation.TaskPilotAuth
 import com.ruishanio.taskpilot.admin.auth.helper.TaskPilotAuthHelper
 import com.ruishanio.taskpilot.admin.auth.model.LoginInfo
+import com.ruishanio.taskpilot.admin.auth.password.TaskPilotPasswordService
 import com.ruishanio.taskpilot.admin.mapper.UserMapper
-import com.ruishanio.taskpilot.admin.model.User
 import com.ruishanio.taskpilot.admin.web.ManageRoute
 import com.ruishanio.taskpilot.tool.core.StringTool
-import com.ruishanio.taskpilot.tool.crypto.Sha256Tool
 import com.ruishanio.taskpilot.tool.id.UUIDTool
 import com.ruishanio.taskpilot.tool.response.Response
 import jakarta.annotation.Resource
@@ -26,8 +25,12 @@ import jakarta.servlet.http.HttpServletResponse
 @Controller
 @RequestMapping(ManageRoute.API_MANAGE_AUTH)
 class LoginController {
+
     @Resource
     private lateinit var userMapper: UserMapper
+
+    @Resource
+    private lateinit var taskPilotPasswordService: TaskPilotPasswordService
 
     /**
      * 管理端仍然走本地用户表校验，校验通过后再创建本地登录态。
@@ -50,8 +53,7 @@ class LoginController {
 
         val user = userMapper.loadByUserName(userName)
             ?: return Response.ofFail("账号或密码错误")
-        val passwordHash = Sha256Tool.sha256(normalizedPassword)
-        if (passwordHash != user.password) {
+        if (!taskPilotPasswordService.matches(normalizedPassword, user.password)) {
             return Response.ofFail("账号或密码错误")
         }
 
@@ -87,25 +89,21 @@ class LoginController {
             return Response.ofFail("请输入旧密码")
         }
         if (password == null || password.trim().isEmpty()) {
-            return Response.ofFail("请输入旧密码")
+            return Response.ofFail("请输入新密码")
         }
         val normalizedPassword = password.trim()
         if (normalizedPassword.length !in 4..20) {
             return Response.ofFail("长度限制[4-20]")
         }
 
-        val oldPasswordHash = Sha256Tool.sha256(oldPassword)
-        val passwordHash = Sha256Tool.sha256(normalizedPassword)
-
         val loginInfoResponse = TaskPilotAuthHelper.loginCheckWithAttr(request)
         val loginInfo = loginInfoResponse.data ?: return Response.ofFail("not login.")
-        val existUser = userMapper.loadByUserName(loginInfo.userName) as User
-        if (oldPasswordHash != existUser.password) {
+        val existUser = userMapper.loadByUserName(loginInfo.userName) ?: return Response.ofFail("用户不存在")
+        if (!taskPilotPasswordService.matches(oldPassword.trim(), existUser.password)) {
             return Response.ofFail("旧密码非法")
         }
 
-        existUser.password = passwordHash
-        userMapper.update(existUser)
+        userMapper.updatePassword(existUser.id, taskPilotPasswordService.encode(normalizedPassword))
         return Response.ofSuccess()
     }
 }

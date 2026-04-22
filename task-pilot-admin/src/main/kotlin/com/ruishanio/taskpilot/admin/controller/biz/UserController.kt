@@ -3,6 +3,7 @@ package com.ruishanio.taskpilot.admin.controller.biz
 import com.ruishanio.taskpilot.admin.auth.annotation.TaskPilotAuth
 import com.ruishanio.taskpilot.admin.auth.helper.TaskPilotAuthHelper
 import com.ruishanio.taskpilot.admin.auth.model.LoginInfo
+import com.ruishanio.taskpilot.admin.auth.password.TaskPilotPasswordService
 import com.ruishanio.taskpilot.admin.constant.Consts
 import com.ruishanio.taskpilot.admin.mapper.ExecutorMapper
 import com.ruishanio.taskpilot.admin.mapper.UserMapper
@@ -10,7 +11,6 @@ import com.ruishanio.taskpilot.admin.model.User
 import com.ruishanio.taskpilot.admin.web.ManageRoute
 import com.ruishanio.taskpilot.tool.core.CollectionTool
 import com.ruishanio.taskpilot.tool.core.StringTool
-import com.ruishanio.taskpilot.tool.crypto.Sha256Tool
 import com.ruishanio.taskpilot.tool.response.PageModel
 import com.ruishanio.taskpilot.tool.response.Response
 import jakarta.annotation.Resource
@@ -32,6 +32,9 @@ class UserController {
 
     @Resource
     private lateinit var userMapper: UserMapper
+
+    @Resource
+    private lateinit var taskPilotPasswordService: TaskPilotPasswordService
 
     /**
      * 用户管理页需要的角色与执行器权限选项直接跟随用户资源输出，便于前端按资源域加载。
@@ -91,7 +94,7 @@ class UserController {
         if (normalizedPassword.length !in 4..20) {
             return Response.ofFail("长度限制[4-20]")
         }
-        user.password = Sha256Tool.sha256(normalizedPassword)
+        user.password = taskPilotPasswordService.encode(normalizedPassword)
 
         val existUser = userMapper.loadByUserName(user.username)
         if (existUser != null) {
@@ -121,7 +124,7 @@ class UserController {
             if (normalizedPassword.length !in 4..20) {
                 return Response.ofFail("长度限制[4-20]")
             }
-            user.password = Sha256Tool.sha256(normalizedPassword)
+            user.password = taskPilotPasswordService.encode(normalizedPassword)
         } else {
             user.password = null
         }

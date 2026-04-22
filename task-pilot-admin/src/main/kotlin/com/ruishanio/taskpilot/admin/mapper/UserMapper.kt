@@ -34,4 +34,6 @@ interface UserMapper {
     fun delete(@Param("id") id: Int): Int
 
     fun updateToken(@Param("id") id: Int, @Param("token") token: String?): Int
+
+    fun updatePassword(@Param("id") id: Int, @Param("password") password: String): Int
 }

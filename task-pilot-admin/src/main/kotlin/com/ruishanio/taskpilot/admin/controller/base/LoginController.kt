@@ -1,6 +1,5 @@
 package com.ruishanio.taskpilot.admin.controller.base
 
-import com.ruishanio.taskpilot.admin.auth.annotation.TaskPilotAuth
 import com.ruishanio.taskpilot.admin.auth.helper.TaskPilotAuthHelper
 import com.ruishanio.taskpilot.admin.auth.model.LoginInfo
 import com.ruishanio.taskpilot.admin.auth.model.LoginTokenPayload
@@ -21,7 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody
 /**
  * 登录与密码维护控制器。
  *
- * 继续复用本地认证 Helper 的 JWT 签发逻辑，只保留管理端自身的账号密码校验。
+ * 继续复用认证 Helper 基于 Spring Security 官方 `JwtEncoder` 的签发逻辑，只保留管理端自身的账号密码校验。
  */
 @Controller
 @RequestMapping(ManageRoute.API_MANAGE_AUTH)
@@ -38,7 +37,6 @@ class LoginController {
      */
     @RequestMapping(value = ["/login"], method = [RequestMethod.POST])
     @ResponseBody
-    @TaskPilotAuth(login = false)
     fun login(
         userName: String?,
         password: String?,
@@ -59,18 +57,11 @@ class LoginController {
 
         return TaskPilotAuthHelper.login(buildLoginInfo(user))
     }
-
-    @RequestMapping(value = ["/logout"], method = [RequestMethod.POST])
-    @ResponseBody
-    @TaskPilotAuth(login = false)
-    fun logout(): Response<String> = TaskPilotAuthHelper.logout()
-
     /**
      * 只允许当前登录用户修改自己的密码，并要求校验旧密码。
      */
     @RequestMapping("/update_password")
     @ResponseBody
-    @TaskPilotAuth
     fun updatePassword(
         request: HttpServletRequest,
         oldPassword: String?,

@@ -12,23 +12,31 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 class ManageWebControllerTest : AbstractSpringMvcTest() {
     @Test
     @Throws(Exception::class)
-    fun loginPageForwardsToSpaWhenAnonymous() {
-        mockMvc.perform(get("/web/login"))
+    fun webRootForwardsToSpaWhenAnonymous() {
+        mockMvc.perform(get("/web"))
             .andExpect(status().isOk)
             .andExpect(forwardedUrl("/web/index.html"))
     }
 
     @Test
     @Throws(Exception::class)
-    fun rootRedirectsToDashboardWhenAnonymous() {
+    fun rootRedirectsToWebWhenAnonymous() {
         mockMvc.perform(get("/"))
             .andExpect(status().is3xxRedirection)
-            .andExpect(redirectedUrl("/web/dashboard"))
+            .andExpect(redirectedUrl("/web"))
     }
 
     @Test
     @Throws(Exception::class)
-    fun dashboardForwardsToSpaWhenAnonymous() {
+    fun webSlashRedirectsToWebWhenAnonymous() {
+        mockMvc.perform(get("/web/"))
+            .andExpect(status().is3xxRedirection)
+            .andExpect(redirectedUrl("/web"))
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun frontendRouteForwardsToSpaWhenAnonymous() {
         mockMvc.perform(get("/web/dashboard"))
             .andExpect(status().isOk)
             .andExpect(forwardedUrl("/web/index.html"))

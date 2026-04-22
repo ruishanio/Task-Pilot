@@ -4,39 +4,54 @@ import com.ruishanio.taskpilot.admin.auth.constant.AuthConst
 import com.ruishanio.taskpilot.admin.auth.exception.TaskPilotAuthException
 import com.ruishanio.taskpilot.admin.auth.model.LoginInfo
 import com.ruishanio.taskpilot.admin.auth.model.LoginTokenPayload
-import com.ruishanio.taskpilot.tool.auth.JwtTool
 import com.ruishanio.taskpilot.tool.core.CollectionTool
 import com.ruishanio.taskpilot.tool.core.StringTool
-import com.ruishanio.taskpilot.tool.http.http.enums.Header
 import com.ruishanio.taskpilot.tool.response.Response
 import jakarta.servlet.http.HttpServletRequest
+import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.oauth2.jose.jws.MacAlgorithm
+import org.springframework.security.oauth2.jwt.JwsHeader
+import org.springframework.security.oauth2.jwt.Jwt
+import org.springframework.security.oauth2.jwt.JwtClaimsSet
+import org.springframework.security.oauth2.jwt.JwtEncoder
+import org.springframework.security.oauth2.jwt.JwtEncoderParameters
+import java.time.Instant
 
 /**
  * 管理端本地认证辅助对象。
  *
- * 统一管理 JWT 登录签发、请求头解析与 request 里的已解析登录态，避免控制器重复处理认证细节。
+ * 统一管理 JWT 登录签发，以及 request / SecurityContext 里的业务登录态恢复逻辑，避免控制器重复处理认证细节。
  */
 object TaskPilotAuthHelper {
-    private lateinit var jwtTool: JwtTool
+    /**
+     * 官方 JwtEncoder 在启动时初始化一次，后续登录签发都复用同一个实例。
+     */
+    private lateinit var jwtEncoder: JwtEncoder
+    /**
+     * Token 有效期继续沿用配置项毫秒值，避免前后端各自推导过期时间。
+     */
     private var tokenTimeout: Long = AuthConst.EXPIRE_TIME_FOR_10_YEAR
 
-    fun init(jwtSecret: String?, tokenTimeout: Long) {
-        if (StringTool.isBlank(jwtSecret)) {
-            throw TaskPilotAuthException("task-pilot jwt secret is blank.")
-        }
-        this.jwtTool = JwtTool(jwtSecret!!.trim())
+    /**
+     * 管理端启动时初始化官方 JWT 编码器与过期时间，避免登录接口自行拼装签名逻辑。
+     */
+    fun init(jwtEncoder: JwtEncoder, tokenTimeout: Long) {
+        this.jwtEncoder = jwtEncoder
         this.tokenTimeout = if (tokenTimeout <= 0) AuthConst.EXPIRE_TIME_FOR_10_YEAR else tokenTimeout
     }
 
     /**
-     * 所有对外能力都依赖初始化后的 JWT 工具，未初始化直接报错，避免静默放大认证问题。
+     * 所有对外能力都依赖初始化后的 JwtEncoder，未初始化直接报错，避免静默放大认证问题。
      */
     private fun ensureInitialized() {
-        if (!::jwtTool.isInitialized) {
+        if (!::jwtEncoder.isInitialized) {
             throw TaskPilotAuthException("task-pilot auth helper not initialized.")
         }
     }
 
+    /**
+     * 登录成功后把最小必需登录态写进 JWT，既保证前端能无状态续用，又避免把完整用户对象暴露给客户端。
+     */
     fun login(loginInfo: LoginInfo?): Response<LoginTokenPayload> {
         ensureInitialized()
         val currentLoginInfo = loginInfo ?: return Response.ofFail("loginInfo is null")
@@ -44,15 +59,25 @@ object TaskPilotAuthHelper {
             return Response.ofFail("loginInfo is invalid")
         }
 
-        currentLoginInfo.expireTime = System.currentTimeMillis() + tokenTimeout
-        val claims = hashMapOf(
-            CLAIM_USER_ID to currentLoginInfo.userId!!,
-            CLAIM_USER_NAME to currentLoginInfo.userName!!,
-            CLAIM_ROLE_LIST to (currentLoginInfo.roleList ?: emptyList()),
-            CLAIM_EXTRA_INFO to (currentLoginInfo.extraInfo ?: emptyMap())
-        )
+        val issuedAt = Instant.now()
+        val expiresAt = issuedAt.plusMillis(tokenTimeout)
+        currentLoginInfo.expireTime = expiresAt.toEpochMilli()
+        val claims = JwtClaimsSet.builder()
+            .subject(currentLoginInfo.userId!!)
+            .issuedAt(issuedAt)
+            .expiresAt(expiresAt)
+            .claim(CLAIM_USER_ID, currentLoginInfo.userId!!)
+            .claim(CLAIM_USER_NAME, currentLoginInfo.userName!!)
+            .claim(CLAIM_ROLE_LIST, currentLoginInfo.roleList ?: emptyList<String>())
+            .claim(CLAIM_EXTRA_INFO, currentLoginInfo.extraInfo ?: emptyMap<String, String>())
+            .build()
         return try {
-            val accessToken = jwtTool.createToken(currentLoginInfo.userId!!, claims, tokenTimeout)
+            val accessToken = jwtEncoder.encode(
+                JwtEncoderParameters.from(
+                    JwsHeader.with(MacAlgorithm.HS256).build(),
+                    claims
+                )
+            ).tokenValue
             Response.ofSuccess(
                 LoginTokenPayload(
                     accessToken = accessToken,
@@ -64,44 +89,39 @@ object TaskPilotAuthHelper {
         }
     }
 
-    fun logout(): Response<String> = Response.ofSuccess()
-
-    fun loginCheck(token: String?): Response<LoginInfo> {
-        ensureInitialized()
-        val rawToken = resolveBearerToken(token)
-        if (rawToken == null || !jwtTool.validateToken(rawToken)) {
-            return Response.ofFail("token is invalid")
+    /**
+     * 官方 JwtDecoder 会先完成验签与时间校验，这里只负责把 claims 还原成业务层沿用的 `LoginInfo`。
+     */
+    fun fromJwt(jwt: Jwt?): LoginInfo? {
+        val currentJwt = jwt ?: return null
+        val claims = currentJwt.claims
+        val userId = resolveStringClaim(claims[CLAIM_USER_ID] ?: currentJwt.subject)
+        val userName = resolveStringClaim(claims[CLAIM_USER_NAME])
+        if (StringTool.isBlank(userId) || StringTool.isBlank(userName)) {
+            return null
         }
 
-        return try {
-            val userId = resolveStringClaim(jwtTool.getClaim(rawToken, CLAIM_USER_ID))
-            val userName = resolveStringClaim(jwtTool.getClaim(rawToken, CLAIM_USER_NAME))
-            if (StringTool.isBlank(userId) || StringTool.isBlank(userName)) {
-                Response.ofFail("token is invalid")
-            } else {
-                Response.ofSuccess(
-                    LoginInfo(
-                        userId = userId,
-                        userName = userName,
-                        roleList = resolveRoleList(jwtTool.getClaim(rawToken, CLAIM_ROLE_LIST)),
-                        extraInfo = resolveExtraInfo(jwtTool.getClaim(rawToken, CLAIM_EXTRA_INFO)),
-                        expireTime = jwtTool.getExpirationTime(rawToken)?.time ?: 0
-                    )
-                )
-            }
-        } catch (_: Exception) {
-            Response.ofFail("token is invalid")
-        }
+        return LoginInfo(
+            userId = userId,
+            userName = userName,
+            roleList = resolveRoleList(claims[CLAIM_ROLE_LIST]),
+            extraInfo = resolveExtraInfo(claims[CLAIM_EXTRA_INFO]),
+            expireTime = currentJwt.expiresAt?.toEpochMilli() ?: 0
+        )
     }
 
-    fun loginCheckWithHeader(request: HttpServletRequest): Response<LoginInfo> =
-        loginCheck(request.getHeader(Header.AUTHORIZATION.value))
-
+    /**
+     * Security 过滤器会优先把登录态挂到 request，若当前调用链没有显式透传 request attribute，则回退读取 SecurityContext。
+     */
     fun loginCheckWithAttr(request: HttpServletRequest): Response<LoginInfo> {
         val loginInfo = request.getAttribute(AuthConst.TASK_PILOT_LOGIN_USER) as? LoginInfo
+            ?: resolveLoginInfoFromSecurityContext()
         return if (loginInfo != null) Response.ofSuccess(loginInfo) else Response.ofFail("not login.")
     }
 
+    /**
+     * 角色校验只处理注解显式声明的角色要求，空角色直接放行，避免普通接口被额外角色约束误伤。
+     */
     fun hasRole(loginInfo: LoginInfo, role: String?): Response<String> {
         if (StringTool.isBlank(role)) {
             return Response.ofSuccess()
@@ -112,6 +132,9 @@ object TaskPilotAuthHelper {
         return if (loginInfo.roleList!!.contains(role)) Response.ofSuccess() else Response.ofFail("has no role.")
     }
 
+    /**
+     * 权限校验保留原语义，只有接口声明了具体权限值时才校验，方便后续继续扩展细粒度授权。
+     */
     fun hasPermission(loginInfo: LoginInfo, permission: String?): Response<String> {
         if (StringTool.isBlank(permission)) {
             return Response.ofSuccess()
@@ -124,21 +147,6 @@ object TaskPilotAuthHelper {
         } else {
             Response.ofFail("has no permission.")
         }
-    }
-
-    /**
-     * Header 必须严格符合 `Bearer <token>`，避免兼容过多非标准写法后把鉴权边界做模糊。
-     */
-    private fun resolveBearerToken(authorizationHeader: String?): String? {
-        if (StringTool.isBlank(authorizationHeader)) {
-            return null
-        }
-        val normalizedHeader = authorizationHeader!!.trim()
-        if (!normalizedHeader.startsWith(AuthConst.BEARER_TOKEN_PREFIX, ignoreCase = true)) {
-            return null
-        }
-        val rawToken = normalizedHeader.substring(AuthConst.BEARER_TOKEN_PREFIX.length).trim()
-        return if (StringTool.isBlank(rawToken)) null else rawToken
     }
 
     /**
@@ -176,6 +184,16 @@ object TaskPilotAuthHelper {
             ?: emptyMap()
         return extraInfo.ifEmpty { null }
     }
+
+    /**
+     * 业务层仍大量依赖 `LoginInfo`，这里把 Spring Security 的 principal 还原成旧模型，降低迁移改动面。
+     */
+    private fun resolveLoginInfoFromSecurityContext(): LoginInfo? =
+        when (val principal = SecurityContextHolder.getContext().authentication?.principal) {
+            is LoginInfo -> principal
+            is Jwt -> fromJwt(principal)
+            else -> null
+        }
 
     private const val CLAIM_USER_ID = "userId"
     private const val CLAIM_USER_NAME = "userName"

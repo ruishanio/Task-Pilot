@@ -1,7 +1,5 @@
 package com.ruishanio.taskpilot.admin.controller.biz
 
-import com.ruishanio.taskpilot.admin.auth.annotation.TaskPilotAuth
-import com.ruishanio.taskpilot.admin.constant.Consts
 import com.ruishanio.taskpilot.admin.mapper.ExecutorMapper
 import com.ruishanio.taskpilot.admin.mapper.RegistryMapper
 import com.ruishanio.taskpilot.admin.mapper.TaskInfoMapper
@@ -16,6 +14,7 @@ import com.ruishanio.taskpilot.tool.http.HttpTool
 import com.ruishanio.taskpilot.tool.response.PageModel
 import com.ruishanio.taskpilot.tool.response.Response
 import jakarta.annotation.Resource
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -41,7 +40,7 @@ class ExecutorController {
 
     @RequestMapping("/page")
     @ResponseBody
-    @TaskPilotAuth(role = Consts.ADMIN_ROLE)
+    @PreAuthorize("hasRole('ADMIN')")
     fun page(
         @RequestParam(required = false, defaultValue = "0") offset: Int,
         @RequestParam(required = false, defaultValue = "10") pagesize: Int,
@@ -61,7 +60,7 @@ class ExecutorController {
      */
     @RequestMapping("/insert")
     @ResponseBody
-    @TaskPilotAuth(role = Consts.ADMIN_ROLE)
+    @PreAuthorize("hasRole('ADMIN')")
     fun insert(executor: Executor): Response<String> {
         val validResult = validExecutor(executor, false)
         if (!validResult.isSuccess) {
@@ -75,7 +74,7 @@ class ExecutorController {
 
     @RequestMapping("/update")
     @ResponseBody
-    @TaskPilotAuth(role = Consts.ADMIN_ROLE)
+    @PreAuthorize("hasRole('ADMIN')")
     fun update(executor: Executor): Response<String> {
         val validResult = validExecutor(executor, true)
         if (!validResult.isSuccess) {
@@ -89,7 +88,7 @@ class ExecutorController {
 
     @RequestMapping("/delete")
     @ResponseBody
-    @TaskPilotAuth(role = Consts.ADMIN_ROLE)
+    @PreAuthorize("hasRole('ADMIN')")
     fun delete(@RequestParam("ids[]") ids: List<Int>): Response<String> {
         if (CollectionTool.isEmpty(ids) || ids.size != 1) {
             return Response.ofFail("请选择一条数据")

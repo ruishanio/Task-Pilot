@@ -14,7 +14,6 @@ export const frontendApi = {
 export const authApi = {
   login: (payload: FormBodyRecord) =>
     http.formPost<AppResponse<LoginTokenPayload>>(`${manageApiPrefix}/auth/login`, payload),
-  logout: () => http.formPost<AppResponse>(`${manageApiPrefix}/auth/logout`),
   updatePassword: (payload: FormBodyRecord) =>
     http.formPost<AppResponse>(`${manageApiPrefix}/auth/update_password`, payload),
 };

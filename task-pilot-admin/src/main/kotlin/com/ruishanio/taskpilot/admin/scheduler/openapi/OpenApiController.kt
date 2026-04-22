@@ -1,6 +1,5 @@
 package com.ruishanio.taskpilot.admin.scheduler.openapi
 
-import com.ruishanio.taskpilot.admin.auth.annotation.TaskPilotAuth
 import com.ruishanio.taskpilot.admin.scheduler.config.TaskPilotAdminBootstrap
 import com.ruishanio.taskpilot.core.constant.Const
 import com.ruishanio.taskpilot.core.openapi.AdminBiz
@@ -34,7 +33,6 @@ class OpenApiController {
      */
     @RequestMapping(Const.ADMIN_OPEN_API_PREFIX + "/{uri}")
     @ResponseBody
-    @TaskPilotAuth(login = false)
     fun api(
         request: HttpServletRequest,
         @PathVariable("uri") uri: String?,

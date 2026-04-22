@@ -1,10 +1,8 @@
 package com.ruishanio.taskpilot.admin.controller.biz
 
-import com.ruishanio.taskpilot.admin.auth.annotation.TaskPilotAuth
 import com.ruishanio.taskpilot.admin.auth.helper.TaskPilotAuthHelper
 import com.ruishanio.taskpilot.admin.auth.model.LoginInfo
 import com.ruishanio.taskpilot.admin.auth.password.TaskPilotPasswordService
-import com.ruishanio.taskpilot.admin.constant.Consts
 import com.ruishanio.taskpilot.admin.mapper.ExecutorMapper
 import com.ruishanio.taskpilot.admin.mapper.UserMapper
 import com.ruishanio.taskpilot.admin.model.User
@@ -15,6 +13,7 @@ import com.ruishanio.taskpilot.tool.response.PageModel
 import com.ruishanio.taskpilot.tool.response.Response
 import jakarta.annotation.Resource
 import jakarta.servlet.http.HttpServletRequest
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -41,7 +40,7 @@ class UserController {
      */
     @RequestMapping("/meta")
     @ResponseBody
-    @TaskPilotAuth(role = Consts.ADMIN_ROLE)
+    @PreAuthorize("hasRole('ADMIN')")
     fun meta(): Response<Map<String, Any>> {
         val data = HashMap<String, Any>()
         data["executors"] = executorMapper.findAll()
@@ -54,7 +53,7 @@ class UserController {
 
     @RequestMapping("/page")
     @ResponseBody
-    @TaskPilotAuth(role = Consts.ADMIN_ROLE)
+    @PreAuthorize("hasRole('ADMIN')")
     fun page(
         @RequestParam(required = false, defaultValue = "0") offset: Int,
         @RequestParam(required = false, defaultValue = "10") pagesize: Int,
@@ -77,7 +76,7 @@ class UserController {
 
     @RequestMapping("/insert")
     @ResponseBody
-    @TaskPilotAuth(role = Consts.ADMIN_ROLE)
+    @PreAuthorize("hasRole('ADMIN')")
     fun insert(user: User): Response<String> {
         if (StringTool.isBlank(user.username)) {
             return Response.ofFail("请输入账号")
@@ -110,7 +109,7 @@ class UserController {
      */
     @RequestMapping("/update")
     @ResponseBody
-    @TaskPilotAuth(role = Consts.ADMIN_ROLE)
+    @PreAuthorize("hasRole('ADMIN')")
     fun update(request: HttpServletRequest, user: User): Response<String> {
         val loginInfoResponse = TaskPilotAuthHelper.loginCheckWithAttr(request)
         val loginInfo = loginInfoResponse.data ?: return Response.ofFail("not login.")
@@ -135,7 +134,7 @@ class UserController {
 
     @RequestMapping("/delete")
     @ResponseBody
-    @TaskPilotAuth(role = Consts.ADMIN_ROLE)
+    @PreAuthorize("hasRole('ADMIN')")
     fun delete(request: HttpServletRequest, @RequestParam("ids[]") ids: List<Int>): Response<String> {
         if (CollectionTool.isEmpty(ids) || ids.size != 1) {
             return Response.ofFail("请选择一条数据")

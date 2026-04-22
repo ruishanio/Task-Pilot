@@ -35,7 +35,7 @@ data class LoginInfo(
      */
     var expireTime: Long = 0,
     /**
-     * 登录态签名，用于和数据库中的当前会话做比对。
+     * 历史签名字段暂时保留给旧同步链路复用，管理端 JWT 鉴权主链路已不再依赖它。
      */
     var signature: String? = null
 ) : Serializable {

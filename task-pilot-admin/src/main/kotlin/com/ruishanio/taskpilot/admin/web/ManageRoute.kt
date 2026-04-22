@@ -10,9 +10,6 @@ object ManageRoute {
 
     const val WEB_PREFIX = "/web"
     const val WEB_ROOT = "$WEB_PREFIX/"
-    const val WEB_DASHBOARD = "$WEB_PREFIX/dashboard"
-    const val WEB_FALLBACK = "$WEB_PREFIX/{path:[^.]*}"
-    const val WEB_NESTED_FALLBACK = "$WEB_PREFIX/**/{path:[^.]*}"
 
     const val API_MANAGE_PREFIX = "/api/manage"
     const val API_MANAGE_AUTH = "$API_MANAGE_PREFIX/auth"

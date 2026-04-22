@@ -1,6 +1,5 @@
 package com.ruishanio.taskpilot.admin.controller.api
 
-import com.ruishanio.taskpilot.admin.auth.annotation.TaskPilotAuth
 import com.ruishanio.taskpilot.admin.auth.helper.TaskPilotAuthHelper
 import com.ruishanio.taskpilot.admin.auth.model.LoginInfo
 import com.ruishanio.taskpilot.admin.constant.Consts
@@ -30,7 +29,6 @@ class SystemApiController {
     private var buildProperties: BuildProperties? = null
 
     @RequestMapping("/bootstrap")
-    @TaskPilotAuth
     fun bootstrap(request: HttpServletRequest): Response<Map<String, Any>> {
         val loginInfo = requireLoginInfo(request)
         val data = HashMap<String, Any>()

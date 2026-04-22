@@ -19,6 +19,10 @@ object AuthConst {
      * 已解析登录用户在 request attribute 中的键名。
      */
     const val TASK_PILOT_LOGIN_USER: String = "task_pilot_login_user"
+    /**
+     * Spring Security 角色授权统一走此前缀，保证 JWT 里的角色 claim 能稳定映射到 `hasRole(...)`。
+     */
+    const val ROLE_AUTHORITY_PREFIX: String = "ROLE_"
 
     /**
      * 未登录或登录失效。

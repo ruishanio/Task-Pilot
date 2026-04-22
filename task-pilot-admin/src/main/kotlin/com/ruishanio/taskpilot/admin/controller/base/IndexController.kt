@@ -1,6 +1,5 @@
 package com.ruishanio.taskpilot.admin.controller.base
 
-import com.ruishanio.taskpilot.admin.auth.annotation.TaskPilotAuth
 import com.ruishanio.taskpilot.admin.service.TaskPilotService
 import com.ruishanio.taskpilot.admin.web.ManageRoute
 import com.ruishanio.taskpilot.tool.response.Response
@@ -33,7 +32,6 @@ class IndexController {
 
     @RequestMapping(ManageRoute.API_MANAGE_ERROR_PAGE)
     @ResponseBody
-    @TaskPilotAuth(login = false)
     fun errorPage(response: HttpServletResponse): String = "HTTP Status Code: ${response.status}"
 
     /**

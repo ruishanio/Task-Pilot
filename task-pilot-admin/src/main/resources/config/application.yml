@@ -62,7 +62,7 @@ spring:
             class: javax.net.ssl.SSLSocketFactory
 
 task-pilot:
-  accessToken: default_token
+  accessToken:
   timeout: 3
   triggerpool:
     fast:

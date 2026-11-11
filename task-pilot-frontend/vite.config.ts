@@ -1,5 +1,7 @@
 import { defineConfig, loadEnv, type ProxyOptions } from 'vite';
-import react from '@vitejs/plugin-react';
+import vue from '@vitejs/plugin-vue';
+import tailwindcss from '@tailwindcss/vite';
+import { fileURLToPath, URL } from 'node:url';
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
@@ -22,7 +24,10 @@ export default defineConfig(({ mode }) => {
   return {
     // 管理端前端统一以 `/web/*` 对外提供，资源路径也固定落在该前缀下。
     base: '/web/',
-    plugins: [react()],
+    plugins: [vue(), tailwindcss()],
+    resolve: {
+      alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
+    },
     build: {
       rollupOptions: {
         output: {
@@ -31,7 +36,7 @@ export default defineConfig(({ mode }) => {
             if (!id.includes('node_modules')) {
               return undefined;
             }
-            if (id.includes('/echarts/') || id.includes('echarts-for-react')) {
+            if (id.includes('/echarts/')) {
               return 'chart-vendor';
             }
             return undefined;

@@ -8,7 +8,7 @@ const http = axios.create({
   timeout: 20000,
 });
 
-type AuthFailureHandler = ((payload?: AppResponse<any>) => void) | null;
+type AuthFailureHandler = ((payload?: AppResponse<unknown>) => void) | null;
 
 let authFailureHandler: AuthFailureHandler = null;
 
@@ -16,7 +16,7 @@ export function registerAuthFailureHandler(handler: AuthFailureHandler): void {
   authFailureHandler = handler;
 }
 
-function createAppError(payload?: AppResponse<any>): AppError {
+function createAppError(payload?: AppResponse<unknown>): AppError {
   const error = new Error(payload?.msg || '请求失败') as AppError;
   error.code = payload?.code;
   error.payload = payload;
@@ -35,10 +35,14 @@ http.interceptors.request.use((config) => {
 
 http.interceptors.response.use(
   (response) => {
-    const payload = response.data as AppResponse<any>;
-    if (payload && typeof payload === 'object' && typeof payload.code === 'number') {
+    const payload = response.data as AppResponse<unknown>;
+    if (
+      payload &&
+      typeof payload === 'object' &&
+      typeof payload.code === 'number'
+    ) {
       if (payload.code === 200) {
-        return payload as any;
+        return response;
       }
 
       if (payload.code === 401) {
@@ -48,9 +52,16 @@ http.interceptors.response.use(
       return Promise.reject(createAppError(payload));
     }
 
-    return payload as any;
+    return response;
   },
-  (error: unknown) => Promise.reject(error),
+  (error: unknown) => {
+    // 同时兼容业务 JSON 的 401 和网关直接返回的 HTTP 401。
+    if (axios.isAxiosError(error) && error.response?.status === 401) {
+      clearAccessToken();
+      authFailureHandler?.();
+    }
+    return Promise.reject(error);
+  },
 );
 
 export function toFormBody(values: FormBodyRecord = {}): URLSearchParams {
@@ -76,19 +87,25 @@ export function toFormBody(values: FormBodyRecord = {}): URLSearchParams {
 
 const request = {
   get<T>(url: string, config?: AxiosRequestConfig) {
-    return http.get<T, T>(url, config);
+    return http.get<T>(url, config).then((response) => response.data);
   },
   post<T>(url: string, data?: unknown, config?: AxiosRequestConfig) {
-    return http.post<T, T>(url, data, config);
+    return http.post<T>(url, data, config).then((response) => response.data);
   },
-  formPost<T>(url: string, data?: FormBodyRecord, config: AxiosRequestConfig = {}) {
-    return http.post<T, T>(url, toFormBody(data), {
-      ...config,
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-        ...config.headers,
-      },
-    });
+  formPost<T>(
+    url: string,
+    data?: FormBodyRecord,
+    config: AxiosRequestConfig = {},
+  ) {
+    return http
+      .post<T>(url, toFormBody(data), {
+        ...config,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+          ...config.headers,
+        },
+      })
+      .then((response) => response.data);
   },
 };
 

@@ -22,7 +22,10 @@ export function parsePagePayload<T = Record<string, unknown>>(
   };
 }
 
-export function getErrorMessage(error: unknown, fallback = '请求失败，请稍后再试'): string {
+export function getErrorMessage(
+  error: unknown,
+  fallback = '请求失败，请稍后再试',
+): string {
   const appError = error as Partial<AppError>;
   return appError?.payload?.msg || appError?.message || fallback;
 }

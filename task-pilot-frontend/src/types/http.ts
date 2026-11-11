@@ -13,9 +13,6 @@ export interface AppError extends Error {
 export type FormValue = string | number | boolean;
 
 export type FormBodyValue =
-  | FormValue
-  | null
-  | undefined
-  | Array<FormValue | null | undefined>;
+  FormValue | null | undefined | Array<FormValue | null | undefined>;
 
 export type FormBodyRecord = Record<string, FormBodyValue>;

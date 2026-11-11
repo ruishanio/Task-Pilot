@@ -19,6 +19,7 @@ export interface MenuItem {
 export interface BootstrapPayload {
   appName?: string;
   appNameFull?: string;
+  version?: string;
   user?: AuthUser | null;
   menus?: MenuItem[];
   [key: string]: unknown;

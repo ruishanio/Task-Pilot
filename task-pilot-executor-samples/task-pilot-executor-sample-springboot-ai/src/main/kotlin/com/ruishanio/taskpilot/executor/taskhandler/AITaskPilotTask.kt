@@ -142,12 +142,13 @@ class AITaskPilotTask {
 
     /**
      * 统一封装聊天客户端构建，确保任务执行与控制器示例使用同一套默认能力。
+     * Spring AI 2.0 接收选项 Builder，由客户端统一构建默认选项。
      */
     private fun buildChatClient(model: String): ChatClient =
         ChatClient.builder(ollamaChatModel)
             .defaultAdvisors(MessageChatMemoryAdvisor.builder(MessageWindowChatMemory.builder().build()).build())
             .defaultAdvisors(SimpleLoggerAdvisor.builder().build())
-            .defaultOptions(OllamaChatOptions.builder().model(model).build())
+            .defaultOptions(OllamaChatOptions.builder().model(model))
             .build()
 
     private class OllamaParam {

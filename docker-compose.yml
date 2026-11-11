@@ -1,9 +1,6 @@
-# docker-compose version
-version: '3.8'
-
 services:
   postgres:
-    image: postgres:17.9-alpine3.23
+    image: postgres:17.11-alpine3.23
     container_name: task-pilot-postgres
     environment:
       POSTGRES_USER: postgres

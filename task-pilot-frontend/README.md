@@ -4,9 +4,11 @@
 
 ## 开发
 
+使用 Node.js 24 LTS，与 Docker 构建环境及 `@types/node` 保持一致。
+
 ```bash
 cd task-pilot-frontend
-npm install
+npm ci
 npm run dev
 ```
 
@@ -21,10 +23,11 @@ VITE_DEV_PROXY_TARGET=http://localhost:8080
 ## 构建
 
 ```bash
+npm run typecheck
 npm run build
 ```
 
-构建产物默认按静态站点方式输出，资源路径为相对路径，适合手动拷贝回：
+构建产物按静态站点方式输出，资源路径固定使用 `/web/` 前缀，可拷贝回：
 
 ```bash
 task-pilot-admin/src/main/resources/static
@@ -36,8 +39,4 @@ task-pilot-admin/src/main/resources/static
 /web/task_info
 ```
 
-如果你把构建产物放到子目录，例如 `static/task-pilot-frontend/`，也可以直接访问：
-
-```text
-/static/task-pilot-frontend/index.html#/task_info
-```
+直接访问或刷新嵌套路由时，后端需要将 `/web/*` 页面请求转发到 SPA 入口；当前管理端已提供该转发。

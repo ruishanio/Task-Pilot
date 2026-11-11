@@ -40,7 +40,7 @@ class OllamaTest {
                 .builder(ollamaChatModel)
                 .defaultAdvisors(MessageChatMemoryAdvisor.builder(MessageWindowChatMemory.builder().build()).build())
                 .defaultAdvisors(SimpleLoggerAdvisor.builder().build())
-                .defaultOptions(OllamaChatOptions.builder().model(model).build())
+                .defaultOptions(OllamaChatOptions.builder().model(model))
                 .build()
 
         val response =
@@ -66,7 +66,7 @@ class OllamaTest {
                 .builder(ollamaChatModel)
                 .defaultAdvisors(MessageChatMemoryAdvisor.builder(MessageWindowChatMemory.builder().build()).build())
                 .defaultAdvisors(SimpleLoggerAdvisor.builder().build())
-                .defaultOptions(OllamaChatOptions.builder().model(model).build())
+                .defaultOptions(OllamaChatOptions.builder().model(model))
                 .build()
 
         logger.info("input: {}", input)

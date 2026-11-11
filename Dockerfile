@@ -1,5 +1,5 @@
 # 先构建前端静态资源，确保运行镜像不携带 Node 环境。
-FROM node:20-alpine AS frontend-builder
+FROM node:24-alpine AS frontend-builder
 WORKDIR /workspace/task-pilot-frontend
 
 COPY task-pilot-frontend/package.json task-pilot-frontend/package-lock.json ./
@@ -9,7 +9,7 @@ COPY task-pilot-frontend/ ./
 RUN npm run build
 
 # 服务端阶段把前端产物回填到 Admin 静态目录，再统一打包 Spring Boot Jar。
-FROM maven:3.9.9-eclipse-temurin-21 AS backend-builder
+FROM maven:3.9.16-eclipse-temurin-21 AS backend-builder
 WORKDIR /workspace
 
 COPY . .

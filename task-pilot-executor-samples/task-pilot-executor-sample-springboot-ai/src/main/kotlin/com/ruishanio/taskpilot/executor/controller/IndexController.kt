@@ -148,12 +148,13 @@ class IndexController {
 
     /**
      * 统一封装聊天客户端构建，避免简单调用和流式调用在配置上出现偏差。
+     * Spring AI 2.0 接收选项 Builder，由客户端统一构建默认选项。
      */
     private fun buildChatClient(): ChatClient =
         ChatClient.builder(ollamaChatModel)
             .defaultAdvisors(MessageChatMemoryAdvisor.builder(MessageWindowChatMemory.builder().build()).build())
             .defaultAdvisors(SimpleLoggerAdvisor.builder().build())
-            .defaultOptions(OllamaChatOptions.builder().model(model).build())
+            .defaultOptions(OllamaChatOptions.builder().model(model))
             .build()
 
     private fun writeToJson(obj: Any?): String {

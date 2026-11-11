@@ -36,48 +36,46 @@
 		<maven.compiler.release>${java.version}</maven.compiler.release>
 		<maven.test.skip>true</maven.test.skip>
 		<!-- plugin -->
-		<maven-compiler-plugin.version>3.14.1</maven-compiler-plugin.version>
+		<maven-compiler-plugin.version>3.16.0</maven-compiler-plugin.version>
 		<maven-source-plugin.version>3.4.0</maven-source-plugin.version>
 		<maven-javadoc-plugin.version>3.12.0</maven-javadoc-plugin.version>
 		<maven-gpg-plugin.version>3.2.8</maven-gpg-plugin.version>
-		<central-publishing-maven-plugin.version>0.9.0</central-publishing-maven-plugin.version>
-		<flatten-maven-plugin.version>1.7.3</flatten-maven-plugin.version>
-		<dokka-maven-plugin.version>2.2.0</dokka-maven-plugin.version>
+		<central-publishing-maven-plugin.version>0.12.0</central-publishing-maven-plugin.version>
+		<flatten-maven-plugin.version>1.9.0</flatten-maven-plugin.version>
+		<dokka-maven-plugin.version>2.3.0</dokka-maven-plugin.version>
 		<!-- base -->
-		<slf4j-api.version>2.0.17</slf4j-api.version>
-		<junit-jupiter.version>6.0.1</junit-jupiter.version>
+		<slf4j-api.version>2.0.20</slf4j-api.version>
 
 		<!-- jakarta.annotation-api -->
 		<jakarta.annotation-api.version>3.0.0</jakarta.annotation-api.version>
 		<jakarta.servlet-api.version>6.1.0</jakarta.servlet-api.version>
 
 		<!-- spring -->
-		<spring-boot.version>4.0.5</spring-boot.version>
-		<spring.version>7.0.6</spring.version>
+		<spring-boot.version>4.1.2</spring-boot.version>
 		<!-- kotlin -->
-		<kotlin.version>2.3.20</kotlin.version>
+		<kotlin.version>2.3.21</kotlin.version>
 		<!-- mybatis & db -->
-		<mybatis-spring-boot-starter.version>4.0.1</mybatis-spring-boot-starter.version>
-		<postgresql.version>42.7.10</postgresql.version>
+		<mybatis-spring-boot-starter.version>4.1.0</mybatis-spring-boot-starter.version>
+		<postgresql.version>42.7.14</postgresql.version>
 		<quartz.version>2.5.2</quartz.version>
 
 		<!-- net -->
-		<netty.version>4.2.9.Final</netty.version>
+		<netty.version>4.2.20.Final</netty.version>
 		<!-- groovy -->
-		<groovy.version>5.0.5</groovy.version>
+		<groovy.version>5.0.8</groovy.version>
 
 		<!-- task-pilot-tool -->
 		<poi.version>5.5.1</poi.version>
-		<freemarker.version>2.3.34</freemarker.version>
-		<nimbus-jose-jwt.version>10.9</nimbus-jose-jwt.version>
-		<bcprov-jdk18on.version>1.84</bcprov-jdk18on.version>
+		<freemarker.version>2.3.35</freemarker.version>
+		<nimbus-jose-jwt.version>10.10</nimbus-jose-jwt.version>
+		<bcprov-jdk18on.version>1.86</bcprov-jdk18on.version>
 		<!-- gson -->
-		<gson.version>2.13.2</gson.version>
+		<gson.version>2.15.0</gson.version>
 
 		<!-- spring-ai -->
-		<spring-ai.version>2.0.0-M4</spring-ai.version>
+		<spring-ai.version>2.0.2</spring-ai.version>
 		<!-- dify -->
-		<dify-java-client.version>1.2.6</dify-java-client.version>
+		<dify-java-client.version>1.7.0</dify-java-client.version>
 	</properties>
 
 	<dependencyManagement>
@@ -90,7 +88,15 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-			<!-- springboot -->
+			<!-- Netty 补丁通过 BOM 整体覆盖，避免 HTTP 编解码器与底层模块混用不同版本。 -->
+			<dependency>
+				<groupId>io.netty</groupId>
+				<artifactId>netty-bom</artifactId>
+				<version>${netty.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<!-- Spring Framework 与 JUnit 统一跟随 Spring Boot BOM，避免单独覆盖部分模块。 -->
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-dependencies</artifactId>
@@ -112,13 +118,6 @@
 				<version>${slf4j-api.version}</version>
 			</dependency>
 
-			<!-- junit -->
-			<dependency>
-				<groupId>org.junit.jupiter</groupId>
-				<artifactId>junit-jupiter-engine</artifactId>
-				<version>${junit-jupiter.version}</version>
-			</dependency>
-
 			<!-- jakarta -->
 			<dependency>
 				<groupId>jakarta.annotation</groupId>
@@ -126,12 +125,6 @@
 				<version>${jakarta.annotation-api.version}</version>
 			</dependency>
 
-			<!-- netty -->
-			<dependency>
-				<groupId>io.netty</groupId>
-				<artifactId>netty-codec-http</artifactId>
-				<version>${netty.version}</version>
-			</dependency>
 			<!-- gson -->
 			<dependency>
 				<groupId>com.google.code.gson</groupId>
@@ -181,14 +174,6 @@
 				<groupId>org.apache.groovy</groupId>
 				<artifactId>groovy</artifactId>
 				<version>${groovy.version}</version>
-			</dependency>
-
-			<!-- spring-context -->
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-context</artifactId>
-				<version>${spring.version}</version>
-				<scope>provided</scope>
 			</dependency>
 
 			<!-- mybatis-starter：mybatis + mybatis-spring + hikari（default） -->

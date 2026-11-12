@@ -102,6 +102,14 @@ docker compose up -d --pull never task-pilot-admin
 
 首次启动时，Flyway 自动初始化表结构和示例配置。Compose 包含数据库和调度中心，**执行器需要通过业务应用或示例工程单独启动**。
 
+### 数据库迁移版本
+
+1.0.7 使用 [`V1_0_7_001__init_task_pilot.sql`](task-pilot-admin/src/main/resources/db/migration/V1_0_7_001__init_task_pilot.sql) 初始化表结构和默认数据，执行器名称支持 64 个字符。
+
+后续脚本按 `V主版本_次版本_修订号_序号__说明.sql` 命名，同一版本从 `001` 递增，例如 `V1_0_7_002__description.sql`。
+
+该脚本用于新库初始化，不负责旧版数据库的结构升级或历史数据修复。已有旧迁移记录的预发布库不能直接沿用；测试库可在确认无需保留数据后重新初始化，需保留数据的数据库应单独制定升级方案。
+
 默认配置用于本地体验。正式部署时，请修改初始密码，并通过外部配置设置数据库凭据、JWT 密钥和调度通信 Token。配置项见 [调度中心配置](task-pilot-admin/src/main/resources/config/application.yml)。
 
 <details>
@@ -126,7 +134,7 @@ docker compose logs -f task-pilot-admin
 <dependency>
     <groupId>com.ruishanio</groupId>
     <artifactId>task-pilot-spring-boot-starter</artifactId>
-    <version>1.0.6</version>
+    <version>1.0.7</version>
 </dependency>
 ```
 

@@ -462,19 +462,20 @@ onBeforeUnmount(() => {
     </div>
   </div>
   <Dialog v-model:open="detailOpen">
+    <!-- 固定弹窗高度并限制在视口内，切换标签或日志更新时仅让内容区滚动。 -->
     <DialogContent
-      class="flex max-h-[92svh] flex-col gap-0 overflow-hidden p-0 sm:max-w-[960px]"
+      class="flex h-[640px] max-h-[92svh] flex-col gap-0 overflow-hidden p-0 sm:max-w-[960px]"
     >
-      <DialogHeader class="border-b px-6 py-5">
+      <DialogHeader class="shrink-0 border-b px-6 py-5">
         <DialogTitle>执行日志 #{{ selected?.id }}</DialogTitle>
         <DialogDescription>
           {{ selected ? taskLabel(selected.taskId) : '' }} ·
           {{ formatDateTime(selected?.triggerTime) }}
         </DialogDescription>
       </DialogHeader>
-      <div class="min-h-0 space-y-5 overflow-y-auto p-6">
+      <div class="flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto p-6">
         <dl
-          class="grid gap-4 rounded-lg border bg-muted/20 p-4 text-xs sm:grid-cols-3"
+          class="grid shrink-0 gap-4 rounded-lg border bg-muted/20 p-4 text-xs sm:grid-cols-3"
         >
           <div>
             <dt class="mb-2 text-muted-foreground">处理结果</dt>
@@ -493,8 +494,8 @@ onBeforeUnmount(() => {
             </dd>
           </div>
         </dl>
-        <Tabs v-model="detailTab">
-          <div class="flex flex-wrap items-center justify-between gap-2">
+        <Tabs v-model="detailTab" class="min-h-48 flex-1 gap-0">
+          <div class="flex shrink-0 flex-wrap items-center justify-between gap-2">
             <TabsList>
               <TabsTrigger value="execution">执行日志</TabsTrigger>
               <TabsTrigger value="trigger">调度信息</TabsTrigger>
@@ -517,47 +518,55 @@ onBeforeUnmount(() => {
               重新加载
             </Button>
           </div>
-          <TabsContent value="execution" class="mt-3 space-y-3">
-            <div
-              v-if="selected?.triggerCode === 200"
-              class="max-h-[45svh] min-h-64 overflow-auto rounded-lg border bg-muted/40 p-4 font-mono text-xs leading-6 break-words whitespace-pre-wrap"
-              v-html="
-                safeContent ||
-                (live.loading.value ? '正在读取日志…' : '暂无日志内容')
-              "
-            />
-            <div
-              v-else
-              class="rounded-lg border border-dashed py-16 text-center text-sm text-muted-foreground"
+          <div
+            :key="detailTab"
+            class="mt-3 min-h-0 flex-1 overflow-y-auto [scrollbar-gutter:stable]"
+          >
+            <TabsContent
+              value="execution"
+              class="m-0 flex min-h-full flex-col gap-3"
             >
-              任务未成功调度，暂无执行日志。
-              <Button
-                variant="link"
-                class="block w-full"
-                @click="detailTab = 'trigger'"
+              <div
+                v-if="selected?.triggerCode === 200"
+                class="min-h-64 flex-1 rounded-lg border bg-muted/40 p-4 font-mono text-xs leading-6 break-words whitespace-pre-wrap"
+                v-html="
+                  safeContent ||
+                  (live.loading.value ? '正在读取日志…' : '暂无日志内容')
+                "
+              />
+              <div
+                v-else
+                class="flex min-h-64 flex-1 flex-col items-center justify-center rounded-lg border border-dashed p-4 text-center text-sm text-muted-foreground"
               >
-                查看调度失败原因
-              </Button>
-            </div>
-            <p
-              v-if="live.error.value"
-              role="alert"
-              class="text-sm text-destructive"
-            >
-              {{ live.error.value }}
-            </p>
-            <div
-              v-if="safeHandle"
-              class="rounded-lg border p-4 text-xs leading-6 break-words"
-              v-html="safeHandle"
-            />
-          </TabsContent>
-          <TabsContent value="trigger" class="mt-3">
-            <div
-              class="max-h-[50svh] min-h-56 overflow-auto rounded-lg border bg-muted/40 p-4 font-mono text-xs leading-6 break-words whitespace-pre-wrap"
-              v-html="safeTrigger || '暂无调度详情'"
-            />
-          </TabsContent>
+                任务未成功调度，暂无执行日志。
+                <Button
+                  variant="link"
+                  class="block w-full"
+                  @click="detailTab = 'trigger'"
+                >
+                  查看调度失败原因
+                </Button>
+              </div>
+              <p
+                v-if="live.error.value"
+                role="alert"
+                class="shrink-0 text-sm text-destructive"
+              >
+                {{ live.error.value }}
+              </p>
+              <div
+                v-if="safeHandle"
+                class="shrink-0 rounded-lg border p-4 text-xs leading-6 break-words"
+                v-html="safeHandle"
+              />
+            </TabsContent>
+            <TabsContent value="trigger" class="m-0 flex min-h-full flex-col">
+              <div
+                class="min-h-64 flex-1 rounded-lg border bg-muted/40 p-4 font-mono text-xs leading-6 break-words whitespace-pre-wrap"
+                v-html="safeTrigger || '暂无调度详情'"
+              />
+            </TabsContent>
+          </div>
         </Tabs>
       </div>
     </DialogContent>

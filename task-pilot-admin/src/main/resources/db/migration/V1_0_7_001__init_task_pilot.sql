@@ -198,8 +198,7 @@ COMMENT ON COLUMN "user".permission IS '权限：执行器 ID 列表，多个逗
 
 INSERT INTO executor (id, app_name, title, address_type, address_list, update_time)
 VALUES
-    (1, 'task-pilot-executor-sample', '通用执行器Sample', 0, NULL, now()),
-    (2, 'task-pilot-executor-sample-ai', 'AI执行器Sample', 0, NULL, now())
+    (1, 'task-pilot-executor-sample', '通用执行器Sample', 0, NULL, now())
 ON CONFLICT (id) DO NOTHING;
 
 INSERT INTO task_info (
@@ -229,23 +228,6 @@ INSERT INTO task_info (
 VALUES
     (1, 1, 'demoTaskHandler', '示例任务01', now(), now(), 'TASK-PILOT', '', 'CRON', '0 0 0 * * ? *',
      'DO_NOTHING', 'FIRST', 'demoTaskHandler', '', 'SERIAL_EXECUTION', 0, 0, 'BEAN', '', 'GLUE代码初始化',
-     now(), ''),
-    (2, 2, 'ollamaTaskHandler', 'Ollama示例任务01', now(), now(), 'TASK-PILOT', '', 'NONE', '',
-     'DO_NOTHING', 'FIRST', 'ollamaTaskHandler', '{
-    "input": "慢SQL问题分析思路",
-    "prompt": "你是一个研发工程师，擅长解决技术类问题。",
-    "model": "qwen3:0.6b"
-}', 'SERIAL_EXECUTION', 0, 0, 'BEAN', '', 'GLUE代码初始化',
-     now(), ''),
-    (3, 2, 'difyWorkflowTaskHandler', 'Dify示例任务', now(), now(), 'TASK-PILOT', '', 'NONE', '',
-     'DO_NOTHING', 'FIRST', 'difyWorkflowTaskHandler', '{
-    "inputs":{
-        "input":"查询班级各学科前三名"
-    },
-    "user": "task-pilot",
-    "baseUrl": "http://localhost/v1",
-    "apiKey": "app-OUVgNUOQRIMokfmuJvBJoUTN"
-}', 'SERIAL_EXECUTION', 0, 0, 'BEAN', '', 'GLUE代码初始化',
      now(), '')
 ON CONFLICT (id) DO NOTHING;
 

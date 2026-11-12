@@ -4,14 +4,13 @@
     <parent>
         <groupId>com.ruishanio</groupId>
         <artifactId>task-pilot</artifactId>
-        <version>1.0.7</version>
+        <version>1.0.8</version>
     </parent>
     <artifactId>task-pilot-executor-samples</artifactId>
     <packaging>pom</packaging>
 
     <modules>
         <module>task-pilot-executor-sample-springboot</module>
-        <module>task-pilot-executor-sample-springboot-ai</module>
     </modules>
 
     <properties>

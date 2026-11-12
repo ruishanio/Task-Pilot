@@ -104,7 +104,7 @@ docker compose up -d --pull never task-pilot-admin
 
 ### 数据库迁移版本
 
-1.0.7 使用 [`V1_0_7_001__init_task_pilot.sql`](task-pilot-admin/src/main/resources/db/migration/V1_0_7_001__init_task_pilot.sql) 初始化表结构和默认数据，执行器名称支持 64 个字符。
+数据库使用 [`V1_0_7_001__init_task_pilot.sql`](task-pilot-admin/src/main/resources/db/migration/V1_0_7_001__init_task_pilot.sql) 初始化表结构和默认数据，执行器名称支持 64 个字符。
 
 后续脚本按 `V主版本_次版本_修订号_序号__说明.sql` 命名，同一版本从 `001` 递增，例如 `V1_0_7_002__description.sql`。
 
@@ -134,7 +134,7 @@ docker compose logs -f task-pilot-admin
 <dependency>
     <groupId>com.ruishanio</groupId>
     <artifactId>task-pilot-spring-boot-starter</artifactId>
-    <version>1.0.7</version>
+    <version>1.0.8</version>
 </dependency>
 ```
 
@@ -261,7 +261,7 @@ mvn -P '!release' -pl task-pilot-executor-samples/task-pilot-executor-sample-spr
 | [`task-pilot-frontend`](task-pilot-frontend) | Vue 管理界面与可视化报表 |
 | [`task-pilot-core`](task-pilot-core) | 执行器、通信协议、任务上下文与运行机制 |
 | [`task-pilot-spring-boot-starter`](task-pilot-spring-boot-starter) | Spring Boot 自动配置、任务扫描与启动同步 |
-| [`task-pilot-executor-samples`](task-pilot-executor-samples) | Spring Boot 与 Spring AI 执行器示例 |
+| [`task-pilot-executor-samples`](task-pilot-executor-samples) | Spring Boot 执行器示例 |
 | [`task-pilot-tool`](task-pilot-tool) | 通用工具与基础支持 |
 
 ## 参与贡献

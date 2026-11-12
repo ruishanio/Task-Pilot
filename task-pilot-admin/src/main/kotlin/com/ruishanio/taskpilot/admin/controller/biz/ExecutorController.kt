@@ -1,5 +1,6 @@
 package com.ruishanio.taskpilot.admin.controller.biz
 
+import com.ruishanio.taskpilot.admin.constant.Consts
 import com.ruishanio.taskpilot.admin.mapper.ExecutorMapper
 import com.ruishanio.taskpilot.admin.mapper.RegistryMapper
 import com.ruishanio.taskpilot.admin.mapper.TaskInfoMapper
@@ -135,6 +136,9 @@ class ExecutorController {
         }
         if (StringTool.isBlank(executor.title)) {
             return Response.ofFail("请输入名称")
+        }
+        if (executor.title!!.length > Consts.EXECUTOR_TITLE_MAX_LENGTH) {
+            return Response.ofFail("名称长度不能超过${Consts.EXECUTOR_TITLE_MAX_LENGTH}个字符")
         }
         if (executor.title!!.contains(">") || executor.title!!.contains("<")) {
             return Response.ofFail("名称非法")

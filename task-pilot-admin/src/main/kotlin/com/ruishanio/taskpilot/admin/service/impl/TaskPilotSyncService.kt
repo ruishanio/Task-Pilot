@@ -140,6 +140,7 @@ class TaskPilotSyncService {
         if (executor.addressType == 0) {
             var changed = false
             val executorTitle = buildExecutorTitle(request)
+            // 使用本次上报的完整名称比较，旧版截成 12 字符的名称会在重新同步时恢复。
             if (!equalsNullable(executor.title, executorTitle)) {
                 executor.title = executorTitle
                 changed = true
@@ -236,11 +237,11 @@ class TaskPilotSyncService {
     }
 
     /**
-     * 标题为空时回退为截断后的 appName，避免超出数据库字段长度。
+     * 标题为空时回退为 appName，最多保留 64 个字符，避免超出数据库字段长度。
      */
     private fun buildExecutorTitle(request: SyncRequest): String {
         val title = if (StringTool.isNotBlank(request.executorTitle)) request.executorTitle!!.trim() else request.appName!!.trim()
-        return if (title.length > 12) title.substring(0, 12) else title
+        return title.take(Consts.EXECUTOR_TITLE_MAX_LENGTH)
     }
 
     /**

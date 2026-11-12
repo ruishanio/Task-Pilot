@@ -12,15 +12,20 @@ import com.ruishanio.taskpilot.core.enums.MisfireStrategyEnum
 import com.ruishanio.taskpilot.core.enums.ScheduleTypeEnum
 import com.ruishanio.taskpilot.core.openapi.model.SyncRequest
 import com.ruishanio.taskpilot.tool.response.Response
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
+import org.junit.jupiter.params.provider.ValueSource
 import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.ArgumentMatchers.argThat
 import org.mockito.Mock
 import org.mockito.Mockito.never
+import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
 import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
@@ -28,7 +33,7 @@ import org.springframework.test.util.ReflectionTestUtils
 import java.util.Collections
 
 /**
- * 覆盖同步服务在“更新已有任务”和“跳过无差异任务”两条分支上的行为。
+ * 覆盖任务同步、执行器名称长度边界和历史截断名称恢复，确保重复同步不会产生无差异更新。
  */
 @ExtendWith(MockitoExtension::class)
 class TaskPilotSyncServiceTest {
@@ -114,6 +119,85 @@ class TaskPilotSyncServiceTest {
         assertTrue(response.data.orEmpty().contains("skippedTaskCount=1"))
         verify(taskPilotService, never()).update(anyObject(), anyObject())
         verify(taskPilotService, never()).add(anyObject(), anyObject())
+        verify(executorMapper, never()).update(anyObject())
+    }
+
+    @ParameterizedTest
+    @CsvSource(
+        "centre-message,",
+        "centre-enrollment,",
+        "centre-facecard,",
+        "demo-app, 自定义执行器名称超过十二个字符后应完整恢复"
+    )
+    fun shouldRestoreTruncatedTitleAndSkipUnchangedResync(appName: String, configuredTitle: String?) {
+        val expectedTitle = configuredTitle ?: appName
+        val executor = buildGroup(expectedTitle.take(12), null).apply { appname = appName }
+        val request = SyncRequest().apply {
+            this.appName = appName
+            executorTitle = configuredTitle
+        }
+        `when`(executorMapper.loadByAppname(appName)).thenReturn(executor)
+        `when`(registryMapper.findAll(anyInt(), anyObject())).thenReturn(emptyList())
+
+        assertTrue(taskPilotSyncService.sync(request).isSuccess)
+        assertEquals(expectedTitle, executor.title)
+        assertTrue(taskPilotSyncService.sync(request).isSuccess)
+
+        // 恢复名称时沿用原执行器，不创建新分组；相同配置再次上报不重复写库。
+        verify(executorMapper, times(1)).update(executor)
+        verify(executorMapper, never()).save(anyObject())
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = [64, 65])
+    fun shouldPreserveUpTo64CharactersWhenCreatingExecutor(titleLength: Int) {
+        val title = "名".repeat(titleLength)
+        val request = SyncRequest().apply {
+            appName = "new-executor"
+            executorTitle = " $title "
+        }
+        `when`(registryMapper.findAll(anyInt(), anyObject())).thenReturn(emptyList())
+        `when`(executorMapper.save(anyObject())).thenAnswer { invocation ->
+            invocation.getArgument<Executor>(0).id = 12
+            1
+        }
+
+        assertTrue(taskPilotSyncService.sync(request).isSuccess)
+
+        verify(executorMapper).save(
+            argThatObject { executor: Executor -> executor.title == "名".repeat(64) }
+        )
+    }
+
+    @Test
+    fun shouldRestore64CharacterAppNameWhenTitleIsBlank() {
+        val appName = "executor-" + "a".repeat(55)
+        val executor = buildGroup(appName.take(12), null).apply { appname = appName }
+        val request = SyncRequest().apply {
+            this.appName = appName
+            executorTitle = " "
+        }
+        `when`(executorMapper.loadByAppname(appName)).thenReturn(executor)
+        `when`(registryMapper.findAll(anyInt(), anyObject())).thenReturn(emptyList())
+
+        assertTrue(taskPilotSyncService.sync(request).isSuccess)
+
+        assertEquals(appName, executor.title)
+        verify(executorMapper).update(executor)
+    }
+
+    @Test
+    fun shouldKeepManuallyManagedExecutorUnchanged() {
+        val executor = buildGroup("人工维护名称", "http://127.0.0.1:9999").apply { addressType = 1 }
+        val request = SyncRequest().apply {
+            appName = "demo-app"
+            executorTitle = "自动同步上报的完整执行器名称"
+        }
+        `when`(executorMapper.loadByAppname("demo-app")).thenReturn(executor)
+
+        assertTrue(taskPilotSyncService.sync(request).isSuccess)
+
+        assertEquals("人工维护名称", executor.title)
         verify(executorMapper, never()).update(anyObject())
     }
 

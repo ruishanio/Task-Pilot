@@ -126,7 +126,7 @@ docker compose logs -f task-pilot-admin
 <dependency>
     <groupId>com.ruishanio</groupId>
     <artifactId>task-pilot-spring-boot-starter</artifactId>
-    <version>1.0.5</version>
+    <version>1.0.6</version>
 </dependency>
 ```
 
